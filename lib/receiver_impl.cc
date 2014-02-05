@@ -124,7 +124,8 @@ receiver_impl::general_work(int noutput_items,
         COUT("FCCH search");
         if (find_fcch_burst(input, ninput_items[0]))   //find frequency correction burst in the input buffer
         {
-            set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
+            //set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
+            COUT("Freq offset " << d_freq_offset);
             //produced_out = 0;
             d_state = next_fcch_search;
         }
@@ -143,7 +144,8 @@ receiver_impl::general_work(int noutput_items,
         {
             if (abs(prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
             {
-                set_frequency(d_freq_offset);              //call set_frequncy only frequency offset change is greater than some value
+                //set_frequency(d_freq_offset);              //call set_frequncy only frequency offset change is greater than some value
+                COUT("Freq offset " << d_freq_offset);
             }
             //produced_out = 0;
             d_state = sch_search;
@@ -227,9 +229,9 @@ receiver_impl::general_work(int noutput_items,
                 if (abs(mean_offset) > FCCH_MAX_FREQ_OFFSET)
                 {
                     d_freq_offset -= mean_offset;                                                 //and adjust frequency if it have changed beyond
-                    set_frequency(d_freq_offset);                                                 //some limit
-                    DCOUT("mean_offset: " << mean_offset);
-                    DCOUT("Adjusting frequency, new frequency offset: " << d_freq_offset << "\n");
+                    //set_frequency(d_freq_offset);                                                 //some limit
+                    COUT("mean_offset: " << mean_offset);
+                    COUT("Adjusting frequency, new frequency offset: " << d_freq_offset << "\n");
                 }
             }
         }
@@ -813,7 +815,7 @@ void receiver_impl::process_normal_burst(burst_counter burst_nr, const unsigned 
     //std::cout << "fn:" <<burst_nr.get_frame_nr() << " ts" << burst_nr.get_timeslot_nr() << " ";
     for(ii=0; ii<148; ii++)
     {
-        std::cout << std::setprecision(1) << static_cast<int>(burst_binary[ii]) << " ";
+        std::cout << std::setprecision(1) << static_cast<int>(burst_binary[ii]) << "";
     }
     std::cout << std::endl;
 }
