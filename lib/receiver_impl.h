@@ -184,7 +184,7 @@ namespace gr {
          * @param bcc base station color code - number of a training sequence
          * @return first sample number of normal burst
          */
-        int get_norm_chan_imp_resp(const gr_complex * input, gr_complex * chan_imp_resp, int bcc);
+        int get_norm_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp, float *corr_max, int bcc);
 
         /**
          *
