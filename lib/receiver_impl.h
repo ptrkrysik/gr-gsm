@@ -189,7 +189,7 @@ namespace gr {
         /**
          *
          */
-        void process_normal_burst(burst_counter burst_nr, const unsigned char * burst_binary);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary);
 
         /**
          *

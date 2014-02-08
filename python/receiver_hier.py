@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import weakref
 import gsm
 from gnuradio.eng_option import eng_option
 from gnuradio import gr, gru, blocks
@@ -22,6 +23,9 @@ class receiver_hier(gr.hier_block2):
                                 gr.io_signature(1, 1, 142*gr.sizeof_float))
         #set rates
         gsm_symb_rate = 1625000/6.0
+
+        self.message_port_register_hier_in("bursts")
+
         self.input_rate = input_rate
         self.osr = osr
         self.sps = input_rate / gsm_symb_rate / osr
@@ -33,6 +37,8 @@ class receiver_hier(gr.hier_block2):
         self.interpolator = self._set_interpolator()
         self.receiver = self._set_receiver()
         self.connect(self, self.filtr,  self.interpolator, self.receiver,  self)
+        self.msg_connect(self.receiver, "bursts", weakref.proxy(self), "bursts")
+
 
     def _set_filter(self):
         filter_cutoff   = 125e3	

@@ -13,7 +13,7 @@
   </param>
 
   <param>
-    <name>Oversampling ration</name>
+    <name>Oversampling ratio</name>
     <key>osr</key>
     <value>4</value>
     <type>int</type>
@@ -23,10 +23,9 @@
     <name>in</name>
     <type>complex</type>
   </sink>
-
   <source>
-    <name>out</name>
-    <type>float</type>
-    <vlen>142</vlen>
+    <name>bursts</name>
+    <type>message</type>
+    <optional>1</optional>
   </source>
 </block>

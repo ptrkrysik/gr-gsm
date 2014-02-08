@@ -22,5 +22,6 @@
 ########################################################################
 install(FILES
     api.h
-    receiver.h DESTINATION include/gsm
+    receiver.h
+    bursts_printer.h DESTINATION include/gsm
 )
