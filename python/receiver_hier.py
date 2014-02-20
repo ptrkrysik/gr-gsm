@@ -16,7 +16,7 @@ class tuner(gr.feval_dd):
         return freq_offet
 
 class receiver_hier(gr.hier_block2):
-    def __init__(self, input_rate, osr=4):
+    def __init__(self, input_rate, osr=4, arfcn=0):
         gr.hier_block2.__init__(self, 
                                 "receiver_hier",
                                 gr.io_signature(1, 1, gr.sizeof_gr_complex),
@@ -28,6 +28,7 @@ class receiver_hier(gr.hier_block2):
 
         self.input_rate = input_rate
         self.osr = osr
+        self.arfcn = arfcn
         self.sps = input_rate / gsm_symb_rate / osr
 
         #create callbacks
@@ -37,6 +38,7 @@ class receiver_hier(gr.hier_block2):
         self.interpolator = self._set_interpolator()
         self.receiver = self._set_receiver()
         self.connect(self, self.filtr,  self.interpolator, self.receiver,  self)
+#        self.connect(self, self.interpolator, self.receiver,  self)
         self.msg_connect(self.receiver, "bursts", weakref.proxy(self), "bursts")
 
 
@@ -54,7 +56,7 @@ class receiver_hier(gr.hier_block2):
         return interpolator
     
     def _set_receiver(self):
-        receiver = gsm.receiver(self.tuner_callback, self.osr)
+        receiver = gsm.receiver(self.tuner_callback, self.osr, self.arfcn)
         return receiver
 
     def set_center_frequency(self, center_freq):
@@ -62,4 +64,5 @@ class receiver_hier(gr.hier_block2):
 
     def set_timing(self, timing_offset):
         pass
-        
+
+

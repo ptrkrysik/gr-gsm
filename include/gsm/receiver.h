@@ -47,7 +47,7 @@ namespace gr {
        * class. gsm::receiver::make is the public interface for
        * creating new instances.
        */
-      static sptr make(feval_dd * tuner, int osr);
+      static sptr make(feval_dd * tuner, int osr, int arfcn);
     };
 
   } // namespace gsm

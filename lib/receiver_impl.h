@@ -24,6 +24,7 @@
 #include <gsm/receiver.h>
 #include <gsm_constants.h>
 #include <receiver_config.h>
+#include <gsmtap.h>
 
 namespace gr {
   namespace gsm {
@@ -37,6 +38,8 @@ namespace gr {
         //@{
         const int d_OSR; ///< oversampling ratio
         const int d_chan_imp_length; ///< channel impulse length
+        uint16_t d_arfcn;
+        int8_t d_signal_dbm;
         //@}
 
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
@@ -189,7 +192,7 @@ namespace gr {
         /**
          *
          */
-        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type);
 
         /**
          *
@@ -197,7 +200,7 @@ namespace gr {
         void configure_receiver();
             
      public:
-      receiver_impl(feval_dd * tuner, int osr);
+      receiver_impl(feval_dd * tuner, int osr, int arfcn);
       ~receiver_impl();
       
       void forecast(int noutput_items, gr_vector_int &ninput_items_required);

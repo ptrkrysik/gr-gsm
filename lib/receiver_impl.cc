@@ -36,8 +36,8 @@
 #include <sch.h>
 #include <iostream>
 #include <iomanip>
-
 #include <assert.h>
+#include <boost/scoped_ptr.hpp>
 
 #define SYNC_SEARCH_RANGE 30
 
@@ -52,16 +52,16 @@ typedef std::vector<float> vector_float;
 typedef boost::circular_buffer<float> circular_buffer_float;
 
 receiver::sptr
-receiver::make(feval_dd * tuner, int osr)
+receiver::make(feval_dd * tuner, int osr, int arfcn)
 {
     return gnuradio::get_initial_sptr
-           (new receiver_impl(tuner, osr));
+           (new receiver_impl(tuner, osr, arfcn));
 }
 
 /*
  * The private constructor
  */
-receiver_impl::receiver_impl(feval_dd * tuner, int osr)
+receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     : gr::block("receiver",
                 gr::io_signature::make(1, 1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
@@ -73,9 +73,10 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr)
     d_freq_offset(0),
     d_state(first_fcch_search),
     d_burst_nr(osr),
-    d_failed_sch(0)
+    d_failed_sch(0),
+    d_arfcn((int)(arfcn)),
+    d_signal_dbm(-120)
 {
-
     int i;
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
     for (i = 0; i < TRAIN_SEQ_NUM; i++)
@@ -116,9 +117,6 @@ receiver_impl::general_work(int noutput_items,
                             gr_vector_void_star &output_items)
 {
     const gr_complex *input = (const gr_complex *) input_items[0];
-    //float *out = (float *) output_items[0];
-    int produced_out = 0;  //how many output elements were produced - this isn't used yet
-    //probably the gsm receiver will be changed into sink so this variable won't be necessary
 
     switch (d_state)
     {
@@ -128,13 +126,11 @@ receiver_impl::general_work(int noutput_items,
         if (find_fcch_burst(input, ninput_items[0]))   //find frequency correction burst in the input buffer
         {
             //set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
-            DCOUT("Freq offset " << d_freq_offset);
-            //produced_out = 0;
+            COUT("Freq offset " << d_freq_offset);
             d_state = next_fcch_search;
         }
         else
         {
-            //produced_out = 0;
             d_state = first_fcch_search;
         }
         break;
@@ -148,14 +144,12 @@ receiver_impl::general_work(int noutput_items,
             if (abs(prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
             {
                 //set_frequency(d_freq_offset);              //call set_frequncy only frequency offset change is greater than some value
-                COUT("Freq offset " << d_freq_offset);
+                DCOUT("Freq offset " << d_freq_offset);
             }
-            //produced_out = 0;
             d_state = sch_search;
         }
         else
         {
-            //produced_out = 0;
             d_state = next_fcch_search;
         }
         break;
@@ -176,8 +170,8 @@ receiver_impl::general_work(int noutput_items,
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary); //detect bits using MLSE detection
             if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)   //decode SCH burst
             {
-                //COUT("sch burst_start: " << burst_start);
-                //COUT("bcc: " << d_bcc << " ncc: " << d_ncc << " t1: " << t1 << " t2: " << t2 << " t3: " << t3);
+                DCOUT("sch burst_start: " << burst_start);
+                DCOUT("bcc: " << d_bcc << " ncc: " << d_ncc << " t1: " << t1 << " t2: " << t2 << " t3: " << t3);
                 d_burst_nr.set(t1, t2, t3, 0);                                  //set counter of bursts value
 
                 //configure the receiver - tell him where to find which burst type
@@ -205,7 +199,7 @@ receiver_impl::general_work(int noutput_items,
     //in this state receiver is synchronized and it processes bursts according to burst type for given burst number
     case synchronized:
     {
-        DCOUT("Synchronized")            ;
+        DCOUT("Synchronized");
         vector_complex channel_imp_resp(CHAN_IMP_RESP_LENGTH*d_OSR);
         int burst_start;
         int offset = 0;
@@ -213,7 +207,13 @@ receiver_impl::general_work(int noutput_items,
         unsigned char output_binary[BURST_SIZE];
 
         burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr); //get burst type for given burst number
-
+        double signal_pwr=0;
+        for(int ii=0;ii<ninput_items[0];ii++)
+        {
+            signal_pwr += abs(input[ii])*abs(input[ii]);
+        }
+        d_signal_dbm=static_cast<int8_t>(round(20*log10(signal_pwr)));
+        
         switch (b_type)
         {
         case fcch_burst:                                                                      //if it's FCCH  burst
@@ -223,7 +223,8 @@ receiver_impl::general_work(int noutput_items,
             double freq_offset = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
 
             d_freq_offset_vals.push_front(freq_offset);
-            send_burst(d_burst_nr, fc_fb);
+            send_burst(d_burst_nr, fc_fb, b_type);
+
             if (d_freq_offset_vals.size() >= 10)
             {
                 double sum = std::accumulate(d_freq_offset_vals.begin(), d_freq_offset_vals.end(), 0);
@@ -244,7 +245,7 @@ receiver_impl::general_work(int noutput_items,
             int t1, t2, t3, d_ncc, d_bcc;
             burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);                //get channel impulse response
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);           //MLSE detection of bits
-            send_burst(d_burst_nr, output_binary);
+            send_burst(d_burst_nr, output_binary, b_type);
             if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)           //and decode SCH data
             {
                 // d_burst_nr.set(t1, t2, t3, 0);                                              //but only to check if burst_start value is correct
@@ -259,7 +260,7 @@ receiver_impl::general_work(int noutput_items,
                 d_failed_sch++;
                 if (d_failed_sch >= MAX_SCH_ERRORS)
                 {
-                    d_state = first_fcch_search;        //TODO: this isn't good, the receiver is going wild when it goes back to next_fcch_search from here
+                    d_state = next_fcch_search;        //TODO: this isn't good, the receiver is going wild when it goes back to next_fcch_search from here
                     d_freq_offset_vals.clear();
                     d_freq_offset=0;
                     //set_frequency(0);
@@ -274,7 +275,7 @@ receiver_impl::general_work(int noutput_items,
             float normal_corr_max;                                                    //if it's normal burst
             burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc); //get channel impulse response for given training sequence number - d_bcc
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);            //MLSE detection of bits
-            send_burst(d_burst_nr, output_binary); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
+            send_burst(d_burst_nr, output_binary, b_type); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
             break;
         }
         case dummy_or_normal:
@@ -290,17 +291,17 @@ receiver_impl::general_work(int noutput_items,
             if (normal_corr_max > dummy_corr_max)
             {
                 detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
-                send_burst(d_burst_nr, output_binary); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
+                send_burst(d_burst_nr, output_binary, b_type); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
             }
             else
             {
-                send_burst(d_burst_nr, dummy_burst);
+                send_burst(d_burst_nr, dummy_burst, b_type);
             }
         }
         case rach_burst:
             break;
         case dummy:
-            send_burst(d_burst_nr, dummy_burst);
+            send_burst(d_burst_nr, dummy_burst, b_type);
             break;
         case empty:   //if it's empty burst
             break;      //do nothing
@@ -316,7 +317,7 @@ receiver_impl::general_work(int noutput_items,
     break;
     }
 
-    return produced_out;
+    return 0;
 }
 
 
@@ -339,7 +340,7 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems)
     bool end = false;
     bool result = false;
     circular_buffer_float::iterator buffer_iter;
-
+    
     /**@name Possible states of FCCH search algorithm*/
     //@{
     enum states
@@ -486,7 +487,6 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems)
 
     return result;
 }
-
 
 double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample)
 {
@@ -764,10 +764,10 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
 
         window_energy_buffer.push_back(energy);
     }
-    //!why doesn't this work
-    int strongest_window_nr_new = max_element(window_energy_buffer.begin(), window_energy_buffer.end()) - window_energy_buffer.begin();
-    strongest_window_nr = strongest_window_nr_new-d_OSR; //! so I have to override it here
 
+    strongest_window_nr = max_element(window_energy_buffer.begin(), window_energy_buffer.end()) - window_energy_buffer.begin();
+    strongest_window_nr = strongest_window_nr-d_OSR; 
+    
     max_correlation = 0;
     for (int ii = 0; ii < (d_chan_imp_length)*d_OSR; ii++)
     {
@@ -788,38 +788,34 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
     // training sequence, which is 3+57+1+6=67 bits into the burst. That is
     // we have that sync_t16 equals first sample in bit number 67.
 
-    burst_start = search_start_pos + chan_imp_resp_center + strongest_window_nr - TRAIN_POS * d_OSR;
-
-    // GMSK modulator introduces ISI - each bit is expanded for 3*Tb
-    // and it's maximum value is in the last bit period, so burst starts
-    // 2*Tb earlier
-    burst_start -= 2 * d_OSR;
-    burst_start += 2;
-    //COUT("Poczatek ###############################");
-    //std::cout << " burst_start: " << burst_start << " center: " << ((float)(search_start_pos + strongest_window_nr + chan_imp_resp_center)) / d_OSR << " stronegest window nr: " <<  strongest_window_nr << "\n";
-    //COUT("burst_start_new: " << (search_start_pos + strongest_window_nr_new - TRAIN_POS * d_OSR));
     DCOUT("strongest_window_nr_new: " << strongest_window_nr);
-    burst_start=(search_start_pos + strongest_window_nr - TRAIN_POS * d_OSR);
+    burst_start = search_start_pos + strongest_window_nr - TRAIN_POS * d_OSR;
 
     DCOUT("burst_start: " << burst_start);
     return burst_start;
 }
 
 
-void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary)
+void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type)
 {
-    int ii;
-    
-    static const int nelements = 148;
-    pmt::pmt_t burst = pmt::make_s8vector(nelements, 0);  // Initializes all 64 elements to 0
 
-    size_t vec_size;
-    int8_t *burst_elements = pmt::s8vector_writable_elements(burst, vec_size);  // Returns pointer, vec_size is set to 64
-  
-    memcpy(burst_elements, burst_binary, nelements);
-    message_port_pub(pmt::mp("bursts"), burst);
+    boost::scoped_ptr<gsmtap_hdr> tap_header(new gsmtap_hdr());
+
+    tap_header->version = GSMTAP_VERSION;
+    tap_header->hdr_len = BURST_SIZE/4;
+    tap_header->type = GSMTAP_TYPE_UM_BURST;
+    tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
+    tap_header->frame_number = d_burst_nr.get_frame_nr();
+    tap_header->sub_type = static_cast<uint8_t>(b_type);
+    tap_header->arfcn = d_arfcn;
+    tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
+    pmt::pmt_t header_blob=pmt::make_blob(tap_header.get(),sizeof(gsmtap_hdr));
+    pmt::pmt_t burst_binary_blob=pmt::make_blob(burst_binary,BURST_SIZE);
+    pmt::pmt_t msg = pmt::cons(header_blob, burst_binary_blob);
+
+    message_port_pub(pmt::mp("bursts"), msg);
 }
-//TODO: this shouldn't be here also - the same reason
+
 void receiver_impl::configure_receiver()
 {
     d_channel_conf.set_multiframe_type(TSC0, multiframe_51);

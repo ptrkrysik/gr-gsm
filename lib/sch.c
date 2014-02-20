@@ -1,9 +1,15 @@
-#include "system.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include "gsm_constants.h"
+
+#define DEBUGF(a...)	{ \
+    fprintf(stderr, "%s:%d ", __FILE__, __LINE__); \
+    fprintf(stderr, a); \
+} while (0)
+
+
 
 /*
  * Synchronization channel.
@@ -257,14 +263,14 @@ int decode_sch(const unsigned char *buf, int * t1_o, int * t2_o, int * t3_o, int
   // Viterbi decode
   if (errors = conv_decode(data, decoded_data)) {
     // fprintf(stderr, "error: sch: conv_decode (%d)\n", errors);
-    DEBUGF("ERR: conv_decode %d\n", errors);
-    return errors;
+    //DEBUGF("ERR: conv_decode %d\n", errors);
+    //return errors;
   }
 
   // check parity
   if (parity_check(decoded_data)) {
     // fprintf(stderr, "error: sch: parity failed\n");
-    DEBUGF("ERR: parity_check failed\n");
+    //DEBUGF("ERR: parity_check failed\n");
     return 1;
   }
 

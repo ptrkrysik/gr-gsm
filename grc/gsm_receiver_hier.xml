@@ -19,6 +19,13 @@
     <type>int</type>
   </param>
 
+  <param>
+    <name>ARFCN</name>
+    <key>arfcn</key>
+    <value>0</value>
+    <type>int</type>
+  </param>
+
   <sink>
     <name>in</name>
     <type>complex</type>
