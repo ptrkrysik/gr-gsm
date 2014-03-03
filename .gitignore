@@ -2,4 +2,3 @@ build
 *.o
 *.log
 *~
-*qa_*
