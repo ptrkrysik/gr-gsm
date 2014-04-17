@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2014 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2014 Piotr Krysik <pkrysik@elka.pw.edu.pl>.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
