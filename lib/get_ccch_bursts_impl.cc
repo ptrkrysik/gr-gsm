@@ -35,7 +35,6 @@ namespace gr {
         pmt::pmt_t content = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
         uint32_t frame_nr = header->frame_number;
-        pmt::pmt_t msgs[4];
         uint32_t frame_numbers[4];
         uint32_t fn_mod51 = header->frame_number % 51;
         
@@ -43,7 +42,7 @@ namespace gr {
             if(fn_mod51>=2 && fn_mod51<=5){
                 uint32_t ii = fn_mod51-2;
                 frame_numbers[ii]=header->frame_number;
-                msgs[ii] = msg;
+                d_msgs[ii] = msg;
             }
             
             if(fn_mod51==5){
@@ -57,8 +56,8 @@ namespace gr {
                 }
                 if(frames_are_consecutive){
                     //send bursts to the output
-                    for(int jj=1; jj<4; jj++){
-                        message_port_pub(pmt::mp("bursts_out"), msgs[jj]);
+                    for(int jj=0; jj<4; jj++){
+                        message_port_pub(pmt::mp("bursts_out"), d_msgs[jj]);
                     }                 
                 }
             }
