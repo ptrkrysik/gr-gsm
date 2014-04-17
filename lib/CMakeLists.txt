@@ -31,6 +31,7 @@ list(APPEND gsm_sources
     viterbi_detector.cc 
     sch.c
     bursts_printer_impl.cc
+    get_ccch_bursts_impl.cc
 )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})

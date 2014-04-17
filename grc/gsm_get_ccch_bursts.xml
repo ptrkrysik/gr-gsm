@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<block>
+  <name>get_ccch_bursts</name>
+  <key>gsm_get_ccch_bursts</key>
+  <category>gsm</category>
+  <import>import gsm</import>
+  <make>gsm.get_ccch_bursts()</make>
+  <sink>
+    <name>bursts_in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>bursts_out</name>
+    <type>message</type>
+  </source>
+</block>

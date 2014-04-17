@@ -19,5 +19,6 @@
 
 install(FILES
     gsm_receiver_hier.xml
+    gsm_get_ccch_bursts.xml
     gsm_bursts_printer.xml DESTINATION share/gnuradio/grc/blocks
 )
