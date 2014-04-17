@@ -712,7 +712,6 @@ inline void receiver_impl::mafi(const gr_complex * input, int nitems, gr_complex
 }
 
 //TODO: get_norm_chan_imp_resp is similar to get_sch_chan_imp_resp - consider joining this two functions
-//TODO: this is place where most errors are introduced and can be corrected by improvements to this fuction
 //especially computations of strongest_window_nr
 int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp, float *corr_max, int bcc)
 {
@@ -725,11 +724,11 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
     int chan_imp_resp_center = 0;
     float max_correlation = 0;
     float energy = 0;
-
+   
     int search_center = (int)((TRAIN_POS + GUARD_PERIOD) * d_OSR);
     int search_start_pos = search_center + 1 - 5*d_OSR;
     //   int search_start_pos = search_center -  d_chan_imp_length * d_OSR;
-    int search_stop_pos = search_center + d_chan_imp_length * d_OSR + 2 * d_OSR;
+    int search_stop_pos = search_center + d_chan_imp_length * d_OSR + 5 * d_OSR;
 
     for (int ii = search_start_pos; ii < search_stop_pos; ii++)
     {
@@ -765,8 +764,11 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
         window_energy_buffer.push_back(energy);
     }
 
-    strongest_window_nr = max_element(window_energy_buffer.begin(), window_energy_buffer.end()) - window_energy_buffer.begin();
-    strongest_window_nr = strongest_window_nr-d_OSR; 
+    strongest_window_nr = max_element(window_energy_buffer.begin(), window_energy_buffer.end()-((d_chan_imp_length)*d_OSR)) - window_energy_buffer.begin();
+    //strongest_window_nr = strongest_window_nr-d_OSR; 
+    if(strongest_window_nr<0){
+       strongest_window_nr = 0;
+    }
     
     max_correlation = 0;
     for (int ii = 0; ii < (d_chan_imp_length)*d_OSR; ii++)
