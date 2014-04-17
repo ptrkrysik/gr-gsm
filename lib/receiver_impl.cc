@@ -254,6 +254,7 @@ receiver_impl::general_work(int noutput_items,
                 d_failed_sch++;
                 if (d_failed_sch >= MAX_SCH_ERRORS)
                 {
+                    d_state = next_fcch_search; 
                     d_freq_offset_vals.clear();
                     d_freq_offset=0;
                     //set_frequency(0);
