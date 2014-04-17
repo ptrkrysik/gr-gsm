@@ -95,6 +95,7 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
     message_port_register_out(pmt::mp("bursts"));
+    configure_receiver();  //configure the receiver - tell it where to find which burst type
 }
 
 /*
@@ -173,13 +174,6 @@ receiver_impl::general_work(int noutput_items,
                 DCOUT("sch burst_start: " << burst_start);
                 DCOUT("bcc: " << d_bcc << " ncc: " << d_ncc << " t1: " << t1 << " t2: " << t2 << " t3: " << t3);
                 d_burst_nr.set(t1, t2, t3, 0);                                  //set counter of bursts value
-
-                //configure the receiver - tell him where to find which burst type
-                d_channel_conf.set_multiframe_type(TIMESLOT0, multiframe_51);  //in the timeslot nr.0 bursts changes according to t3 counter
-                configure_receiver();//TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
-                d_channel_conf.set_burst_types(TIMESLOT0, FCCH_FRAMES, sizeof(FCCH_FRAMES) / sizeof(unsigned), fcch_burst);  //tell where to find fcch bursts
-                d_channel_conf.set_burst_types(TIMESLOT0, SCH_FRAMES, sizeof(SCH_FRAMES) / sizeof(unsigned), sch_burst);     //sch bursts
-                d_channel_conf.set_burst_types(TIMESLOT0, BCCH_FRAMES, sizeof(BCCH_FRAMES) / sizeof(unsigned), normal_burst);//!and maybe normal bursts of the BCCH logical channel
                 d_burst_nr++;
 
                 consume_each(burst_start + BURST_SIZE * d_OSR);   //consume samples up to next guard period
@@ -824,6 +818,7 @@ void receiver_impl::configure_receiver()
 
     d_channel_conf.set_burst_types(TSC0, TEST_CCH_FRAMES, sizeof(TEST_CCH_FRAMES) / sizeof(unsigned), dummy_or_normal);
     d_channel_conf.set_burst_types(TSC0, FCCH_FRAMES, sizeof(FCCH_FRAMES) / sizeof(unsigned), fcch_burst);
+    d_channel_conf.set_burst_types(TSC0, SCH_FRAMES, sizeof(FCCH_FRAMES) / sizeof(unsigned), fcch_burst);
 
     //  d_channel_conf.set_multiframe_type(TIMESLOT1, multiframe_26);
     //  d_channel_conf.set_burst_types(TIMESLOT1, TRAFFIC_CHANNEL_F, sizeof(TRAFFIC_CHANNEL_F) / sizeof(unsigned), dummy_or_normal);
@@ -854,7 +849,6 @@ void receiver_impl::configure_receiver()
     d_channel_conf.set_burst_types(TIMESLOT6, TEST51, sizeof(TEST51) / sizeof(unsigned), dummy_or_normal);
     d_channel_conf.set_multiframe_type(TIMESLOT7, multiframe_51);
     d_channel_conf.set_burst_types(TIMESLOT7, TEST51, sizeof(TEST51) / sizeof(unsigned), dummy_or_normal);
-
 }
 
 
