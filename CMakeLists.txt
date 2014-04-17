@@ -140,6 +140,7 @@ add_custom_target(uninstall
 # Add subdirectories
 ########################################################################
 add_subdirectory(include/gsm)
+add_subdirectory(include/plotting)
 add_subdirectory(lib)
 add_subdirectory(swig)
 add_subdirectory(python)
