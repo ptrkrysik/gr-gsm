@@ -2,7 +2,7 @@
 <block>
   <name>get_ccch_bursts</name>
   <key>gsm_get_ccch_bursts</key>
-  <category>gsm</category>
+  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.get_ccch_bursts()</make>
   <sink>

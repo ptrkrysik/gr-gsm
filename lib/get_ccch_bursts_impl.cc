@@ -37,32 +37,28 @@ namespace gr {
         uint32_t frame_nr = header->frame_number;
         pmt::pmt_t msgs[4];
         uint32_t frame_numbers[4];
+        uint32_t fn_mod51 = header->frame_number % 51;
         
         if(header->timeslot==0){
-            std::cout << (header->frame_number % 51) << std::endl;
-            if((header->frame_number % 51)>=2 & (header->frame_number % 51)<=5){
-                uint32_t ii = header->frame_number-2;
+            if(fn_mod51>=2 && fn_mod51<=5){
+                uint32_t ii = fn_mod51-2;
                 frame_numbers[ii]=header->frame_number;
                 msgs[ii] = msg;
-//                std::cout << "Hura, pierwszy if" << std::endl;
             }
             
-            if((header->frame_number % 51)==5){
+            if(fn_mod51==5){
                 //check for a situation where some BCCH bursts were lost
                 //in this situation frame numbers won't be consecutive
                 bool frames_are_consecutive = true;
-                for(int jj=1;jj<4;jj++){
+                for(int jj=1; jj<4; jj++){
                     if((frame_numbers[jj]-frame_numbers[jj-1])!=1){
                         frames_are_consecutive = false;
                     }
                 }
-                std::cout << "Hura, durgi if" << std::endl;                
                 if(frames_are_consecutive){
                     //send bursts to the output
-                    std::cout << "Hura, trzeci if" << std::endl;                
-
-                    for(int jj=1;jj<4;jj++){
-//                        message_port_pub(pmt::mp("bursts_out"), msgs[jj]);
+                    for(int jj=1; jj<4; jj++){
+                        message_port_pub(pmt::mp("bursts_out"), msgs[jj]);
                     }                 
                 }
             }
