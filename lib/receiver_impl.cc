@@ -260,7 +260,6 @@ receiver_impl::general_work(int noutput_items,
                 d_failed_sch++;
                 if (d_failed_sch >= MAX_SCH_ERRORS)
                 {
-                    d_state = next_fcch_search;        //TODO: this isn't good, the receiver is going wild when it goes back to next_fcch_search from here
                     d_freq_offset_vals.clear();
                     d_freq_offset=0;
                     //set_frequency(0);
@@ -275,7 +274,7 @@ receiver_impl::general_work(int noutput_items,
             float normal_corr_max;                                                    //if it's normal burst
             burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc); //get channel impulse response for given training sequence number - d_bcc
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);            //MLSE detection of bits
-            send_burst(d_burst_nr, output_binary, b_type); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
+            send_burst(d_burst_nr, output_binary, b_type);
             break;
         }
         case dummy_or_normal:
@@ -291,7 +290,7 @@ receiver_impl::general_work(int noutput_items,
             if (normal_corr_max > dummy_corr_max)
             {
                 detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
-                send_burst(d_burst_nr, output_binary, b_type); //TODO: this shouldn't be here - remove it when gsm receiver's interface will be ready
+                send_burst(d_burst_nr, output_binary, b_type); 
             }
             else
             {
