@@ -687,8 +687,9 @@ inline void receiver_impl::mafi(const gr_complex * input, int nitems, gr_complex
 
         while (ii < filter_length)
         {
-            if ((a + ii) >= nitems*d_OSR)
+            if ((a + ii) >= nitems*d_OSR){
                 break;
+            }
             output[n] += input[a+ii] * filter[ii];
             ii++;
         }

@@ -30,7 +30,7 @@ namespace gr {
     class get_ccch_bursts_impl : public get_ccch_bursts
     {
      private:
-         pmt::pmt_t d_msgs[4];                
+         pmt::pmt_t d_bursts[4];                
      public:
         get_ccch_bursts_impl();
         ~get_ccch_bursts_impl();
