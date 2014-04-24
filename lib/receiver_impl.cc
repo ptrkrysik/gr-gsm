@@ -81,17 +81,7 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
     for (i = 0; i < TRAIN_SEQ_NUM; i++)
     {
-        gr_complex startpoint;
-        if (i == 6 || i == 7)                             //this is nasty hack
-        {
-            startpoint = gr_complex(-1.0, 0.0);   //if I don't change it here all bits of normal bursts for BTSes with bcc=6 will have reversed values
-        }
-        else
-        {
-            startpoint = gr_complex(1.0, 0.0);    //I've checked this hack for bcc==0,1,2,3,4,6
-        }                                       //I don't know what about bcc==5 and 7 yet
-        //TODO:find source of this situation - this is purely mathematical problem I guess
-
+        gr_complex startpoint = (train_seq[i][0]==0) ? gr_complex(1.0, 0.0) : gr_complex(-1.0, 0.0); //if first bit of the seqeunce ==0  first symbol ==1
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
     message_port_register_out(pmt::mp("bursts"));
