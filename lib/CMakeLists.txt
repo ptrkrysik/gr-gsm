@@ -24,15 +24,13 @@ include(GrPlatform) #define LIB_SUFFIX
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
-
 list(APPEND gsm_sources
     receiver_impl.cc
     receiver_config.cc 
     viterbi_detector.cc 
     sch.c
     bursts_printer_impl.cc
-    get_ccch_bursts_impl.cc
-)
+    )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
 target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES}  

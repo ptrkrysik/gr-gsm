@@ -23,6 +23,5 @@
 install(FILES
     api.h
     receiver.h
-    get_ccch_bursts.h
     bursts_printer.h DESTINATION include/gsm
 )
