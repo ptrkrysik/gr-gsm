@@ -62,7 +62,7 @@ receiver::make(feval_dd * tuner, int osr, int arfcn)
  * The private constructor
  */
 receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
-    : gr::block("receiver",
+    : gr::sync_block("receiver",
                 gr::io_signature::make(1, 1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
     d_OSR(osr),
@@ -78,6 +78,8 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     d_signal_dbm(-120)
 {
     int i;
+    set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); //don't send samples to the receiver until there are at least samples for one
+                                                                      // burst and two gurad periods (one gurard period is an arbitrary overlap)
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
     for (i = 0; i < TRAIN_SEQ_NUM; i++)
     {
@@ -95,18 +97,12 @@ receiver_impl::~receiver_impl()
 {
 }
 
-void receiver_impl::forecast(int noutput_items, gr_vector_int &ninput_items_required)
-{
-    ninput_items_required[0] = noutput_items * floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR);
-}
-
-
 int
-receiver_impl::general_work(int noutput_items,
-                            gr_vector_int &ninput_items,
-                            gr_vector_const_void_star &input_items,
-                            gr_vector_void_star &output_items)
+receiver_impl::work(int noutput_items,
+	               gr_vector_const_void_star &input_items,
+	               gr_vector_void_star &output_items)
 {
+    //std::cout << noutput_items << std::endl;
     const gr_complex *input = (const gr_complex *) input_items[0];
 
     switch (d_state)
@@ -114,7 +110,7 @@ receiver_impl::general_work(int noutput_items,
         //bootstrapping
     case first_fcch_search:
         DCOUT("FCCH search");
-        if (find_fcch_burst(input, ninput_items[0]))   //find frequency correction burst in the input buffer
+        if (find_fcch_burst(input, noutput_items))   //find frequency correction burst in the input buffer
         {
             //set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
             COUT("Freq offset " << d_freq_offset);
@@ -130,7 +126,7 @@ receiver_impl::general_work(int noutput_items,
     {
         DCOUT("NEXT FCCH search");
         float prev_freq_offset = d_freq_offset;        //before previous set_frequqency cause change
-        if (find_fcch_burst(input, ninput_items[0]))
+        if (find_fcch_burst(input, noutput_items))
         {
             if (abs(prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
             {
@@ -155,7 +151,7 @@ receiver_impl::general_work(int noutput_items,
         int burst_start = 0;
         unsigned char output_binary[BURST_SIZE];
 
-        if (reach_sch_burst(ninput_items[0]))                                //wait for a SCH burst
+        if (reach_sch_burst(noutput_items))                                //wait for a SCH burst
         {
             burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]); //get channel impulse response from it
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary); //detect bits using MLSE detection
@@ -192,7 +188,7 @@ receiver_impl::general_work(int noutput_items,
 
         burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr); //get burst type for given burst number
         double signal_pwr=0;
-        for(int ii=0;ii<ninput_items[0];ii++)
+        for(int ii=0;ii<noutput_items;ii++)
         {
             signal_pwr += abs(input[ii])*abs(input[ii]);
         }
@@ -769,14 +765,11 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
     }
 
     *corr_max = max_correlation;
-    // We want to use the first sample of the impulse response, and the
-    // corresponding samples of the received signal.
-    // the variable sync_w should contain the beginning of the used part of
-    // training sequence, which is 3+57+1+6=67 bits into the burst. That is
-    // we have that sync_t16 equals first sample in bit number 67.
 
     DCOUT("strongest_window_nr_new: " << strongest_window_nr);
-    burst_start = search_start_pos + strongest_window_nr - TRAIN_POS * d_OSR;
+    burst_start = search_start_pos + strongest_window_nr - TRAIN_POS * d_OSR; //compute first sample posiiton which corresponds to the first sample of the impulse response
+                                                                              //TRAIN_POS=3+57+1+6
+                                                                              //TODO: describe this part in detail in documentation as this is crucial part for synchronization
 
     DCOUT("burst_start: " << burst_start);
     return burst_start;

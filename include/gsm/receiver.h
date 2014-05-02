@@ -25,6 +25,7 @@
 #include <gsm/api.h>
 #include <gnuradio/block.h>
 #include <gnuradio/feval.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -34,7 +35,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API receiver : virtual public block
+    class GSM_API receiver : virtual public sync_block
     {
      public:
       typedef boost::shared_ptr<receiver> sptr;
