@@ -66,6 +66,7 @@ void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_com
    float increment[8];
    float path_metrics1[16];
    float path_metrics2[16];
+   float paths_difference;
    float * new_path_metrics;
    float * old_path_metrics;
    float * tmp;
@@ -106,16 +107,11 @@ void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_com
 * and one for even samples (real numbers).
 * Each part is composed of independent (parallelisable) statements like  
 * this one:
-*      pm_candidate1 = old_path_metrics[0] - input_symbol_real - increment[7];
-*      pm_candidate2 = old_path_metrics[8] - input_symbol_real + increment[0];
-*      if(pm_candidate1 > pm_candidate2){
-*         new_path_metrics[0] = pm_candidate1;
-*         trans_table[sample_nr][0] = -1.0;
-*      }
-*      else{
-*         new_path_metrics[0] = pm_candidate2;
-*         trans_table[sample_nr][0] = 1.0;
-*      }
+*      pm_candidate1 = old_path_metrics[0] -input_symbol_imag +increment[2];
+*      pm_candidate2 = old_path_metrics[8] -input_symbol_imag -increment[5];
+*      paths_difference=pm_candidate2-pm_candidate1;
+*      new_path_metrics[1]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+*      trans_table[sample_nr][1] = paths_difference;
 * This is very good point for optimisations (SIMD or OpenMP) as it's most time 
 * consuming part of this function. 
 */
@@ -129,179 +125,99 @@ void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_com
 
       pm_candidate1 = old_path_metrics[0] +input_symbol_imag -increment[2];
       pm_candidate2 = old_path_metrics[8] +input_symbol_imag +increment[5];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[0] = pm_candidate1;
-         trans_table[sample_nr][0] = -std::abs( +input_symbol_imag -increment[2]);
-      }
-      else{
-         new_path_metrics[0] = pm_candidate2;
-         trans_table[sample_nr][0] = std::abs( +input_symbol_imag +increment[5]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[0]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][0] = paths_difference;
 
       pm_candidate1 = old_path_metrics[0] -input_symbol_imag +increment[2];
       pm_candidate2 = old_path_metrics[8] -input_symbol_imag -increment[5];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[1] = pm_candidate1;
-         trans_table[sample_nr][1] = -std::abs( -input_symbol_imag +increment[2]);
-      }
-      else{
-         new_path_metrics[1] = pm_candidate2;
-         trans_table[sample_nr][1] = std::abs( -input_symbol_imag -increment[5]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[1]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][1] = paths_difference;
 
       pm_candidate1 = old_path_metrics[1] +input_symbol_imag -increment[3];
       pm_candidate2 = old_path_metrics[9] +input_symbol_imag +increment[4];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[2] = pm_candidate1;
-         trans_table[sample_nr][2] = -std::abs( +input_symbol_imag -increment[3]);
-      }
-      else{
-         new_path_metrics[2] = pm_candidate2;
-         trans_table[sample_nr][2] = std::abs( +input_symbol_imag +increment[4]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[2]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][2] = paths_difference;
 
       pm_candidate1 = old_path_metrics[1] -input_symbol_imag +increment[3];
       pm_candidate2 = old_path_metrics[9] -input_symbol_imag -increment[4];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[3] = pm_candidate1;
-         trans_table[sample_nr][3] = -std::abs( -input_symbol_imag +increment[3]);
-      }
-      else{
-         new_path_metrics[3] = pm_candidate2;
-         trans_table[sample_nr][3] = std::abs( -input_symbol_imag -increment[4]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[3]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][3] = paths_difference;
 
       pm_candidate1 = old_path_metrics[2] +input_symbol_imag -increment[0];
       pm_candidate2 = old_path_metrics[10] +input_symbol_imag +increment[7];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[4] = pm_candidate1;
-         trans_table[sample_nr][4] = -std::abs( +input_symbol_imag -increment[0]);
-      }
-      else{
-         new_path_metrics[4] = pm_candidate2;
-         trans_table[sample_nr][4] = std::abs( +input_symbol_imag +increment[7]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[4]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][4] = paths_difference;
 
       pm_candidate1 = old_path_metrics[2] -input_symbol_imag +increment[0];
       pm_candidate2 = old_path_metrics[10] -input_symbol_imag -increment[7];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[5] = pm_candidate1;
-         trans_table[sample_nr][5] = -std::abs( -input_symbol_imag +increment[0]);
-      }
-      else{
-         new_path_metrics[5] = pm_candidate2;
-         trans_table[sample_nr][5] = std::abs( -input_symbol_imag -increment[7]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[5]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][5] = paths_difference;
 
       pm_candidate1 = old_path_metrics[3] +input_symbol_imag -increment[1];
       pm_candidate2 = old_path_metrics[11] +input_symbol_imag +increment[6];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[6] = pm_candidate1;
-         trans_table[sample_nr][6] = -std::abs( +input_symbol_imag -increment[1]);
-      }
-      else{
-         new_path_metrics[6] = pm_candidate2;
-         trans_table[sample_nr][6] = std::abs( +input_symbol_imag +increment[6]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[6]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][6] = paths_difference;
 
       pm_candidate1 = old_path_metrics[3] -input_symbol_imag +increment[1];
       pm_candidate2 = old_path_metrics[11] -input_symbol_imag -increment[6];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[7] = pm_candidate1;
-         trans_table[sample_nr][7] = -std::abs( -input_symbol_imag +increment[1]);
-      }
-      else{
-         new_path_metrics[7] = pm_candidate2;
-         trans_table[sample_nr][7] = std::abs( -input_symbol_imag -increment[6]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[7]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][7] = paths_difference;
 
       pm_candidate1 = old_path_metrics[4] +input_symbol_imag -increment[6];
       pm_candidate2 = old_path_metrics[12] +input_symbol_imag +increment[1];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[8] = pm_candidate1;
-         trans_table[sample_nr][8] = -std::abs( +input_symbol_imag -increment[6]);
-      }
-      else{
-         new_path_metrics[8] = pm_candidate2;
-         trans_table[sample_nr][8] = std::abs( +input_symbol_imag +increment[1]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[8]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][8] = paths_difference;
 
       pm_candidate1 = old_path_metrics[4] -input_symbol_imag +increment[6];
       pm_candidate2 = old_path_metrics[12] -input_symbol_imag -increment[1];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[9] = pm_candidate1;
-         trans_table[sample_nr][9] = -std::abs( -input_symbol_imag +increment[6]);
-      }
-      else{
-         new_path_metrics[9] = pm_candidate2;
-         trans_table[sample_nr][9] = std::abs( -input_symbol_imag -increment[1]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[9]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][9] = paths_difference;
 
       pm_candidate1 = old_path_metrics[5] +input_symbol_imag -increment[7];
       pm_candidate2 = old_path_metrics[13] +input_symbol_imag +increment[0];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[10] = pm_candidate1;
-         trans_table[sample_nr][10] = -std::abs( +input_symbol_imag -increment[7]);
-      }
-      else{
-         new_path_metrics[10] = pm_candidate2;
-         trans_table[sample_nr][10] = std::abs( +input_symbol_imag +increment[0]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[10]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][10] = paths_difference;
 
       pm_candidate1 = old_path_metrics[5] -input_symbol_imag +increment[7];
       pm_candidate2 = old_path_metrics[13] -input_symbol_imag -increment[0];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[11] = pm_candidate1;
-         trans_table[sample_nr][11] = -std::abs( -input_symbol_imag +increment[7]);
-      }
-      else{
-         new_path_metrics[11] = pm_candidate2;
-         trans_table[sample_nr][11] = std::abs( -input_symbol_imag -increment[0]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[11]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][11] = paths_difference;
 
       pm_candidate1 = old_path_metrics[6] +input_symbol_imag -increment[4];
       pm_candidate2 = old_path_metrics[14] +input_symbol_imag +increment[3];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[12] = pm_candidate1;
-         trans_table[sample_nr][12] = -std::abs( +input_symbol_imag -increment[4]);
-      }
-      else{
-         new_path_metrics[12] = pm_candidate2;
-         trans_table[sample_nr][12] = std::abs( +input_symbol_imag +increment[3]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[12]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][12] = paths_difference;
 
       pm_candidate1 = old_path_metrics[6] -input_symbol_imag +increment[4];
       pm_candidate2 = old_path_metrics[14] -input_symbol_imag -increment[3];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[13] = pm_candidate1;
-         trans_table[sample_nr][13] = -std::abs( -input_symbol_imag +increment[4]);
-      }
-      else{
-         new_path_metrics[13] = pm_candidate2;
-         trans_table[sample_nr][13] = std::abs( -input_symbol_imag -increment[3]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[13]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][13] = paths_difference;
 
       pm_candidate1 = old_path_metrics[7] +input_symbol_imag -increment[5];
       pm_candidate2 = old_path_metrics[15] +input_symbol_imag +increment[2];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[14] = pm_candidate1;
-         trans_table[sample_nr][14] = -std::abs( +input_symbol_imag -increment[5]);
-      }
-      else{
-         new_path_metrics[14] = pm_candidate2;
-         trans_table[sample_nr][14] = std::abs( +input_symbol_imag +increment[2]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[14]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][14] = paths_difference;
 
       pm_candidate1 = old_path_metrics[7] -input_symbol_imag +increment[5];
       pm_candidate2 = old_path_metrics[15] -input_symbol_imag -increment[2];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[15] = pm_candidate1;
-         trans_table[sample_nr][15] = -std::abs( -input_symbol_imag +increment[5]);
-      }
-      else{
-         new_path_metrics[15] = pm_candidate2;
-         trans_table[sample_nr][15] = std::abs( -input_symbol_imag -increment[2]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[15]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][15] = paths_difference;
       tmp=old_path_metrics;
       old_path_metrics=new_path_metrics;
       new_path_metrics=tmp;
@@ -316,179 +232,100 @@ void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_com
 
       pm_candidate1 = old_path_metrics[0] -input_symbol_real -increment[7];
       pm_candidate2 = old_path_metrics[8] -input_symbol_real +increment[0];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[0] = pm_candidate1;
-         trans_table[sample_nr][0] = -std::abs( -input_symbol_real -increment[7]);
-      }
-      else{
-         new_path_metrics[0] = pm_candidate2;
-         trans_table[sample_nr][0] = std::abs( -input_symbol_real +increment[0]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[0]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][0] = paths_difference;
 
       pm_candidate1 = old_path_metrics[0] +input_symbol_real +increment[7];
       pm_candidate2 = old_path_metrics[8] +input_symbol_real -increment[0];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[1] = pm_candidate1;
-         trans_table[sample_nr][1] = -std::abs( +input_symbol_real +increment[7]);
-      }
-      else{
-         new_path_metrics[1] = pm_candidate2;
-         trans_table[sample_nr][1] = std::abs( +input_symbol_real -increment[0]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[1]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][1] = paths_difference;
 
       pm_candidate1 = old_path_metrics[1] -input_symbol_real -increment[6];
       pm_candidate2 = old_path_metrics[9] -input_symbol_real +increment[1];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[2] = pm_candidate1;
-         trans_table[sample_nr][2] = -std::abs( -input_symbol_real -increment[6]);
-      }
-      else{
-         new_path_metrics[2] = pm_candidate2;
-         trans_table[sample_nr][2] = std::abs( -input_symbol_real +increment[1]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[2]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][2] = paths_difference;
 
       pm_candidate1 = old_path_metrics[1] +input_symbol_real +increment[6];
       pm_candidate2 = old_path_metrics[9] +input_symbol_real -increment[1];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[3] = pm_candidate1;
-         trans_table[sample_nr][3] = -std::abs( +input_symbol_real +increment[6]);
-      }
-      else{
-         new_path_metrics[3] = pm_candidate2;
-         trans_table[sample_nr][3] = std::abs( +input_symbol_real -increment[1]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[3]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][3] = paths_difference;
 
       pm_candidate1 = old_path_metrics[2] -input_symbol_real -increment[5];
       pm_candidate2 = old_path_metrics[10] -input_symbol_real +increment[2];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[4] = pm_candidate1;
-         trans_table[sample_nr][4] = -std::abs( -input_symbol_real -increment[5]);
-      }
-      else{
-         new_path_metrics[4] = pm_candidate2;
-         trans_table[sample_nr][4] = std::abs( -input_symbol_real +increment[2]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[4]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][4] = paths_difference;
 
       pm_candidate1 = old_path_metrics[2] +input_symbol_real +increment[5];
       pm_candidate2 = old_path_metrics[10] +input_symbol_real -increment[2];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[5] = pm_candidate1;
-         trans_table[sample_nr][5] = -std::abs( +input_symbol_real +increment[5]);
-      }
-      else{
-         new_path_metrics[5] = pm_candidate2;
-         trans_table[sample_nr][5] = std::abs( +input_symbol_real -increment[2]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[5]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][5] = paths_difference;
 
       pm_candidate1 = old_path_metrics[3] -input_symbol_real -increment[4];
       pm_candidate2 = old_path_metrics[11] -input_symbol_real +increment[3];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[6] = pm_candidate1;
-         trans_table[sample_nr][6] = -std::abs( -input_symbol_real -increment[4]);
-      }
-      else{
-         new_path_metrics[6] = pm_candidate2;
-         trans_table[sample_nr][6] = std::abs( -input_symbol_real +increment[3]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[6]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][6] = paths_difference;
 
       pm_candidate1 = old_path_metrics[3] +input_symbol_real +increment[4];
       pm_candidate2 = old_path_metrics[11] +input_symbol_real -increment[3];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[7] = pm_candidate1;
-         trans_table[sample_nr][7] = -std::abs( +input_symbol_real +increment[4]);
-      }
-      else{
-         new_path_metrics[7] = pm_candidate2;
-         trans_table[sample_nr][7] = std::abs( +input_symbol_real -increment[3]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[7]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][7] = paths_difference;
 
       pm_candidate1 = old_path_metrics[4] -input_symbol_real -increment[3];
       pm_candidate2 = old_path_metrics[12] -input_symbol_real +increment[4];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[8] = pm_candidate1;
-         trans_table[sample_nr][8] = -std::abs( -input_symbol_real -increment[3]);
-      }
-      else{
-         new_path_metrics[8] = pm_candidate2;
-         trans_table[sample_nr][8] = std::abs( -input_symbol_real +increment[4]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[8]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][8] = paths_difference;
 
       pm_candidate1 = old_path_metrics[4] +input_symbol_real +increment[3];
       pm_candidate2 = old_path_metrics[12] +input_symbol_real -increment[4];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[9] = pm_candidate1;
-         trans_table[sample_nr][9] = -std::abs( +input_symbol_real +increment[3]);
-      }
-      else{
-         new_path_metrics[9] = pm_candidate2;
-         trans_table[sample_nr][9] = std::abs( +input_symbol_real -increment[4]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[9]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][9] = paths_difference;
 
       pm_candidate1 = old_path_metrics[5] -input_symbol_real -increment[2];
       pm_candidate2 = old_path_metrics[13] -input_symbol_real +increment[5];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[10] = pm_candidate1;
-         trans_table[sample_nr][10] = -std::abs( -input_symbol_real -increment[2]);
-      }
-      else{
-         new_path_metrics[10] = pm_candidate2;
-         trans_table[sample_nr][10] = std::abs( -input_symbol_real +increment[5]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[10]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][10] = paths_difference;
 
       pm_candidate1 = old_path_metrics[5] +input_symbol_real +increment[2];
       pm_candidate2 = old_path_metrics[13] +input_symbol_real -increment[5];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[11] = pm_candidate1;
-         trans_table[sample_nr][11] = -std::abs( +input_symbol_real +increment[2]);
-      }
-      else{
-         new_path_metrics[11] = pm_candidate2;
-         trans_table[sample_nr][11] = std::abs( +input_symbol_real -increment[5]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[11]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][11] = paths_difference;
 
       pm_candidate1 = old_path_metrics[6] -input_symbol_real -increment[1];
       pm_candidate2 = old_path_metrics[14] -input_symbol_real +increment[6];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[12] = pm_candidate1;
-         trans_table[sample_nr][12] = -std::abs( -input_symbol_real -increment[1]);
-      }
-      else{
-         new_path_metrics[12] = pm_candidate2;
-         trans_table[sample_nr][12] = std::abs( -input_symbol_real +increment[6]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[12]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][12] = paths_difference;
 
       pm_candidate1 = old_path_metrics[6] +input_symbol_real +increment[1];
       pm_candidate2 = old_path_metrics[14] +input_symbol_real -increment[6];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[13] = pm_candidate1;
-         trans_table[sample_nr][13] = -std::abs( +input_symbol_real +increment[1]);
-      }
-      else{
-         new_path_metrics[13] = pm_candidate2;
-         trans_table[sample_nr][13] = std::abs( +input_symbol_real -increment[6]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[13]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][13] = paths_difference;
 
       pm_candidate1 = old_path_metrics[7] -input_symbol_real -increment[0];
       pm_candidate2 = old_path_metrics[15] -input_symbol_real +increment[7];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[14] = pm_candidate1;
-         trans_table[sample_nr][14] = -std::abs( -input_symbol_real -increment[0]);
-      }
-      else{
-         new_path_metrics[14] = pm_candidate2;
-         trans_table[sample_nr][14] = std::abs( -input_symbol_real +increment[7]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[14]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][14] = paths_difference;
 
       pm_candidate1 = old_path_metrics[7] +input_symbol_real +increment[0];
       pm_candidate2 = old_path_metrics[15] +input_symbol_real -increment[7];
-      if(pm_candidate1 > pm_candidate2){
-         new_path_metrics[15] = pm_candidate1;
-         trans_table[sample_nr][15] = -std::abs( +input_symbol_real +increment[0]);
-      }
-      else{
-         new_path_metrics[15] = pm_candidate2;
-         trans_table[sample_nr][15] = std::abs( +input_symbol_real -increment[7]);
-      }
+      paths_difference=pm_candidate2-pm_candidate1;
+      new_path_metrics[15]=(paths_difference<0) ? pm_candidate1 : pm_candidate2;
+      trans_table[sample_nr][15] = paths_difference;
+
       tmp=old_path_metrics;
       old_path_metrics=new_path_metrics;
       new_path_metrics=tmp;
@@ -543,8 +380,12 @@ void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_com
    while(sample_nr>0){
       sample_nr--;
       decision = (trans_table[sample_nr][state_nr]>0);
-     
-      output[sample_nr] = (decision == out_bit ? trans_table[sample_nr][state_nr] : -trans_table[sample_nr][state_nr]);
+
+      if(decision != out_bit)
+         output[sample_nr]=-trans_table[sample_nr][state_nr];
+      else
+         output[sample_nr]=trans_table[sample_nr][state_nr];
+
       out_bit = out_bit ^ real_imag ^ parity_table[state_nr];
       state_nr = prev_table[state_nr][decision];
       real_imag = !real_imag;
