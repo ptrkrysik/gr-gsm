@@ -27,8 +27,8 @@ link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND gsm_sources
     receiver/receiver_impl.cc
     receiver/receiver_config.cc 
-    viterbi_detector.cc 
-    sch.c
+    receiver/viterbi_detector.cc 
+    receiver/sch.c
     burst_printer/bursts_printer_impl.cc
     )
 
