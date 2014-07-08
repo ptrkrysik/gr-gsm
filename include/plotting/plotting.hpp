@@ -44,8 +44,7 @@ void plot(arma::cx_mat & x, std::string title){
    }
    (*current_figure) << "plot ";
    
-   (*current_figure) << current_figure->file1d(y) <<"title \'"  << titl
-   e << "\' with lines ";
+   (*current_figure) << current_figure->file1d(y) <<"title \'" << title << "\' with lines ";
    (*current_figure) << std::endl; 
 }
 
