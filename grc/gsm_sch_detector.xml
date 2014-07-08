@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<block>
+  <name>sch_detector</name>
+  <key>gsm_sch_detector</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.sch_detector($OSR)</make>
+  <param>
+    <name>OSR</name>
+    <key>OSR</key>
+    <type>int</type>
+<!--    <value>OSR</value>-->
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>

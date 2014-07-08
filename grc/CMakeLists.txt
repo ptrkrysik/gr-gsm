@@ -18,5 +18,8 @@
 # Boston, MA 02110-1301, USA.
 install(FILES
     gsm_receiver_hier.xml
-    gsm_bursts_printer.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_bursts_printer.xml
+    gsm_fcch_burst_tagger.xml
+    gsm_sch_detector.xml
+    gsm_fcch_detector.xml DESTINATION share/gnuradio/grc/blocks
 )

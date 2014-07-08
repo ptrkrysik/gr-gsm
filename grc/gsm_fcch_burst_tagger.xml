@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<block>
+  <name>fcch_burst_tagger</name>
+  <key>gsm_fcch_burst_tagger</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.fcch_burst_tagger($OSR)</make>
+  <param>
+    <name>OSR</name>
+    <key>OSR</key>
+    <type>int</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  
+  <sink>
+    <name>threshold</name>
+    <type>float</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>
