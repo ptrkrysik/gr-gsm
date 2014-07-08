@@ -55,7 +55,7 @@ namespace gr {
 
         for(int ii=0; ii<burst_len; ii++)
         {
-          std::cout << std::setprecision(1) << static_cast<int>(burst_elements[ii]) << " ";
+          std::cout << std::setprecision(1) << static_cast<int>(burst_elements[ii]) << "";
         }
         std::cout << std::endl;
     }

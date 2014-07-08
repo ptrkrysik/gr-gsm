@@ -32,7 +32,7 @@ namespace gr {
      private:
       void bursts_print(pmt::pmt_t burst);
       std::set<uint16_t> d_c0_channels;
-          
+
      public:
       bursts_printer_impl();
       ~bursts_printer_impl();

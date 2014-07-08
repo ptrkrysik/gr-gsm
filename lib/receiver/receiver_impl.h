@@ -60,6 +60,7 @@ namespace gr {
         //@{
         unsigned d_fcch_start_pos; ///< position of the first sample of the fcch burst
         float d_freq_offset; ///< frequency offset of the received signal
+        float d_prev_freq_offset; //!!!
         //@}
         std::list<double> d_freq_offset_vals;
 

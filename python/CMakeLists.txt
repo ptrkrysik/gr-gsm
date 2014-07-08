@@ -37,9 +37,9 @@ GR_PYTHON_INSTALL(
 ########################################################################
 # Handle the unit tests
 ########################################################################
-include(GrTest)
+#include(GrTest)
 
-set(GR_TEST_TARGET_DEPS gnuradio-gsm)
-set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
-GR_ADD_TEST(qa_receiver ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.py)
-GR_ADD_TEST(qa_receiver_hier ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver_hier.py)
+#set(GR_TEST_TARGET_DEPS gnuradio-gsm)
+#set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+#GR_ADD_TEST(qa_receiver ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.py)
+#GR_ADD_TEST(qa_receiver_hier ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver_hier.py)

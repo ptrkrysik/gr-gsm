@@ -95,9 +95,8 @@ class burst_counter
         d_timeslot_nr(timeslot_nr),
         d_offset_fractional(0.0),
         d_offset_integer(0.0) {
-      double first_sample_position = (get_frame_nr() * 8 + timeslot_nr) * TS_BITS;
-      d_offset_integer = floor(first_sample_position);
-      d_offset_fractional = first_sample_position - floor(first_sample_position);
+      d_offset_integer = 0;
+      d_offset_fractional = 0;
     }
 
     burst_counter & operator++(int);

@@ -22,14 +22,14 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIR} receiver burst_printer)
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND gsm_sources
-    receiver_impl.cc
-    receiver_config.cc 
+    receiver/receiver_impl.cc
+    receiver/receiver_config.cc 
     viterbi_detector.cc 
     sch.c
-    bursts_printer_impl.cc
+    burst_printer/bursts_printer_impl.cc
     )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
@@ -52,24 +52,24 @@ install(TARGETS gnuradio-gsm
 ########################################################################
 # Build and register unit test
 ########################################################################
-include(GrTest)
+#include(GrTest)
 
-include_directories(${CPPUNIT_INCLUDE_DIRS})
+#include_directories(${CPPUNIT_INCLUDE_DIRS})
 
-list(APPEND test_gsm_sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/test_gsm.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.cc
-)
+#list(APPEND test_gsm_sources
+#    ${CMAKE_CURRENT_SOURCE_DIR}/test_gsm.cc
+#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm.cc
+#    ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.cc
+#)
 
-add_executable(test-gsm ${test_gsm_sources})
+#add_executable(test-gsm ${test_gsm_sources})
 
-target_link_libraries(
-  test-gsm
-  ${GNURADIO_RUNTIME_LIBRARIES}
-  ${Boost_LIBRARIES}
-  ${CPPUNIT_LIBRARIES}
-  gnuradio-gsm
-)
+#target_link_libraries(
+#  test-gsm
+#  ${GNURADIO_RUNTIME_LIBRARIES}
+#  ${Boost_LIBRARIES}
+#  ${CPPUNIT_LIBRARIES}
+#  gnuradio-gsm
+#)
 
-GR_ADD_TEST(test_gsm test-gsm)
+#GR_ADD_TEST(test_gsm test-gsm)

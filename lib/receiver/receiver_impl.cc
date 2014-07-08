@@ -38,6 +38,7 @@
 #include <iomanip>
 #include <assert.h>
 #include <boost/scoped_ptr.hpp>
+//#include "plotting/plotting.hpp"
 
 #define SYNC_SEARCH_RANGE 30
 
@@ -78,12 +79,13 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     d_signal_dbm(-120)
 {
     int i;
-    set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); //don't send samples to the receiver until there are at least samples for one
-                                                                      // burst and two gurad periods (one gurard period is an arbitrary overlap)
+    //set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); //don't send samples to the receiver until there are at least samples for one
+    set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); // burst and two gurad periods (one gurard period is an arbitrary overlap)
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
     for (i = 0; i < TRAIN_SEQ_NUM; i++)
     {
         gr_complex startpoint = (train_seq[i][0]==0) ? gr_complex(1.0, 0.0) : gr_complex(-1.0, 0.0); //if first bit of the seqeunce ==0  first symbol ==1
+                                                                                                     //if first bit of the seqeunce ==1  first symbol ==-1
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
     message_port_register_out(pmt::mp("bursts"));
@@ -113,7 +115,8 @@ receiver_impl::work(int noutput_items,
         if (find_fcch_burst(input, noutput_items))   //find frequency correction burst in the input buffer
         {
             //set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
-            COUT("Freq offset " << d_freq_offset);
+            DCOUT("Freq offset " << d_freq_offset);
+            DCOUT("PPM: " << d_freq_offset/940e6);
             d_state = next_fcch_search;
         }
         else
@@ -125,13 +128,14 @@ receiver_impl::work(int noutput_items,
     case next_fcch_search:                           //this state is used because it takes some time (a bunch of buffered samples)
     {
         DCOUT("NEXT FCCH search");
-        float prev_freq_offset = d_freq_offset;        //before previous set_frequqency cause change
+        d_prev_freq_offset = d_freq_offset;        //before previous set_frequqency cause change
         if (find_fcch_burst(input, noutput_items))
         {
-            if (abs(prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
+            if (abs(d_prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
             {
                 //set_frequency(d_freq_offset);              //call set_frequncy only frequency offset change is greater than some value
-                DCOUT("Freq offset " << d_freq_offset);
+                //COUT("Freq offset " << d_freq_offset);
+                DCOUT("PPM: " << d_freq_offset/940);
             }
             d_state = sch_search;
         }
@@ -162,7 +166,7 @@ receiver_impl::work(int noutput_items,
                 d_burst_nr.set(t1, t2, t3, 0);                                  //set counter of bursts value
                 d_burst_nr++;
 
-                consume_each(burst_start + BURST_SIZE * d_OSR);   //consume samples up to next guard period
+                consume_each(burst_start + BURST_SIZE * d_OSR + 4*d_OSR);   //consume samples up to next guard period
                 d_state = synchronized;
             }
             else
@@ -210,7 +214,7 @@ receiver_impl::work(int noutput_items,
                 double sum = std::accumulate(d_freq_offset_vals.begin(), d_freq_offset_vals.end(), 0);
                 double mean_offset = sum / d_freq_offset_vals.size();                           //compute mean
                 d_freq_offset_vals.clear();
-                DCOUT("mean offset" << mean_offset);
+                DCOUT("mean offset" << mean_offset/940);
                 if (abs(mean_offset) > FCCH_MAX_FREQ_OFFSET)
                 {
                     //d_freq_offset -= mean_offset;                                                 //and adjust frequency if it have changed beyond
@@ -244,7 +248,7 @@ receiver_impl::work(int noutput_items,
                     d_freq_offset_vals.clear();
                     d_freq_offset=0;
                     //set_frequency(0);
-                    DCOUT("Re-Synchronization");
+                    DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -288,7 +292,6 @@ receiver_impl::work(int noutput_items,
         }
 
         d_burst_nr++;   //go to next burst
-
         to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();  //consume samples of the burst up to next guard period
         //and add offset which is introduced by
         //0.25 fractional part of a guard period
@@ -447,7 +450,8 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems)
             //compute frequency offset
             double phase_offset = best_sum / FCCH_HITS_NEEDED;
             double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
-            d_freq_offset -= freq_offset;
+            //d_freq_offset -= freq_offset;
+            d_freq_offset = freq_offset;
             DCOUT("freq_offset: " << d_freq_offset);
 
             end = true;
@@ -544,7 +548,7 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex *input, gr_complex * c
         correlation_buffer.push_back(correlation);
         power_buffer.push_back(std::pow(abs(correlation), 2));
     }
-
+    //plot(power_buffer);
     //compute window energies
     vector_float::iterator iter = power_buffer.begin();
     bool loop_end = false;
