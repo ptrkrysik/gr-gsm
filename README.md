@@ -1,1 +1,1 @@
-This is a GSM receiver gnuradio block.
+This are gnuradio blocks and tools for receiving GSM transmissions.
