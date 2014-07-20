@@ -10,7 +10,7 @@
     <name>OverSamplingRatio</name>
     <key>OSR</key>
     <value>4</value>
-    <type>raw</type>
+    <type>int</type>
   </param>
   <sink>
     <name>in</name>

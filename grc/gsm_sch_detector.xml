@@ -5,11 +5,12 @@
   <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.sch_detector($OSR)</make>
+  <callback>set_OSR($OSR)</callback>
   <param>
     <name>OSR</name>
     <key>OSR</key>
+    <value>4</value>
     <type>int</type>
-<!--    <value>OSR</value>-->
   </param>
 
   <sink>
