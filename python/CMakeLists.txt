@@ -34,7 +34,8 @@ GR_PYTHON_INSTALL(
     receiver_hier.py
     fcch_burst_tagger.py
     sch_detector.py
-    fcch_detector.py DESTINATION ${GR_PYTHON_DIR}/gsm
+    fcch_detector.py 
+    chirpz.py DESTINATION ${GR_PYTHON_DIR}/gsm
 )
 
 ########################################################################
