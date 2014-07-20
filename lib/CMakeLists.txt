@@ -30,7 +30,11 @@ list(APPEND gsm_sources
     receiver/viterbi_detector.cc 
     receiver/sch.c
     burst_printer/bursts_printer_impl.cc
-    )
+    demapping/get_bcch_or_ccch_bursts_impl.cc
+    decoding/control_channels_decoder_impl.cc
+    decoding/cch.c
+    decoding/fire_crc.c
+)
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
 target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES}  

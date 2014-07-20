@@ -22,9 +22,9 @@
 #define INCLUDED_GSM_RECEIVER_IMPL_H
 
 #include <gsm/receiver.h>
+#include <gsm/gsmtap.h>
 #include <gsm_constants.h>
 #include <receiver_config.h>
-#include <gsmtap.h>
 
 namespace gr {
   namespace gsm {

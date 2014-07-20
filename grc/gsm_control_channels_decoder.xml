@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<block>
+  <name>Control channels decoder</name>
+  <key>gsm_control_channels_decoder</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.control_channels_decoder()</make>
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+<!--  <source>-->
+<!--    <name>msgs_out</name>-->
+<!--    <type>message</type>-->
+<!--  </source>-->
+</block>

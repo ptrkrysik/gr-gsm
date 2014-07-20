@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<block>
+  <name>Demapper for BCCH and CCCH</name>
+  <key>gsm_get_bcch_or_ccch_bursts</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.get_bcch_or_ccch_bursts()</make>
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+  </source>
+</block>

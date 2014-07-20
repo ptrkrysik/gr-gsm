@@ -23,5 +23,8 @@
 install(FILES
     api.h
     receiver.h
-    bursts_printer.h DESTINATION include/gsm
+    bursts_printer.h
+    get_bcch_or_ccch_bursts.h
+    control_channels_decoder.h 
+    gsmtap.h DESTINATION include/gsm
 )

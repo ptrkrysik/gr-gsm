@@ -21,5 +21,7 @@ install(FILES
     gsm_bursts_printer.xml
     gsm_fcch_burst_tagger.xml
     gsm_sch_detector.xml
-    gsm_fcch_detector.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_fcch_detector.xml
+    gsm_get_bcch_or_ccch_bursts.xml
+    gsm_control_channels_decoder.xml DESTINATION share/gnuradio/grc/blocks
 )

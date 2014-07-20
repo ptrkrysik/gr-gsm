@@ -23,10 +23,10 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "bursts_printer_impl.h"
-#include <gsmtap.h>
+#include <gsm/gsmtap.h>
 #include <iterator>
 #include <algorithm>
+#include "bursts_printer_impl.h"
 
 namespace gr {
   namespace gsm {
