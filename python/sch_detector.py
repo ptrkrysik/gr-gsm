@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # 
-# Copyright 2014 <+YOU OR YOUR COMPANY+>.
+# Copyright 2014 Piotr Krysik pkrysik@elka.pw.edu.pl
 # 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,23 +54,36 @@ class sch_receiver():
             correlation_bl[:,ii]=correlate(sch_burst_bl[:,ii],self.sync_seq_msk,'same')
         
         correlation_bl = correlation_bl/len(self.sync_seq_msk)
-        power_bl_mov_avg = uniform_filter1d(abs(correlation_bl)**2,5,mode='constant',axis=0)
+        power_bl_mov_avg = uniform_filter1d(abs(correlation_bl)**2,self.L+1,mode='constant',axis=0)
 
-        print "correlation_bl.argmax()",argmax(abs(hstack(correlation_bl)))
-        print "power_bl_mov_avg.argmax()",hstack(power_bl_mov_avg).argmax()
-        print 'unravel_index(correlation_bl.argmax(), correlation_bl.shape)',unravel_index(correlation_bl.argmax(), correlation_bl.shape)
+        print "correlation_bl.argmax()",argmax(abs(correlation_bl))
+        print "power_bl_mov_avg.argmax()",(power_bl_mov_avg).argmax()
+        print 'unravel_index(correlation_bl.argmax(), correlation_bl.shape)',unravel_index(argmax(abs(correlation_bl)), correlation_bl.shape)
         print 'unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)',unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)
+        (r_corrmax, c_corrmax)=unravel_index(argmax(abs(correlation_bl)), correlation_bl.shape)
+        (r_powmax, c_powmax)=unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)
+        
 #        correlation = zeros(shape(sch_burst))
 #        correlation = correlate(sch_burst, self.sync_seq_msk_interp,'same')/len(self.sync_seq_msk)
 #        print "pozycja maksimum",argmax(abs(correlation))
-        plot(abs(hstack(correlation_bl))*1000)
+#        plot(abs(hstack(correlation_bl))*1000)
+##        hold(True)
+##        plot(abs(sch_burst)*500)
+##        print shape(range(0,len(sch_burst),self.OSR))
+##        print shape(correlation_bl[:,0])
+#        for ii in range(0,self.OSR):
+#            if ii == c_powmax:
+#                plot(range(ii,len(correlation_bl[:,0])*self.OSR,self.OSR),power_bl_mov_avg[:,ii]*5e6,'g.')
+#            else:
+#                plot(range(ii,len(correlation_bl[:,0])*self.OSR,self.OSR),power_bl_mov_avg[:,ii]*5e6,'r.')
+#        show()
+#        figure()
+        print 'r_powmax: ',r_powmax
+#        plot(abs(correlation_bl[range(r_powmax-(self.L+1)/2+1,r_powmax+(self.L+1)/2+1), c_powmax]),'g')
 #        hold(True)
-#        plot(abs(sch_burst)*500)
-#        print shape(range(0,len(sch_burst),self.OSR))
-#        print shape(correlation_bl[:,0])
-        for ii in range(0,self.OSR):
-            plot(range(ii,len(correlation_bl[:,0])*self.OSR,self.OSR),power_bl_mov_avg[:,ii]*5e6,'r.')
-        show()
+#        plot(abs(correlation_bl[range(r_corrmax-(self.L+1)/2+1,r_corrmax+(self.L+1)/2+1), c_corrmax]),'r')
+#        show()
+        
     def receive(self, input_corr, chan_imp_resp):
         pass
 
@@ -129,4 +142,15 @@ class sch_detector(gr.sync_block):
 
         out[:] = in0[self.history()-1:]
         return to_consume
+        
+    def get_OSR(self):
+        return self.OSR
+
+    def set_OSR(self, OSR):
+        self.OSR = OSR
+        self.burst_size = int(round(156.25*self.OSR))
+        self.guard_period = int(round(8.25*self.OSR))
+        self.block_size = self.burst_size + self.guard_period
+        self.set_history(self.block_size)
+        self.sch_receiver = sch_receiver(OSR)
 
