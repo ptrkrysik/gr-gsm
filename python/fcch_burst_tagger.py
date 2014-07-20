@@ -43,7 +43,7 @@ class fcch_burst_tagger(gr.sync_block):
         self.guard_period = int(round(8.25*self.OSR))
         self.block_size = self.burst_size+self.guard_period
         self.processed_block_size = int(142*self.OSR)
-        self.set_history(self.burst_size)
+        self.set_history(self.block_size)
         self.set_output_multiple(self.guard_period)
         self.prev_offset=0
         
@@ -64,9 +64,9 @@ class fcch_burst_tagger(gr.sync_block):
 
         up_to_high_idx=[] 
         
-        for up_to_high_idx in up_to_high_indexes:           #look for "high" value at the trigger
+        for up_to_high_idx in up_to_high_indexes:         #look for "high" value at the trigger
             if up_to_high_idx==0 and self.state==True:    #if it's not transition from "low" to "high"
-                continue                                    #then continue
+                continue                                  #then continue
             self.state=True                               #if found - change state
         
         if self.state==True and up_to_high_idx and any(threshold_diff<0):          #and look for transition from high to low
@@ -74,11 +74,16 @@ class fcch_burst_tagger(gr.sync_block):
             last_high_to_low_idx = nonzero(threshold_diff<0)[0][-1]
             
             if last_high_to_low_idx-last_up_to_high_idx>0:
-                coarse_idx = int(last_high_to_low_idx+self.history()-self.guard_period-self.burst_size)
+                coarse_idx = int(last_high_to_low_idx+self.history()-self.block_size)
                 inst_freq = angle(in0[coarse_idx:coarse_idx+self.block_size]*in0[coarse_idx-self.OSR:coarse_idx+self.block_size-self.OSR].conj())/(2*pi)*self.symbol_rate #instantaneus frequency estimate
                 precise_idx = self.find_best_position(inst_freq)
 #                measured_freq = mean(inst_freq[precise_idx:precise_idx+self.processed_block_size])
                 expected_freq = self.symbol_rate/4
+                
+                print "input_items:",len(in0)
+                print "coarse_idx",coarse_idx
+                print "coarse_idx+precise_idx",coarse_idx+precise_idx
+                
                 zoomed_spectrum = abs(self.zoomfft(in0[coarse_idx+precise_idx:coarse_idx+precise_idx+self.processed_block_size]))
                 measured_freq = self.f_axis[argmax(zoomed_spectrum)]
                 freq_offset = measured_freq - expected_freq
@@ -108,7 +113,7 @@ class fcch_burst_tagger(gr.sync_block):
         lowest_max_min_diff = 1e6 #1e6 - just some large value
         start_pos = 0
         
-        for ii in xrange(0,int(30*self.OSR)):
+        for ii in xrange(0,int(2*self.guard_period)):
             min_inst_freq = min(inst_freq[ii:self.processed_block_size+ii-1]);
             max_inst_freq = max(inst_freq[ii:self.processed_block_size+ii-1]);
 
