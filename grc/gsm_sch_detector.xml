@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>sch_detector</name>
+  <name>SCH bursts detector</name>
   <key>gsm_sch_detector</key>
   <category>GSM</category>
   <import>import gsm</import>

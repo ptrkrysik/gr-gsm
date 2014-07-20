@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>fcch_detector</name>
+  <name>FCCH bursts detector</name>
   <key>gsm_fcch_detector</key>
   <category>GSM</category>
   <import>import gsm</import>
