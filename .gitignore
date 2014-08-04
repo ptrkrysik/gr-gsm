@@ -2,3 +2,5 @@ build
 *.o
 *.log
 *~
+*.pyc
+*.pyo
