@@ -199,14 +199,18 @@ namespace gr {
          *
          */
         void configure_receiver();
-            
+        
+
+        
      public:
-      receiver_impl(feval_dd * tuner, int osr, int arfcn);
+       receiver_impl(feval_dd * tuner, int osr, int arfcn);
       ~receiver_impl();
       
 //      void forecast(int noutput_items, gr_vector_int &ninput_items_required);
 
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
+      virtual void set_arfcn(int arfcn);
+      virtual void reset();
     };
   } // namespace gsm
 } // namespace gr

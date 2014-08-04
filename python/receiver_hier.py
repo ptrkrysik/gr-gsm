@@ -41,7 +41,6 @@ class receiver_hier(gr.hier_block2):
 #        self.connect(self, self.interpolator, self.receiver,  self)
         self.msg_connect(self.receiver, "bursts", weakref.proxy(self), "bursts")
 
-
     def _set_filter(self):
         filter_cutoff   = 125e3	
         filter_t_width  = 10e3
@@ -64,5 +63,10 @@ class receiver_hier(gr.hier_block2):
 
     def set_timing(self, timing_offset):
         pass
-
-
+        
+    def set_arfcn(self,arfcn):
+        self.receiver.set_arfcn(arfcn)
+        
+    def reset(self):
+        self.receiver.reset()
+        

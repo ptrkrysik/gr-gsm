@@ -49,6 +49,9 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(feval_dd * tuner, int osr, int arfcn);
+      
+      virtual void set_arfcn(int arfcn) = 0;
+      virtual void reset() = 0;
     };
 
   } // namespace gsm

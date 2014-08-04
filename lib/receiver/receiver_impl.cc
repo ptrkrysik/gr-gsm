@@ -92,6 +92,8 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     configure_receiver();  //configure the receiver - tell it where to find which burst type
 }
 
+
+
 /*
  * Our virtual destructor.
  */
@@ -191,12 +193,12 @@ receiver_impl::work(int noutput_items,
         unsigned char output_binary[BURST_SIZE];
 
         burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr); //get burst type for given burst number
-        double signal_pwr=0;
+        double signal_pwr = 0;
         for(int ii=0;ii<noutput_items;ii++)
         {
             signal_pwr += abs(input[ii])*abs(input[ii]);
         }
-        d_signal_dbm=static_cast<int8_t>(round(20*log10(signal_pwr)));
+        d_signal_dbm=static_cast<int8_t>(round(10*log10(signal_pwr/50/noutput_items)));
         
         switch (b_type)
         {
@@ -248,7 +250,7 @@ receiver_impl::work(int noutput_items,
                     d_freq_offset_vals.clear();
                     d_freq_offset=0;
                     //set_frequency(0);
-                    DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    COUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -796,7 +798,7 @@ void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * bur
     pmt::pmt_t header_blob=pmt::make_blob(tap_header.get(),sizeof(gsmtap_hdr));
     pmt::pmt_t burst_binary_blob=pmt::make_blob(burst_binary,BURST_SIZE);
     pmt::pmt_t msg = pmt::cons(header_blob, burst_binary_blob);
-
+    
     message_port_pub(pmt::mp("bursts"), msg);
 }
 
@@ -840,6 +842,16 @@ void receiver_impl::configure_receiver()
     d_channel_conf.set_burst_types(TIMESLOT7, TEST51, sizeof(TEST51) / sizeof(unsigned), dummy_or_normal);
 }
 
+void receiver_impl::set_arfcn(int arfcn) //!!
+{
+    d_arfcn = arfcn;
+//    std::cout << "set arfcn:"<<arfcn << std::endl;
+}
+
+void receiver_impl::reset()
+{
+    d_state = first_fcch_search;
+}
 
 } /* namespace gsm */
 } /* namespace gr */
