@@ -57,7 +57,7 @@ namespace gr {
         FC_init(&fc_ctx, 40, 184);
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&control_channels_decoder_impl::decode, this, _1));
-//        message_port_register_out(pmt::mp(""));
+        message_port_register_out(pmt::mp("msgs"));
     }
 
     /*
@@ -73,8 +73,8 @@ namespace gr {
         d_bursts[d_collected_bursts_num] = msg;
         d_collected_bursts_num++;
         //get convecutive bursts
-        pmt::pmt_t header_blob = pmt::car(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
+//        pmt::pmt_t header_blob = pmt::car(msg);
+//        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
         
         if(d_collected_bursts_num==4)
         {
@@ -109,7 +109,7 @@ namespace gr {
                 if (FC_check_crc(&fc_ctx, decoded_data, crc_result) == 0)
                 {
                     //("error: sacch: parity error (errors=%d fn=%d)\n", errors, ctx->fn);
-                    //std::cout << "Uncorrectable errors!" << std::endl;
+                    std::cout << "Uncorrectable errors!" << std::endl;
                     errors = -1;
                 } else {
                     //DEBUGF("Successfully corrected parity bits! (errors=%d fn=%d)\n", errors, ctx->fn);
@@ -130,8 +130,7 @@ namespace gr {
                  }
                  outmsg[pos++] = c & 0xff;
              }
-
-           //printf("%6d %d:", (0 + 1), 0);
+            
            int jj=0;
              while (jj < 23){
                  printf(" %02x", outmsg[jj]);//decoded_data[jj]);
@@ -139,6 +138,13 @@ namespace gr {
                }
              printf("\n");
              fflush(stdout);
+
+           //send message with header of the first burst
+            pmt::pmt_t header_blob = pmt::car(d_bursts[0]);
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(outmsg,23);
+            pmt::pmt_t msg_out = pmt::cons(header_blob, msg_binary_blob);
+
+            message_port_pub(pmt::mp("msgs"), msg_out);
         }
         return;
     }
