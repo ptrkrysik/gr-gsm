@@ -4,7 +4,14 @@
   <key>gsm_get_bcch_or_ccch_bursts</key>
   <category>GSM</category>
   <import>import gsm</import>
-  <make>gsm.get_bcch_or_ccch_bursts()</make>
+  <make>gsm.get_bcch_or_ccch_bursts($d_fn51_start)</make>
+  <param>
+    <name>d_fn51_start</name>
+    <key>d_fn51_start</key>
+    <value>2</value>
+    <type>int</type>
+  </param>
+
   <sink>
     <name>bursts</name>
     <type>message</type>
