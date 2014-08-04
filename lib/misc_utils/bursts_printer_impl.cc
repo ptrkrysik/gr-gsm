@@ -27,31 +27,23 @@
 #include <iterator>
 #include <algorithm>
 #include "bursts_printer_impl.h"
+#include <unistd.h>
+
+#include <iostream>
 
 namespace gr {
   namespace gsm {
+    boost::mutex printer_mutex;
     void bursts_printer_impl::bursts_print(pmt::pmt_t msg)
     {
+        boost::mutex::scoped_lock lock(printer_mutex);
+        
         pmt::pmt_t burst = pmt::cdr(msg);
         int8_t * burst_elements = (int8_t *)pmt::blob_data(burst);
         size_t burst_len=pmt::blob_length(burst);
 
         pmt::pmt_t header_blob = pmt::car(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
-        d_c0_channels.insert(header->arfcn);
-        
-//        d_channels_dbm.insert(header->signal_dbm);
-//        std::copy(
-//            d_c0_channels.begin(),
-//            d_c0_channels.end(),
-//            std::ostream_iterator<uint16_t>(std::cout, " ")
-//        );
-//        std::cout << std::endl;
-//        std::copy(
-//            d_channels_dbm.begin(),
-//            d_channels_dbm.end(),
-//            std::ostream_iterator<int>(std::cout, " ")
-//        );
 
         for(int ii=0; ii<burst_len; ii++)
         {
@@ -59,7 +51,7 @@ namespace gr {
         }
         std::cout << std::endl;
     }
-
+     
     bursts_printer::sptr
     bursts_printer::make()
     {

@@ -24,6 +24,38 @@
 
 #include <gsm/api.h>
 #include <gnuradio/block.h>
+#include <string>
+#include <vector>
+
+
+
+class chan_info {
+  public:
+    unsigned int id;
+    int8_t pwr_db;
+    unsigned int arfcn;
+    float freq;
+    unsigned int lac;
+    unsigned int cell_id;
+    unsigned int mnc;
+    
+    chan_info() :  id(-1), pwr_db(0), arfcn(0), freq(0), lac(0), cell_id(0), mnc(0){}
+    chan_info(const chan_info & info) : id(info.id), pwr_db(info.pwr_db), arfcn(info.arfcn), freq(info.freq), lac(info.lac), cell_id(info.cell_id), mnc(info.mnc){}
+    ~chan_info(){}
+};
+
+struct compare_id {
+    inline bool operator()(const chan_info &a, const chan_info &b) const
+    {
+        return a.id < b.id;
+    }
+};
+struct compare_pwr {
+    inline bool operator()(const chan_info &a, const chan_info &b) const
+    {
+        return a.pwr_db < b.pwr_db;
+    }
+};
 
 namespace gr {
   namespace gsm {

@@ -29,7 +29,7 @@ list(APPEND gsm_sources
     receiver/receiver_config.cc 
     receiver/viterbi_detector.cc 
     receiver/sch.c
-    burst_printer/bursts_printer_impl.cc
+    misc_utils/bursts_printer_impl.cc
     demapping/get_bcch_or_ccch_bursts_impl.cc
     decoding/control_channels_decoder_impl.cc
     decoding/cch.c
