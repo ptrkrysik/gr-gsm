@@ -46,7 +46,7 @@ namespace gr {
        * class. gsm::get_bcch_or_ccch_bursts::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(unsigned int fn51_start);
     };
 
   } // namespace gsm
