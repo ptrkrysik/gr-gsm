@@ -30,19 +30,20 @@ namespace gr {
   namespace gsm {
 
     get_bcch_or_ccch_bursts::sptr
-    get_bcch_or_ccch_bursts::make()
+    get_bcch_or_ccch_bursts::make(unsigned int fn51_start)
     {
       return gnuradio::get_initial_sptr
-        (new get_bcch_or_ccch_bursts_impl());
+        (new get_bcch_or_ccch_bursts_impl(fn51_start));
     }
 
     /*
      * The private constructor
      */
-    get_bcch_or_ccch_bursts_impl::get_bcch_or_ccch_bursts_impl()
+    get_bcch_or_ccch_bursts_impl::get_bcch_or_ccch_bursts_impl(unsigned int fn51_start)
       : gr::block("get_bcch_or_ccch_bursts",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+              d_fn51_start(fn51_start)
     {
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&get_bcch_or_ccch_bursts_impl::filter_ccch, this, _1));
@@ -64,12 +65,11 @@ namespace gr {
         uint32_t frame_nr = header->frame_number;
 
         uint32_t fn_mod51 = header->frame_number % 51;
-        const int fn51_start = 6;
-        const int fn51_stop = 9;
+        int fn51_stop = d_fn51_start+3;
 
         if(header->timeslot==0){
-            if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop){
-                uint32_t ii = fn_mod51-fn51_start;
+            if(fn_mod51>=d_fn51_start && fn_mod51<=fn51_stop){
+                uint32_t ii = fn_mod51-d_fn51_start;
                 d_frame_numbers[ii]=header->frame_number;
                 d_bursts[ii] = msg;
             }

@@ -29,10 +29,11 @@ namespace gr {
     class get_bcch_or_ccch_bursts_impl : public get_bcch_or_ccch_bursts
     {
      private:
+         unsigned int d_fn51_start;
          uint32_t d_frame_numbers[4];     
          pmt::pmt_t d_bursts[4];                
      public:
-        get_bcch_or_ccch_bursts_impl();
+        get_bcch_or_ccch_bursts_impl(unsigned int fn51_start);
         ~get_bcch_or_ccch_bursts_impl();
         void filter_ccch(pmt::pmt_t msg);
     };
