@@ -23,5 +23,6 @@ install(FILES
     gsm_sch_detector.xml
     gsm_fcch_detector.xml
     gsm_get_bcch_or_ccch_bursts.xml
-    gsm_control_channels_decoder.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_control_channels_decoder.xml
+    gsm_extract_system_info.xml DESTINATION share/gnuradio/grc/blocks
 )

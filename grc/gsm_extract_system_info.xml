@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<block>
+  <name>extract_system_info</name>
+  <key>gsm_extract_system_info</key>
+  <category>gsm</category>
+  <import>import gsm</import>
+  <make>gsm.extract_system_info()</make>
+
+  <sink>
+    <name>msgs</name>
+    <type>message</type>
+  </sink>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+  
+</block>

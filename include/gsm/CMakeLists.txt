@@ -26,5 +26,6 @@ install(FILES
     bursts_printer.h
     get_bcch_or_ccch_bursts.h
     control_channels_decoder.h 
-    gsmtap.h DESTINATION include/gsm
+    gsmtap.h
+    extract_system_info.h DESTINATION include/gsm
 )
