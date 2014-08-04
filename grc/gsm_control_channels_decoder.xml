@@ -9,8 +9,9 @@
     <name>bursts</name>
     <type>message</type>
   </sink>
-<!--  <source>-->
-<!--    <name>msgs_out</name>-->
-<!--    <type>message</type>-->
-<!--  </source>-->
+  <source>
+    <name>msgs</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
 </block>
