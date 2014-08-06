@@ -10,9 +10,11 @@ sudo apt-get install git cmake libboost1.55-all-dev libcppunit-dev swig doxygen 
 ```
 
 Download gr-gsm sources with following command:
+
 ```
 git clone git@github.com:Jakotako/gr-gsm.git
 ```
+
 and compile it:
 
 ```
