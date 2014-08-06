@@ -15,6 +15,7 @@
 #include "gsm/extract_system_info.h"
 #include "gsm/controlled_rotator_cc.h"
 #include "gsm/controlled_const_source_f.h"
+#include "gsm/message_printer.h"
 %}
 
 
@@ -33,3 +34,5 @@ GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_rotator_cc);
 %include "gsm/controlled_const_source_f.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
+%include "gsm/message_printer.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
