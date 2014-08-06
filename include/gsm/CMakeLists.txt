@@ -27,5 +27,8 @@ install(FILES
     get_bcch_or_ccch_bursts.h
     control_channels_decoder.h 
     gsmtap.h
-    extract_system_info.h DESTINATION include/gsm
+    extract_system_info.h
+    controlled_rotator_cc.h
+    controlled_const_source_f.h
+    message_printer.h DESTINATION include/gsm
 )

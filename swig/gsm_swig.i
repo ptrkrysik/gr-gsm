@@ -13,6 +13,8 @@
 #include "gsm/get_bcch_or_ccch_bursts.h"
 #include "gsm/control_channels_decoder.h"
 #include "gsm/extract_system_info.h"
+#include "gsm/controlled_rotator_cc.h"
+#include "gsm/controlled_const_source_f.h"
 %}
 
 
@@ -27,3 +29,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, get_bcch_or_ccch_bursts);
 GR_SWIG_BLOCK_MAGIC2(gsm, control_channels_decoder);
 %include "gsm/extract_system_info.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
+%include "gsm/controlled_rotator_cc.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, controlled_rotator_cc);
+%include "gsm/controlled_const_source_f.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
