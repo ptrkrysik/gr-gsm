@@ -97,7 +97,7 @@ namespace gr {
           ii++;
         }
       }
-      d_r.rotateN(out, in, noutput_items);
+      d_r.rotateN(out, const_cast<gr_complex *>(in), noutput_items); //const_cast<gr_complex *> is workaround old implementation of rotateN that is still present in ubuntu 14.04 packages
       return noutput_items;
     }
 
