@@ -49,7 +49,11 @@ class clock_offset_control(gr.basic_block):
                 freq_offset = pmt.to_double(pmt.tuple_ref(msg,1))
                 ppm = -freq_offset/self.fc*1.0e6
                 state = pmt.symbol_to_string(pmt.tuple_ref(msg,2))
-
+                
+                if abs(ppm) > 50:
+                    ppm = 0
+                    self.reset()
+                    
                 if state == "fcch_search":
                     msg_ppm = pmt.from_double(ppm)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
@@ -69,9 +73,10 @@ class clock_offset_control(gr.basic_block):
                         self.counter=self.counter+1
                     
                 if state == "sync_loss":
-                    self.ppm_estimate = -1e6
-                    self.counter = 0
-                    self.first_measurement = True
+                    self.reset()
                     msg_ppm = pmt.from_double(0.0)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
-
+    def reset(self):
+        self.ppm_estimate = -1e6
+        self.counter = 0
+        self.first_measurement = True
