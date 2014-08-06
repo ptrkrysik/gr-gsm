@@ -32,7 +32,7 @@
     <vlen>1</vlen>
   </sink>
   <sink>
-    <name>ppm_msg</name>
+    <name>ppm</name>
     <type>message</type>
     <optional>True</optional>
   </sink>

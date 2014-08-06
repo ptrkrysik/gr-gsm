@@ -3,7 +3,7 @@
 # Gnuradio Python Flow Graph
 # Title: Clock offset corrector
 # Author: Piotr Krysik
-# Generated: Wed Aug  6 13:47:38 2014
+# Generated: Wed Aug  6 15:49:59 2014
 ##################################################
 
 from gnuradio import blocks
@@ -32,7 +32,7 @@ class clock_offset_corrector(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self.ppm_msg = None;self.message_port_register_hier_out("ppm_msg")
+        self.ppm_msg = None;self.message_port_register_hier_out("ppm")
         self.gsm_controlled_rotator_cc_0 = gsm.controlled_rotator_cc(0,samp_rate)
         self.gsm_controlled_const_source_f_0 = gsm.controlled_const_source_f(ppm)
         self.fractional_resampler_xx_0 = filter.fractional_resampler_cc(0, 1)
@@ -55,7 +55,7 @@ class clock_offset_corrector(gr.hier_block2):
         ##################################################
         # Asynch Message Connections
         ##################################################
-        self.msg_connect(self, "ppm_msg", self.gsm_controlled_const_source_f_0, "constant_msg")
+        self.msg_connect(self, "ppm", self.gsm_controlled_const_source_f_0, "constant_msg")
 
 
     def get_ppm(self):
