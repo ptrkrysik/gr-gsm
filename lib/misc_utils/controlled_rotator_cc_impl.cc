@@ -24,7 +24,6 @@
 
 #include <gnuradio/io_signature.h>
 #include "controlled_rotator_cc_impl.h"
-#include <gnuradio/blocks/rotator_cc.h>
 #include <math.h>
 
 namespace gr {
