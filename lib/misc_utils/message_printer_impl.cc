@@ -23,60 +23,53 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <gsm/gsmtap.h>
-#include <iterator>
-#include <algorithm>
-#include "bursts_printer_impl.h"
-#include <unistd.h>
-
-#include <iostream>
+#include "message_printer_impl.h"
 
 namespace gr {
   namespace gsm {
-    boost::mutex printer_mutex;
-    void bursts_printer_impl::bursts_print(pmt::pmt_t msg)
+
+    void message_printer_impl::message_print(pmt::pmt_t msg)
     {
-        pmt::pmt_t burst = pmt::cdr(msg);
-        int8_t * burst_elements = (int8_t *)pmt::blob_data(burst);
-        size_t burst_len=pmt::blob_length(burst);
+        pmt::pmt_t message = pmt::cdr(msg);
+        uint8_t * message_elements = (uint8_t *)pmt::blob_data(message);
+        size_t message_len=pmt::blob_length(message);
 
-        pmt::pmt_t header_blob = pmt::car(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
+//        pmt::pmt_t header_blob = pmt::car(msg);
+//        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
 
-        for(int ii=0; ii<burst_len; ii++)
+        for(int ii=0; ii<message_len; ii++)
         {
-          std::cout << std::setprecision(1) << static_cast<int>(burst_elements[ii]) << "";
+            printf(" %02x", message_elements[ii]);
         }
         std::cout << std::endl;
     }
-     
-    bursts_printer::sptr
-    bursts_printer::make()
+
+    message_printer::sptr
+    message_printer::make()
     {
       return gnuradio::get_initial_sptr
-        (new bursts_printer_impl());
+        (new message_printer_impl());
     }
 
     /*
      * The private constructor
      */
-    bursts_printer_impl::bursts_printer_impl()
-      : gr::block("bursts_printer",
+    message_printer_impl::message_printer_impl()
+      : gr::block("message_printer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
-        message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, _1));
+        message_port_register_in(pmt::mp("msgs"));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&message_printer_impl::message_print, this, _1));
+
     }
-    
+
     /*
      * Our virtual destructor.
      */
-    bursts_printer_impl::~bursts_printer_impl()
+    message_printer_impl::~message_printer_impl()
     {
     }
-
-
   } /* namespace gsm */
 } /* namespace gr */
 

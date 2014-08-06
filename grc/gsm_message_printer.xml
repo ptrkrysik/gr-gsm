@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<block>
+  <name>Message printer</name>
+  <key>gsm_message_printer</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.message_printer()</make>
+
+  <sink>
+    <name>msgs</name>
+    <type>message</type>
+  </sink>
+</block>

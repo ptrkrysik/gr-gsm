@@ -73,8 +73,6 @@ namespace gr {
         d_bursts[d_collected_bursts_num] = msg;
         d_collected_bursts_num++;
         //get convecutive bursts
-//        pmt::pmt_t header_blob = pmt::car(msg);
-//        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
         
         if(d_collected_bursts_num==4)
         {
@@ -109,7 +107,7 @@ namespace gr {
                 if (FC_check_crc(&fc_ctx, decoded_data, crc_result) == 0)
                 {
                     //("error: sacch: parity error (errors=%d fn=%d)\n", errors, ctx->fn);
-                    std::cout << "Uncorrectable errors!" << std::endl;
+                    //std::cout << "Uncorrectable errors!" << std::endl;
                     errors = -1;
                 } else {
                     //DEBUGF("Successfully corrected parity bits! (errors=%d fn=%d)\n", errors, ctx->fn);
@@ -125,25 +123,16 @@ namespace gr {
            unsigned char sbuf_len=224;
            int i, j, c, pos=0;
            for(i = 0; i < sbuf_len; i += 8) {
-                 for(j = 0, c = 0; (j < 8) && (i + j < sbuf_len); j++){
-                     c |= (!!decoded_data[i + j]) << j;
-                 }
-                 outmsg[pos++] = c & 0xff;
-             }
-            
-           int jj=0;
-             while (jj < 23){
-                 printf(" %02x", outmsg[jj]);//decoded_data[jj]);
-                 jj++;
-               }
-             printf("\n");
-             fflush(stdout);
+                for(j = 0, c = 0; (j < 8) && (i + j < sbuf_len); j++){
+                    c |= (!!decoded_data[i + j]) << j;
+                }
+                outmsg[pos++] = c & 0xff;
+           }
 
            //send message with header of the first burst
             pmt::pmt_t header_blob = pmt::car(d_bursts[0]);
             pmt::pmt_t msg_binary_blob = pmt::make_blob(outmsg,23);
             pmt::pmt_t msg_out = pmt::cons(header_blob, msg_binary_blob);
-
             message_port_pub(pmt::mp("msgs"), msg_out);
         }
         return;
