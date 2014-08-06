@@ -1,7 +1,7 @@
 This are gnuradio blocks and tools for receiving GSM transmissions.
 
 Installation
-============
+------------
 
 On clean Ubuntu 14.04 following packages are required in order to compile gr-gsm:
 
@@ -15,12 +15,10 @@ git clone git@github.com:Jakotako/gr-gsm.git
 
 and compile it:
 
+```
 cd gr-gsm
-
 mkdir build
-
 cmake ..
-
 make
-
 sudo make install
+```
