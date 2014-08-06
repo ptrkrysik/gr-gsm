@@ -50,6 +50,7 @@ from receiver_hier import receiver_hier
 from fcch_burst_tagger import fcch_burst_tagger
 from sch_detector import sch_detector
 from fcch_detector import fcch_detector
+from clock_offset_control import clock_offset_control
 
 #
 

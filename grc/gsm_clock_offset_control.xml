@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<block>
+  <name>Clock offset control</name>
+  <key>gsm_clock_offset_control</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.clock_offset_control($fc, $samp_rate)</make>
+  <callback></callback>
+  <param>
+    <name>fc</name>
+    <key>fc</key>
+    <value>fc</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>samp_rate</name>
+    <key>samp_rate</key>
+    <value>samp_rate</value>
+    <type>float</type>
+  </param>
+
+  <sink>
+    <name>measurements</name>
+    <type>message</type>
+  </sink>
+
+  <source>
+    <name>ppm</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>

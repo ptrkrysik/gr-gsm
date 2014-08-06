@@ -71,7 +71,7 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     d_tuner(tuner),
     d_counter(0),
     d_fcch_start_pos(0),
-    d_freq_offset(0),
+    d_freq_offset_setting(0),
     d_state(first_fcch_search),
     d_burst_nr(osr),
     d_failed_sch(0),
@@ -79,7 +79,7 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     d_signal_dbm(-120)
 {
     int i;
-    //set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); //don't send samples to the receiver until there are at least samples for one
+                                                                      //don't send samples to the receiver until there are at least samples for one
     set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); // burst and two gurad periods (one gurard period is an arbitrary overlap)
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
     for (i = 0; i < TRAIN_SEQ_NUM; i++)
@@ -89,10 +89,9 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
     message_port_register_out(pmt::mp("bursts"));
+    message_port_register_out(pmt::mp("measurements"));
     configure_receiver();  //configure the receiver - tell it where to find which burst type
 }
-
-
 
 /*
  * Our virtual destructor.
@@ -106,19 +105,44 @@ receiver_impl::work(int noutput_items,
 	               gr_vector_const_void_star &input_items,
 	               gr_vector_void_star &output_items)
 {
-    //std::cout << noutput_items << std::endl;
     const gr_complex *input = (const gr_complex *) input_items[0];
+    std::vector<tag_t> freq_offset_tags;
+    uint64_t start = nitems_read(0);
+    uint64_t stop = start + noutput_items;
 
+    pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
+    get_tags_in_range(freq_offset_tags, 0, start, stop, key);
+    bool freq_offset_tag_in_fcch = false;
+    uint64_t tag_offset=-1; //-1 - just some clearly invalid value
+    
+    if(!freq_offset_tags.empty()){
+        tag_t freq_offset_tag = freq_offset_tags[0];
+        tag_offset = freq_offset_tag.offset - start;
+        
+        burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr);
+        if(d_state == synchronized && b_type == fcch_burst){
+            uint64_t last_sample_nr = ceil((GUARD_PERIOD + 2.0 * TAIL_BITS + 156.25) * d_OSR) + 1;
+            if(tag_offset < last_sample_nr){
+                DCOUT("Freq change inside FCCH burst!!!!!!!!!!!!!!");
+                freq_offset_tag_in_fcch = true;
+            }
+            d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
+        } else {
+            d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
+        }
+    }
+    
     switch (d_state)
     {
         //bootstrapping
     case first_fcch_search:
         DCOUT("FCCH search");
-        if (find_fcch_burst(input, noutput_items))   //find frequency correction burst in the input buffer
+        double freq_offset_tmp;
+        if (find_fcch_burst(input, noutput_items, freq_offset_tmp))   //find frequency correction burst in the input buffer
         {
-            //set_frequency(d_freq_offset);                //if fcch search is successful set frequency offset
-            DCOUT("Freq offset " << d_freq_offset);
-            DCOUT("PPM: " << d_freq_offset/940e6);
+            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("first_fcch_search"));
+            message_port_pub(pmt::mp("measurements"), msg);
+            
             d_state = next_fcch_search;
         }
         else
@@ -130,15 +154,12 @@ receiver_impl::work(int noutput_items,
     case next_fcch_search:                           //this state is used because it takes some time (a bunch of buffered samples)
     {
         DCOUT("NEXT FCCH search");
-        d_prev_freq_offset = d_freq_offset;        //before previous set_frequqency cause change
-        if (find_fcch_burst(input, noutput_items))
+        double freq_offset_tmp;
+        if (find_fcch_burst(input, noutput_items,freq_offset_tmp))
         {
-            if (abs(d_prev_freq_offset - d_freq_offset) > FCCH_MAX_FREQ_OFFSET)
-            {
-                //set_frequency(d_freq_offset);              //call set_frequncy only frequency offset change is greater than some value
-                //COUT("Freq offset " << d_freq_offset);
-                DCOUT("PPM: " << d_freq_offset/940);
-            }
+            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("next_fcch_search"));
+            message_port_pub(pmt::mp("measurements"), msg);
+
             d_state = sch_search;
         }
         else
@@ -147,7 +168,6 @@ receiver_impl::work(int noutput_items,
         }
         break;
     }
-
 
     case sch_search:
     {
@@ -206,30 +226,24 @@ receiver_impl::work(int noutput_items,
         {
             const unsigned first_sample = ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
             const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
-            double freq_offset = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
+            double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
 
-            d_freq_offset_vals.push_front(freq_offset);
             send_burst(d_burst_nr, fc_fb, b_type);
 
-            if (d_freq_offset_vals.size() >= 10)
-            {
-                double sum = std::accumulate(d_freq_offset_vals.begin(), d_freq_offset_vals.end(), 0);
-                double mean_offset = sum / d_freq_offset_vals.size();                           //compute mean
-                d_freq_offset_vals.clear();
-                DCOUT("mean offset" << mean_offset/940);
-                if (abs(mean_offset) > FCCH_MAX_FREQ_OFFSET)
-                {
-                    //d_freq_offset -= mean_offset;                                                 //and adjust frequency if it have changed beyond
-                    //set_frequency(d_freq_offset);                                                 //some limit
-                    DCOUT("Adjusting frequency, new frequency offset: " << d_freq_offset << "\n");
-                }
-            }
+            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("synchronized"));
+            message_port_pub(pmt::mp("measurements"), msg);
         }
         break;
         case sch_burst:                                                                      //if it's SCH burst
         {
             int t1, t2, t3, d_ncc, d_bcc;
             burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);                //get channel impulse response
+            
+            if(d_prev_burst_start != burst_start){
+                d_prev_burst_start = burst_start;
+                DCOUT("burst start" << burst_start);
+            }
+            
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);           //MLSE detection of bits
             send_burst(d_burst_nr, output_binary, b_type);
             if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)           //and decode SCH data
@@ -247,10 +261,9 @@ receiver_impl::work(int noutput_items,
                 if (d_failed_sch >= MAX_SCH_ERRORS)
                 {
                     d_state = next_fcch_search; 
-                    d_freq_offset_vals.clear();
-                    d_freq_offset=0;
-                    //set_frequency(0);
-                    COUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(0.0),pmt::mp("sync_loss"));
+                    message_port_pub(pmt::mp("measurements"), msg);
+                    DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }
@@ -268,9 +281,7 @@ receiver_impl::work(int noutput_items,
         {
             unsigned int normal_burst_start;
             float dummy_corr_max, normal_corr_max;
-            DCOUT("Dummy");
             get_norm_chan_imp_resp(input, &channel_imp_resp[0], &dummy_corr_max, TS_DUMMY);
-            DCOUT("Normal");
             normal_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
                         
             DCOUT("normal_corr_max: " << normal_corr_max <<  " dummy_corr_max:" << dummy_corr_max);
@@ -305,8 +316,7 @@ receiver_impl::work(int noutput_items,
     return 0;
 }
 
-
-bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems)
+bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems, double & computed_freq_offset)
 {
     circular_buffer_float phase_diff_buffer(FCCH_HITS_NEEDED * d_OSR); //circular buffer used to scan throug signal to find
     //best match for FCCH burst
@@ -451,10 +461,8 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems)
 
             //compute frequency offset
             double phase_offset = best_sum / FCCH_HITS_NEEDED;
-            double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
-            //d_freq_offset -= freq_offset;
-            d_freq_offset = freq_offset;
-            DCOUT("freq_offset: " << d_freq_offset);
+            double freq_offset = phase_offset * 1625000.0/6 / (2 * M_PI); //1625000.0/6 - GMSK symbol rate in GSM
+            computed_freq_offset = freq_offset;
 
             end = true;
             result = true;
@@ -623,7 +631,6 @@ void receiver_impl::detect_burst(const gr_complex * input, gr_complex * chan_imp
     }
 }
 
-//TODO consider placing this funtion in a separate class for signal processing
 void receiver_impl::gmsk_mapper(const unsigned char * input, int nitems, gr_complex * gmsk_output, gr_complex start_point)
 {
     gr_complex j = gr_complex(0.0, 1.0);
@@ -645,7 +652,6 @@ void receiver_impl::gmsk_mapper(const unsigned char * input, int nitems, gr_comp
     }
 }
 
-//TODO consider use of some generalized function for correlation and placing it in a separate class  for signal processing
 gr_complex receiver_impl::correlate_sequence(const gr_complex * sequence, int length, const gr_complex * input)
 {
     gr_complex result(0.0, 0.0);
@@ -662,7 +668,6 @@ gr_complex receiver_impl::correlate_sequence(const gr_complex * sequence, int le
 }
 
 //computes autocorrelation for positive arguments
-//TODO consider placing this funtion in a separate class for signal processing
 inline void receiver_impl::autocorrelation(const gr_complex * input, gr_complex * out, int nitems)
 {
     int i, k;
@@ -676,7 +681,6 @@ inline void receiver_impl::autocorrelation(const gr_complex * input, gr_complex 
     }
 }
 
-//TODO consider use of some generalized function for filtering and placing it in a separate class  for signal processing
 inline void receiver_impl::mafi(const gr_complex * input, int nitems, gr_complex * filter, int filter_length, gr_complex * output)
 {
     int ii = 0, n, a;
@@ -698,7 +702,6 @@ inline void receiver_impl::mafi(const gr_complex * input, int nitems, gr_complex
     }
 }
 
-//TODO: get_norm_chan_imp_resp is similar to get_sch_chan_imp_resp - consider joining this two functions
 //especially computations of strongest_window_nr
 int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp, float *corr_max, int bcc)
 {
@@ -774,8 +777,6 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
 
     DCOUT("strongest_window_nr_new: " << strongest_window_nr);
     burst_start = search_start_pos + strongest_window_nr - TRAIN_POS * d_OSR; //compute first sample posiiton which corresponds to the first sample of the impulse response
-                                                                              //TRAIN_POS=3+57+1+6
-                                                                              //TODO: describe this part in detail in documentation as this is crucial part for synchronization
 
     DCOUT("burst_start: " << burst_start);
     return burst_start;
@@ -845,7 +846,6 @@ void receiver_impl::configure_receiver()
 void receiver_impl::set_arfcn(int arfcn) //!!
 {
     d_arfcn = arfcn;
-//    std::cout << "set arfcn:"<<arfcn << std::endl;
 }
 
 void receiver_impl::reset()

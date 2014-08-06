@@ -35,6 +35,9 @@ list(APPEND gsm_sources
     decoding/control_channels_decoder_impl.cc
     decoding/cch.c
     decoding/fire_crc.c
+    misc_utils/controlled_rotator_cc_impl.cc
+    misc_utils/controlled_const_source_f_impl.cc
+    misc_utils/message_printer_impl.cc
 )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})

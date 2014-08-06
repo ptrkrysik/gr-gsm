@@ -1,0 +1,53 @@
+/* -*- c++ -*- */
+/* 
+ * Copyright 2014 <+YOU OR YOUR COMPANY+>.
+ * 
+ * This is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this software; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#ifndef INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
+#define INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
+
+#include <gsm/controlled_rotator_cc.h>
+#include <gnuradio/blocks/rotator.h>
+
+namespace gr {
+  namespace gsm {
+
+    class controlled_rotator_cc_impl : public controlled_rotator_cc
+    {
+     private:
+      gr_complex d_phase_inc;
+      double d_samp_rate;
+      blocks::rotator d_r;
+
+     public:
+      controlled_rotator_cc_impl(double phase_inc, double samp_rate);
+      ~controlled_rotator_cc_impl();
+
+      virtual void set_phase_inc(double phase_inc);
+      virtual void set_samp_rate(double samp_rate);
+      // Where all the action really happens
+      int work(int noutput_items,
+	       gr_vector_const_void_star &input_items,
+	       gr_vector_void_star &output_items);
+    };
+
+  } // namespace gsm
+} // namespace gr
+
+#endif /* INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H */
+

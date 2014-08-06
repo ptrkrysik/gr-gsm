@@ -25,6 +25,7 @@ class receiver_hier(gr.hier_block2):
         gsm_symb_rate = 1625000/6.0
 
         self.message_port_register_hier_in("bursts")
+        self.message_port_register_hier_in("measurements")
 
         self.input_rate = input_rate
         self.osr = osr
@@ -40,6 +41,7 @@ class receiver_hier(gr.hier_block2):
         self.connect(self, self.filtr,  self.interpolator, self.receiver,  self)
 #        self.connect(self, self.interpolator, self.receiver,  self)
         self.msg_connect(self.receiver, "bursts", weakref.proxy(self), "bursts")
+        self.msg_connect(self.receiver, "measurements", weakref.proxy(self), "measurements")
 
     def _set_filter(self):
         filter_cutoff   = 125e3	

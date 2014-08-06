@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<block>
+  <name>Controlled rotator</name>
+  <key>gsm_controlled_rotator_cc</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.controlled_rotator_cc($phase_inc,$samp_rate)</make>
+  <callback>set_phase_inc($phase_inc)</callback>
+  <callback>set_samp_rate($samp_rate)</callback>
+  <param>
+    <name>phase_inc</name>
+    <key>phase_inc</key>
+    <value>0</value>
+    <type>real</type>
+  </param>
+
+  <param>
+    <name>samp_rate</name>
+    <key>samp_rate</key>
+    <value>samp_rate</value>
+    <type>real</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <sink>
+    <name>phase_inc</name>
+    <type>float</type>
+  </sink>
+  
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>
+

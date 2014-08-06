@@ -34,6 +34,7 @@ namespace gr {
     class receiver_impl : public receiver
     {
      private:
+        int d_prev_burst_start; //!!
         /**@name Configuration of the receiver */
         //@{
         const int d_OSR; ///< oversampling ratio
@@ -59,8 +60,8 @@ namespace gr {
         /**@name Variables used to store result of the find_fcch_burst fuction */
         //@{
         unsigned d_fcch_start_pos; ///< position of the first sample of the fcch burst
-        float d_freq_offset; ///< frequency offset of the received signal
-        float d_prev_freq_offset; //!!!
+//        float d_freq_offset; ///< frequency offset of the received signal
+        float d_freq_offset_setting; ///< frequency offset set in frequency shifter located upstream
         //@}
         std::list<double> d_freq_offset_vals;
 
@@ -89,19 +90,19 @@ namespace gr {
         /** Function whis is used to search a FCCH burst and to compute frequency offset before
         * "synchronized" state of the receiver
         *
-        * TODO: Describe the FCCH search algorithm in the documentation
         * @param input vector with input signal
         * @param nitems number of samples in the input vector
         * @return
         */
-        bool find_fcch_burst(const gr_complex *input, const int nitems);
+        bool find_fcch_burst(const gr_complex *input, const int nitems, double & computed_freq_offset);
 
         /** Computes frequency offset from FCCH burst samples
          *
-         * @param input vector with input samples
-         * @param first_sample number of the first sample of the FCCH busrt
-         * @param last_sample number of the last sample of the FCCH busrt
-         * @return frequency offset
+         * @param[in] input vector with input samples
+         * @param[in] first_sample number of the first sample of the FCCH busrt
+         * @param[in] last_sample number of the last sample of the FCCH busrt
+         * @param[out] computed_freq_offset contains frequency offset estimate if FCCH burst was located
+         * @return true if frequency offset was faound
          */
         double compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample);
 
@@ -206,8 +207,6 @@ namespace gr {
        receiver_impl(feval_dd * tuner, int osr, int arfcn);
       ~receiver_impl();
       
-//      void forecast(int noutput_items, gr_vector_int &ninput_items_required);
-
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
       virtual void set_arfcn(int arfcn);
       virtual void reset();
