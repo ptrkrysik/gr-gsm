@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Gsm Receiver Test
-# Generated: Wed Aug  6 13:56:15 2014
+# Generated: Wed Aug  6 15:17:29 2014
 ##################################################
 
 execfile("/home/piotr/.grc_gnuradio/clk_offset_corrector.py")
@@ -18,7 +18,7 @@ import wx
 
 class gsm_receiver_test(grc_wxgui.top_block_gui):
 
-    def __init__(self, input_file_name="input.cfile"):
+    def __init__(self, fc=937e6, samp_rate=1e6, input_file_name="/home/piotr/Odbiornik_gsm/gr-gsm/examples/input.cfile"):
         grc_wxgui.top_block_gui.__init__(self, title="Gsm Receiver Test")
         _icon_path = "/home/piotr/.local/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
         self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
@@ -26,12 +26,9 @@ class gsm_receiver_test(grc_wxgui.top_block_gui):
         ##################################################
         # Parameters
         ##################################################
+        self.fc = fc
+        self.samp_rate = samp_rate
         self.input_file_name = input_file_name
-
-        ##################################################
-        # Variables
-        ##################################################
-        self.samp_rate = samp_rate = 1625000/6*4
 
         ##################################################
         # Blocks
@@ -40,7 +37,7 @@ class gsm_receiver_test(grc_wxgui.top_block_gui):
         self.gsm_message_printer_0 = gsm.message_printer()
         self.gsm_get_bcch_or_ccch_bursts_0 = gsm.get_bcch_or_ccch_bursts(2)
         self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(940e6, samp_rate)
+        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc, samp_rate)
         self.clk_offset_corrector_0 = clk_offset_corrector(
             ppm=0,
             samp_rate=samp_rate,
@@ -64,12 +61,11 @@ class gsm_receiver_test(grc_wxgui.top_block_gui):
         self.msg_connect(self.gsm_receiver_hier_0, "bursts", self.gsm_get_bcch_or_ccch_bursts_0, "bursts")
 
 
-    def get_input_file_name(self):
-        return self.input_file_name
+    def get_fc(self):
+        return self.fc
 
-    def set_input_file_name(self, input_file_name):
-        self.input_file_name = input_file_name
-        self.blocks_file_source_0.open(self.input_file_name, False)
+    def set_fc(self, fc):
+        self.fc = fc
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -77,6 +73,13 @@ class gsm_receiver_test(grc_wxgui.top_block_gui):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.clk_offset_corrector_0.set_samp_rate(self.samp_rate)
+
+    def get_input_file_name(self):
+        return self.input_file_name
+
+    def set_input_file_name(self, input_file_name):
+        self.input_file_name = input_file_name
+        self.blocks_file_source_0.open(self.input_file_name, False)
 
 if __name__ == '__main__':
     import ctypes
@@ -88,9 +91,13 @@ if __name__ == '__main__':
         except:
             print "Warning: failed to XInitThreads()"
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    parser.add_option("-i", "--input-file-name", dest="input_file_name", type="string", default="input.cfile",
-        help="Set input.cfile [default=%default]")
+    parser.add_option("-f", "--fc", dest="fc", type="eng_float", default=eng_notation.num_to_str(937e6),
+        help="Set fc [default=%default]")
+    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(1e6),
+        help="Set samp_rate [default=%default]")
+    parser.add_option("-i", "--input-file-name", dest="input_file_name", type="string", default="/home/piotr/Odbiornik_gsm/gr-gsm/examples/input.cfile",
+        help="Set /home/piotr/Odbiornik_gsm/gr-gsm/examples/input.cfile [default=%default]")
     (options, args) = parser.parse_args()
-    tb = gsm_receiver_test(input_file_name=options.input_file_name)
+    tb = gsm_receiver_test(fc=options.fc, samp_rate=options.samp_rate, input_file_name=options.input_file_name)
     tb.Start(True)
     tb.Wait()
