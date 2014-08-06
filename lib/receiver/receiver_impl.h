@@ -34,7 +34,6 @@ namespace gr {
     class receiver_impl : public receiver
     {
      private:
-        int d_prev_burst_start; //!!
         /**@name Configuration of the receiver */
         //@{
         const int d_OSR; ///< oversampling ratio
@@ -60,7 +59,6 @@ namespace gr {
         /**@name Variables used to store result of the find_fcch_burst fuction */
         //@{
         unsigned d_fcch_start_pos; ///< position of the first sample of the fcch burst
-//        float d_freq_offset; ///< frequency offset of the received signal
         float d_freq_offset_setting; ///< frequency offset set in frequency shifter located upstream
         //@}
         std::list<double> d_freq_offset_vals;
@@ -74,7 +72,7 @@ namespace gr {
         /**@name Internal state of the gsm receiver */
         //@{
         enum states {
-          first_fcch_search, next_fcch_search, sch_search, // synchronization search part
+          fcch_search, sch_search, // synchronization search part
           synchronized // receiver is synchronized in this state
         } d_state;
         //@}

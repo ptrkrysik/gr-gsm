@@ -50,7 +50,7 @@ class clock_offset_control(gr.basic_block):
                 ppm = -freq_offset/self.fc*1.0e6
                 state = pmt.symbol_to_string(pmt.tuple_ref(msg,2))
 
-                if state == "first_fcch_search" or state == "next_fcch_search":
+                if state == "fcch_search":
                     msg_ppm = pmt.from_double(ppm)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
                 
@@ -74,3 +74,4 @@ class clock_offset_control(gr.basic_block):
                     self.first_measurement = True
                     msg_ppm = pmt.from_double(0.0)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+

@@ -72,7 +72,7 @@ receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
     d_counter(0),
     d_fcch_start_pos(0),
     d_freq_offset_setting(0),
-    d_state(first_fcch_search),
+    d_state(fcch_search),
     d_burst_nr(osr),
     d_failed_sch(0),
     d_arfcn((int)(arfcn)),
@@ -135,36 +135,20 @@ receiver_impl::work(int noutput_items,
     switch (d_state)
     {
         //bootstrapping
-    case first_fcch_search:
-        DCOUT("FCCH search");
-        double freq_offset_tmp;
-        if (find_fcch_burst(input, noutput_items, freq_offset_tmp))   //find frequency correction burst in the input buffer
-        {
-            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("first_fcch_search"));
-            message_port_pub(pmt::mp("measurements"), msg);
-            
-            d_state = next_fcch_search;
-        }
-        else
-        {
-            d_state = first_fcch_search;
-        }
-        break;
-
-    case next_fcch_search:                           //this state is used because it takes some time (a bunch of buffered samples)
+    case fcch_search:                           //this state is used because it takes some time (a bunch of buffered samples)
     {
-        DCOUT("NEXT FCCH search");
+        DCOUT("FCCH search");
         double freq_offset_tmp;
         if (find_fcch_burst(input, noutput_items,freq_offset_tmp))
         {
-            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("next_fcch_search"));
+            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("fcch_search"));
             message_port_pub(pmt::mp("measurements"), msg);
 
             d_state = sch_search;
         }
         else
         {
-            d_state = next_fcch_search;
+            d_state = fcch_search;
         }
         break;
     }
@@ -193,7 +177,7 @@ receiver_impl::work(int noutput_items,
             }
             else
             {
-                d_state = next_fcch_search;                       //if there is error in the sch burst go back to fcch search phase
+                d_state = fcch_search;                       //if there is error in the sch burst go back to fcch search phase
             }
         }
         else
@@ -239,11 +223,6 @@ receiver_impl::work(int noutput_items,
             int t1, t2, t3, d_ncc, d_bcc;
             burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);                //get channel impulse response
             
-            if(d_prev_burst_start != burst_start){
-                d_prev_burst_start = burst_start;
-                DCOUT("burst start" << burst_start);
-            }
-            
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);           //MLSE detection of bits
             send_burst(d_burst_nr, output_binary, b_type);
             if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)           //and decode SCH data
@@ -260,7 +239,7 @@ receiver_impl::work(int noutput_items,
                 d_failed_sch++;
                 if (d_failed_sch >= MAX_SCH_ERRORS)
                 {
-                    d_state = next_fcch_search; 
+                    d_state = fcch_search; 
                     pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(0.0),pmt::mp("sync_loss"));
                     message_port_pub(pmt::mp("measurements"), msg);
                     DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -850,7 +829,7 @@ void receiver_impl::set_arfcn(int arfcn) //!!
 
 void receiver_impl::reset()
 {
-    d_state = first_fcch_search;
+    d_state = fcch_search;
 }
 
 } /* namespace gsm */
