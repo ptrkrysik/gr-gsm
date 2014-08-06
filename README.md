@@ -1,4 +1,6 @@
-This are gnuradio blocks and tools for receiving GSM transmissions.
+The gr-gsm project
+==================
+The project contains gnuradio blocks and tools for receiving GSM transmissions.
 
 Installation
 ------------
