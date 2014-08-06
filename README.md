@@ -1,6 +1,9 @@
 The gr-gsm project
 ==================
-The project contains gnuradio blocks and tools for receiving GSM transmissions.
+The project is based on the gsm-receiver which was written by me for Airprobe project.
+
+The aim is to provide set of tools that enable reliable receiving information transmitted by GSM devices.
+
 
 Installation
 ------------
@@ -26,3 +29,5 @@ cmake ..
 make
 sudo make install
 ```
+
+
