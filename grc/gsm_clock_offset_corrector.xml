@@ -17,13 +17,13 @@
   <param>
     <name>samp_rate</name>
     <key>samp_rate</key>
-    <value>1625000.0/6.0*4.0</value>
+    <value>samp_rate</value>
     <type>raw</type>
   </param>
   <param>
     <name>fc</name>
     <key>fc</key>
-    <value>936.6e6</value>
+    <value>fc</value>
     <type>raw</type>
   </param>
   <sink>
