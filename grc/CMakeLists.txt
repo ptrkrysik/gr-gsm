@@ -28,5 +28,6 @@ install(FILES
     gsm_controlled_rotator_cc.xml
     gsm_controlled_const_source_f.xml
     gsm_clock_offset_control.xml
-    gsm_message_printer.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_message_printer.xml 
+    gsm_clock_offset_corrector.xml DESTINATION share/gnuradio/grc/blocks
 )

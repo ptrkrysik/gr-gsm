@@ -3,12 +3,8 @@
   <name>Clock offset corrector</name>
   <key>clock_offset_corrector</key>
   <category>GSM</category>
-  <import>execfile("/home/piotr/.grc_gnuradio/clock_offset_corrector.py")</import>
-  <make>clock_offset_corrector(
-    ppm=$ppm,
-    samp_rate=$samp_rate,
-    fc=$fc,
-)</make>
+  <import>import gsm</import>
+  <make>gsm.clock_offset_corrector(ppm=$ppm,samp_rate=$samp_rate,fc=$fc)</make>
   <callback>set_ppm($ppm)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
   <callback>set_fc($fc)</callback>
@@ -45,6 +41,6 @@
     <type>complex</type>
     <vlen>1</vlen>
   </source>
-  <doc>Piotr Krysik
-  <grc_source>gr-gsm/examples/clock_offset_corrector.grc</grc_source>
+  <doc>Piotr Krysik</doc>
+<!--  <grc_source>/home/piotr/Odbiornik_gsm/gr-gsm/hier_blocks/clock_offset_corrector.grc</grc_source> -->
 </block>

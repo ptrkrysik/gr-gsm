@@ -51,6 +51,7 @@ from fcch_burst_tagger import fcch_burst_tagger
 from sch_detector import sch_detector
 from fcch_detector import fcch_detector
 from clock_offset_control import clock_offset_control
+from clock_offset_corrector import clock_offset_corrector
 
 #
 

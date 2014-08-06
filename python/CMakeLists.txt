@@ -36,7 +36,8 @@ GR_PYTHON_INSTALL(
     sch_detector.py
     fcch_detector.py 
     chirpz.py
-    clock_offset_control.py DESTINATION ${GR_PYTHON_DIR}/gsm
+    clock_offset_control.py 
+    clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/gsm
 )
 
 ########################################################################
