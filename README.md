@@ -14,7 +14,7 @@ In order to compile gnuradio on fresh Ubuntu run following commands:
 sudo apt-get install git
 git clone git://github.com/pybombs/pybombs
 cd pybombs
-./pybombs install gnuradio uhd rtl-sdr
+./pybombs install gnuradio uhd gr-osmosdr
 ```
 
 To download gr-gsm sources run following command:
