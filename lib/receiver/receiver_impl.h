@@ -45,8 +45,6 @@ namespace gr {
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
         gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal bursts and dummy bursts
 
-        feval_dd *d_tuner; ///<callback to a python object which is used for frequency tunning
-
         /** Counts samples consumed by the receiver
          *
          * It is used in beetween find_fcch_burst and reach_sch_burst calls.
@@ -103,12 +101,6 @@ namespace gr {
          * @return true if frequency offset was faound
          */
         double compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample);
-
-        /** Calls d_tuner's method to set frequency offset from Python level
-         *
-         * @param freq_offset absolute frequency offset of the received signal
-         */
-        void set_frequency(double freq_offset);
 
         /** Computes angle between two complex numbers
          *
@@ -202,7 +194,7 @@ namespace gr {
 
         
      public:
-       receiver_impl(feval_dd * tuner, int osr, int arfcn);
+       receiver_impl(int osr, int arfcn);
       ~receiver_impl();
       
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);

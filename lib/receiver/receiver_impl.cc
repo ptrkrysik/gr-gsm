@@ -53,22 +53,21 @@ typedef std::vector<float> vector_float;
 typedef boost::circular_buffer<float> circular_buffer_float;
 
 receiver::sptr
-receiver::make(feval_dd * tuner, int osr, int arfcn)
+receiver::make(int osr, int arfcn)
 {
     return gnuradio::get_initial_sptr
-           (new receiver_impl(tuner, osr, arfcn));
+           (new receiver_impl(osr, arfcn));
 }
 
 /*
  * The private constructor
  */
-receiver_impl::receiver_impl(feval_dd * tuner, int osr, int arfcn)
+receiver_impl::receiver_impl(int osr, int arfcn)
     : gr::sync_block("receiver",
                 gr::io_signature::make(1, 1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
     d_OSR(osr),
     d_chan_imp_length(CHAN_IMP_RESP_LENGTH),
-    d_tuner(tuner),
     d_counter(0),
     d_fcch_start_pos(0),
     d_freq_offset_setting(0),
@@ -475,11 +474,6 @@ double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned fir
     double phase_offset = phase_sum / (last_sample - first_sample);
     double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
     return freq_offset;
-}
-
-void receiver_impl::set_frequency(double freq_offset)
-{
-    d_tuner->calleval(freq_offset);
 }
 
 inline float receiver_impl::compute_phase_diff(gr_complex val1, gr_complex val2)

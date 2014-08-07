@@ -6,15 +6,6 @@ from gnuradio.eng_option import eng_option
 from gnuradio import gr, gru, blocks
 from gnuradio import filter
 
-
-class tuner(gr.feval_dd):
-    def __init__(self, top_block):
-        gr.feval_dd.__init__(self)
-        self.top_block = top_block
-    def eval(self, freq_offet):
-        self.top_block.set_center_frequency(freq_offet)
-        return freq_offet
-
 class receiver_hier(gr.hier_block2):
     def __init__(self, input_rate, osr=4, arfcn=0):
         gr.hier_block2.__init__(self, 
@@ -32,8 +23,6 @@ class receiver_hier(gr.hier_block2):
         self.arfcn = arfcn
         self.sps = input_rate / gsm_symb_rate / osr
 
-        #create callbacks
-        self.tuner_callback = tuner(self)
         #create accompaning blocks
         self.filtr = self._set_filter()
         self.interpolator = self._set_interpolator()
@@ -57,7 +46,7 @@ class receiver_hier(gr.hier_block2):
         return interpolator
     
     def _set_receiver(self):
-        receiver = gsm.receiver(self.tuner_callback, self.osr, self.arfcn)
+        receiver = gsm.receiver(self.osr, self.arfcn)
         return receiver
 
     def set_center_frequency(self, center_freq):
