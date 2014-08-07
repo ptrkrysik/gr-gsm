@@ -43,7 +43,7 @@ class clock_offset_control(gr.basic_block):
         self.first_measurement = True
         self.counter = 0
         self.last_state = ""
-        self.timer = Timer(0.5, self.conditional_reset)
+        self.timer = Timer(0.5, self.timed_reset)
         
     def process_measurement(self,msg):
         if pmt.is_tuple(msg):
@@ -63,9 +63,10 @@ class clock_offset_control(gr.basic_block):
                     msg_ppm = pmt.from_double(ppm)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
                     self.timer.cancel()
-                    self.timer = Timer(0.5, self.conditional_reset)
+                    self.timer = Timer(0.5, self.timed_reset)
                     self.timer.start()
                 elif state == "synchronized":
+                    self.timer.cancel()
                     if self.first_measurement:
                         self.ppm_estimate = ppm
                         self.first_measurement = False
@@ -83,7 +84,7 @@ class clock_offset_control(gr.basic_block):
                     msg_ppm = pmt.from_double(0.0)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
 
-    def conditional_reset(self):
+    def timed_reset(self):
         if self.last_state != "synchronized":
 #            print "conditional reset"
             self.reset()
@@ -94,3 +95,4 @@ class clock_offset_control(gr.basic_block):
         self.ppm_estimate = -1e6
         self.counter = 0
         self.first_measurement = True
+
