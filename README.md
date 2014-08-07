@@ -28,7 +28,7 @@ Make sure that you have all required packages:
 sudo apt-get install git cmake libboost1.55-all-dev libcppunit-dev swig doxygen liblog4cpp5-dev
 ```
 
-To compile run:
+To compile and install gr-gsm run:
 
 ```
 cd gr-gsm
