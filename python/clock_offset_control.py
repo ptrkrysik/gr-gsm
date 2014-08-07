@@ -22,6 +22,7 @@
 from numpy import *
 from gnuradio import gr
 import pmt
+from threading import Timer
 
 class clock_offset_control(gr.basic_block):
     """
@@ -41,6 +42,8 @@ class clock_offset_control(gr.basic_block):
         self.ppm_estimate = -1e6
         self.first_measurement = True
         self.counter = 0
+        self.last_state = ""
+        self.timer = Timer(0.5, self.conditional_reset)
         
     def process_measurement(self,msg):
         if pmt.is_tuple(msg):
@@ -50,15 +53,19 @@ class clock_offset_control(gr.basic_block):
                 ppm = -freq_offset/self.fc*1.0e6
                 state = pmt.symbol_to_string(pmt.tuple_ref(msg,2))
                 
-                if abs(ppm) > 50:
+                self.last_state = state
+                
+                if abs(ppm) > 100: #safeguard against flawed measurements
                     ppm = 0
                     self.reset()
                     
                 if state == "fcch_search":
                     msg_ppm = pmt.from_double(ppm)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
-                
-                if state == "synchronized":
+                    self.timer.cancel()
+                    self.timer = Timer(0.5, self.conditional_reset)
+                    self.timer.start()
+                elif state == "synchronized":
                     if self.first_measurement:
                         self.ppm_estimate = ppm
                         self.first_measurement = False
@@ -71,11 +78,18 @@ class clock_offset_control(gr.basic_block):
                         self.message_port_pub(pmt.intern("ppm"), msg_ppm)
                     else:
                         self.counter=self.counter+1
-                    
-                if state == "sync_loss":
+                elif state == "sync_loss":
                     self.reset()
                     msg_ppm = pmt.from_double(0.0)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+
+    def conditional_reset(self):
+        if self.last_state != "synchronized":
+#            print "conditional reset"
+            self.reset()
+            msg_ppm = pmt.from_double(0.0)
+            self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+        
     def reset(self):
         self.ppm_estimate = -1e6
         self.counter = 0
