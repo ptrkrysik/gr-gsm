@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Clock offset control</name>
+  <name>GSM clock offset control</name>
   <key>gsm_clock_offset_control</key>
   <category>GSM</category>
   <import>import gsm</import>

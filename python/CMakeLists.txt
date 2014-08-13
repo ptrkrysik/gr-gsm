@@ -31,13 +31,13 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    receiver_hier.py
-    fcch_burst_tagger.py
-    sch_detector.py
-    fcch_detector.py 
-    chirpz.py
-    clock_offset_control.py 
-    clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/gsm
+    receiver/receiver_hier.py
+    receiver/fcch_burst_tagger.py
+    receiver/sch_detector.py
+    receiver/fcch_detector.py 
+    receiver/chirpz.py
+    receiver/clock_offset_control.py 
+    misc_utils/clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/gsm
 )
 
 ########################################################################

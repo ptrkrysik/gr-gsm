@@ -4,10 +4,22 @@
   <key>clock_offset_corrector</key>
   <category>GSM</category>
   <import>import gsm</import>
-  <make>gsm.clock_offset_corrector(ppm=$ppm,samp_rate=$samp_rate,fc=$fc)</make>
-  <callback>set_ppm($ppm)</callback>
-  <callback>set_samp_rate($samp_rate)</callback>
+  <make>gsm.clock_offset_corrector(
+    fc=$fc,
+    ppm=$ppm,
+    samp_rate_in=$samp_rate_in,
+    samp_rate_out=$samp_rate_out,
+)</make>
   <callback>set_fc($fc)</callback>
+  <callback>set_ppm($ppm)</callback>
+  <callback>set_samp_rate_in($samp_rate_in)</callback>
+  <callback>set_samp_rate_out($samp_rate_out)</callback>
+  <param>
+    <name>fc</name>
+    <key>fc</key>
+    <value>936.6e6</value>
+    <type>raw</type>
+  </param>
   <param>
     <name>ppm</name>
     <key>ppm</key>
@@ -15,15 +27,15 @@
     <type>raw</type>
   </param>
   <param>
-    <name>samp_rate</name>
-    <key>samp_rate</key>
-    <value>samp_rate</value>
+    <name>samp_rate_in</name>
+    <key>samp_rate_in</key>
+    <value>1625000.0/6.0*4.0</value>
     <type>raw</type>
   </param>
   <param>
-    <name>fc</name>
-    <key>fc</key>
-    <value>fc</value>
+    <name>samp_rate_out</name>
+    <key>samp_rate_out</key>
+    <value>1625000.0/6.0*4.0</value>
     <type>raw</type>
   </param>
   <sink>
@@ -32,7 +44,7 @@
     <vlen>1</vlen>
   </sink>
   <sink>
-    <name>ppm</name>
+    <name>ppm_in</name>
     <type>message</type>
     <optional>True</optional>
   </sink>
@@ -42,5 +54,5 @@
     <vlen>1</vlen>
   </source>
   <doc>Piotr Krysik</doc>
-<!--  <grc_source>/home/piotr/Odbiornik_gsm/gr-gsm/hier_blocks/clock_offset_corrector.grc</grc_source> -->
+<!--  <grc_source></grc_source> -->
 </block>

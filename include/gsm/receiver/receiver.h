@@ -19,11 +19,13 @@
  */
 
 
-#ifndef INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
-#define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
+#ifndef INCLUDED_GSM_RECEIVER_H
+#define INCLUDED_GSM_RECEIVER_H
 
 #include <gsm/api.h>
 #include <gnuradio/block.h>
+#include <gnuradio/feval.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -33,24 +35,27 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API control_channels_decoder : virtual public gr::block
+    class GSM_API receiver : virtual public sync_block
     {
      public:
-      typedef boost::shared_ptr<control_channels_decoder> sptr;
+      typedef boost::shared_ptr<receiver> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::control_channels_decoder.
+       * \brief Return a shared_ptr to a new instance of gsm::receiver.
        *
-       * To avoid accidental use of raw pointers, gsm::control_channels_decoder's
+       * To avoid accidental use of raw pointers, gsm::receiver's
        * constructor is in a private implementation
-       * class. gsm::control_channels_decoder::make is the public interface for
+       * class. gsm::receiver::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(int osr, int arfcn);
+      
+      virtual void set_arfcn(int arfcn) = 0;
+      virtual void reset() = 0;
     };
-
+   
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H */
-
+#endif /* INCLUDED_GSM_RECEIVER_H */
+ 

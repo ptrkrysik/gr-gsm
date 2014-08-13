@@ -21,7 +21,7 @@ class receiver_hier(gr.hier_block2):
         self.input_rate = input_rate
         self.osr = osr
         self.arfcn = arfcn
-        self.sps = input_rate / gsm_symb_rate / osr
+        self.sps = input_rate / (gsm_symb_rate * osr)
 
         #create accompaning blocks
         self.filtr = self._set_filter()

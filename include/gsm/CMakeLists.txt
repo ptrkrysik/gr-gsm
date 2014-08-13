@@ -22,13 +22,13 @@
 ########################################################################
 install(FILES
     api.h
-    receiver.h
-    bursts_printer.h
-    get_bcch_or_ccch_bursts.h
-    control_channels_decoder.h 
+    receiver/receiver.h
+    misc_utils/bursts_printer.h
+    demapping/get_bcch_or_ccch_bursts.h
+    decoding/control_channels_decoder.h 
     gsmtap.h
-    extract_system_info.h
-    controlled_rotator_cc.h
-    controlled_const_source_f.h
-    message_printer.h DESTINATION include/gsm
+    misc_utils/extract_system_info.h
+    misc_utils/controlled_rotator_cc.h
+    misc_utils/controlled_const_source_f.h
+    misc_utils/message_printer.h DESTINATION include/gsm
 )

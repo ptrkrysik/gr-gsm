@@ -17,17 +17,18 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 install(FILES
-    gsm_receiver_hier.xml
-    gsm_bursts_printer.xml
-    gsm_fcch_burst_tagger.xml
-    gsm_sch_detector.xml
-    gsm_fcch_detector.xml
-    gsm_get_bcch_or_ccch_bursts.xml
-    gsm_control_channels_decoder.xml
-    gsm_extract_system_info.xml
-    gsm_controlled_rotator_cc.xml
-    gsm_controlled_const_source_f.xml
-    gsm_clock_offset_control.xml
-    gsm_message_printer.xml 
-    gsm_clock_offset_corrector.xml DESTINATION share/gnuradio/grc/blocks
+    receiver/gsm_receiver.xml
+    receiver/gsm_receiver_hier.xml
+    misc_utils/gsm_bursts_printer.xml
+    receiver/gsm_fcch_burst_tagger.xml
+    receiver/gsm_sch_detector.xml
+    receiver/gsm_fcch_detector.xml
+    demapping/gsm_get_bcch_or_ccch_bursts.xml
+    decoding/gsm_control_channels_decoder.xml
+    misc_utils/gsm_extract_system_info.xml
+    misc_utils/gsm_controlled_rotator_cc.xml
+    misc_utils/gsm_controlled_const_source_f.xml
+    receiver/gsm_clock_offset_control.xml
+    misc_utils/gsm_message_printer.xml 
+    misc_utils/gsm_clock_offset_corrector.xml DESTINATION share/gnuradio/grc/blocks
 )

@@ -90,7 +90,6 @@ namespace gr {
             info.lac = (msg_elements[6]<<8)+msg_elements[7];             //wyciągnij lac
             info.mnc = (msg_elements[5]>>4);    //wyciągnij id operatora
 
-
             std::set<chan_info, compare_id>::iterator iter = d_c0_channels.find(info);
             boost::mutex::scoped_lock lock(extract_mutex);
             if(iter != d_c0_channels.end()){
@@ -178,7 +177,21 @@ namespace gr {
     
     void extract_system_info_impl::reset()
     {
-        d_c0_channels.clear();
+        std::set<chan_info, compare_id>::iterator iter;
+        
+        chan_info info;
+
+        for(iter = d_c0_channels.begin(); iter != d_c0_channels.end(); iter++){
+            info.id = iter->id;
+            info.cell_id = iter->cell_id;             //wyciągnij cell id
+            info.lac = iter->lac;            //wyciągnij lac
+            info.mnc = iter->mnc;
+            info.pwr_db = -111;
+            d_c0_channels.erase(iter);
+            d_c0_channels.insert(info);
+        }
+//        d_c0_channels.clear();
+        
         if(!empty_p(pmt::mp("bursts"))){
             delete_head_blocking(pmt::mp("bursts"));
         }

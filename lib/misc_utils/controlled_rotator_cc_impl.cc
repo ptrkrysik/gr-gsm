@@ -83,14 +83,16 @@ namespace gr {
         while(ii < noutput_items){
           //look for different values on phase increment control input
           if(d_phase_inc != (*pp)){
+
             set_phase_inc(*(pp));      //set new value of phase increment
             
             float freq_offset_setting = (*(pp) / (2*M_PI)) * d_samp_rate; //send stream tag with a new value of the frequency offset
-            int offset = nitems_written(0);
+
+            uint64_t offset = nitems_written(0);
             pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
             pmt::pmt_t value =  pmt::from_double(freq_offset_setting);
             add_item_tag(0,offset, key, value);
-            
+    
             break;
           }
           pp++;

@@ -241,7 +241,7 @@ receiver_impl::work(int noutput_items,
                     d_state = fcch_search; 
                     pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(0.0),pmt::mp("sync_loss"));
                     message_port_pub(pmt::mp("measurements"), msg);
-                    DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    COUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
             }
         }

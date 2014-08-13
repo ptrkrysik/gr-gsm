@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<block>
+  <name>GSM Receiver bare</name>
+  <key>gsm_receiver</key>
+  <category>GSM</category>
+  <import>import gsm</import>
+  <make>gsm.receiver($osr, $arfcn)</make>
+
+  <param>
+    <name>Oversampling ratio</name>
+    <key>osr</key>
+    <value>4</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>ARFCN</name>
+    <key>arfcn</key>
+    <value>0</value>
+    <type>int</type>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+  
+  <source>
+    <name>measurements</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>

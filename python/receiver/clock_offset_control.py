@@ -30,7 +30,7 @@ class clock_offset_control(gr.basic_block):
     """
     def __init__(self, fc, samp_rate):
         gr.basic_block.__init__(self,
-            name="clock_offset_control",
+            name="gsm_clock_offset_control",
             in_sig=[],
             out_sig=[])
         self.fc = fc
@@ -38,12 +38,13 @@ class clock_offset_control(gr.basic_block):
         self.message_port_register_in(pmt.intern("measurements"))
         self.set_msg_handler(pmt.intern("measurements"), self.process_measurement)
         self.message_port_register_out(pmt.intern("ppm"))
-        self.alfa = 0.6
+        self.alfa = 0.3
         self.ppm_estimate = -1e6
         self.first_measurement = True
         self.counter = 0
         self.last_state = ""
         self.timer = Timer(0.5, self.timed_reset)
+        self.last_ppm = -1e6
         
     def process_measurement(self,msg):
         if pmt.is_tuple(msg):
@@ -75,14 +76,17 @@ class clock_offset_control(gr.basic_block):
                     
                     if self.counter == 5:
                         self.counter = 0
-                        msg_ppm = pmt.from_double(ppm)
-                        self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+                        if abs(self.last_ppm-self.ppm_estimate) > 0.1:
+                            msg_ppm = pmt.from_double(ppm)
+                            self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+                            self.last_ppm = self.ppm_estimate
                     else:
                         self.counter=self.counter+1
                 elif state == "sync_loss":
                     self.reset()
                     msg_ppm = pmt.from_double(0.0)
                     self.message_port_pub(pmt.intern("ppm"), msg_ppm)
+
 
     def timed_reset(self):
         if self.last_state != "synchronized":

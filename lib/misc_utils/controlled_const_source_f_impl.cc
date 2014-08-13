@@ -78,8 +78,6 @@ namespace gr {
     void controlled_const_source_f_impl::set_constant(float constant){
       d_constant = constant;
     }
-    
-
 
   } /* namespace gsm */
 } /* namespace gr */
