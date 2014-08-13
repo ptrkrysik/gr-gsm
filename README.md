@@ -16,8 +16,7 @@ git clone git://github.com/pybombs/pybombs
 cd pybombs
 ./pybombs install gnuradio uhd gr-osmosdr
 ```
-At the first run pybombs will ask for configuration options. As target directory choose /usr/local/. The rest of the options can be left default.
-
+At the first run pybombs will ask for configuration options. As a target directory select /usr/local/. The rest of the options can be left as default.
 
 To download gr-gsm sources run following command:
 
