@@ -27,7 +27,7 @@ git clone git@github.com:Jakotako/gr-gsm.git
 Make sure that you have all required packages:
 
 ```
-sudo apt-get install cmake libboost1.55-all-dev libcppunit-dev swig doxygen liblog4cpp5-dev
+sudo apt-get install cmake libboost1.55-all-dev libcppunit-dev swig doxygen liblog4cpp5-dev python-scipy
 ```
 
 To compile and install gr-gsm run:
