@@ -85,6 +85,7 @@ set(GRC_BLOCKS_DIR      ${GR_PKG_DATA_DIR}/grc/blocks)
 ########################################################################
 find_package(GnuradioRuntime)
 find_package(CppUnit)
+find_package(Doxygen)
 
 # To run a more advanced search for GNU Radio and it's components and
 # versions, use the following. Add any components required to the list
@@ -100,6 +101,15 @@ endif()
 if(NOT CPPUNIT_FOUND)
     message(FATAL_ERROR "CppUnit required to compile gsm")
 endif()
+
+########################################################################
+# Setup doxygen option
+########################################################################
+if(DOXYGEN_FOUND)
+	option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
+else(DOXYGEN_FOUND)
+	option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
+endif(DOXYGEN_FOUND)
 
 ########################################################################
 # Setup the include and linker paths
