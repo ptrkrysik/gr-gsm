@@ -18,25 +18,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
-#define INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
 
-#include <gsm/misc_utils/message_printer.h>
+#ifndef INCLUDED_GSM_WIRESHARK_SINK_H
+#define INCLUDED_GSM_WIRESHARK_SINK_H
+
+#include <gsm/api.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
 
-    class message_printer_impl : public message_printer
+    /*!
+     * \brief <+description of block+>
+     * \ingroup gsm
+     *
+     */
+    class GSM_API wireshark_sink : virtual public gr::block
     {
-     private:
-      void message_print(pmt::pmt_t msg);
      public:
-      message_printer_impl();
-      ~message_printer_impl();
+      typedef boost::shared_ptr<wireshark_sink> sptr;
+
+      /*!
+       * \brief Return a shared_ptr to a new instance of gsm::wireshark_sink.
+       *
+       * To avoid accidental use of raw pointers, gsm::wireshark_sink's
+       * constructor is in a private implementation
+       * class. gsm::wireshark_sink::make is the public interface for
+       * creating new instances.
+       */
+      static sptr make();
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H */
+#endif /* INCLUDED_GSM_WIRESHARK_SINK_H */
 

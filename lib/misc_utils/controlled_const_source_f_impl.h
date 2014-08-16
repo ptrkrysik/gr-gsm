@@ -21,7 +21,7 @@
 #ifndef INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_IMPL_H
 #define INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_IMPL_H
 
-#include <gsm/controlled_const_source_f.h>
+#include <gsm/misc_utils/controlled_const_source_f.h>
 
 namespace gr {
   namespace gsm {

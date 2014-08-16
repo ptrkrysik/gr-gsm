@@ -21,7 +21,7 @@
 #ifndef INCLUDED_GSM_EXTRACT_SYSTEM_INFO_IMPL_H
 #define INCLUDED_GSM_EXTRACT_SYSTEM_INFO_IMPL_H
 
-#include <gsm/extract_system_info.h>
+#include <gsm/misc_utils/extract_system_info.h>
 
 
 

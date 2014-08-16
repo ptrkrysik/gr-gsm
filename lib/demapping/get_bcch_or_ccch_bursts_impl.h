@@ -21,7 +21,7 @@
 #ifndef INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_IMPL_H
 #define INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_IMPL_H
 
-#include <gsm/get_bcch_or_ccch_bursts.h>
+#include <gsm/demapping/get_bcch_or_ccch_bursts.h>
 
 namespace gr {
   namespace gsm {

@@ -20,12 +20,10 @@
 ########################################################################
 # Install public header files
 ########################################################################
-add_subdirectory(misc_utils)
-add_subdirectory(decoding)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-
 install(FILES
-    api.h
-    gsmtap.h DESTINATION include/gsm
+    bursts_printer.h
+    extract_system_info.h
+    controlled_rotator_cc.h
+    controlled_const_source_f.h
+    message_printer.h DESTINATION include/gsm/misc_utils
 )

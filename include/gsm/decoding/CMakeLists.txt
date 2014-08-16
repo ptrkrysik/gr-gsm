@@ -20,12 +20,6 @@
 ########################################################################
 # Install public header files
 ########################################################################
-add_subdirectory(misc_utils)
-add_subdirectory(decoding)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-
 install(FILES
-    api.h
-    gsmtap.h DESTINATION include/gsm
+    control_channels_decoder.h DESTINATION include/gsm/decoding
 )

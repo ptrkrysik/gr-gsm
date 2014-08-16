@@ -21,7 +21,7 @@
 #ifndef INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
 #define INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
 
-#include <gsm/controlled_rotator_cc.h>
+#include <gsm/misc_utils/controlled_rotator_cc.h>
 #include <gnuradio/blocks/rotator.h>
 
 namespace gr {
