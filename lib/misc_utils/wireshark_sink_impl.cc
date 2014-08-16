@@ -28,6 +28,12 @@
 namespace gr {
   namespace gsm {
 
+    void wireshark_sink_impl::send_to_wireshark(pmt::pmt_t msg)
+    {
+        //implementation of sending gsm messages to wireshark
+    }
+
+
     wireshark_sink::sptr
     wireshark_sink::make()
     {
@@ -42,7 +48,11 @@ namespace gr {
       : gr::block("wireshark_sink",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
-    {}
+    {
+        message_port_register_in(pmt::mp("msgs"));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&wireshark_sink_impl::send_to_wireshark, this, _1));
+    }
+
 
     /*
      * Our virtual destructor.

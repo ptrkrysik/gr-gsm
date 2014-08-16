@@ -29,7 +29,7 @@ namespace gr {
     class wireshark_sink_impl : public wireshark_sink
     {
      private:
-      // Nothing to declare in this block.
+        void send_to_wireshark(pmt::pmt_t msg);
 
      public:
       wireshark_sink_impl();
