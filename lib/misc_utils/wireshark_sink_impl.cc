@@ -24,13 +24,22 @@
 
 #include <gnuradio/io_signature.h>
 #include "wireshark_sink_impl.h"
+#include "gsm/gsmtap.h"
 
 namespace gr {
   namespace gsm {
 
     void wireshark_sink_impl::send_to_wireshark(pmt::pmt_t msg)
     {
-        //implementation of sending gsm messages to wireshark
+
+        pmt::pmt_t header_blob = pmt::car(msg);
+        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob); //GSMTAP header
+
+        pmt::pmt_t message = pmt::cdr(msg);
+        uint8_t * message_elements = (uint8_t *)pmt::blob_data(message);
+        size_t message_len=pmt::blob_length(message); //message content
+
+        //place for implementation of sending gsm messages to wireshark
     }
 
 
