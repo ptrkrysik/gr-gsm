@@ -2,7 +2,7 @@
 <block>
   <name>wireshark_sink</name>
   <key>gsm_wireshark_sink</key>
-  <category>gsm</category>
+  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.wireshark_sink()</make>
 
