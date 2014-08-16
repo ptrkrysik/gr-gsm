@@ -25,5 +25,6 @@ install(FILES
     extract_system_info.h
     controlled_rotator_cc.h
     controlled_const_source_f.h
+    wireshark_sink.h
     message_printer.h DESTINATION include/gsm/misc_utils
 )

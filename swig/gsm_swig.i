@@ -16,6 +16,7 @@
 #include "gsm/controlled_rotator_cc.h"
 #include "gsm/controlled_const_source_f.h"
 #include "gsm/message_printer.h"
+#include "gsm/wireshark_sink.h"
 %}
 
 
@@ -36,3 +37,5 @@ GR_SWIG_BLOCK_MAGIC2(gsm, controlled_rotator_cc);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
 %include "gsm/message_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
+%include "gsm/wireshark_sink.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, wireshark_sink);
