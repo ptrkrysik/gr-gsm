@@ -22,7 +22,7 @@ At the first run pybombs will ask for configuration options. As a target directo
 To download gr-gsm sources run following command:
 
 ```
-git clone git@github.com:Jakotako/gr-gsm.git
+git clone https://github.com/ptrkrysik/gr-gsm.git
 ```
 Make sure that you have all required packages:
 
