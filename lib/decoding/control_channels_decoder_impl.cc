@@ -37,7 +37,7 @@ namespace gr {
     }
 
     /*
-     * The private constructor
+     * Constructor
      */
     control_channels_decoder_impl::control_channels_decoder_impl()
       : gr::block("control_channels_decoder",
@@ -53,16 +53,16 @@ namespace gr {
             j = 2 * ((49 * k) % 57) + ((k % 8) / 4);
             interleave_trans[k] = B * 114 + j; //114=57 + 57
         }
-
+        
+        //initialize decoder
         FC_init(&fc_ctx, 40, 184);
+        
+        //setup input/output ports
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&control_channels_decoder_impl::decode, this, _1));
         message_port_register_out(pmt::mp("msgs"));
     }
 
-    /*
-     * Our virtual destructor.
-     */
     control_channels_decoder_impl::~control_channels_decoder_impl()
     {
     }
@@ -131,8 +131,18 @@ namespace gr {
 
            //send message with header of the first burst
             pmt::pmt_t header_blob = pmt::car(d_bursts[0]);
-            pmt::pmt_t msg_binary_blob = pmt::make_blob(outmsg,23);
-            pmt::pmt_t msg_out = pmt::cons(header_blob, msg_binary_blob);
+            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
+            header->type = GSMTAP_TYPE_UM;
+            header->sub_type = GSMTAP_CHANNEL_BCCH;
+            int8_t * header_content = (int8_t *)pmt::blob_data(header_blob);
+
+            int8_t header_plus_data[16+23];
+            memcpy(header_plus_data, header_content, 16);
+            memcpy(header_plus_data+16, outmsg, 23);
+            
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,23+16);
+            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
+            
             message_port_pub(pmt::mp("msgs"), msg_out);
         }
         return;
