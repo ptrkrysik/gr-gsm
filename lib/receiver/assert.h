@@ -36,7 +36,7 @@
 #define DCOUT(text) {}
 #define OBJDCOUT(text) {}
 #else
-#define DCOUT(text) { COUT(__FILE__ << ":" << __LINE__ << " " << text); }
+#define DCOUT(text) { CERR(text); }
 #define OBJDCOUT(text) { DCOUT(this << " " << text); }
 #endif
 //@}
