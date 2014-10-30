@@ -20,10 +20,20 @@
     <type>int</type>
   </param>
 
+  <param>
+    <name>Num Streams</name>
+    <key>num_streams</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+  <check>$num_streams &gt;= 0</check>
+  
   <sink>
     <name>in</name>
     <type>complex</type>
+    <nports>$num_streams</nports>
   </sink>
+
   <source>
     <name>bursts</name>
     <type>message</type>

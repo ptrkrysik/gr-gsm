@@ -25,6 +25,7 @@ cmake_minimum_required(VERSION 2.6)
 project(gr-gsm CXX C)
 enable_testing()
 
+#set(CMAKE_BUILD_TYPE "Debug")
 #select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE "Release")

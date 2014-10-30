@@ -34,16 +34,18 @@ namespace gr {
     class receiver_impl : public receiver
     {
      private:
+        unsigned int d_c0_burst_start;
+        float d_c0_signal_dbm;
         /**@name Configuration of the receiver */
         //@{
         const int d_OSR; ///< oversampling ratio
         const int d_chan_imp_length; ///< channel impulse length
         uint16_t d_arfcn;
-        int8_t d_signal_dbm;
+        float d_signal_dbm;
         //@}
 
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
-        gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal bursts and dummy bursts
+        gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal and dummy burst
 
         /** Counts samples consumed by the receiver
          *
