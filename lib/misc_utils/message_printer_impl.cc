@@ -24,6 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "message_printer_impl.h"
+#include "gsm/gsmtap.h"
 
 namespace gr {
   namespace gsm {
@@ -35,9 +36,9 @@ namespace gr {
         size_t message_len=pmt::blob_length(message);
 
 //        pmt::pmt_t header_blob = pmt::car(msg);
-//        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
-
-        for(int ii=0; ii<message_len; ii++)
+        gsmtap_hdr * header = (gsmtap_hdr *)message_elements;
+        
+        for(int ii=(header->hdr_len*4); ii<message_len; ii++)
         {
             printf(" %02x", message_elements[ii]);
         }

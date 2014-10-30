@@ -758,11 +758,10 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
 
 void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type)
 {
-
     boost::scoped_ptr<gsmtap_hdr> tap_header(new gsmtap_hdr());
 
     tap_header->version = GSMTAP_VERSION;
-    tap_header->hdr_len = BURST_SIZE/4;
+    tap_header->hdr_len = sizeof(gsmtap_hdr)/4;
     tap_header->type = GSMTAP_TYPE_UM_BURST;
     tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
     tap_header->frame_number = d_burst_nr.get_frame_nr();
