@@ -44,7 +44,7 @@ class clock_offset_control(gr.basic_block):
         self.counter = 0
         self.last_state = ""
         self.timer = Timer(0.5, self.timed_reset)
-        self.last_ppm = -1e6
+        self.last_ppm_estimate = -1e6
         
     def process_measurement(self,msg):
         if pmt.is_tuple(msg):
@@ -76,10 +76,10 @@ class clock_offset_control(gr.basic_block):
                     
                     if self.counter == 5:
                         self.counter = 0
-                        if abs(self.last_ppm-self.ppm_estimate) > 0.1:
+                        if abs(self.last_ppm_estimate-self.ppm_estimate) > 0.1:
                             msg_ppm = pmt.from_double(ppm)
                             self.message_port_pub(pmt.intern("ppm"), msg_ppm)
-                            self.last_ppm = self.ppm_estimate
+                            self.last_ppm_estimate = self.ppm_estimate
                     else:
                         self.counter=self.counter+1
                 elif state == "sync_loss":
