@@ -55,16 +55,16 @@ typedef std::vector<float> vector_float;
 typedef boost::circular_buffer<float> circular_buffer_float;
 
 receiver::sptr
-receiver::make(int osr, int arfcn)
+receiver::make(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums)
 {
     return gnuradio::get_initial_sptr
-           (new receiver_impl(osr, arfcn));
+           (new receiver_impl(osr, cell_allocation, tseq_nums));
 }
 
 /*
  * The private constructor
  */
-receiver_impl::receiver_impl(int osr, int arfcn)
+receiver_impl::receiver_impl(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums)
     : gr::sync_block("receiver",
                 gr::io_signature::make(1, -1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
@@ -76,8 +76,9 @@ receiver_impl::receiver_impl(int osr, int arfcn)
     d_state(fcch_search),
     d_burst_nr(osr),
     d_failed_sch(0),
-    d_arfcn((int)(arfcn)),
-    d_signal_dbm(-120)
+    d_signal_dbm(-120),
+    d_tseq_nums(tseq_nums),
+    d_cell_allocation(cell_allocation)
 {
     int i;
                                                                       //don't send samples to the receiver until there are at least samples for one
@@ -89,7 +90,8 @@ receiver_impl::receiver_impl(int osr, int arfcn)
                                                                                                      //if first bit of the seqeunce ==1  first symbol ==-1
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
-    message_port_register_out(pmt::mp("bursts"));
+    message_port_register_out(pmt::mp("C0"));
+    message_port_register_out(pmt::mp("CX"));
     message_port_register_out(pmt::mp("measurements"));
     configure_receiver();  //configure the receiver - tell it where to find which burst type
 }
@@ -193,7 +195,7 @@ receiver_impl::work(int noutput_items,
 
         burst_type b_type;
         
-        for(int input_nr=0;input_nr<input_items.size();input_nr++)
+        for(int input_nr=0; input_nr<d_cell_allocation.size(); input_nr++)
         {
             double signal_pwr = 0;
             input = (gr_complex *)input_items[input_nr];
@@ -225,7 +227,7 @@ receiver_impl::work(int noutput_items,
                 const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
                 double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
 
-                send_burst(d_burst_nr, fc_fb, b_type);
+                send_burst(d_burst_nr, fc_fb, b_type, input_nr);
 
                 pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("synchronized"));
                 message_port_pub(pmt::mp("measurements"), msg);
@@ -237,7 +239,7 @@ receiver_impl::work(int noutput_items,
                 d_c0_burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);                //get channel impulse response
                 
                 detect_burst(input, &channel_imp_resp[0], d_c0_burst_start, output_binary);           //MLSE detection of bits
-                send_burst(d_burst_nr, output_binary, b_type);
+                send_burst(d_burst_nr, output_binary, b_type, input_nr);
                 if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)           //and decode SCH data
                 {
                     // d_burst_nr.set(t1, t2, t3, 0);                                              //but only to check if burst_start value is correct
@@ -263,7 +265,7 @@ receiver_impl::work(int noutput_items,
                 float normal_corr_max;                                                    //if it's normal burst
                 d_c0_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc); //get channel impulse response for given training sequence number - d_bcc
                 detect_burst(input, &channel_imp_resp[0], d_c0_burst_start, output_binary);            //MLSE detection of bits
-                send_burst(d_burst_nr, output_binary, b_type);
+                send_burst(d_burst_nr, output_binary, b_type, input_nr);
                 break;
             }
             case dummy_or_normal:
@@ -278,19 +280,19 @@ receiver_impl::work(int noutput_items,
                 {
                     d_c0_burst_start = normal_burst_start;
                     detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
-                    send_burst(d_burst_nr, output_binary, b_type); 
+                    send_burst(d_burst_nr, output_binary, b_type, input_nr); 
                 }
                 else
                 {
                     d_c0_burst_start = dummy_burst_start;
-                    send_burst(d_burst_nr, dummy_burst, b_type);
+                    send_burst(d_burst_nr, dummy_burst, b_type, input_nr);
                 }
                 break;
             }
             case rach_burst:
                 break;
             case dummy:
-                send_burst(d_burst_nr, dummy_burst, b_type);
+                send_burst(d_burst_nr, dummy_burst, b_type, input_nr);
                 break;
             case normal_or_noise:
             {
@@ -301,19 +303,34 @@ receiver_impl::work(int noutput_items,
                 std::vector<gr_complex> v(input, input + noutput_items);
                 if(d_signal_dbm>=d_c0_signal_dbm-13)
                 {
-                    plot(v);
-
-                    burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, 7);
-//                  if(abs(d_c0_burst_start-burst_start)<=2){
-                    if((normal_corr_max/sqrt(signal_pwr))>=0.9){
-                        std::cout << static_cast<int>(d_signal_dbm) << std::endl;
-                        COUT("d_c0_burst_start: " << d_c0_burst_start);
-                        COUT("burst_start: " << burst_start);
-                        std::cout << "corr max to signal ratio: " << (normal_corr_max/sqrt(signal_pwr)) << std::endl;
-                        usleep(4e6);
+                    if(d_tseq_nums.size()==0)              //there is no information about training sequence
+                    {                                      //however the receiver can detect it
+                        get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, 0);
+                        float ts_max=normal_corr_max;     //with use of a very simple algorithm based on finding
+                        int ts_max_num=0;                 //maximum correlation
+                        for(int ss=1; ss<=7; ss++)
+                        {
+                            get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, ss);
+                            if(ts_max<normal_corr_max)
+                            {
+                                ts_max = normal_corr_max;
+                                ts_max_num = ss;
+                            }
+                        }
+                        d_tseq_nums.push_back(ts_max_num);
                     }
-                    detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
-                    send_burst(d_burst_nr, output_binary, b_type);
+                    int tseq_num;
+                    if(input_nr<=d_tseq_nums.size()){
+                        tseq_num = d_tseq_nums[input_nr-1];
+                    } else {
+                        tseq_num = d_tseq_nums.back();
+                    }
+                    burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, tseq_num);
+//                  if(abs(d_c0_burst_start-burst_start)<=2){ //unused check/filter based on timing
+                    if((normal_corr_max/sqrt(signal_pwr))>=0.9){
+                        detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
+                        send_burst(d_burst_nr, output_binary, b_type, input_nr);
+                    }
                 }
                 break;
             }
@@ -622,7 +639,6 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex *input, gr_complex * c
 }
 
 
-
 void receiver_impl::detect_burst(const gr_complex * input, gr_complex * chan_imp_resp, int burst_start, unsigned char * output_binary)
 {
     float output[BURST_SIZE];
@@ -743,7 +759,7 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
         correlation_buffer.push_back(correlation);
         power_buffer.push_back(std::pow(abs(correlation), 2));
     }
-    //plot(power_buffer);
+//    plot(power_buffer);
     //compute window energies
     vector_float::iterator iter = power_buffer.begin();
     bool loop_end = false;
@@ -788,7 +804,7 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
         //     d_channel_imp_resp.push_back(correlation);
         chan_imp_resp[ii] = correlation;
     }
-
+    
     *corr_max = max_correlation;
 
     //DCOUT("strongest_window_nr_new: " << strongest_window_nr);
@@ -799,7 +815,7 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
 }
 
 
-void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type)
+void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type, unsigned int input_nr)
 {
     boost::scoped_ptr<gsmtap_hdr> tap_header(new gsmtap_hdr());
 
@@ -809,13 +825,17 @@ void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * bur
     tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
     tap_header->frame_number = d_burst_nr.get_frame_nr();
     tap_header->sub_type = static_cast<uint8_t>(b_type);
-    tap_header->arfcn = d_arfcn;
+    tap_header->arfcn = d_cell_allocation[input_nr];
     tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
     pmt::pmt_t header_blob=pmt::make_blob(tap_header.get(),sizeof(gsmtap_hdr));
     pmt::pmt_t burst_binary_blob=pmt::make_blob(burst_binary,BURST_SIZE);
     pmt::pmt_t msg = pmt::cons(header_blob, burst_binary_blob);
     
-    message_port_pub(pmt::mp("bursts"), msg);
+    if(input_nr==0){
+        message_port_pub(pmt::mp("C0"), msg);
+    } else {
+        message_port_pub(pmt::mp("CX"), msg);
+    }
 }
 
 void receiver_impl::configure_receiver()
@@ -843,9 +863,14 @@ void receiver_impl::configure_receiver()
     d_channel_conf.set_burst_types(TIMESLOT7, TEST51, sizeof(TEST51) / sizeof(unsigned), dummy_or_normal);
 }
 
-void receiver_impl::set_arfcn(int arfcn) //!!
+void receiver_impl::set_cell_allocation(const std::vector<float> &cell_allocation)
 {
-    d_arfcn = arfcn;
+    d_cell_allocation = cell_allocation;
+}
+
+void receiver_impl::set_tseq_nums(const std::vector<int> & tseq_nums)
+{
+    d_tseq_nums = tseq_nums;
 }
 
 void receiver_impl::reset()

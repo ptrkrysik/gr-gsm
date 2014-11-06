@@ -48,9 +48,10 @@ namespace gr {
        * class. gsm::receiver::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int osr, int arfcn);
+      static sptr make(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &seq_nums);
       
-      virtual void set_arfcn(int arfcn) = 0;
+      virtual void set_cell_allocation(const std::vector<float> &cell_allocation) = 0;
+      virtual void set_tseq_nums(const std::vector<int> & tseq_nums) = 0;
       virtual void reset() = 0;
     };
    

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Thu Aug 21 20:40:28 2014</timestamp>
+  <timestamp>Thu Nov  6 14:43:22 2014</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -92,117 +92,26 @@
     </param>
   </block>
   <block>
-    <key>variable_qtgui_range</key>
+    <key>gsm_message_printer</key>
     <param>
       <key>id</key>
-      <value>g</value>
+      <value>gsm_message_printer_1</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>label</key>
-      <value>gain</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>43</value>
-    </param>
-    <param>
-      <key>start</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>stop</key>
-      <value>50</value>
-    </param>
-    <param>
-      <key>step</key>
-      <value>0.5</value>
-    </param>
-    <param>
-      <key>widget</key>
-      <value>counter</value>
-    </param>
-    <param>
-      <key>orient</key>
-      <value>Qt.Horizontal</value>
-    </param>
-    <param>
-      <key>min_len</key>
-      <value>100</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value></value>
-    </param>
-    <param>
       <key>alias</key>
       <value></value>
     </param>
     <param>
-      <key>_coordinate</key>
-      <value>(218, 10)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable_qtgui_range</key>
-    <param>
-      <key>id</key>
-      <value>fc</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>center_frequency</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>939.4e6</value>
-    </param>
-    <param>
-      <key>start</key>
-      <value>925e6</value>
-    </param>
-    <param>
-      <key>stop</key>
-      <value>960e6</value>
-    </param>
-    <param>
-      <key>step</key>
-      <value>2e5</value>
-    </param>
-    <param>
-      <key>widget</key>
-      <value>counter_slider</value>
-    </param>
-    <param>
-      <key>orient</key>
-      <value>Qt.Horizontal</value>
-    </param>
-    <param>
-      <key>min_len</key>
-      <value>100</value>
-    </param>
-    <param>
-      <key>gui_hint</key>
-      <value></value>
-    </param>
-    <param>
-      <key>alias</key>
+      <key>affinity</key>
       <value></value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(330, 9)</value>
+      <value>(1131, 230)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -241,105 +150,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(660, 243)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>blocks_tag_debug</key>
-    <param>
-      <key>id</key>
-      <value>blocks_tag_debug_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>name</key>
-      <value></value>
-    </param>
-    <param>
-      <key>filter</key>
-      <value>""</value>
-    </param>
-    <param>
-      <key>num_inputs</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>display</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(456, 477)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gsm_receiver_hier</key>
-    <param>
-      <key>id</key>
-      <value>gsm_receiver_hier_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>input_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>osr</key>
-      <value>4</value>
-    </param>
-    <param>
-      <key>arfcn</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(455, 244)</value>
+      <value>(650, 226)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -374,7 +185,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(920, 247)</value>
+      <value>(910, 230)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -382,13 +193,33 @@
     </param>
   </block>
   <block>
-    <key>gsm_message_printer</key>
+    <key>blocks_socket_pdu</key>
     <param>
       <key>id</key>
-      <value>gsm_message_printer_0</value>
+      <value>blocks_socket_pdu_0</value>
     </param>
     <param>
       <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>"UDP_CLIENT"</value>
+    </param>
+    <param>
+      <key>host</key>
+      <value>127.0.0.1</value>
+    </param>
+    <param>
+      <key>port</key>
+      <value>4729</value>
+    </param>
+    <param>
+      <key>mtu</key>
+      <value>10000</value>
+    </param>
+    <param>
+      <key>tcp_no_delay</key>
       <value>False</value>
     </param>
     <param>
@@ -400,62 +231,16 @@
       <value></value>
     </param>
     <param>
-      <key>_coordinate</key>
-      <value>(1128, 169)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
+      <key>minoutbuf</key>
       <value>0</value>
     </param>
-  </block>
-  <block>
-    <key>gsm_message_printer</key>
     <param>
-      <key>id</key>
-      <value>gsm_message_printer_1</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1141, 247)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
+      <key>maxoutbuf</key>
       <value>0</value>
     </param>
-  </block>
-  <block>
-    <key>blocks_message_debug</key>
-    <param>
-      <key>id</key>
-      <value>blocks_message_debug_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
     <param>
       <key>_coordinate</key>
-      <value>(240, 405)</value>
+      <value>(1148, 302)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -522,93 +307,117 @@
     </param>
   </block>
   <block>
-    <key>gsm_clock_offset_control</key>
+    <key>variable_qtgui_range</key>
     <param>
       <key>id</key>
-      <value>gsm_clock_offset_control_0</value>
+      <value>fc</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>fc</key>
-      <value>fc</value>
+      <key>label</key>
+      <value>center_frequency</value>
     </param>
     <param>
-      <key>samp_rate</key>
-      <value>samp_rate</value>
+      <key>value</key>
+      <value>939.4e6</value>
+    </param>
+    <param>
+      <key>start</key>
+      <value>925e6</value>
+    </param>
+    <param>
+      <key>stop</key>
+      <value>960e6</value>
+    </param>
+    <param>
+      <key>step</key>
+      <value>2e5</value>
+    </param>
+    <param>
+      <key>widget</key>
+      <value>counter_slider</value>
+    </param>
+    <param>
+      <key>orient</key>
+      <value>Qt.Horizontal</value>
+    </param>
+    <param>
+      <key>min_len</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>gui_hint</key>
+      <value></value>
     </param>
     <param>
       <key>alias</key>
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(329, 155)</value>
+      <value>(330, 9)</value>
     </param>
     <param>
       <key>_rotation</key>
-      <value>180</value>
+      <value>0</value>
     </param>
   </block>
   <block>
-    <key>clock_offset_corrector</key>
+    <key>variable_qtgui_range</key>
     <param>
       <key>id</key>
-      <value>clock_offset_corrector_0</value>
+      <value>g</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>fc</key>
-      <value>fc</value>
+      <key>label</key>
+      <value>gain</value>
     </param>
     <param>
-      <key>ppm</key>
+      <key>value</key>
+      <value>43</value>
+    </param>
+    <param>
+      <key>start</key>
       <value>0</value>
     </param>
     <param>
-      <key>samp_rate_in</key>
-      <value>samp_rate</value>
+      <key>stop</key>
+      <value>50</value>
     </param>
     <param>
-      <key>samp_rate_out</key>
-      <value>samp_rate</value>
+      <key>step</key>
+      <value>0.5</value>
+    </param>
+    <param>
+      <key>widget</key>
+      <value>counter</value>
+    </param>
+    <param>
+      <key>orient</key>
+      <value>Qt.Horizontal</value>
+    </param>
+    <param>
+      <key>min_len</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>gui_hint</key>
+      <value></value>
     </param>
     <param>
       <key>alias</key>
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(251, 236)</value>
+      <value>(218, 10)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -867,10 +676,10 @@
     </param>
   </block>
   <block>
-    <key>qtgui_sink_x</key>
+    <key>qtgui_freq_sink_x</key>
     <param>
       <key>id</key>
-      <value>qtgui_sink_x_0</value>
+      <value>qtgui_freq_sink_x_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -901,40 +710,200 @@
       <value>samp_rate</value>
     </param>
     <param>
-      <key>rate</key>
+      <key>grid</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>autoscale</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>average</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>ymin</key>
+      <value>-140</value>
+    </param>
+    <param>
+      <key>ymax</key>
       <value>10</value>
     </param>
     <param>
-      <key>showrf</key>
-      <value>True</value>
+      <key>nconnections</key>
+      <value>1</value>
     </param>
     <param>
-      <key>plotfreq</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plotwaterfall</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plottime</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>plotconst</key>
-      <value>True</value>
+      <key>update_time</key>
+      <value>0.10</value>
     </param>
     <param>
       <key>gui_hint</key>
       <value></value>
     </param>
     <param>
-      <key>freqchangevar</key>
-      <value>None</value>
-    </param>
-    <param>
       <key>showports</key>
       <value>True</value>
+    </param>
+    <param>
+      <key>label1</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width1</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color1</key>
+      <value>"blue"</value>
+    </param>
+    <param>
+      <key>alpha1</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label2</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width2</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color2</key>
+      <value>"red"</value>
+    </param>
+    <param>
+      <key>alpha2</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label3</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width3</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color3</key>
+      <value>"green"</value>
+    </param>
+    <param>
+      <key>alpha3</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label4</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width4</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color4</key>
+      <value>"black"</value>
+    </param>
+    <param>
+      <key>alpha4</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label5</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width5</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color5</key>
+      <value>"cyan"</value>
+    </param>
+    <param>
+      <key>alpha5</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label6</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width6</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color6</key>
+      <value>"magenta"</value>
+    </param>
+    <param>
+      <key>alpha6</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label7</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width7</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color7</key>
+      <value>"yellow"</value>
+    </param>
+    <param>
+      <key>alpha7</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label8</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width8</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color8</key>
+      <value>"dark red"</value>
+    </param>
+    <param>
+      <key>alpha8</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label9</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width9</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color9</key>
+      <value>"dark green"</value>
+    </param>
+    <param>
+      <key>alpha9</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>label10</key>
+      <value></value>
+    </param>
+    <param>
+      <key>width10</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>color10</key>
+      <value>"dark blue"</value>
+    </param>
+    <param>
+      <key>alpha10</key>
+      <value>1.0</value>
     </param>
     <param>
       <key>alias</key>
@@ -954,7 +923,152 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(455, 374)</value>
+      <value>(245, 432)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_clock_offset_control</key>
+    <param>
+      <key>id</key>
+      <value>gsm_clock_offset_control_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(294, 341)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_receiver</key>
+    <param>
+      <key>id</key>
+      <value>gsm_receiver_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>cell_allocation</key>
+      <value>[0]</value>
+    </param>
+    <param>
+      <key>tseq_nums</key>
+      <value>[]</value>
+    </param>
+    <param>
+      <key>num_streams</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(440, 230)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_input</key>
+    <param>
+      <key>id</key>
+      <value>gsm_input_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>ppm</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>samp_rate_in</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(268, 247)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -962,16 +1076,10 @@
     </param>
   </block>
   <connection>
-    <source_block_id>clock_offset_corrector_0</source_block_id>
-    <sink_block_id>gsm_receiver_hier_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>rtlsdr_source_0</source_block_id>
-    <sink_block_id>clock_offset_corrector_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
+    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
+    <sink_block_id>gsm_message_printer_1</sink_block_id>
+    <source_key>msgs</source_key>
+    <sink_key>msgs</sink_key>
   </connection>
   <connection>
     <source_block_id>gsm_get_bcch_or_ccch_bursts_0</source_block_id>
@@ -980,51 +1088,45 @@
     <sink_key>bursts</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_receiver_hier_0</source_block_id>
-    <sink_block_id>gsm_get_bcch_or_ccch_bursts_0</sink_block_id>
-    <source_key>bursts</source_key>
-    <sink_key>bursts</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_receiver_hier_0</source_block_id>
-    <sink_block_id>gsm_clock_offset_control_0</sink_block_id>
-    <source_key>measurements</source_key>
-    <sink_key>measurements</sink_key>
-  </connection>
-  <connection>
     <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>gsm_message_printer_0</sink_block_id>
+    <sink_block_id>blocks_socket_pdu_0</sink_block_id>
     <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
+    <sink_key>pdus</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>gsm_message_printer_1</sink_block_id>
-    <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
+    <source_block_id>rtlsdr_source_0</source_block_id>
+    <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>gsm_clock_offset_control_0</source_block_id>
-    <sink_block_id>blocks_message_debug_0</sink_block_id>
-    <source_key>ppm</source_key>
-    <sink_key>print</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_clock_offset_control_0</source_block_id>
-    <sink_block_id>clock_offset_corrector_0</sink_block_id>
+    <sink_block_id>gsm_input_0</sink_block_id>
     <source_key>ppm</source_key>
     <sink_key>ppm_in</sink_key>
   </connection>
   <connection>
-    <source_block_id>clock_offset_corrector_0</source_block_id>
-    <sink_block_id>blocks_tag_debug_0</sink_block_id>
+    <source_block_id>rtlsdr_source_0</source_block_id>
+    <sink_block_id>gsm_input_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>rtlsdr_source_0</source_block_id>
-    <sink_block_id>qtgui_sink_x_0</sink_block_id>
+    <source_block_id>gsm_input_0</source_block_id>
+    <sink_block_id>gsm_receiver_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_receiver_0</source_block_id>
+    <sink_block_id>gsm_get_bcch_or_ccch_bursts_0</sink_block_id>
+    <source_key>C0</source_key>
+    <sink_key>bursts</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_receiver_0</source_block_id>
+    <sink_block_id>gsm_clock_offset_control_0</sink_block_id>
+    <source_key>measurements</source_key>
+    <sink_key>measurements</sink_key>
   </connection>
 </flow_graph>

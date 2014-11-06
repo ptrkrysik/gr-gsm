@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Wed Aug 13 19:03:06 2014</timestamp>
+  <timestamp>Thu Nov  6 14:42:26 2014</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -29,7 +29,7 @@
     </param>
     <param>
       <key>generate_options</key>
-      <value>no_gui</value>
+      <value>wx_gui</value>
     </param>
     <param>
       <key>category</key>
@@ -143,100 +143,6 @@
     </param>
   </block>
   <block>
-    <key>gsm_clock_offset_control</key>
-    <param>
-      <key>id</key>
-      <value>gsm_clock_offset_control_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>fc</key>
-      <value>fc</value>
-    </param>
-    <param>
-      <key>samp_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(330, 261)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>180</value>
-    </param>
-  </block>
-  <block>
-    <key>clock_offset_corrector</key>
-    <param>
-      <key>id</key>
-      <value>clock_offset_corrector_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>fc</key>
-      <value>fc</value>
-    </param>
-    <param>
-      <key>ppm</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>samp_rate_in</key>
-      <value>1625000.0/6.0*4.0</value>
-    </param>
-    <param>
-      <key>samp_rate_out</key>
-      <value>1625000.0/6.0*4.0</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(253, 355)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>gsm_message_printer</key>
     <param>
       <key>id</key>
@@ -256,7 +162,97 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1135, 366)</value>
+      <value>(1130, 196)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_control_channels_decoder</key>
+    <param>
+      <key>id</key>
+      <value>gsm_control_channels_decoder_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(908, 196)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_socket_pdu</key>
+    <param>
+      <key>id</key>
+      <value>blocks_socket_pdu_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>"UDP_CLIENT"</value>
+    </param>
+    <param>
+      <key>host</key>
+      <value>127.0.0.1</value>
+    </param>
+    <param>
+      <key>port</key>
+      <value>4729</value>
+    </param>
+    <param>
+      <key>mtu</key>
+      <value>10000</value>
+    </param>
+    <param>
+      <key>tcp_no_delay</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1138, 278)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -295,7 +291,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(668, 362)</value>
+      <value>(637, 192)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -303,14 +299,22 @@
     </param>
   </block>
   <block>
-    <key>gsm_control_channels_decoder</key>
+    <key>gsm_clock_offset_control</key>
     <param>
       <key>id</key>
-      <value>gsm_control_channels_decoder_0</value>
+      <value>gsm_clock_offset_control_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
     </param>
     <param>
       <key>alias</key>
@@ -330,34 +334,38 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(913, 366)</value>
+      <value>(261, 307)</value>
     </param>
     <param>
       <key>_rotation</key>
-      <value>0</value>
+      <value>180</value>
     </param>
   </block>
   <block>
-    <key>gsm_receiver_hier</key>
+    <key>gsm_receiver</key>
     <param>
       <key>id</key>
-      <value>gsm_receiver_hier_0</value>
+      <value>gsm_receiver_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
-    </param>
-    <param>
-      <key>input_rate</key>
-      <value>samp_rate</value>
     </param>
     <param>
       <key>osr</key>
       <value>4</value>
     </param>
     <param>
-      <key>arfcn</key>
-      <value>0</value>
+      <key>cell_allocation</key>
+      <value>[0]</value>
+    </param>
+    <param>
+      <key>tseq_nums</key>
+      <value>[]</value>
+    </param>
+    <param>
+      <key>num_streams</key>
+      <value>1</value>
     </param>
     <param>
       <key>alias</key>
@@ -377,7 +385,58 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(465, 363)</value>
+      <value>(414, 196)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_input</key>
+    <param>
+      <key>id</key>
+      <value>gsm_input_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>ppm</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>samp_rate_in</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(226, 213)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -467,7 +526,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(23, 354)</value>
+      <value>(15, 201)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -475,34 +534,16 @@
     </param>
   </block>
   <connection>
-    <source_block_id>clock_offset_corrector_0</source_block_id>
-    <sink_block_id>gsm_receiver_hier_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_file_source_0</source_block_id>
-    <sink_block_id>clock_offset_corrector_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_clock_offset_control_0</source_block_id>
-    <sink_block_id>clock_offset_corrector_0</sink_block_id>
-    <source_key>ppm</source_key>
-    <sink_key>ppm_in</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_receiver_hier_0</source_block_id>
+    <source_block_id>gsm_receiver_0</source_block_id>
     <sink_block_id>gsm_clock_offset_control_0</sink_block_id>
     <source_key>measurements</source_key>
     <sink_key>measurements</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>gsm_message_printer_0</sink_block_id>
-    <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
+    <source_block_id>gsm_receiver_0</source_block_id>
+    <sink_block_id>gsm_get_bcch_or_ccch_bursts_0</sink_block_id>
+    <source_key>C0</source_key>
+    <sink_key>bursts</sink_key>
   </connection>
   <connection>
     <source_block_id>gsm_get_bcch_or_ccch_bursts_0</source_block_id>
@@ -511,9 +552,33 @@
     <sink_key>bursts</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_receiver_hier_0</source_block_id>
-    <sink_block_id>gsm_get_bcch_or_ccch_bursts_0</sink_block_id>
-    <source_key>bursts</source_key>
-    <sink_key>bursts</sink_key>
+    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
+    <sink_block_id>gsm_message_printer_0</sink_block_id>
+    <source_key>msgs</source_key>
+    <sink_key>msgs</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
+    <sink_block_id>blocks_socket_pdu_0</sink_block_id>
+    <source_key>msgs</source_key>
+    <sink_key>pdus</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_file_source_0</source_block_id>
+    <sink_block_id>gsm_input_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_clock_offset_control_0</source_block_id>
+    <sink_block_id>gsm_input_0</sink_block_id>
+    <source_key>ppm</source_key>
+    <sink_key>ppm_in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_input_0</source_block_id>
+    <sink_block_id>gsm_receiver_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
 </flow_graph>

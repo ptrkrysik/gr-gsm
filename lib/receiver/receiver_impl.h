@@ -40,8 +40,9 @@ namespace gr {
         //@{
         const int d_OSR; ///< oversampling ratio
         const int d_chan_imp_length; ///< channel impulse length
-        uint16_t d_arfcn;
         float d_signal_dbm;
+        std::vector<int> d_tseq_nums; ///< stores training sequence numbers for channels different than C0
+        std::vector<float> d_cell_allocation; ///< stores cell allocation - absolute rf channel numbers (ARFCNs) assigned to the given cell. The variable should at least contain C0 channel number.
         //@}
 
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
@@ -82,7 +83,7 @@ namespace gr {
         burst_counter d_burst_nr; ///< frame number and timeslot number
         channel_configuration d_channel_conf; ///< mapping of burst_counter to burst_type
         //@}
-    
+        
         unsigned d_failed_sch; ///< number of subsequent erroneous SCH bursts    
         
         /** Function whis is used to search a FCCH burst and to compute frequency offset before
@@ -184,23 +185,28 @@ namespace gr {
         int get_norm_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp, float *corr_max, int bcc);
 
         /**
+         * Sends burst through a C0 (for burst from C0 channel) or Cx (for other bursts) message port
          *
+         * @param burst_nr - frame number of the burst
+         * @param burst_binary - content of the burst
+         * @b_type - type of the burst
          */
-        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type, unsigned int input_nr);
 
         /**
-         *
+         * Configures burst types in different channels
          */
         void configure_receiver();
         
 
         
      public:
-       receiver_impl(int osr, int arfcn);
+       receiver_impl(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums);
       ~receiver_impl();
       
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
-      virtual void set_arfcn(int arfcn);
+      virtual void set_cell_allocation(const std::vector<float> &cell_allocation);
+      virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
       virtual void reset();
     };
   } // namespace gsm

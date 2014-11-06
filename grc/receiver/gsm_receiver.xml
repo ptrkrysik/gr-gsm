@@ -3,7 +3,7 @@
   <name>GSM Receiver</name>
   <key>gsm_receiver</key>
   <import>import gsm</import>
-  <make>gsm.receiver($osr, $arfcn)</make>
+  <make>gsm.receiver($osr, $cell_allocation, $tseq_nums)</make>
 
   <param>
     <name>Oversampling ratio</name>
@@ -13,10 +13,17 @@
   </param>
 
   <param>
-    <name>ARFCN</name>
-    <key>arfcn</key>
-    <value>0</value>
-    <type>int</type>
+    <name>Cell allocation</name>
+    <key>cell_allocation</key>
+    <value>[0]</value>
+    <type>float_vector</type>
+  </param>
+
+  <param>
+    <name>TSEQ numbers</name>
+    <key>tseq_nums</key>
+    <value>[]</value>
+    <type>int_vector</type>
   </param>
 
   <param>
@@ -34,11 +41,17 @@
   </sink>
 
   <source>
-    <name>bursts</name>
+    <name>C0</name>
     <type>message</type>
     <optional>1</optional>
   </source>
   
+  <source>
+    <name>CX</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+
   <source>
     <name>measurements</name>
     <type>message</type>
