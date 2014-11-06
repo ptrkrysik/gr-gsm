@@ -2,7 +2,6 @@
 <block>
   <name>Controlled rotator</name>
   <key>gsm_controlled_rotator_cc</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.controlled_rotator_cc($phase_inc,$samp_rate)</make>
   <callback>set_phase_inc($phase_inc)</callback>

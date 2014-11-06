@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='ASCII'?>
 <block>
   <name>Clock offset corrector</name>
-  <key>clock_offset_corrector</key>
-  <category>GSM</category>
+  <key>gsm_clock_offset_corrector</key>
   <import>import gsm</import>
   <make>gsm.clock_offset_corrector(
     fc=$fc,
@@ -18,25 +17,25 @@
     <name>fc</name>
     <key>fc</key>
     <value>936.6e6</value>
-    <type>raw</type>
+    <type>float</type>
   </param>
   <param>
     <name>ppm</name>
     <key>ppm</key>
     <value>0</value>
-    <type>raw</type>
+    <type>int</type>
   </param>
   <param>
     <name>samp_rate_in</name>
     <key>samp_rate_in</key>
     <value>1625000.0/6.0*4.0</value>
-    <type>raw</type>
+    <type>float</type>
   </param>
   <param>
     <name>samp_rate_out</name>
     <key>samp_rate_out</key>
     <value>1625000.0/6.0*4.0</value>
-    <type>raw</type>
+    <type>float</type>
   </param>
   <sink>
     <name>in</name>

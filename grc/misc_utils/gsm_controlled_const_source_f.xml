@@ -2,7 +2,6 @@
 <block>
   <name>Controlled const source</name>
   <key>gsm_controlled_const_source_f</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.controlled_const_source_f($constant)</make>
   <callback>set_constant($constant)</callback>

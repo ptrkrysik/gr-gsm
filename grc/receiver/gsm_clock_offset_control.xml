@@ -2,7 +2,6 @@
 <block>
   <name>GSM clock offset control</name>
   <key>gsm_clock_offset_control</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.clock_offset_control($fc, $samp_rate)</make>
   <callback></callback>

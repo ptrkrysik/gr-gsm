@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>bursts_printer</name>
+  <name>Bursts printer</name>
   <key>gsm_bursts_printer</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.bursts_printer()</make>
- 
   <sink>
     <name>bursts</name>
     <type>message</type>

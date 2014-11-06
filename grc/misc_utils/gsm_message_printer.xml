@@ -2,7 +2,6 @@
 <block>
   <name>Message printer</name>
   <key>gsm_message_printer</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.message_printer()</make>
 

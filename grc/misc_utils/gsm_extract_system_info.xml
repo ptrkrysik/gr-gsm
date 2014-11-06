@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <block>
-  <name>extract_system_info</name>
+  <name>Extract system info</name>
   <key>gsm_extract_system_info</key>
-  <category>GSM</category>
   <import>import gsm</import>
   <make>gsm.extract_system_info()</make>
 

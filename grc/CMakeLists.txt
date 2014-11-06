@@ -17,6 +17,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 install(FILES
+    gsm_block_tree.xml
     receiver/gsm_receiver.xml
     misc_utils/gsm_bursts_printer.xml
     receiver/gsm_fcch_burst_tagger.xml
