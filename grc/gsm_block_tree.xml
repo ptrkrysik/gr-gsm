@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<!--
+###################################################
+##Block Tree for GSM blocks.
+###################################################
+-->
+
+<cat>
+  <name></name> <!-- Blank for Root Name -->
+  <cat>
+    <name>GSM</name>
+    <cat>
+      <name>Receiver</name>
+      <block>gsm_receiver</block>
+      <block>gsm_fcch_burst_tagger</block>
+      <block>gsm_sch_detector</block>
+      <block>gsm_fcch_detector</block>
+      <block>gsm_clock_offset_control</block>
+      <block>gsm_input</block>
+    </cat>
+    <cat>
+      <name>Logical channels demapping</name>
+      <block>gsm_get_bcch_or_ccch_bursts</block>
+    </cat>
+    <cat>
+      <name>Decoding</name>
+      <block>gsm_control_channels_decoder</block>
+    </cat>
+    <cat>
+      <name>Utilities</name>
+      <block>gsm_bursts_printer</block>
+      <block>gsm_extract_system_info</block>
+      <block>gsm_controlled_rotator_cc</block>
+      <block>gsm_controlled_const_source_f</block>
+      <block>gsm_message_printer</block>
+      <block>gsm_clock_offset_corrector</block>
+    </cat>
+  </cat>
+</cat>
