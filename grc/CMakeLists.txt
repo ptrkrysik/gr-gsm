@@ -18,7 +18,6 @@
 # Boston, MA 02110-1301, USA.
 install(FILES
     receiver/gsm_receiver.xml
-    receiver/gsm_receiver_hier.xml
     misc_utils/gsm_bursts_printer.xml
     receiver/gsm_fcch_burst_tagger.xml
     receiver/gsm_sch_detector.xml
@@ -30,6 +29,5 @@ install(FILES
     misc_utils/gsm_controlled_const_source_f.xml
     receiver/gsm_clock_offset_control.xml
     misc_utils/gsm_message_printer.xml
-    misc_utils/gsm_wireshark_sink.xml 
     misc_utils/gsm_clock_offset_corrector.xml DESTINATION share/gnuradio/grc/blocks
 )

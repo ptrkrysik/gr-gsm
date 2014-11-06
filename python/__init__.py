@@ -45,7 +45,6 @@ if _RTLD_GLOBAL != 0:
 from gsm_swig import *
 
 # import any pure python here
-from receiver_hier import receiver_hier
 
 from fcch_burst_tagger import fcch_burst_tagger
 from sch_detector import sch_detector

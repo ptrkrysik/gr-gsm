@@ -31,7 +31,6 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    receiver/receiver_hier.py
     receiver/fcch_burst_tagger.py
     receiver/sch_detector.py
     receiver/fcch_detector.py 
