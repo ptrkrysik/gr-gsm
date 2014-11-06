@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='ASCII'?>
+<block>
+  <name>GSM input adaptor</name>
+  <key>gsm_input</key>
+  <category></category>
+  <import>import gsm</import>
+  <make>gsm.gsm_input(
+    ppm=$ppm,
+    fc=$fc,
+    osr=$osr,
+    samp_rate_in=$samp_rate_in,
+)</make>
+  <callback>set_ppm($ppm)</callback>
+  <callback>set_fc($fc)</callback>
+  <callback>set_osr($osr)</callback>
+  <callback>set_samp_rate_in($samp_rate_in)</callback>
+  <param>
+    <name>ppm</name>
+    <key>ppm</key>
+    <value>0</value>
+    <type>raw</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>fc</name>
+    <key>fc</key>
+    <value>fc</value>
+    <type>raw</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>OSR</name>
+    <key>osr</key>
+    <value>4</value>
+    <type>raw</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>samp_rate_in</name>
+    <key>samp_rate_in</key>
+    <value>samp_rate</value>
+    <type>raw</type>
+    <hide>part</hide>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <sink>
+    <name>ppm_in</name>
+    <type>message</type>
+    <optional>True</optional>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>Piotr Krysik
+Adaptor of input stream for the GSM receiver. Contains frequency ofset corrector doing also resampling to integer multiplies of GSM sample rate and LP filter filtering GSM channel.
+/home/piotr/.grc_gnuradio/gsm_input.py</doc>
+  <grc_source>/home/piotr/Odbiornik_gsm/Dodanie_wielokanalowosci/demonstration (without data)/gsminput.grc</grc_source>
+</block>
