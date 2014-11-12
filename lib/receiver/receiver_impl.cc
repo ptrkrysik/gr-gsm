@@ -823,10 +823,11 @@ void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * bur
     tap_header->hdr_len = sizeof(gsmtap_hdr)/4;
     tap_header->type = GSMTAP_TYPE_UM_BURST;
     tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
-    tap_header->frame_number = d_burst_nr.get_frame_nr();
+    tap_header->frame_number = htobe32(d_burst_nr.get_frame_nr());
     tap_header->sub_type = static_cast<uint8_t>(b_type);
     tap_header->arfcn = d_cell_allocation[input_nr];
     tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
+    tap_header->snr_db = 0;
     pmt::pmt_t header_blob=pmt::make_blob(tap_header.get(),sizeof(gsmtap_hdr));
     pmt::pmt_t burst_binary_blob=pmt::make_blob(burst_binary,BURST_SIZE);
     pmt::pmt_t msg = pmt::cons(header_blob, burst_binary_blob);

@@ -62,15 +62,15 @@ namespace gr {
         pmt::pmt_t header_blob = pmt::car(msg);
         pmt::pmt_t content = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
-        uint32_t frame_nr = header->frame_number;
+        uint32_t frame_nr = be32toh(header->frame_number);
 
-        uint32_t fn_mod51 = header->frame_number % 51;
+        uint32_t fn_mod51 = frame_nr % 51;
         int fn51_stop = d_fn51_start+3;
 
         if(header->timeslot==0){
             if(fn_mod51>=d_fn51_start && fn_mod51<=fn51_stop){
                 uint32_t ii = fn_mod51-d_fn51_start;
-                d_frame_numbers[ii]=header->frame_number;
+                d_frame_numbers[ii]=frame_nr;
                 d_bursts[ii] = msg;
             }
             
