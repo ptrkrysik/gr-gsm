@@ -39,8 +39,9 @@
 #include <assert.h>
 #include <boost/scoped_ptr.hpp>
 
-#include "plotting/plotting.hpp"
-#include <pthread.h>
+//files included for debuging
+//#include "plotting/plotting.hpp"
+//#include <pthread.h>
 
 #define SYNC_SEARCH_RANGE 30
 
