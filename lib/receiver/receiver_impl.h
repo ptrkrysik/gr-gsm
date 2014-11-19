@@ -42,7 +42,7 @@ namespace gr {
         const int d_chan_imp_length; ///< channel impulse length
         float d_signal_dbm;
         std::vector<int> d_tseq_nums; ///< stores training sequence numbers for channels different than C0
-        std::vector<float> d_cell_allocation; ///< stores cell allocation - absolute rf channel numbers (ARFCNs) assigned to the given cell. The variable should at least contain C0 channel number.
+        std::vector<int> d_cell_allocation; ///< stores cell allocation - absolute rf channel numbers (ARFCNs) assigned to the given cell. The variable should at least contain C0 channel number.
         //@}
 
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
@@ -201,11 +201,11 @@ namespace gr {
 
         
      public:
-       receiver_impl(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums);
+       receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums);
       ~receiver_impl();
       
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
-      virtual void set_cell_allocation(const std::vector<float> &cell_allocation);
+      virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
       virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
       virtual void reset();
     };

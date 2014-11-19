@@ -56,7 +56,7 @@ typedef std::vector<float> vector_float;
 typedef boost::circular_buffer<float> circular_buffer_float;
 
 receiver::sptr
-receiver::make(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums)
+receiver::make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums)
 {
     return gnuradio::get_initial_sptr
            (new receiver_impl(osr, cell_allocation, tseq_nums));
@@ -65,7 +65,7 @@ receiver::make(int osr, const std::vector<float> &cell_allocation, const std::ve
 /*
  * The private constructor
  */
-receiver_impl::receiver_impl(int osr, const std::vector<float> &cell_allocation, const std::vector<int> &tseq_nums)
+receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums)
     : gr::sync_block("receiver",
                 gr::io_signature::make(1, -1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
@@ -865,7 +865,7 @@ void receiver_impl::configure_receiver()
     d_channel_conf.set_burst_types(TIMESLOT7, TEST51, sizeof(TEST51) / sizeof(unsigned), dummy_or_normal);
 }
 
-void receiver_impl::set_cell_allocation(const std::vector<float> &cell_allocation)
+void receiver_impl::set_cell_allocation(const std::vector<int> &cell_allocation)
 {
     d_cell_allocation = cell_allocation;
 }
