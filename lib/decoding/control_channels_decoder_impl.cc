@@ -109,6 +109,7 @@ namespace gr {
                     //("error: sacch: parity error (errors=%d fn=%d)\n", errors, ctx->fn);
                     //std::cout << "Uncorrectable errors!" << std::endl;
                     errors = -1;
+                    return;
                 } else {
                     //DEBUGF("Successfully corrected parity bits! (errors=%d fn=%d)\n", errors, ctx->fn);
                     //std::cout << "Corrected some errors" << std::endl;
@@ -133,7 +134,6 @@ namespace gr {
             pmt::pmt_t header_blob = pmt::car(d_bursts[0]);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
             header->type = GSMTAP_TYPE_UM;
-            header->sub_type = GSMTAP_CHANNEL_BCCH;
             int8_t * header_content = (int8_t *)pmt::blob_data(header_blob);
 
             int8_t header_plus_data[16+23];
