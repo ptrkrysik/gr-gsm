@@ -10,6 +10,7 @@
 %{
 #include "gsm/receiver/receiver.h"
 #include "gsm/demapping/get_bcch_or_ccch_bursts.h"
+#include "gsm/demapping/universal_ctrl_chans_demapper.h"
 #include "gsm/decoding/control_channels_decoder.h"
 #include "gsm/misc_utils/bursts_printer.h"
 #include "gsm/misc_utils/controlled_const_source_f.h"
@@ -27,6 +28,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, control_channels_decoder);
 
 %include "gsm/demapping/get_bcch_or_ccch_bursts.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, get_bcch_or_ccch_bursts);
+%include "gsm/demapping/universal_ctrl_chans_demapper.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, universal_ctrl_chans_demapper);
 
 %include "gsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);

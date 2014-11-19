@@ -22,6 +22,7 @@
     <cat>
       <name>Logical channels demapping</name>
       <block>gsm_get_bcch_or_ccch_bursts</block>
+      <block>gsm_universal_ctrl_chans_demapper</block>
     </cat>
     <cat>
       <name>Decoding</name>

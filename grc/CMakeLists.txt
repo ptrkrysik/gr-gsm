@@ -25,6 +25,7 @@ install(FILES
     receiver/gsm_sch_detector.xml
     receiver/gsm_fcch_detector.xml
     demapping/gsm_get_bcch_or_ccch_bursts.xml
+    demapping/gsm_universal_ctrl_chans_demapper.xml 
     decoding/gsm_control_channels_decoder.xml
     misc_utils/gsm_extract_system_info.xml
     misc_utils/gsm_controlled_rotator_cc.xml
