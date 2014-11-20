@@ -19,7 +19,12 @@
 
 include(GrPython)
 
+GRCC( airprobe_file.grc airprobe_rtlsdr.grc airprobe_usrp.grc ${CMAKE_CURRENT_BINARY_DIR} )
+
 GR_PYTHON_INSTALL(
     PROGRAMS
+    ${PYFILES}
     DESTINATION bin
 )
+
+

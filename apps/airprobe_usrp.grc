@@ -6,7 +6,7 @@
     <key>options</key>
     <param>
       <key>id</key>
-      <value>gsm_receiver_usrp</value>
+      <value>airprobe_usrp</value>
     </param>
     <param>
       <key>_enabled</key>

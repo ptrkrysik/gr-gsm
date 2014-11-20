@@ -6,7 +6,7 @@
     <key>options</key>
     <param>
       <key>id</key>
-      <value>receiver_rtlsdr</value>
+      <value>airprobe_rtlsdr</value>
     </param>
     <param>
       <key>_enabled</key>
