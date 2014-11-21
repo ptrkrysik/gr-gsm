@@ -826,7 +826,6 @@ void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * bur
     tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
     tap_header->frame_number = htobe32(d_burst_nr.get_frame_nr());
     tap_header->sub_type = burst_type;
-    std::cout << static_cast<int>(tap_header->sub_type) << std::endl;
     tap_header->arfcn = htobe16(d_cell_allocation[input_nr]) ; 
     tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
     tap_header->snr_db = 0;
