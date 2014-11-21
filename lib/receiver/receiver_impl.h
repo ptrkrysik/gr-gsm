@@ -191,7 +191,7 @@ namespace gr {
          * @param burst_binary - content of the burst
          * @b_type - type of the burst
          */
-        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type, unsigned int input_nr);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, unsigned int input_nr);
 
         /**
          * Configures burst types in different channels

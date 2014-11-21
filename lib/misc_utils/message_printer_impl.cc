@@ -31,16 +31,15 @@ namespace gr {
 
     void message_printer_impl::message_print(pmt::pmt_t msg)
     {
-        pmt::pmt_t message = pmt::cdr(msg);
-        uint8_t * message_elements = (uint8_t *)pmt::blob_data(message);
-        size_t message_len=pmt::blob_length(message);
-
-//        pmt::pmt_t header_blob = pmt::car(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)message_elements;
+        pmt::pmt_t message_plus_header_blob = pmt::cdr(msg);
+        uint8_t * message_plus_header = (uint8_t *)pmt::blob_data(message_plus_header_blob);
+        size_t message_plus_header_len=pmt::blob_length(message_plus_header_blob);
         
-        for(int ii=(header->hdr_len*4); ii<message_len; ii++)
+        gsmtap_hdr * header = (gsmtap_hdr *)message_plus_header;
+        
+        for(int ii=sizeof(gsmtap_hdr); ii<message_plus_header_len; ii++)
         {
-            printf(" %02x", message_elements[ii]);
+            printf(" %02x", message_plus_header[ii]);
         }
         std::cout << std::endl;
     }

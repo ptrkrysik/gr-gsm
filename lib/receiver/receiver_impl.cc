@@ -228,7 +228,7 @@ receiver_impl::work(int noutput_items,
                 const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
                 double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
 
-                send_burst(d_burst_nr, fc_fb, b_type, input_nr);
+                send_burst(d_burst_nr, fc_fb, GSMTAP_BURST_FCCH, input_nr);
 
                 pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("synchronized"));
                 message_port_pub(pmt::mp("measurements"), msg);
@@ -240,7 +240,7 @@ receiver_impl::work(int noutput_items,
                 d_c0_burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);                //get channel impulse response
                 
                 detect_burst(input, &channel_imp_resp[0], d_c0_burst_start, output_binary);           //MLSE detection of bits
-                send_burst(d_burst_nr, output_binary, b_type, input_nr);
+                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_SCH, input_nr);
                 if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)           //and decode SCH data
                 {
                     // d_burst_nr.set(t1, t2, t3, 0);                                              //but only to check if burst_start value is correct
@@ -266,7 +266,7 @@ receiver_impl::work(int noutput_items,
                 float normal_corr_max;                                                    //if it's normal burst
                 d_c0_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc); //get channel impulse response for given training sequence number - d_bcc
                 detect_burst(input, &channel_imp_resp[0], d_c0_burst_start, output_binary);            //MLSE detection of bits
-                send_burst(d_burst_nr, output_binary, b_type, input_nr);
+                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
                 break;
             }
             case dummy_or_normal:
@@ -281,19 +281,19 @@ receiver_impl::work(int noutput_items,
                 {
                     d_c0_burst_start = normal_burst_start;
                     detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
-                    send_burst(d_burst_nr, output_binary, b_type, input_nr); 
+                    send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr); 
                 }
                 else
                 {
                     d_c0_burst_start = dummy_burst_start;
-                    send_burst(d_burst_nr, dummy_burst, b_type, input_nr);
+                    send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr);
                 }
                 break;
             }
             case rach_burst:
                 break;
             case dummy:
-                send_burst(d_burst_nr, dummy_burst, b_type, input_nr);
+                send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr);
                 break;
             case normal_or_noise:
             {
@@ -330,7 +330,7 @@ receiver_impl::work(int noutput_items,
 //                  if(abs(d_c0_burst_start-burst_start)<=2){ //unused check/filter based on timing
                     if((normal_corr_max/sqrt(signal_pwr))>=0.9){
                         detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
-                        send_burst(d_burst_nr, output_binary, b_type, input_nr);
+                        send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
                     }
                 }
                 break;
@@ -816,22 +816,27 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
 }
 
 
-void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, burst_type b_type, unsigned int input_nr)
+void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, unsigned int input_nr)
 {
     boost::scoped_ptr<gsmtap_hdr> tap_header(new gsmtap_hdr());
-
+   
     tap_header->version = GSMTAP_VERSION;
     tap_header->hdr_len = sizeof(gsmtap_hdr)/4;
     tap_header->type = GSMTAP_TYPE_UM_BURST;
     tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
     tap_header->frame_number = htobe32(d_burst_nr.get_frame_nr());
-    tap_header->sub_type = static_cast<uint8_t>(b_type);
-    tap_header->arfcn = d_cell_allocation[input_nr];
+    tap_header->sub_type = burst_type;
+    std::cout << static_cast<int>(tap_header->sub_type) << std::endl;
+    tap_header->arfcn = htobe16(d_cell_allocation[input_nr]) ; 
     tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
     tap_header->snr_db = 0;
-    pmt::pmt_t header_blob=pmt::make_blob(tap_header.get(),sizeof(gsmtap_hdr));
-    pmt::pmt_t burst_binary_blob=pmt::make_blob(burst_binary,BURST_SIZE);
-    pmt::pmt_t msg = pmt::cons(header_blob, burst_binary_blob);
+
+    int8_t header_plus_burst[sizeof(gsmtap_hdr)+BURST_SIZE];
+    memcpy(header_plus_burst, tap_header.get(), sizeof(gsmtap_hdr));
+    memcpy(header_plus_burst+sizeof(gsmtap_hdr), burst_binary, BURST_SIZE);
+    
+    pmt::pmt_t blob_header_plus_burst = pmt::make_blob(header_plus_burst,sizeof(gsmtap_hdr)+BURST_SIZE);
+    pmt::pmt_t msg = pmt::cons(pmt::PMT_NIL, blob_header_plus_burst);
     
     if(input_nr==0){
         message_port_pub(pmt::mp("C0"), msg);

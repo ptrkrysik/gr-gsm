@@ -59,9 +59,8 @@ namespace gr {
 
     void get_bcch_or_ccch_bursts_impl::filter_ccch(pmt::pmt_t msg)
     {
-        pmt::pmt_t header_blob = pmt::car(msg);
-        pmt::pmt_t content = pmt::cdr(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
+        pmt::pmt_t header_plus_burst = pmt::cdr(msg);
+        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
         uint32_t frame_nr = be32toh(header->frame_number);
 
         uint32_t fn_mod51 = frame_nr % 51;

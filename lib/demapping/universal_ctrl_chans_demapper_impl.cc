@@ -88,11 +88,10 @@ namespace gr {
     
     void universal_ctrl_chans_demapper_impl::filter_ctrl_chans(pmt::pmt_t msg)
     {
-        pmt::pmt_t header_blob = pmt::car(msg);
-        pmt::pmt_t content = pmt::cdr(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
-        uint32_t frame_nr = be32toh(header->frame_number);
+        pmt::pmt_t header_plus_burst = pmt::cdr(msg);
+        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
 
+        uint32_t frame_nr = be32toh(header->frame_number);
         uint32_t fn_mod51 = frame_nr % 51;
         uint32_t fn51_start = d_starts_fn_mod51[fn_mod51];
         uint32_t fn51_stop = fn51_start + 3;

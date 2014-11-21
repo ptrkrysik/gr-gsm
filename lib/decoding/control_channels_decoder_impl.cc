@@ -26,6 +26,8 @@
 #include <gsm/gsmtap.h>
 #include "control_channels_decoder_impl.h"
 
+#define DATA_BYTES 23
+
 namespace gr {
   namespace gsm {
 
@@ -80,8 +82,8 @@ namespace gr {
             //reorganize data
             for(int ii = 0; ii < 4; ii++)
             {
-                pmt::pmt_t burst_content = pmt::cdr(d_bursts[ii]);
-                int8_t * burst_bits = (int8_t *)pmt::blob_data(burst_content);
+                pmt::pmt_t header_plus_burst = pmt::cdr(d_bursts[ii]);
+                int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
 
                 for(int jj = 0; jj < 57; jj++)
                 {
@@ -131,16 +133,17 @@ namespace gr {
            }
 
            //send message with header of the first burst
-            pmt::pmt_t header_blob = pmt::car(d_bursts[0]);
-            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
+            pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
+            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(first_header_plus_burst);
             header->type = GSMTAP_TYPE_UM;
-            int8_t * header_content = (int8_t *)pmt::blob_data(header_blob);
-
-            int8_t header_plus_data[16+23];
-            memcpy(header_plus_data, header_content, 16);
-            memcpy(header_plus_data+16, outmsg, 23);
             
-            pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,23+16);
+            int8_t * header_content = (int8_t *)header;
+            
+            int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
+            memcpy(header_plus_data, header_content, sizeof(gsmtap_hdr));
+            memcpy(header_plus_data+sizeof(gsmtap_hdr), outmsg, DATA_BYTES);
+            
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr));
             pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
             
             message_port_pub(pmt::mp("msgs"), msg_out);

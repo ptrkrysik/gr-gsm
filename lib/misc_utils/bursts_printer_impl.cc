@@ -36,16 +36,15 @@ namespace gr {
     boost::mutex printer_mutex;
     void bursts_printer_impl::bursts_print(pmt::pmt_t msg)
     {
-        pmt::pmt_t burst = pmt::cdr(msg);
-        int8_t * burst_elements = (int8_t *)pmt::blob_data(burst);
-        size_t burst_len=pmt::blob_length(burst);
+        pmt::pmt_t header_plus_burst = pmt::cdr(msg);
 
-        pmt::pmt_t header_blob = pmt::car(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
-
+        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
+        int8_t * burst = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
+        size_t burst_len=pmt::blob_length(header_plus_burst)-sizeof(gsmtap_hdr);
+        
         for(int ii=0; ii<burst_len; ii++)
         {
-          std::cout << std::setprecision(1) << static_cast<int>(burst_elements[ii]) << "";
+          std::cout << std::setprecision(1) << static_cast<int>(burst[ii]) << "";
         }
         std::cout << std::endl;
     }
