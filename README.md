@@ -25,7 +25,7 @@ cd pybombs
 ```
 
 At the first run pybombs will ask for configuration options. As a target directory select /usr/local/. The rest of the options can be left as default.
-Pybombs will then take care of downloading all of required libraries for installation of gnuradio and build it will build and install it in /usr/local/.
+Pybombs will then take care of downloading all of required libraries for installation of gnuradio and it will build and install it in /usr/local/.
 
 
 Installation of GNU Radio from packages (Ubuntu 14.10)
