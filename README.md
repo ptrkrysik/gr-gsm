@@ -49,12 +49,6 @@ then edit ~/.gnuradio/config.conf and put following text inside:
 local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/blocks
 ```
 
-It can be done with following commands:
-```
-echo "[grc]" >> ~/.gnuradio/config.conf 
-echo "local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/blocks" >> ~/.gnuradio/config.conf 
-```
-
 Compilation and installation of gr-gsm
 ------------------------------------------------------
 
@@ -67,7 +61,8 @@ git clone https://github.com/ptrkrysik/gr-gsm.git
 Make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
 
 ```
-sudo apt-get install cmake libboost-all-dev libcppunit-dev swig doxygen liblog4cpp5-dev python-scipy
+sudo apt-get install cmake libboost-all-dev libcppunit-dev swig \
+                     doxygen liblog4cpp5-dev python-scipy
 ```
 
 To compile and install gr-gsm run:
