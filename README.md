@@ -4,8 +4,8 @@ The project is based on the gsm-receiver which was written by me for Airprobe pr
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
-Installation
-============
+Installation of GNU Radio
+=========================
 
 The project is based on GNU Radio signal processing framework and takes advantage of its great features like stream tagging and message passing.
 Installation of GNU Radio is therefore a basic requirement for compilation and installation of gr-gsm.
@@ -30,8 +30,8 @@ Pybombs will then take care of downloading all of required libraries for install
 
 Installation of GNU Radio from packages (Ubuntu 14.10)
 ------------------------------------------------------
-Gr-gsm works with GNU Radio versions 3.7.3 and newer. On Ubuntu 14.10 it is possible to compile and use gr-gsm together with GNU Radio available from distribution's standard repository.
-To do this install all required packages enter following command in a terminal:
+The easier way to install gnuradio is installation from distribution's repository. Currently gr-gsm works with GNU Radio versions 3.7.3 and newer. On Ubuntu 14.10 it is possible to compile and use gr-gsm together with GNU Radio available from distribution's standard repository.
+To do this install all required packages by entering following command in a terminal:
 
 ```
 sudo apt-get install gnuradio-dev gr-osmosdr libgnuradio-uhd3.7.2.1
@@ -50,7 +50,7 @@ local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/b
 ```
 
 Compilation and installation of gr-gsm
-------------------------------------------------------
+======================================
 
 To download gr-gsm sources run following command:
 
