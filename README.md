@@ -1,6 +1,6 @@
 The gr-gsm project
 ==================
-The project is based on the gsm-receiver which was written by me for Airprobe project.
+The project is based on the gsm-receiver which was written by me for the Airprobe project.
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
