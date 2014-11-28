@@ -4,12 +4,77 @@ The project is based on the gsm-receiver which was written by me for Airprobe pr
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
-Installation of GNU Radio
-=========================
+Installation
+============
 
 The project is based on GNU Radio signal processing framework and takes advantage of its great features like stream tagging and message passing.
-Installation of GNU Radio is therefore a basic requirement for compilation and installation of gr-gsm.
+Presence of GNU Radio is therefore a basic requirement for compilation and installation of gr-gsm. Installation of GNU Radio is described at the bottom of the page.
 
+
+Compilation and installation of gr-gsm
+======================================
+
+To download gr-gsm sources run following command:
+
+```
+git clone https://github.com/ptrkrysik/gr-gsm.git
+```
+
+Make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
+
+```
+sudo apt-get install cmake libboost-all-dev libcppunit-dev swig \
+                     doxygen liblog4cpp5-dev python-scipy
+```
+
+To compile and install gr-gsm run:
+
+```
+cd gr-gsm
+mkdir build
+cmake ..
+make
+sudo make install
+```
+
+Usage
+=====
+There are many possible applications of gr-gsm. At this moment there is one application that is ready out of the box. It is improved replacement of the old Airprobe - the program that lets you receive and decode GSM control messages from timeslot 0 on the broadcasting channel of a BTS. After installation of gr-gsm there are three python executables that will be installed:
+-airprobe_rtlsdr.py,
+-airprobe_file.py.
+
+Airprobe_rtlsdr
+---------------
+This program uses cheap RTL-SDR receivers as the source of the signal. It can be started by running from a terminal:
+```
+airprogre_rtlsdr.py
+``` 
+In the window of the program spectrum of the signal is drawn. The central frequency of the signal can be changed by moving fc slider. The GSM signal has bandwidth of around 200kHz. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. If everything set properly the program should immediately print content of subsequent messages on the standard output. If it doesn't happen set ppm slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work (there is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels). You can use the value set later by passing it as argument of the program:
+```
+airprogre_rtlsdr.py -p <correction>
+```
+
+Airprobe_file
+-------------
+This program processes files containing complex data - interleaved float IQ samples.
+Example of the usage:
+```
+airprobe_file.py --samp-rate=1M --fc=940M -i input_file 
+```
+where:
+```
+--samp-rate - sampling frequency of the data stored in the file,
+--fc - central frequency of the recorded data - it is needed for frequency offset correction,
+-i - the file containing the complex data.
+```
+
+Observing GSM messages in the Wireshark
+-------------------------------------------
+The airprobe (file,usrp,rtlsdr) application sends GSM messages in GSMTAP format created by Harald Welte to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with GSMTAP header and it is able to dissect messages
+
+
+Installation of GNU Radio
+=========================
 
 Building GNU Radio from source
 ------------------------------
@@ -48,31 +113,4 @@ then edit ~/.gnuradio/config.conf and put following text inside:
 [grc]
 local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/blocks
 ```
-
-Compilation and installation of gr-gsm
-======================================
-
-To download gr-gsm sources run following command:
-
-```
-git clone https://github.com/ptrkrysik/gr-gsm.git
-```
-
-Make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
-
-```
-sudo apt-get install cmake libboost-all-dev libcppunit-dev swig \
-                     doxygen liblog4cpp5-dev python-scipy
-```
-
-To compile and install gr-gsm run:
-
-```
-cd gr-gsm
-mkdir build
-cmake ..
-make
-sudo make install
-```
-
 
