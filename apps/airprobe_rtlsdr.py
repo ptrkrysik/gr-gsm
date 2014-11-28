@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Fri Nov 28 23:34:23 2014
+# Generated: Fri Nov 28 23:56:39 2014
 ##################################################
 
 from PyQt4 import Qt
@@ -55,7 +55,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate =  1500000.014901
+        self.samp_rate = samp_rate = 2000000.052982
         self.ppm = ppm = ppm_param
         self.g = g = 43
         self.fc = fc = 939.4e6
@@ -79,7 +79,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
             def setValue(self, value):
                 super(Qwt.QwtCounter, self).setValue(value)
         self._ppm_counter = qwt_counter_pyslot()
-        self._ppm_counter.setRange(-100, 100, 1)
+        self._ppm_counter.setRange(-150, 150, 1)
         self._ppm_counter.setNumButtons(2)
         self._ppm_counter.setMinimumWidth(100)
         self._ppm_counter.setValue(self.ppm)
@@ -129,8 +129,8 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.rtlsdr_source_0.set_sample_rate(samp_rate)
         self.rtlsdr_source_0.set_center_freq(fc, 0)
         self.rtlsdr_source_0.set_freq_corr(ppm, 0)
-        self.rtlsdr_source_0.set_dc_offset_mode(0, 0)
-        self.rtlsdr_source_0.set_iq_balance_mode(0, 0)
+        self.rtlsdr_source_0.set_dc_offset_mode(2, 0)
+        self.rtlsdr_source_0.set_iq_balance_mode(2, 0)
         self.rtlsdr_source_0.set_gain_mode(True, 0)
         self.rtlsdr_source_0.set_gain(g, 0)
         self.rtlsdr_source_0.set_if_gain(20, 0)
@@ -222,8 +222,8 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.gsm_input_0.set_samp_rate_in(self.samp_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
 
     def get_ppm(self):
@@ -249,8 +249,8 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.fc = fc
         Qt.QMetaObject.invokeMethod(self._fc_counter, "setValue", Qt.Q_ARG("double", self.fc))
         Qt.QMetaObject.invokeMethod(self._fc_slider, "setValue", Qt.Q_ARG("double", self.fc))
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.gsm_input_0.set_fc(self.fc)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.rtlsdr_source_0.set_center_freq(self.fc, 0)
 
     def get_SDCCH(self):
