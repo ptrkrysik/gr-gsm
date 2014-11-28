@@ -28,13 +28,12 @@ class clock_offset_control(gr.basic_block):
     """
     docstring for block clock_offset_control
     """
-    def __init__(self, fc, samp_rate):
+    def __init__(self, fc):
         gr.basic_block.__init__(self,
             name="gsm_clock_offset_control",
             in_sig=[],
             out_sig=[])
         self.fc = fc
-        self.samp_rate = samp_rate
         self.message_port_register_in(pmt.intern("measurements"))
         self.set_msg_handler(pmt.intern("measurements"), self.process_measurement)
         self.message_port_register_out(pmt.intern("ppm"))
