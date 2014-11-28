@@ -1,0 +1,6 @@
+This directory contains programs based on gr-gsm. Currently two are available:
+- airprobe_rtlsdr.py
+- airprobe_file.py
+
+- airprobe_usrp can be used but it will need to be customized in the gnuradio-companion for given configuration (for example address of the USRP will need to be changed).
+

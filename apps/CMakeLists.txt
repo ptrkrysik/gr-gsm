@@ -24,5 +24,7 @@ include(GrPython)
 GR_PYTHON_INSTALL(
     PROGRAMS
 #    ${PYFILES}
+    airprobe_file.py
+    airprobe_rtlsdr.py
     DESTINATION bin
 )
