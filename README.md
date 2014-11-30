@@ -6,29 +6,21 @@ The aim is to provide set of tools for receiving information transmitted by GSM 
 
 Installation
 ============
-
 The project is based on GNU Radio signal processing framework and takes advantage of its great features like stream tagging and message passing.
 Presence of GNU Radio is therefore a basic requirement for compilation and installation of gr-gsm. Installation of GNU Radio is described at the bottom of the page.
 
-
-Compilation and installation of gr-gsm
-======================================
-
-To download gr-gsm sources run following command:
-
+The description of the installation is focussed on Ubuntu distribution and its flavours.
+First make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
+```
+sudo apt-get install git cmake libboost-all-dev libcppunit-dev swig \
+                     doxygen liblog4cpp5-dev python-scipy
+```
+Then download gr-gsm sources using git:
 ```
 git clone https://github.com/ptrkrysik/gr-gsm.git
 ```
 
-Make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
-
-```
-sudo apt-get install cmake libboost-all-dev libcppunit-dev swig \
-                     doxygen liblog4cpp5-dev python-scipy
-```
-
 To compile and install gr-gsm run:
-
 ```
 cd gr-gsm
 mkdir build
@@ -43,18 +35,18 @@ There are many possible applications of gr-gsm. At this moment there is one appl
 -airprobe_rtlsdr.py,
 -airprobe_file.py.
 
-Airprobe_rtlsdr
+Airprobe with RTL-SDR input
 ---------------
 This program uses cheap RTL-SDR receivers as the source of the signal. It can be started by running from a terminal:
 ```
 airprogre_rtlsdr.py
-``` 
-In the window of the program spectrum of the signal is drawn. The central frequency of the signal can be changed by moving fc slider. The GSM signal has bandwidth of around 200kHz. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. If everything set properly the program should immediately print content of subsequent messages on the standard output. If it doesn't happen set ppm slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work (there is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels). You can use the value set later by passing it as argument of the program:
+```
+The window of the program contains amplitude spectrum of the signal drawn in realtime. The central frequency of the signal can be changed by moving fc slider. The GSM signal has bandwidth of around 200kHz. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. By setting the fc slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. If it doesn't happen set ppm slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work. There is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels that would inevitably lead to instability. You can use the value set later by passing it as argument of the program:
 ```
 airprogre_rtlsdr.py -p <correction>
 ```
 
-Airprobe_file
+Airprobe with file input
 -------------
 This program processes files containing complex data - interleaved float IQ samples.
 Example of the usage:
@@ -68,10 +60,15 @@ where:
 -i - the file containing the complex data.
 ```
 
-Observing GSM messages in the Wireshark
+Analyzing GSM messages in the Wireshark
 -------------------------------------------
-The airprobe (file,usrp,rtlsdr) application sends GSM messages in GSMTAP format created by Harald Welte to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with GSMTAP header and it is able to dissect messages
-
+The airprobe (file,usrp,rtlsdr) application sends GSM messages in GSMTAP format that was created by Harald Welte to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with GSMTAP header and it is able to dissect messages.
+To start Wireshark straight to analysis of the GSMTAP packets obtained from gr-gsm's airprobe use following command:
+```
+sudo wireshark -k -Y '!icmp && gsmtap' -i lo
+````
+If you want to avoid the risks caused by running Wireshark with root priviledges follow this short howto:
+https://ask.wireshark.org/questions/7976/wireshark-setup-linux-for-nonroot-user
 
 Installation of GNU Radio
 =========================
