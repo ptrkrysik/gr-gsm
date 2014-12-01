@@ -31,6 +31,7 @@
 #include <boost/circular_buffer.hpp>
 #include <algorithm>
 #include <numeric>
+#include <vector>
 #include <viterbi_detector.h>
 #include <string.h>
 #include <sch.h>
@@ -643,13 +644,13 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex *input, gr_complex * c
 void receiver_impl::detect_burst(const gr_complex * input, gr_complex * chan_imp_resp, int burst_start, unsigned char * output_binary)
 {
     float output[BURST_SIZE];
-    gr_complex rhh_temp[CHAN_IMP_RESP_LENGTH*d_OSR];
+    std::vector<gr_complex> rhh_temp(CHAN_IMP_RESP_LENGTH*d_OSR);
     gr_complex rhh[CHAN_IMP_RESP_LENGTH];
     gr_complex filtered_burst[BURST_SIZE];
     int start_state = 3;
     unsigned int stop_states[2] = {4, 12};
 
-    autocorrelation(chan_imp_resp, rhh_temp, d_chan_imp_length*d_OSR);
+    autocorrelation(chan_imp_resp, &rhh_temp[0], d_chan_imp_length*d_OSR);
     for (int ii = 0; ii < (d_chan_imp_length); ii++)
     {
         rhh[ii] = conj(rhh_temp[ii*d_OSR]);
