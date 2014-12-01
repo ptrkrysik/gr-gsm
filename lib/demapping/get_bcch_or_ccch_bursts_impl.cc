@@ -23,6 +23,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <gsm/endian.h>
 #include <gsm/gsmtap.h>
 #include "get_bcch_or_ccch_bursts_impl.h"
 
