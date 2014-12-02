@@ -39,6 +39,7 @@
 #include <iostream>
 #include <iomanip>
 #include <boost/scoped_ptr.hpp>
+#include <gsm/endian.h>
 
 //files included for debuging
 //#include "plotting/plotting.hpp"
