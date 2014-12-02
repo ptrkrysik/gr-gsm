@@ -38,7 +38,6 @@
 #include <sch.h>
 #include <iostream>
 #include <iomanip>
-#include <assert.h>
 #include <boost/scoped_ptr.hpp>
 
 //files included for debuging
@@ -258,7 +257,7 @@ receiver_impl::work(int noutput_items,
                         d_state = fcch_search; 
                         pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(0.0),pmt::mp("sync_loss"));
                         message_port_pub(pmt::mp("measurements"), msg);
-                        DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        //DCOUT("Re-Synchronization!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     }
                 }
                 break;
