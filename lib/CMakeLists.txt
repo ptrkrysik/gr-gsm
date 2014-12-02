@@ -42,7 +42,7 @@ list(APPEND gsm_sources
 )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
-target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES}  
+target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
     boost_iostreams
     boost_system
     boost_filesystem
