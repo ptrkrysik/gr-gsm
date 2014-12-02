@@ -1,4 +1,3 @@
-//TODO: this file shouldn't be part of the GSM Receiver
 /*
  * $Id:$
  */

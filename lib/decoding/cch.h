@@ -1,4 +1,3 @@
-//TODO: this file shouldn't be part of the GSM Receiver
 #ifndef __GSMSTACK_CCH_H__
 #define __GSMSTACK_CCH_H__ 1
 
