@@ -26,12 +26,13 @@
 
 #include <gnuradio/io_signature.h>
 #include <gsm/gsmtap.h>
+#include <unistd.h>
+#include <set>
 #include <iterator>
 #include <algorithm>
-#include "extract_system_info_impl.h"
-#include <unistd.h>
-
 #include <iostream>
+
+#include "extract_system_info_impl.h"
 
 namespace gr {
   namespace gsm {
