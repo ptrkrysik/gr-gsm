@@ -97,7 +97,7 @@ The easier way to install gnuradio is installation from distribution's repositor
 To do this install all required packages by entering following command in a terminal:
 
 ```
-sudo apt-get install gnuradio-dev gr-osmosdr libgnuradio-uhd3.7.2.1
+sudo apt-get install gnuradio-dev gr-osmosdr
 ```
 
 Gr-gsm blocks that will be later installed will be located in /usr/local directory. To tell Gnu Radio Companion to look for blocks in there create config.conf in ~/.gnuradio directory:
