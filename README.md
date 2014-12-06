@@ -22,10 +22,21 @@ git clone https://github.com/ptrkrysik/pybombs.git
 Go into *pybombs* directory and configure it:
 ```
 cd pybombs
-./pybombs
+./pybombs config
 ```
 
-At the first run *pybombs* will ask for configuration options. As a target directory select */usr/local/*. The rest of the options can be left as default.
+At the first run *pybombs* will ask for configuration options. As a install prefix enter */usr/local/*. The rest of the options can be left as defaul.
+
+On the distributions that have *GNU Radio* version 3.7.3 and above *GNU Radio* can be installed from packages without compilation. To avoid this quite lenghty process use:
+
+```
+./pybombs config forcebuild ' '
+```
+
+To check *GNU Radio* version use:
+```
+apt-cache policy gnuradio-dev
+```
 
 Then build and install *gr-gsm* with following command:
 ```
@@ -34,7 +45,7 @@ sudo ./pybombs install gr-gsm
 
 Pybombs will take care of downloading all of required libraries and for installation of *GNU Radio* and building *gr-gsm*.
 
-*Gr-gsm* blocks that are installed in */usr/local* directory. To tell *Gnu Radio Companion* to look for blocks in there create *config.conf* in *~/.gnuradio* directory (this step is not required on Ubuntu 14.04 as *GNU Radio* will be built from source, will reside in */usr/local* and *GNU Radio* will be already configured to look for *Gnu Radio Companion* blocks in there):
+*Gr-gsm* blocks are installed in */usr/local* directory. To tell *Gnu Radio Companion* to look for blocks in there create *config.conf* in *~/.gnuradio* directory (this step is not required on Ubuntu 14.04 as *GNU Radio* will be built from source, will reside in */usr/local* and *GNU Radio* will be already configured to look for *Gnu Radio Companion* blocks in there):
 ```
 mkdir ~/.gnuradio
 touch ~/.gnuradio/config.conf
@@ -117,4 +128,4 @@ The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* projec
 
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
 
-Special thanks to Pawel Koszut who lent his precious USRP1 to the author of *gr-gsm* (Piotr Krysik) in 2007-2010.
+Special thanks to Pawel Koszut who generously lent his USRP1 to the author of *gr-gsm* (Piotr Krysik) in 2007-2010.
