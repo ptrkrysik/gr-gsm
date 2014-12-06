@@ -9,7 +9,7 @@ Installation
 The project is based on *GNU Radio* signal processing framework and takes advantage of its great features like stream tagging and message passing.
 Presence of *GNU Radio* is therefore a basic requirement for compilation and installation of *gr-gsm*. 
 
-Installation is based on *pybombs* installer (GNU Radio install management system) and was tested on Ubuntu 14.04 and 14.10.
+Installation is based on *pybombs* installer (GNU Radio install management system) and was tested on Ubuntu 14.04 and 14.10 (on 14.10 installation will be much faster as compilation of *GNU Radio* is not necessary).
 For installation you will need git. On Debian based distributions you can get it with:
 ```
 sudo apt-get install git
@@ -25,7 +25,7 @@ cd pybombs
 ./pybombs
 ```
 
-At the first run pybombs will ask for configuration options. As a target directory select */usr/local/*. The rest of the options can be left as default.
+At the first run *pybombs* will ask for configuration options. As a target directory select */usr/local/*. The rest of the options can be left as default.
 
 Then build and install *gr-gsm* with following command:
 ```
@@ -34,7 +34,7 @@ Then build and install *gr-gsm* with following command:
 
 Pybombs will take care of downloading all of required libraries and for installation of *GNU Radio* and building *gr-gsm*.
 
-*Gr-gsm* blocks that are installed in */usr/local* directory. To tell *Gnu Radio Companion* to look for blocks in there create config.conf in *~/.gnuradio* directory (this step is not required on Ubuntu 14.04 as *GNU Radio* will be built from source, will reside in */usr/local* and *GNU Radio* will be already configured to look for *Gnu Radio Companion* blocks in there):
+*Gr-gsm* blocks that are installed in */usr/local* directory. To tell *Gnu Radio Companion* to look for blocks in there create *config.conf* in *~/.gnuradio* directory (this step is not required on Ubuntu 14.04 as *GNU Radio* will be built from source, will reside in */usr/local* and *GNU Radio* will be already configured to look for *Gnu Radio Companion* blocks in there):
 ```
 mkdir ~/.gnuradio
 touch ~/.gnuradio/config.conf
@@ -60,7 +60,7 @@ This program uses cheap RTL-SDR receivers as a source of the signal. It can be s
 ```
 airprobe_rtlsdr.py
 ```
-The window of the program contains amplitude spectrum of the signal drawn in realtime. The central frequency of the signal can be changed by moving *fc* slider. The GSM signal has bandwidth of around *200kHz*. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. By setting the *fc* slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. 
+The window of the program contains amplitude spectrum of the signal drawn in real-time. The central frequency of the signal can be changed by moving *fc* slider. The GSM signal has bandwidth of around *200kHz*. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. By setting the *fc* slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. 
 
 If it doesn't happen set *ppm* slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work. There is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels that would inevitably lead to instability. You can use the value set later by passing it as argument of the program:
 ```
@@ -94,7 +94,7 @@ To start *Wireshark* straight to analysis of the *GSMTAP* packets obtained from 
 sudo wireshark -k -Y '!icmp && gsmtap' -i lo
 ````
 
-If you want to avoid the risks caused by running *Wireshark* with root priviledges follow this short howto:
+If you want to avoid the risks caused by running *Wireshark* with root privileges follow this short howto:
 https://ask.wireshark.org/questions/7976/wireshark-setup-linux-for-nonroot-user
 
 Videos
@@ -107,4 +107,3 @@ Credits
 *Piotr Krysik* - main author and project maintainer
 
 *Unknown Author* - functions for decoding channel codes
-
