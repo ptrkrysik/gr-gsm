@@ -20,7 +20,7 @@
 # 
 
 from numpy import *
-from pylab import *
+#from pylab import *
 from gnuradio import gr
 import pmt
 from scipy.ndimage.filters import uniform_filter1d
