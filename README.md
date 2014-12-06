@@ -104,6 +104,13 @@ https://www.youtube.com/watch?v=Eofnb7zr8QE
 
 Credits
 =======
-*Piotr Krysik* - main author and project maintainer
+*Piotr Krysik* <pkrysik (at) gmail.com> - main author and project maintainer
 
-*Unknown Author* - functions for decoding channel codes
+*Steve* <steve (at) segfault.net>  - functions for decoding channel codes
+
+
+Thanks
+======
+The work would be possible without efforts made by many people build knowledge of GSM. 
+The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid*. 
+*Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
