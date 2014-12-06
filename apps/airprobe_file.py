@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe File
-# Generated: Wed Dec  3 08:03:37 2014
+# Generated: Sat Dec  6 15:32:40 2014
 ##################################################
 
 from gnuradio import blocks
@@ -50,7 +50,7 @@ class airprobe_file(gr.top_block):
         )
         self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, input_file_name, False)
 
         ##################################################
@@ -69,6 +69,7 @@ class airprobe_file(gr.top_block):
         self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
         self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
 
+# QT sink close method reimplementation
 
     def get_input_file_name(self):
         return self.input_file_name
@@ -145,3 +146,4 @@ if __name__ == '__main__':
     tb = airprobe_file(input_file_name=options.input_file_name, fc=options.fc, samp_rate=options.samp_rate)
     tb.start()
     tb.wait()
+
