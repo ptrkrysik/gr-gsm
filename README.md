@@ -111,7 +111,7 @@ Credits
 
 Thanks
 ======
-This work is built upon the efforts made by many people to build knowledge of GSM. 
+This work is built upon the efforts made by many people to gather knowledge of GSM. 
 
 The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid* written by Tvoid. 
 
