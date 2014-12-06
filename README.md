@@ -29,7 +29,7 @@ At the first run *pybombs* will ask for configuration options. As a target direc
 
 Then build and install *gr-gsm* with following command:
 ```
-./pybombs install gr-gsm
+sudo ./pybombs install gr-gsm
 ```
 
 Pybombs will take care of downloading all of required libraries and for installation of *GNU Radio* and building *gr-gsm*.
