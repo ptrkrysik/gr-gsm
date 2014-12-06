@@ -111,10 +111,7 @@ Credits
 
 Thanks
 ======
-The *gr-gsm* wouldn't be possible without efforts made by many people to build knowledge of GSM. 
-
+This work is built upon the efforts made by many people to build knowledge of GSM. 
 The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid* written by Tvoid. 
-
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
-
 Special thanks to Pawel Koszut who lent his precious USRP1 to the author of *gr-gsm* (Piotr Krysik) in 2007-2010.
