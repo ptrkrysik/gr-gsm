@@ -25,9 +25,9 @@ cd pybombs
 ./pybombs config
 ```
 
-At the first run *pybombs* will ask for configuration options. As a install prefix enter */usr/local/*. The rest of the options can be left as defaul.
+As a install prefix enter */usr/local/*. The rest of the options can be left as defaul.
 
-On the distributions that have *GNU Radio* version 3.7.3 and above *GNU Radio* can be installed from packages without compilation. To avoid this quite lenghty process use:
+On distributions that have *GNU Radio* version 3.7.3 and above *GNU Radio* can be installed from packages without compilation. To avoid this quite lenghty process use:
 
 ```
 ./pybombs config forcebuild ' '
