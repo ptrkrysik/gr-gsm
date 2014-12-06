@@ -104,5 +104,6 @@ https://www.youtube.com/watch?v=Eofnb7zr8QE
 Credits
 =======
 *Piotr Krysik* - main author and project maintainer
+
 *Unknown Author* - functions for decoding channel codes
 
