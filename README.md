@@ -111,6 +111,6 @@ Credits
 
 Thanks
 ======
-The work would be possible without efforts made by many people build knowledge of GSM. 
+The work would be possible without efforts made by many people to build knowledge of GSM. 
 The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid*. 
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
