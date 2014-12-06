@@ -48,7 +48,7 @@ local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/b
 
 Usage
 =====
-There are many possible applications of *gr-gsm*. At this moment there is one application that is ready out of the box. It is improved replacement of the old Airprobe - the program that lets you receive and decode GSM control messages from timeslot 0 on the broadcasting channel of a BTS. After installation of *gr-gsm* there are three python executables that will be installed:
+There are many possible applications of *gr-gsm*. At this moment there is one application that is ready out of the box. It is improved replacement of the old Airprobe - the program that lets you receive and decode GSM control messages from timeslot 0 on the broadcasting channel of a BTS. After installation of *gr-gsm* there are two python executables that will be installed:
 
 -```airprobe_rtlsdr.py```,
 
