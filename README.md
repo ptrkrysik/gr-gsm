@@ -70,9 +70,9 @@ This program uses cheap RTL-SDR receivers as a source of the signal. It can be s
 ```
 airprobe_rtlsdr.py
 ```
-The window of the program contains amplitude spectrum of the signal drawn in real-time. The central frequency of the signal can be changed by moving *fc* slider. The GSM signal has bandwidth of around *200kHz*. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. By setting the *fc* slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. 
+The window of the program contains amplitude spectrum of the signal drawn in real-time. The central frequency of the signal can be changed by moving *fc* slider. The GSM signal has bandwidth of around *200kHz*. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. After setting the *fc* slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. 
 
-If it doesn't happen set *ppm* slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work. There is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels that would inevitably lead to instability. You can use the value set later by passing it as argument of the program:
+If it doesn't happen, set *ppm* slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work. There is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels that would inevitably lead to instability. You can use the value set later by passing it as argument of the program:
 ```
 airprobe_rtlsdr.py -p <correction>
 ```
