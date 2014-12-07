@@ -93,7 +93,7 @@ where:
 
 Analyzing GSM messages in the Wireshark
 -------------------------------------------
-The *Airprobe* (file,usrp,rtlsdr) application sends GSM messages in *GSMTAP* format that was created by *Harald Welte* to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with *GSMTAP* header and it is able to dissect messages.
+The *Airprobe* (file, rtlsdr) application sends GSM messages in *GSMTAP* format that was created by *Harald Welte* to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with *GSMTAP* header and it is able to dissect messages.
 
 On Debian like systems *Wireshark can be installed with:
 ```
