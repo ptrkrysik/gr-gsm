@@ -46,10 +46,10 @@ Pybombs will take care of downloading all of required libraries and for installa
 
 At the end create the `~/.gnuradio/config.conf` config file so gnuradio-companion can find custom blocks of gr-gsm:
 
-  ```ini
-  [grc]
-  local_blocks_path=/usr/local/share/gnuradio/grc/blocks
-  ```
+```ini
+[grc]
+local_blocks_path=/usr/local/share/gnuradio/grc/blocks
+```
 
 Usage
 =====
