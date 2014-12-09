@@ -11,16 +11,16 @@ Presence of *GNU Radio* is therefore a basic requirement for compilation and ins
 
 The easiest way to install *gr-gsm* it to use *pybombs* installer (GNU Radio install management system). Installation with this tool was tested on Ubuntu 14.04 and 14.10 (on 14.10 installation will be much faster as compilation of *GNU Radio* is not necessary).
 For installation of pybombs you will need git. On Debian based distributions you can get it with:
-```
+```sh
 sudo apt-get install git
 ```
 Then download *pybombs* sources using git:
-```
+```sh
 git clone https://github.com/ptrkrysik/pybombs.git
 ```
 
 Go into *pybombs* directory and configure it:
-```
+```sh
 cd pybombs
 ./pybombs config
 ```
@@ -28,12 +28,12 @@ cd pybombs
 As a install prefix enter */usr/local/*. The rest of the options can be left as defaul.
 
 On distributions that have *GNU Radio* version 3.7.3 and above in standard repository, *GNU Radio* can be installed from packages without compilation. To avoid this quite lenghty process use:
-```
+```sh
 ./pybombs config forcebuild ' '
 ```
 
 To check *GNU Radio* version use:
-```
+```sh
 apt-cache policy gnuradio-dev
 ```
 
@@ -44,17 +44,12 @@ sudo ./pybombs install gr-gsm
 
 Pybombs will take care of downloading all of required libraries and for installation of *GNU Radio* and building *gr-gsm*.
 
-*Gr-gsm* blocks are installed in */usr/local* directory. To tell *Gnu Radio Companion* to look for blocks in there create *config.conf* in *~/.gnuradio* directory (this step is not required on Ubuntu 14.04 as *GNU Radio* will be built from source, will reside in */usr/local* and *GNU Radio* will be already configured to look for *Gnu Radio Companion* blocks in there):
-```
-mkdir ~/.gnuradio
-touch ~/.gnuradio/config.conf
-```
+At the end create the `~/.gnuradio/config.conf` config file so gnuradio-companion can find custom blocks of gr-gsm:
 
-then edit ~/.gnuradio/config.conf and put following text inside:
-```
-[grc]
-local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/blocks
-```
+  ```ini
+  [grc]
+  local_blocks_path=/usr/local/share/gnuradio/grc/blocks
+  ```
 
 Usage
 =====
