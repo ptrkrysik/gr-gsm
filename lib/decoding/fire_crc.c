@@ -36,6 +36,7 @@ outit(int *data, int len)
 	for (i = 0; i < len; i++)
 		printf("%d ", data[i]);
 	printf("\n");
+	return 0;
 }
 
 int
