@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='ASCII'?>
-<?grc format='1' created='3.7.6'?>
+<?grc format='1' created='3.7.5'?>
 <flow_graph>
-  <timestamp>Wed Aug 13 19:03:06 2014</timestamp>
+  <timestamp>Sat Dec 13 10:46:37 2014</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -58,88 +58,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(0, -5)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>CHANNEL_UNKNOWN</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(480, -5)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>BCCH</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(616, -5)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>CCCH</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(680, -5)</value>
+      <value>(16, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -166,7 +85,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(936, -5)</value>
+      <value>(1080, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -177,7 +96,7 @@
     <key>variable</key>
     <param>
       <key>id</key>
-      <value>RACH</value>
+      <value>CHANNEL_UNKNOWN</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -185,7 +104,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>3</value>
+      <value>0</value>
     </param>
     <param>
       <key>alias</key>
@@ -193,7 +112,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(744, -5)</value>
+      <value>(576, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -220,7 +139,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(872, -5)</value>
+      <value>(1008, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -247,7 +166,88 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(808, -5)</value>
+      <value>(936, 11)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>CCCH</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>2</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(792, 11)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>RACH</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>3</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(864, 11)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>BCCH</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(720, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -286,7 +286,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(184, -5)</value>
+      <value>(208, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -325,7 +325,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(296, -5)</value>
+      <value>(328, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -364,101 +364,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(376, -5)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gsm_clock_offset_control</key>
-    <param>
-      <key>id</key>
-      <value>gsm_clock_offset_control_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>fc</key>
-      <value>fc</value>
-    </param>
-    <param>
-      <key>samp_rate</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(240, 219)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>180</value>
-    </param>
-  </block>
-  <block>
-    <key>gsm_input</key>
-    <param>
-      <key>id</key>
-      <value>gsm_input_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>ppm</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>osr</key>
-      <value>4</value>
-    </param>
-    <param>
-      <key>fc</key>
-      <value>fc</value>
-    </param>
-    <param>
-      <key>samp_rate_in</key>
-      <value>samp_rate</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(176, 128)</value>
+      <value>(416, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -509,7 +415,58 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(-8, 115)</value>
+      <value>(16, 195)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_input</key>
+    <param>
+      <key>id</key>
+      <value>gsm_input_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>ppm</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>samp_rate_in</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(200, 208)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -560,11 +517,50 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(352, 112)</value>
+      <value>(384, 192)</value>
     </param>
     <param>
       <key>_rotation</key>
       <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_clock_offset_control</key>
+    <param>
+      <key>id</key>
+      <value>gsm_clock_offset_control_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>fc</key>
+      <value>fc</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(272, 315)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>180</value>
     </param>
   </block>
   <block>
@@ -603,34 +599,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(536, 112)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gsm_message_printer</key>
-    <param>
-      <key>id</key>
-      <value>gsm_message_printer_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(1000, 112)</value>
+      <value>(576, 192)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -665,7 +634,38 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(784, 112)</value>
+      <value>(840, 192)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_message_printer</key>
+    <param>
+      <key>id</key>
+      <value>gsm_message_printer_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>prepend_string</key>
+      <value></value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1088, 192)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -720,7 +720,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1016, 179)</value>
+      <value>(1088, 243)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -728,40 +728,10 @@
     </param>
   </block>
   <connection>
-    <source_block_id>gsm_receiver_0</source_block_id>
-    <sink_block_id>gsm_clock_offset_control_0</sink_block_id>
-    <source_key>measurements</source_key>
-    <sink_key>measurements</sink_key>
-  </connection>
-  <connection>
     <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>gsm_message_printer_0</sink_block_id>
+    <sink_block_id>blocks_socket_pdu_0</sink_block_id>
     <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_input_0</source_block_id>
-    <sink_block_id>gsm_receiver_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_universal_ctrl_chans_demapper_0</source_block_id>
-    <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
-    <source_key>bursts</source_key>
-    <sink_key>bursts</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_receiver_0</source_block_id>
-    <sink_block_id>gsm_universal_ctrl_chans_demapper_0</sink_block_id>
-    <source_key>C0</source_key>
-    <sink_key>bursts</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_clock_offset_control_0</source_block_id>
-    <sink_block_id>gsm_input_0</sink_block_id>
-    <source_key>ppm</source_key>
-    <sink_key>ppm_in</sink_key>
+    <sink_key>pdus</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_file_source_0</source_block_id>
@@ -770,9 +740,39 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>gsm_clock_offset_control_0</source_block_id>
+    <sink_block_id>gsm_input_0</sink_block_id>
+    <source_key>ppm</source_key>
+    <sink_key>ppm_in</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_receiver_0</source_block_id>
+    <sink_block_id>gsm_universal_ctrl_chans_demapper_0</sink_block_id>
+    <source_key>C0</source_key>
+    <sink_key>bursts</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_universal_ctrl_chans_demapper_0</source_block_id>
+    <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
+    <source_key>bursts</source_key>
+    <sink_key>bursts</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_input_0</source_block_id>
+    <sink_block_id>gsm_receiver_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>blocks_socket_pdu_0</sink_block_id>
+    <sink_block_id>gsm_message_printer_0</sink_block_id>
     <source_key>msgs</source_key>
-    <sink_key>pdus</sink_key>
+    <sink_key>msgs</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_receiver_0</source_block_id>
+    <sink_block_id>gsm_clock_offset_control_0</sink_block_id>
+    <source_key>measurements</source_key>
+    <sink_key>measurements</sink_key>
   </connection>
 </flow_graph>
