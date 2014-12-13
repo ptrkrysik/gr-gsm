@@ -164,5 +164,5 @@ add_subdirectory(docs)
 # Install cmake search helper for this library
 ########################################################################
 install(FILES cmake/Modules/gsmConfig.cmake        
-    DESTINATION lib/cmake/grgsm
+    DESTINATION lib${LIB_SUFFIX}/cmake/grgsm
 )
