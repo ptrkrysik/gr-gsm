@@ -37,7 +37,7 @@ GR_PYTHON_INSTALL(
     receiver/fcch_detector.py 
     receiver/chirpz.py
     receiver/clock_offset_control.py 
-    misc_utils/clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/gsm
+    misc_utils/clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )
 
 ########################################################################

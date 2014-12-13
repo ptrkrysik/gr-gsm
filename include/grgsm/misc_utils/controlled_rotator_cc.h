@@ -24,7 +24,7 @@
 #ifndef INCLUDED_GSM_CONTROLLED_ROTATOR_CC_H
 #define INCLUDED_GSM_CONTROLLED_ROTATOR_CC_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {

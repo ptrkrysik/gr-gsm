@@ -2,8 +2,8 @@
 <block>
   <name>FCCH bursts detector</name>
   <key>gsm_fcch_detector</key>
-  <import>import gsm</import>
-  <make>gsm.fcch_detector($OSR)</make>
+  <import>import grgsm</import>
+  <make>grgsm.fcch_detector($OSR)</make>
 <callback>set_OSR($OSR)</callback>
   <param>
     <name>OverSamplingRatio</name>

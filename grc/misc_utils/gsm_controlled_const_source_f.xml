@@ -2,8 +2,8 @@
 <block>
   <name>Controlled const source</name>
   <key>gsm_controlled_const_source_f</key>
-  <import>import gsm</import>
-  <make>gsm.controlled_const_source_f($constant)</make>
+  <import>import grgsm</import>
+  <make>grgsm.controlled_const_source_f($constant)</make>
   <callback>set_constant($constant)</callback>
   
   <param>

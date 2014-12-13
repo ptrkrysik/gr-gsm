@@ -21,11 +21,13 @@
  */
 
 
-#ifndef INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H
-#define INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H
+#ifndef INCLUDED_GSM_RECEIVER_H
+#define INCLUDED_GSM_RECEIVER_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <gnuradio/feval.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -35,31 +37,28 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API extract_system_info : virtual public gr::block
+    class GSM_API receiver : virtual public sync_block
     {
      public:
-      typedef boost::shared_ptr<extract_system_info> sptr;
+      typedef boost::shared_ptr<receiver> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::extract_system_info.
+       * \brief Return a shared_ptr to a new instance of gsm::receiver.
        *
-       * To avoid accidental use of raw pointers, gsm::extract_system_info's
+       * To avoid accidental use of raw pointers, gsm::receiver's
        * constructor is in a private implementation
-       * class. gsm::extract_system_info::make is the public interface for
+       * class. gsm::receiver::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
-      virtual void show() = 0;
-      virtual std::vector<int> get_chans() = 0;
-      virtual std::vector<int> get_pwrs() = 0;
-      virtual std::vector<int> get_lac() = 0;
-      virtual std::vector<int> get_cell_id() = 0;
-      virtual std::vector<int> get_mnc() = 0;
+      static sptr make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &seq_nums);
+      
+      virtual void set_cell_allocation(const std::vector<int> &cell_allocation) = 0;
+      virtual void set_tseq_nums(const std::vector<int> & tseq_nums) = 0;
       virtual void reset() = 0;
     };
-
+   
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H */
-
+#endif /* INCLUDED_GSM_RECEIVER_H */
+ 

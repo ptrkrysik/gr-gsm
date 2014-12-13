@@ -21,6 +21,9 @@
 # Install public header files
 ########################################################################
 install(FILES
-    universal_ctrl_chans_demapper.h
-    get_bcch_or_ccch_bursts.h DESTINATION include/gsm/demapping
+    bursts_printer.h
+    extract_system_info.h
+    controlled_rotator_cc.h
+    controlled_const_source_f.h
+    message_printer.h DESTINATION include/grgsm/misc_utils
 )

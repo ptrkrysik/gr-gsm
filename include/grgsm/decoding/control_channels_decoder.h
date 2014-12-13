@@ -21,11 +21,11 @@
  */
 
 
-#ifndef INCLUDED_GSM_MESSAGE_PRINTER_H
-#define INCLUDED_GSM_MESSAGE_PRINTER_H
+#ifndef INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
+#define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
 
-#include <gsm/api.h>
-#include <gnuradio/sync_block.h>
+#include <grgsm/api.h>
+#include <gnuradio/block.h>
 
 namespace gr {
   namespace gsm {
@@ -35,24 +35,25 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API message_printer : virtual public gr::block
+    class GSM_API control_channels_decoder : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<message_printer> sptr;
+      typedef boost::shared_ptr<control_channels_decoder> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::message_printer.
+       * \brief Return a shared_ptr to a new instance of gsm::control_channels_decoder.
        *
-       * To avoid accidental use of raw pointers, gsm::message_printer's
+       * To avoid accidental use of raw pointers, gsm::control_channels_decoder's
        * constructor is in a private implementation
-       * class. gsm::message_printer::make is the public interface for
+       * class. gsm::control_channels_decoder::make is the public interface for
        * creating new instances.
        */
       static sptr make();
+
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_PRINTER_H */
+#endif /* INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H */
 

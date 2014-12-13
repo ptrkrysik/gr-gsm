@@ -23,8 +23,8 @@
 #ifndef INCLUDED_GSM_RECEIVER_IMPL_H
 #define INCLUDED_GSM_RECEIVER_IMPL_H
 
-#include <gsm/receiver/receiver.h>
-#include <gsm/gsmtap.h>
+#include <grgsm/receiver/receiver.h>
+#include <grgsm/gsmtap.h>
 #include <gsm_constants.h>
 #include <receiver_config.h>
 

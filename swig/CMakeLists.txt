@@ -36,22 +36,22 @@ foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
 endforeach(incdir)
 
 set(GR_SWIG_LIBRARIES gnuradio-gsm)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/gsm_swig_doc.i)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i)
 set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-GR_SWIG_MAKE(gsm_swig gsm_swig.i)
+GR_SWIG_MAKE(grgsm_swig grgsm_swig.i)
 
 ########################################################################
 # Install the build swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS gsm_swig DESTINATION ${GR_PYTHON_DIR}/gsm)
+GR_SWIG_INSTALL(TARGETS grgsm_swig DESTINATION ${GR_PYTHON_DIR}/grgsm)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
     FILES
-    gsm_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/gsm_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/gsm/swig
+    grgsm_swig.i
+    ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i
+    DESTINATION ${GR_INCLUDE_DIR}/grgsm/swig
 )

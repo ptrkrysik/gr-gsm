@@ -21,13 +21,11 @@
  */
 
 
-#ifndef INCLUDED_GSM_RECEIVER_H
-#define INCLUDED_GSM_RECEIVER_H
+#ifndef INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H
+#define INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/block.h>
-#include <gnuradio/feval.h>
-#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -37,28 +35,24 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API receiver : virtual public sync_block
+    class GSM_API get_bcch_or_ccch_bursts : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<receiver> sptr;
+      typedef boost::shared_ptr<get_bcch_or_ccch_bursts> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::receiver.
+       * \brief Return a shared_ptr to a new instance of gsm::get_bcch_or_ccch_bursts.
        *
-       * To avoid accidental use of raw pointers, gsm::receiver's
+       * To avoid accidental use of raw pointers, gsm::get_bcch_or_ccch_bursts's
        * constructor is in a private implementation
-       * class. gsm::receiver::make is the public interface for
+       * class. gsm::get_bcch_or_ccch_bursts::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &seq_nums);
-      
-      virtual void set_cell_allocation(const std::vector<int> &cell_allocation) = 0;
-      virtual void set_tseq_nums(const std::vector<int> & tseq_nums) = 0;
-      virtual void reset() = 0;
+      static sptr make(unsigned int fn51_start);
     };
-   
+
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_RECEIVER_H */
- 
+#endif /* INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H */
+

@@ -2,8 +2,8 @@
 <block>
   <name>Controlled rotator</name>
   <key>gsm_controlled_rotator_cc</key>
-  <import>import gsm</import>
-  <make>gsm.controlled_rotator_cc($phase_inc,$samp_rate)</make>
+  <import>import grgsm</import>
+  <make>grgsm.controlled_rotator_cc($phase_inc,$samp_rate)</make>
   <callback>set_phase_inc($phase_inc)</callback>
   <callback>set_samp_rate($samp_rate)</callback>
   <param>

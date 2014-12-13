@@ -25,7 +25,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <gsm/gsmtap.h>
+#include <grgsm/gsmtap.h>
 #include <iterator>
 #include <algorithm>
 #include "bursts_printer_impl.h"

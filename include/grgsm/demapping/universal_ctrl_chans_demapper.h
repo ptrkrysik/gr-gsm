@@ -21,10 +21,10 @@
  */
 
 
-#ifndef INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H
-#define INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H
+#ifndef INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H
+#define INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/block.h>
 
 namespace gr {
@@ -35,24 +35,24 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API get_bcch_or_ccch_bursts : virtual public gr::block
+    class GSM_API universal_ctrl_chans_demapper : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<get_bcch_or_ccch_bursts> sptr;
+      typedef boost::shared_ptr<universal_ctrl_chans_demapper> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::get_bcch_or_ccch_bursts.
+       * \brief Return a shared_ptr to a new instance of gsm::universal_ctrl_chans_demapper.
        *
-       * To avoid accidental use of raw pointers, gsm::get_bcch_or_ccch_bursts's
+       * To avoid accidental use of raw pointers, gsm::universal_ctrl_chans_demapper's
        * constructor is in a private implementation
-       * class. gsm::get_bcch_or_ccch_bursts::make is the public interface for
+       * class. gsm::universal_ctrl_chans_demapper::make is the public interface for
        * creating new instances.
        */
-      static sptr make(unsigned int fn51_start);
+      static sptr make(const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types);
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_GET_BCCH_OR_CCCH_BURSTS_H */
+#endif /* INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H */
 

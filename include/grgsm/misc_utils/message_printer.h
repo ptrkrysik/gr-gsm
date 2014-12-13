@@ -21,11 +21,11 @@
  */
 
 
-#ifndef INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H
-#define INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H
+#ifndef INCLUDED_GSM_MESSAGE_PRINTER_H
+#define INCLUDED_GSM_MESSAGE_PRINTER_H
 
-#include <gsm/api.h>
-#include <gnuradio/block.h>
+#include <grgsm/api.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -35,24 +35,24 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API universal_ctrl_chans_demapper : virtual public gr::block
+    class GSM_API message_printer : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<universal_ctrl_chans_demapper> sptr;
+      typedef boost::shared_ptr<message_printer> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::universal_ctrl_chans_demapper.
+       * \brief Return a shared_ptr to a new instance of gsm::message_printer.
        *
-       * To avoid accidental use of raw pointers, gsm::universal_ctrl_chans_demapper's
+       * To avoid accidental use of raw pointers, gsm::message_printer's
        * constructor is in a private implementation
-       * class. gsm::universal_ctrl_chans_demapper::make is the public interface for
+       * class. gsm::message_printer::make is the public interface for
        * creating new instances.
        */
-      static sptr make(const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types);
+      static sptr make();
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_H */
+#endif /* INCLUDED_GSM_MESSAGE_PRINTER_H */
 

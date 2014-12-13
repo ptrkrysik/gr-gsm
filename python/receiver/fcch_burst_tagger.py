@@ -23,7 +23,7 @@ from numpy import *
 #from pylab import *
 from gnuradio import gr
 import pmt
-from gsm.chirpz import ZoomFFT
+from grgsm.chirpz import ZoomFFT
 
 class fcch_burst_tagger(gr.sync_block):
     """

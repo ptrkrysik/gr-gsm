@@ -26,8 +26,8 @@
 
 #include <gnuradio/io_signature.h>
 #include "universal_ctrl_chans_demapper_impl.h"
-#include <gsm/endian.h>
-#include <gsm/gsmtap.h>
+#include <grgsm/endian.h>
+#include <grgsm/gsmtap.h>
 
 namespace gr {
   namespace gsm {

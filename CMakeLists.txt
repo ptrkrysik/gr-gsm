@@ -70,11 +70,11 @@ endif()
 include(GrPlatform) #define LIB_SUFFIX
 set(GR_RUNTIME_DIR      bin)
 set(GR_LIBRARY_DIR      lib${LIB_SUFFIX})
-set(GR_INCLUDE_DIR      include/gsm)
-set(GR_INCLUDE_DIR      include/gsm/misc_utils)
-set(GR_INCLUDE_DIR      include/gsm/receiver)
-set(GR_INCLUDE_DIR      include/gsm/demapping)
-set(GR_INCLUDE_DIR      include/gsm/decoding)
+set(GR_INCLUDE_DIR      include/grgsm)
+set(GR_INCLUDE_DIR      include/ggrsm/misc_utils)
+set(GR_INCLUDE_DIR      include/grgsm/receiver)
+set(GR_INCLUDE_DIR      include/grgsm/demapping)
+set(GR_INCLUDE_DIR      include/grgsm/decoding)
 set(GR_DATA_DIR         share)
 set(GR_PKG_DATA_DIR     ${GR_DATA_DIR}/${CMAKE_PROJECT_NAME})
 set(GR_DOC_DIR          ${GR_DATA_DIR}/doc)
@@ -151,7 +151,7 @@ add_custom_target(uninstall
 ########################################################################
 # Add subdirectories
 ########################################################################
-add_subdirectory(include/gsm)
+add_subdirectory(include/grgsm)
 add_subdirectory(include/plotting)
 add_subdirectory(lib)
 add_subdirectory(swig)
@@ -164,5 +164,5 @@ add_subdirectory(docs)
 # Install cmake search helper for this library
 ########################################################################
 install(FILES cmake/Modules/gsmConfig.cmake        
-    DESTINATION lib/cmake/gsm
+    DESTINATION lib/cmake/grgsm
 )

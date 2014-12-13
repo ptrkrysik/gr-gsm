@@ -2,7 +2,7 @@
 #ifndef __SCH_H__
 #define __SCH_H__ 1
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 
 #ifdef __cplusplus
 extern "C"

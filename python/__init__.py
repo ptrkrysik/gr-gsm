@@ -42,7 +42,7 @@ if _RTLD_GLOBAL != 0:
 
 
 # import swig generated symbols into the gsm namespace
-from gsm_swig import *
+from grgsm_swig import *
 
 # import any pure python here
 

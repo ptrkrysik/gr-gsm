@@ -20,6 +20,12 @@
 ########################################################################
 # Install public header files
 ########################################################################
+add_subdirectory(misc_utils)
+add_subdirectory(decoding)
+add_subdirectory(demapping)
+add_subdirectory(receiver)
+
 install(FILES
-    receiver.h DESTINATION include/gsm/receiver
+    api.h
+    gsmtap.h DESTINATION include/grgsm
 )

@@ -21,5 +21,6 @@
 # Install public header files
 ########################################################################
 install(FILES
-    control_channels_decoder.h DESTINATION include/gsm/decoding
+    universal_ctrl_chans_demapper.h
+    get_bcch_or_ccch_bursts.h DESTINATION include/grgsm/demapping
 )

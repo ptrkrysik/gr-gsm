@@ -20,11 +20,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H
-#define INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H
 
-#include <gsm/api.h>
-#include <gnuradio/sync_block.h>
+#ifndef INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H
+#define INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H
+
+#include <grgsm/api.h>
+#include <gnuradio/block.h>
 
 namespace gr {
   namespace gsm {
@@ -34,25 +35,31 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API controlled_const_source_f : virtual public gr::sync_block
+    class GSM_API extract_system_info : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<controlled_const_source_f> sptr;
+      typedef boost::shared_ptr<extract_system_info> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::controlled_const_source_f.
+       * \brief Return a shared_ptr to a new instance of gsm::extract_system_info.
        *
-       * To avoid accidental use of raw pointers, gsm::controlled_const_source_f's
+       * To avoid accidental use of raw pointers, gsm::extract_system_info's
        * constructor is in a private implementation
-       * class. gsm::controlled_const_source_f::make is the public interface for
+       * class. gsm::extract_system_info::make is the public interface for
        * creating new instances.
        */
-      static sptr make(float constant);
-      virtual void set_constant(float constant) = 0;
+      static sptr make();
+      virtual void show() = 0;
+      virtual std::vector<int> get_chans() = 0;
+      virtual std::vector<int> get_pwrs() = 0;
+      virtual std::vector<int> get_lac() = 0;
+      virtual std::vector<int> get_cell_id() = 0;
+      virtual std::vector<int> get_mnc() = 0;
+      virtual void reset() = 0;
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H */
+#endif /* INCLUDED_GSM_EXTRACT_SYSTEM_INFO_H */
 

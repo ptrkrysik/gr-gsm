@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe File
-# Generated: Sat Dec  6 15:32:40 2014
+# Generated: Sat Dec 13 09:44:41 2014
 ##################################################
 
 from gnuradio import blocks
@@ -11,7 +11,7 @@ from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
-import gsm
+import grgsm
 
 class airprobe_file(gr.top_block):
 
@@ -39,10 +39,10 @@ class airprobe_file(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.gsm_universal_ctrl_chans_demapper_0 = gsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
-        self.gsm_receiver_0 = gsm.receiver(4, ([0]), ([]))
-        self.gsm_message_printer_0 = gsm.message_printer()
-        self.gsm_input_0 = gsm.gsm_input(
+        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
+        self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
+        self.gsm_message_printer_0 = grgsm.message_printer()
+        self.gsm_input_0 = grgsm.gsm_input(
             ppm=0,
             osr=4,
             fc=fc,
@@ -69,7 +69,6 @@ class airprobe_file(gr.top_block):
         self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
         self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
 
-# QT sink close method reimplementation
 
     def get_input_file_name(self):
         return self.input_file_name
@@ -146,4 +145,3 @@ if __name__ == '__main__':
     tb = airprobe_file(input_file_name=options.input_file_name, fc=options.fc, samp_rate=options.samp_rate)
     tb.start()
     tb.wait()
-

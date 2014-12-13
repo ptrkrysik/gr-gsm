@@ -25,7 +25,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <gsm/gsmtap.h>
+#include <grgsm/gsmtap.h>
 #include "control_channels_decoder_impl.h"
 
 #define DATA_BYTES 23

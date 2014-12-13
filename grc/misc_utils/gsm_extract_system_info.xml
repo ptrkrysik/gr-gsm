@@ -2,8 +2,8 @@
 <block>
   <name>Extract system info</name>
   <key>gsm_extract_system_info</key>
-  <import>import gsm</import>
-  <make>gsm.extract_system_info()</make>
+  <import>import grgsm</import>
+  <make>grgsm.extract_system_info()</make>
 
   <sink>
     <name>msgs</name>

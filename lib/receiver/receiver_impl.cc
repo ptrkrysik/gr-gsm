@@ -25,9 +25,6 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "receiver_impl.h"
-
-#include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
 #include <math.h>
 #include <boost/circular_buffer.hpp>
@@ -35,11 +32,13 @@
 #include <numeric>
 #include <viterbi_detector.h>
 #include <string.h>
-#include <sch.h>
 #include <iostream>
 #include <iomanip>
 #include <boost/scoped_ptr.hpp>
-#include <gsm/endian.h>
+
+#include <sch.h>
+#include "receiver_impl.h"
+#include <grgsm/endian.h>
 
 //files included for debuging
 //#include "plotting/plotting.hpp"

@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Sat Dec  6 15:20:59 2014
+# Generated: Sat Dec 13 09:54:44 2014
 ##################################################
 
 from PyQt4 import Qt
@@ -15,11 +15,13 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
 import PyQt4.Qwt5 as Qwt
-import gsm
+import grgsm
 import osmosdr
 import sip
 import sys
+import time
 
+from distutils.version import StrictVersion
 class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
 
     def __init__(self, ppm_param=0):
@@ -149,17 +151,17 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.gsm_universal_ctrl_chans_demapper_0 = gsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
-        self.gsm_receiver_0 = gsm.receiver(4, ([0]), ([]))
-        self.gsm_message_printer_1 = gsm.message_printer()
-        self.gsm_input_0 = gsm.gsm_input(
+        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
+        self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
+        self.gsm_message_printer_1 = grgsm.message_printer()
+        self.gsm_input_0 = grgsm.gsm_input(
             ppm=0,
             osr=4,
             fc=fc,
             samp_rate_in=samp_rate,
         )
-        self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc)
+        self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
         self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
 
         ##################################################
@@ -179,7 +181,6 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
         self.msg_connect(self.gsm_receiver_0, "measurements", self.gsm_clock_offset_control_0, "measurements")
 
-# QT sink close method reimplementation
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "airprobe_rtlsdr")
         self.settings.setValue("geometry", self.saveGeometry())
@@ -283,7 +284,8 @@ if __name__ == '__main__':
     parser.add_option("-p", "--ppm-param", dest="ppm_param", type="intx", default=0,
         help="Set ppm [default=%default]")
     (options, args) = parser.parse_args()
-    Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
+    if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
+        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
     tb = airprobe_rtlsdr(ppm_param=options.ppm_param)
     tb.start()
@@ -294,4 +296,3 @@ if __name__ == '__main__':
     qapp.connect(qapp, Qt.SIGNAL("aboutToQuit()"), quitting)
     qapp.exec_()
     tb = None #to clean up Qt widgets
-

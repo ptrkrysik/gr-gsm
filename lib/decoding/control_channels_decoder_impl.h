@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_CONTROL_CHANNELS_DECODER_IMPL_H
 #define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_IMPL_H
 
-#include <gsm/decoding/control_channels_decoder.h>
+#include <grgsm/decoding/control_channels_decoder.h>
 #include "fire_crc.h"
 #include "cch.h"
 

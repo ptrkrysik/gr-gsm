@@ -21,9 +21,5 @@
 # Install public header files
 ########################################################################
 install(FILES
-    bursts_printer.h
-    extract_system_info.h
-    controlled_rotator_cc.h
-    controlled_const_source_f.h
-    message_printer.h DESTINATION include/gsm/misc_utils
+    receiver.h DESTINATION include/grgsm/receiver
 )

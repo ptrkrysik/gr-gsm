@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
 #define INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
 
-#include <gsm/misc_utils/message_printer.h>
+#include <grgsm/misc_utils/message_printer.h>
 
 namespace gr {
   namespace gsm {

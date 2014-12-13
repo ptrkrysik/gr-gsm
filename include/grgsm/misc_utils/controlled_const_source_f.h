@@ -20,12 +20,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H
+#define INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H
 
-#ifndef INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
-#define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H
-
-#include <gsm/api.h>
-#include <gnuradio/block.h>
+#include <grgsm/api.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -35,25 +34,25 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API control_channels_decoder : virtual public gr::block
+    class GSM_API controlled_const_source_f : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<control_channels_decoder> sptr;
+      typedef boost::shared_ptr<controlled_const_source_f> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::control_channels_decoder.
+       * \brief Return a shared_ptr to a new instance of gsm::controlled_const_source_f.
        *
-       * To avoid accidental use of raw pointers, gsm::control_channels_decoder's
+       * To avoid accidental use of raw pointers, gsm::controlled_const_source_f's
        * constructor is in a private implementation
-       * class. gsm::control_channels_decoder::make is the public interface for
+       * class. gsm::controlled_const_source_f::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
-
+      static sptr make(float constant);
+      virtual void set_constant(float constant) = 0;
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_CONTROL_CHANNELS_DECODER_H */
+#endif /* INCLUDED_GSM_CONTROLLED_CONST_SOURCE_F_H */
 

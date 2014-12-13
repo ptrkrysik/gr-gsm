@@ -27,7 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include <stdio.h>
 #include "message_printer_impl.h"
-#include "gsm/gsmtap.h"
+#include "grgsm/gsmtap.h"
 
 namespace gr {
   namespace gsm {

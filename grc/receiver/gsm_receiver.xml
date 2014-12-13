@@ -2,8 +2,8 @@
 <block>
   <name>GSM Receiver</name>
   <key>gsm_receiver</key>
-  <import>import gsm</import>
-  <make>gsm.receiver($osr, $cell_allocation, $tseq_nums)</make>
+  <import>import grgsm</import>
+  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums)</make>
 
   <param>
     <name>Oversampling ratio</name>

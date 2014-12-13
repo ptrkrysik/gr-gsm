@@ -2,8 +2,8 @@
 <block>
   <name>Demapper for BCCH and CCCH</name>
   <key>gsm_get_bcch_or_ccch_bursts</key>
-  <import>import gsm</import>
-  <make>gsm.get_bcch_or_ccch_bursts($d_fn51_start)</make>
+  <import>import grgsm</import>
+  <make>grgsm.get_bcch_or_ccch_bursts($d_fn51_start)</make>
   <param>
     <name>d_fn51_start</name>
     <key>d_fn51_start</key>

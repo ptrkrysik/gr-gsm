@@ -1,8 +1,8 @@
 <block>
   <name>Clock offset corrector</name>
   <key>gsm_clock_offset_corrector</key>
-  <import>import gsm</import>
-  <make>gsm.clock_offset_corrector(
+  <import>import grgsm</import>
+  <make>grgsm.clock_offset_corrector(
     fc=$fc,
     ppm=$ppm,
     samp_rate_in=$samp_rate_in,

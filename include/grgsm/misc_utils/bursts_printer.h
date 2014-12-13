@@ -24,7 +24,7 @@
 #ifndef INCLUDED_GSM_BURSTS_PRINTER_H
 #define INCLUDED_GSM_BURSTS_PRINTER_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/block.h>
 #include <string>
 #include <vector>

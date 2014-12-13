@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_BURSTS_PRINTER_IMPL_H
 #define INCLUDED_GSM_BURSTS_PRINTER_IMPL_H
 
-#include <gsm/misc_utils/bursts_printer.h>
+#include <grgsm/misc_utils/bursts_printer.h>
 #include <set>
 
 namespace gr {
