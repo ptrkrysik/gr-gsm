@@ -44,6 +44,7 @@ namespace gr {
         int8_t * burst = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
         size_t burst_len=pmt::blob_length(header_plus_burst)-sizeof(gsmtap_hdr);
         
+        std::cout << d_prepend_string;
         for(int ii=0; ii<burst_len; ii++)
         {
           std::cout << std::setprecision(1) << static_cast<int>(burst[ii]) << "";
@@ -52,20 +53,21 @@ namespace gr {
     }
      
     bursts_printer::sptr
-    bursts_printer::make()
+    bursts_printer::make(pmt::pmt_t prepend_string)
     {
       return gnuradio::get_initial_sptr
-        (new bursts_printer_impl());
+        (new bursts_printer_impl(prepend_string));
     }
 
     /*
      * The private constructor
      */
-    bursts_printer_impl::bursts_printer_impl()
+    bursts_printer_impl::bursts_printer_impl(pmt::pmt_t prepend_string)
       : gr::block("bursts_printer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
+        d_prepend_string = prepend_string;
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, _1));
     }

@@ -33,8 +33,9 @@ namespace gr {
     {
      private:
       void bursts_print(pmt::pmt_t burst);
+      pmt::pmt_t d_prepend_string;
      public:
-      bursts_printer_impl();
+      bursts_printer_impl(pmt::pmt_t prepend_string);
       ~bursts_printer_impl();
     };
 
