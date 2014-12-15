@@ -20,12 +20,14 @@
 ########################################################################
 # Install public header files
 ########################################################################
-add_subdirectory(misc_utils)
 add_subdirectory(decoding)
+add_subdirectory(decryption)
 add_subdirectory(demapping)
 add_subdirectory(receiver)
+add_subdirectory(misc_utils)
 
 install(FILES
+    plotting.hpp
     api.h
     gsmtap.h DESTINATION include/grgsm
 )

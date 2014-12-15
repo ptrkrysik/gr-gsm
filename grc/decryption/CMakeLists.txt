@@ -17,12 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-add_subdirectory(decoding)
-add_subdirectory(decryption)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-add_subdirectory(misc_utils)
-
 install(FILES
-    gsm_block_tree.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_decryption.xml DESTINATION share/gnuradio/grc/blocks
 )

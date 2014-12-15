@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011,2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -17,12 +17,4 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-add_subdirectory(decoding)
-add_subdirectory(decryption)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-add_subdirectory(misc_utils)
-
-install(FILES
-    gsm_block_tree.xml DESTINATION share/gnuradio/grc/blocks
-)
+add_subdirectory(grgsm)

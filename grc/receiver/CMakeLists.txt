@@ -17,9 +17,11 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-########################################################################
-# Install public header files
-########################################################################
 install(FILES
-    plotting.hpp DESTINATION include/plotting
+    gsm_input.xml
+    gsm_receiver.xml
+    gsm_fcch_burst_tagger.xml
+    gsm_sch_detector.xml
+    gsm_fcch_detector.xml
+    gsm_clock_offset_control.xml DESTINATION share/gnuradio/grc/blocks
 )

@@ -25,6 +25,10 @@
       <block>gsm_universal_ctrl_chans_demapper</block>
     </cat>
     <cat>
+      <name>Decryption</name>
+      <block>gsm_decryption</block>
+    </cat>
+    <cat>
       <name>Decoding</name>
       <block>gsm_control_channels_decoder</block>
     </cat>

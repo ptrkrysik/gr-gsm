@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<block>
+  <name>Decryption</name>
+  <key>gsm_decryption</key>
+  <import>import grgsm</import>
+  <make>grgsm.decryption($k_c)</make>
+
+  <param>
+    <name>Kc session key</name>
+    <key>k_c</key>
+    <type>int_vector</type>
+  </param>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+  </source>
+  
+</block>

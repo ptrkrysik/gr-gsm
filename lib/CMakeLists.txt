@@ -22,7 +22,7 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-include_directories(${Boost_INCLUDE_DIR} receiver burst_printer)
+include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND gsm_sources
     receiver/receiver_impl.cc
@@ -39,6 +39,7 @@ list(APPEND gsm_sources
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_const_source_f_impl.cc
     misc_utils/message_printer_impl.cc
+    decryption/decryption_impl.cc
 )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
