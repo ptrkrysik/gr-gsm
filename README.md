@@ -118,7 +118,9 @@ Thanks
 ======
 This work is built upon the efforts made by many people to gather knowledge of GSM. 
 
-The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid* written by Tvoid. 
+First very significant public effort of research into GSM security was The Hacker's Choice GSM SCANNER PROJECT.
+
+The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid*, a software receiver created by Tvoid as part of THC's project.
 
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
 

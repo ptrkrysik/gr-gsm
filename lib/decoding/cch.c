@@ -1,3 +1,8 @@
+/*
+   The Hacker's Choice - http://www.thc.org
+   Part of THC's GSM SCANNER PROJECT
+*/
+
 //#include "system.h"
 #include <stdio.h>
 #include <stdlib.h>

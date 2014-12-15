@@ -1,3 +1,8 @@
+/*
+   The Hacker's Choice - http://www.thc.org
+   Part of THC's GSM SCANNER PROJECT
+*/
+
 #ifndef __GSMSTACK_CCH_H__
 #define __GSMSTACK_CCH_H__ 1
 
