@@ -364,19 +364,26 @@ void run(byte AtoBkeystream[], byte BtoAkeystream[]) {
   }
 }
 
-void runA51(unsigned char AtoBkeystream[]) {
+void runA51(byte AtoBkeystream[], byte BtoAkeystream[]) {
   int i;
 
   /* Zero out the output buffers. */
-  for (i = 0; i < 114; i++)
+  for (i = 0; i < 114; i++){
     AtoBkeystream[i] = 0;
-
+  }
 
   /* Generate 114 bits of keystream for the
    * A->B direction.  Store it, MSB first. */
   for (i = 0; i < 114; i++) {
     clock(0, 0);
     AtoBkeystream[i] = getbit();
+  }
+  
+  /* Generate 114 bits of keystream for the
+   * B->A direction.  Store it, MSB first. */
+  for (i = 0; i < 114; i++) {
+    clock(0, 0);
+    BtoAkeystream[i] = getbit();
   }
 }
 

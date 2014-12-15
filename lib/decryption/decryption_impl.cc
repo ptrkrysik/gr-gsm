@@ -95,7 +95,7 @@ namespace gr {
             uint32_t t3 = frame_number % 51;
             uint32_t frame_number_mod = (t1 << 11) + (t3 << 5) + t2;
             keysetup(&d_k_c[0], frame_number_mod);
-            run(AtoBkeystream, BtoAkeystream);
+            runA51(AtoBkeystream, BtoAkeystream);
             
             if(uplink_burst){
                 //process uplink burst
@@ -108,6 +108,7 @@ namespace gr {
             for (int i = 0; i < 3; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
+            //encrypt first part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+3] = keystream[i] ^ burst_binary[i+3];
             }
@@ -115,6 +116,7 @@ namespace gr {
             for (int i = 60; i < 88; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
+            //encrypt second part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+88] = keystream[i+57] ^ burst_binary[i+88];
             }
