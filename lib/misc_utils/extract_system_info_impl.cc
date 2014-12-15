@@ -39,16 +39,12 @@ namespace gr {
     boost::mutex extract_mutex;
     void extract_system_info_impl::process_bursts(pmt::pmt_t msg)
     {
-        pmt::pmt_t burst = pmt::cdr(msg);
-        int8_t * burst_elements = (int8_t *)pmt::blob_data(burst);
-        size_t burst_len=pmt::blob_length(burst);
+        pmt::pmt_t burst_plus_header_blob = pmt::cdr(msg);
+        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(burst_plus_header_blob);
 
-        pmt::pmt_t header_blob = pmt::car(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
         chan_info info;
         info.id = header->arfcn;
         info.pwr_db = header->signal_dbm;
-        
         std::set<chan_info, compare_id>::iterator iter = d_c0_channels.find(info);
 
         boost::mutex::scoped_lock lock(extract_mutex);
@@ -63,8 +59,10 @@ namespace gr {
     }
     
     void extract_system_info_impl::process_sysinfo(pmt::pmt_t msg){
-        pmt::pmt_t msg_blob = pmt::cdr(msg);
-        uint8_t * msg_elements = (uint8_t *)pmt::blob_data(msg_blob);
+        pmt::pmt_t message_plus_header_blob = pmt::cdr(msg);
+        uint8_t * message_plus_header = (uint8_t *)pmt::blob_data(message_plus_header_blob);
+        gsmtap_hdr * header = (gsmtap_hdr *)message_plus_header;
+        uint8_t * msg_elements = (uint8_t *)(message_plus_header+sizeof(gsmtap_hdr));
 
         if(msg_elements[2]==0x1b){
             //wyciągnij arfcn
@@ -73,9 +71,9 @@ namespace gr {
             chan_info info;
             info.id = header->arfcn;
             info.pwr_db = header->signal_dbm;
-            info.cell_id = (msg_elements[3]<<8)+msg_elements[4];             //wyciągnij cell id
-            info.lac = (msg_elements[8]<<8)+msg_elements[9];             //wyciągnij lac
-            info.mnc = (msg_elements[7]>>4);    //wyciągnij id operatora
+            info.cell_id = (msg_elements[3]<<8)+msg_elements[4];         //take cell id
+            info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
+            info.mnc = (msg_elements[7]>>4);                             //take mnc
 
             std::set<chan_info, compare_id>::iterator iter = d_c0_channels.find(info);
             boost::mutex::scoped_lock lock(extract_mutex);
@@ -90,8 +88,8 @@ namespace gr {
             chan_info info;
             info.id = header->arfcn;
             info.pwr_db = header->signal_dbm;
-            info.lac = (msg_elements[6]<<8)+msg_elements[7];             //wyciągnij lac
-            info.mnc = (msg_elements[5]>>4);    //wyciągnij id operatora
+            info.lac = (msg_elements[6]<<8)+msg_elements[7];       //take lac
+            info.mnc = (msg_elements[5]>>4);                       //take mnc
 
             std::set<chan_info, compare_id>::iterator iter = d_c0_channels.find(info);
             boost::mutex::scoped_lock lock(extract_mutex);
@@ -186,9 +184,9 @@ namespace gr {
 
         for(iter = d_c0_channels.begin(); iter != d_c0_channels.end(); iter++){
             info.id = iter->id;
-            info.cell_id = iter->cell_id;             //wyciągnij cell id
-            info.lac = iter->lac;            //wyciągnij lac
-            info.mnc = iter->mnc;
+            info.cell_id = iter->cell_id;    
+            info.lac = iter->lac;            
+            info.mnc = iter->mnc;           
             info.pwr_db = -111;
             d_c0_channels.erase(iter);
             d_c0_channels.insert(info);
