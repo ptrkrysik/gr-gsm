@@ -119,7 +119,7 @@ Thanks
 ======
 This work is built upon the efforts made by many people to gather knowledge of GSM. 
 
-First very significant effort of public research into GSM and its security was The Hacker's Choice GSM SCANNER PROJECT. One of the results of this project was creation of *gsm-tvoid* a software GSM receiver created by *Tvoid*. It is the most important predecessor of *gr-gsm* (and of *gsm-receiver* from the *Airprobe* project).
+First very significant effort of public research into GSM and its security vulnerabilities was The Hacker's Choice GSM SCANNER PROJECT. One of the results of this project was creation of a software GSM receiver by *Tvoid* - *gsm-tvoid* - which was  was the most important predecessor of *gr-gsm* and of *gsm-receiver* from the *Airprobe* project.
 
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
 
