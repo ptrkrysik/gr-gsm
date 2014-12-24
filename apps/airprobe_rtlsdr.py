@@ -303,7 +303,7 @@ if __name__ == '__main__':
             print "Warning: failed to XInitThreads()"
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--ppm-param", type=int, default=0,
-        help="Set ppm [default=%default]")
+        help="Set ppm [default=0")
     parser.add_argument("-s", "--sample-rate", type=float, default=1800000,
         help="set receiver sample rate (default 1800000)")
     parser.add_argument("-f", "--frequency", type=float, default=924.2e6,
