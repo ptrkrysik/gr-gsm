@@ -16,7 +16,7 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 import argparse
 import PyQt4.Qwt5 as Qwt
-import gsm
+import grgsm
 import osmosdr
 import sip
 import sys
@@ -172,17 +172,17 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.gsm_universal_ctrl_chans_demapper_0 = gsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
-        self.gsm_receiver_0 = gsm.receiver(4, ([0]), ([]))
-        self.gsm_message_printer_1 = gsm.message_printer()
-        self.gsm_input_0 = gsm.gsm_input(
+        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
+        self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
+        self.gsm_message_printer_1 = grgsm.message_printer()
+        self.gsm_input_0 = grgsm.gsm_input(
             ppm=0,
             osr=4,
             fc=fc,
             samp_rate_in=samp_rate,
         )
-        self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc)
+        self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
         self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
 
         ##################################################
