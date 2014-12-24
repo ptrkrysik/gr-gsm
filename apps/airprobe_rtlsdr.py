@@ -1,8 +1,9 @@
+#!/usr/bin/python2
 #!/usr/bin/env python
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Sat Dec 13 09:54:44 2014
+# Generated: Fri Dec  5 10:38:30 2014
 ##################################################
 
 from PyQt4 import Qt
@@ -13,13 +14,12 @@ from gnuradio import gr
 from gnuradio import qtgui
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
-from optparse import OptionParser
+import argparse
 import PyQt4.Qwt5 as Qwt
 import grgsm
 import osmosdr
 import sip
 import sys
-import time
 
 from distutils.version import StrictVersion
 class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
@@ -51,15 +51,15 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         ##################################################
         # Parameters
         ##################################################
-        self.ppm_param = ppm_param
+        self.ppm_param = args.ppm_param
 
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 2000000.052982
+        self.samp_rate = samp_rate = args.sample_rate
         self.ppm = ppm = ppm_param
-        self.g = g = 43
-        self.fc = fc = 939.4e6
+        self.g = g = args.gain
+        self.fc = fc = args.frequency
         self.SDCCH = SDCCH = 6
         self.RACH = RACH = 3
         self.PCH = PCH = 5
@@ -149,6 +149,27 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.qtgui_freq_sink_x_0.set_update_time(0.10)
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(False)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+        
+        labels = ["", "", "", "", "",
+                  "", "", "", "", ""]
+        widths = [1, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+        for i in xrange(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+        
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
@@ -162,7 +183,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
 
         ##################################################
         # Connections
@@ -280,14 +301,20 @@ if __name__ == '__main__':
             x11.XInitThreads()
         except:
             print "Warning: failed to XInitThreads()"
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    parser.add_option("-p", "--ppm-param", dest="ppm_param", type="intx", default=0,
-        help="Set ppm [default=%default]")
-    (options, args) = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--ppm-param", type=int, default=0,
+        help="Set ppm [default=0")
+    parser.add_argument("-s", "--sample-rate", type=float, default=1800000,
+        help="set receiver sample rate (default 1800000)")
+    parser.add_argument("-f", "--frequency", type=float, default=924.2e6,
+        help="set receiver center frequency")
+    parser.add_argument("-g", "--gain", type=float, default=2e6,
+        help="set receiver gain")
+    args = parser.parse_args()
     if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
         Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
-    tb = airprobe_rtlsdr(ppm_param=options.ppm_param)
+    tb = airprobe_rtlsdr(ppm_param=args.ppm_param)
     tb.start()
     tb.show()
     def quitting():
