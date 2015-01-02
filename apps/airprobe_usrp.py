@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Usrp
-# Generated: Sat Jan  3 00:02:32 2015
+# Generated: Sat Jan  3 00:30:50 2015
 ##################################################
 
 from PyQt4 import Qt
@@ -25,7 +25,7 @@ import time
 from distutils.version import StrictVersion
 class airprobe_usrp(gr.top_block, Qt.QWidget):
 
-    def __init__(self):
+    def __init__(self, samp_rate=2000000.052982, gain=30, fc=939.4e6):
         gr.top_block.__init__(self, "Airprobe Usrp")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Airprobe Usrp")
@@ -50,11 +50,17 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
 
 
         ##################################################
+        # Parameters
+        ##################################################
+        self.samp_rate = samp_rate
+        self.gain = gain
+        self.fc = fc
+
+        ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 100e6/100
-        self.g = g = 30
-        self.fc = fc = 1869e6
+        self.g_slider = g_slider = gain
+        self.fc_slider = fc_slider = fc
         self.SDCCH = SDCCH = 6
         self.RACH = RACH = 3
         self.PCH = PCH = 5
@@ -66,45 +72,45 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._g_layout = Qt.QHBoxLayout()
-        self._g_layout.addWidget(Qt.QLabel("Gain"+": "))
+        self._g_slider_layout = Qt.QHBoxLayout()
+        self._g_slider_layout.addWidget(Qt.QLabel("Gain"+": "))
         class qwt_counter_pyslot(Qwt.QwtCounter):
             def __init__(self, parent=None):
                 Qwt.QwtCounter.__init__(self, parent)
             @pyqtSlot('double')
             def setValue(self, value):
                 super(Qwt.QwtCounter, self).setValue(value)
-        self._g_counter = qwt_counter_pyslot()
-        self._g_counter.setRange(0, 50, 0.5)
-        self._g_counter.setNumButtons(2)
-        self._g_counter.setMinimumWidth(100)
-        self._g_counter.setValue(self.g)
-        self._g_layout.addWidget(self._g_counter)
-        self._g_counter.valueChanged.connect(self.set_g)
-        self.top_layout.addLayout(self._g_layout)
-        self._fc_layout = Qt.QVBoxLayout()
-        self._fc_tool_bar = Qt.QToolBar(self)
-        self._fc_layout.addWidget(self._fc_tool_bar)
-        self._fc_tool_bar.addWidget(Qt.QLabel("Frequency"+": "))
+        self._g_slider_counter = qwt_counter_pyslot()
+        self._g_slider_counter.setRange(0, 50, 0.5)
+        self._g_slider_counter.setNumButtons(2)
+        self._g_slider_counter.setMinimumWidth(100)
+        self._g_slider_counter.setValue(self.g_slider)
+        self._g_slider_layout.addWidget(self._g_slider_counter)
+        self._g_slider_counter.valueChanged.connect(self.set_g_slider)
+        self.top_layout.addLayout(self._g_slider_layout)
+        self._fc_slider_layout = Qt.QVBoxLayout()
+        self._fc_slider_tool_bar = Qt.QToolBar(self)
+        self._fc_slider_layout.addWidget(self._fc_slider_tool_bar)
+        self._fc_slider_tool_bar.addWidget(Qt.QLabel("Frequency"+": "))
         class qwt_counter_pyslot(Qwt.QwtCounter):
             def __init__(self, parent=None):
                 Qwt.QwtCounter.__init__(self, parent)
             @pyqtSlot('double')
             def setValue(self, value):
                 super(Qwt.QwtCounter, self).setValue(value)
-        self._fc_counter = qwt_counter_pyslot()
-        self._fc_counter.setRange(1800e6, 1900e6, 2e5)
-        self._fc_counter.setNumButtons(2)
-        self._fc_counter.setValue(self.fc)
-        self._fc_tool_bar.addWidget(self._fc_counter)
-        self._fc_counter.valueChanged.connect(self.set_fc)
-        self._fc_slider = Qwt.QwtSlider(None, Qt.Qt.Horizontal, Qwt.QwtSlider.BottomScale, Qwt.QwtSlider.BgSlot)
-        self._fc_slider.setRange(1800e6, 1900e6, 2e5)
-        self._fc_slider.setValue(self.fc)
-        self._fc_slider.setMinimumWidth(100)
-        self._fc_slider.valueChanged.connect(self.set_fc)
-        self._fc_layout.addWidget(self._fc_slider)
-        self.top_layout.addLayout(self._fc_layout)
+        self._fc_slider_counter = qwt_counter_pyslot()
+        self._fc_slider_counter.setRange(925e6, 960e6, 2e5)
+        self._fc_slider_counter.setNumButtons(2)
+        self._fc_slider_counter.setValue(self.fc_slider)
+        self._fc_slider_tool_bar.addWidget(self._fc_slider_counter)
+        self._fc_slider_counter.valueChanged.connect(self.set_fc_slider)
+        self._fc_slider_slider = Qwt.QwtSlider(None, Qt.Qt.Horizontal, Qwt.QwtSlider.BottomScale, Qwt.QwtSlider.BgSlot)
+        self._fc_slider_slider.setRange(925e6, 960e6, 2e5)
+        self._fc_slider_slider.setValue(self.fc_slider)
+        self._fc_slider_slider.setMinimumWidth(100)
+        self._fc_slider_slider.valueChanged.connect(self.set_fc_slider)
+        self._fc_slider_layout.addWidget(self._fc_slider_slider)
+        self.top_layout.addLayout(self._fc_slider_layout)
         self.uhd_usrp_source_0 = uhd.usrp_source(
         	",".join(("addr=192.168.10.2", "")),
         	uhd.stream_args(
@@ -114,8 +120,8 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         )
         self.uhd_usrp_source_0.set_clock_source("internal", 0)
         self.uhd_usrp_source_0.set_samp_rate(samp_rate)
-        self.uhd_usrp_source_0.set_center_freq(fc, 0)
-        self.uhd_usrp_source_0.set_gain(g, 0)
+        self.uhd_usrp_source_0.set_center_freq(fc_slider, 0)
+        self.uhd_usrp_source_0.set_gain(g_slider, 0)
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
         	1024, #size
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
@@ -164,7 +170,6 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
-        self.blocks_message_debug_0 = blocks.message_debug()
 
         ##################################################
         # Connections
@@ -180,7 +185,6 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
         self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
         self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
-        self.msg_connect(self.gsm_receiver_0, "measurements", self.blocks_message_debug_0, "print")
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "airprobe_usrp")
@@ -196,13 +200,12 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
-    def get_g(self):
-        return self.g
+    def get_gain(self):
+        return self.gain
 
-    def set_g(self, g):
-        self.g = g
-        Qt.QMetaObject.invokeMethod(self._g_counter, "setValue", Qt.Q_ARG("double", self.g))
-        self.uhd_usrp_source_0.set_gain(self.g, 0)
+    def set_gain(self, gain):
+        self.gain = gain
+        self.set_g_slider(self.gain)
 
     def get_fc(self):
         return self.fc
@@ -211,9 +214,24 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.fc = fc
         self.gsm_input_0.set_fc(self.fc)
         self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
-        self.uhd_usrp_source_0.set_center_freq(self.fc, 0)
-        Qt.QMetaObject.invokeMethod(self._fc_counter, "setValue", Qt.Q_ARG("double", self.fc))
-        Qt.QMetaObject.invokeMethod(self._fc_slider, "setValue", Qt.Q_ARG("double", self.fc))
+        self.set_fc_slider(self.fc)
+
+    def get_g_slider(self):
+        return self.g_slider
+
+    def set_g_slider(self, g_slider):
+        self.g_slider = g_slider
+        Qt.QMetaObject.invokeMethod(self._g_slider_counter, "setValue", Qt.Q_ARG("double", self.g_slider))
+        self.uhd_usrp_source_0.set_gain(self.g_slider, 0)
+
+    def get_fc_slider(self):
+        return self.fc_slider
+
+    def set_fc_slider(self, fc_slider):
+        self.fc_slider = fc_slider
+        Qt.QMetaObject.invokeMethod(self._fc_slider_counter, "setValue", Qt.Q_ARG("double", self.fc_slider))
+        Qt.QMetaObject.invokeMethod(self._fc_slider_slider, "setValue", Qt.Q_ARG("double", self.fc_slider))
+        self.uhd_usrp_source_0.set_center_freq(self.fc_slider, 0)
 
     def get_SDCCH(self):
         return self.SDCCH
@@ -267,11 +285,17 @@ if __name__ == '__main__':
         except:
             print "Warning: failed to XInitThreads()"
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
+    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
+        help="Set samp_rate [default=%default]")
+    parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=eng_notation.num_to_str(30),
+        help="Set gain [default=%default]")
+    parser.add_option("-f", "--fc", dest="fc", type="eng_float", default=eng_notation.num_to_str(939.4e6),
+        help="Set fc [default=%default]")
     (options, args) = parser.parse_args()
     if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
         Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
-    tb = airprobe_usrp()
+    tb = airprobe_usrp(samp_rate=options.samp_rate, gain=options.gain, fc=options.fc)
     tb.start()
     tb.show()
     def quitting():
