@@ -50,7 +50,7 @@ namespace gr {
        * class. gsm::bursts_printer::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(pmt::pmt_t prepend_string);
     };
 
   } // namespace gsm

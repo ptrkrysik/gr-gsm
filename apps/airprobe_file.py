@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe File
-# Generated: Sat Dec 13 09:44:41 2014
+# Generated: Sat Jan  3 00:02:07 2015
 ##################################################
 
 from gnuradio import blocks
@@ -12,6 +12,7 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
 import grgsm
+import pmt
 
 class airprobe_file(gr.top_block):
 
@@ -41,33 +42,33 @@ class airprobe_file(gr.top_block):
         ##################################################
         self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
         self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
-        self.gsm_message_printer_0 = grgsm.message_printer()
+        self.gsm_message_printer_0 = grgsm.message_printer(pmt.intern(""))
         self.gsm_input_0 = grgsm.gsm_input(
             ppm=0,
             osr=4,
             fc=fc,
             samp_rate_in=samp_rate,
         )
-        self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, input_file_name, False)
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))
         self.connect((self.blocks_file_source_0, 0), (self.gsm_input_0, 0))
+        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))
 
         ##################################################
-        # Asynch Message Connections
+        # Message Connections
         ##################################################
-        self.msg_connect(self.gsm_receiver_0, "measurements", self.gsm_clock_offset_control_0, "measurements")
-        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.gsm_message_printer_0, "msgs")
-        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
-        self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
-        self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
         self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
+        self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
+        self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
+        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
+        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.gsm_message_printer_0, "msgs")
+        self.msg_connect(self.gsm_receiver_0, "measurements", self.gsm_clock_offset_control_0, "measurements")
 
 
     def get_input_file_name(self):
