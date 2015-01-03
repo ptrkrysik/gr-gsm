@@ -16,7 +16,7 @@ sudo apt-get install git
 ```
 Then download *pybombs* sources using git:
 ```sh
-git clone https://github.com/ptrkrysik/pybombs.git
+git clone https://github.com/pybombs/pybombs.git
 ```
 
 Go into *pybombs* directory and configure it:
@@ -105,6 +105,7 @@ https://ask.wireshark.org/questions/7976/wireshark-setup-linux-for-nonroot-user
 Videos
 ======
 Short presentation of *Airprobe*'like application of *gr-gsm*:
+
 https://www.youtube.com/watch?v=Eofnb7zr8QE
 
 Credits
@@ -118,9 +119,7 @@ Thanks
 ======
 This work is built upon the efforts made by many people to gather knowledge of GSM. 
 
-First very significant public effort of research into GSM security was The Hacker's Choice GSM SCANNER PROJECT.
-
-The most important ancestor of *gr-gsm* (and *gsm-receiver* of *Airprobe* project) was *gsm-tvoid*, a software receiver created by Tvoid as part of THC's project.
+First very significant effort of public research into GSM and its security vulnerabilities was The Hacker's Choice GSM SCANNER PROJECT. One of the results of this project was creation of a software GSM receiver by *Tvoid* - *gsm-tvoid* - which was  was the most important predecessor of *gr-gsm* and of *gsm-receiver* from the *Airprobe* project.
 
 *Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
 
