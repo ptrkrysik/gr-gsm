@@ -50,12 +50,6 @@ namespace gr
 {
 namespace gsm
 {
-
-typedef std::list<float> list_float;
-typedef std::vector<float> vector_float;
-
-typedef boost::circular_buffer<float> circular_buffer_float;
-
 receiver::sptr
 receiver::make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums)
 {
@@ -159,7 +153,7 @@ receiver_impl::work(int noutput_items,
 
     case sch_search:
     {
-        vector_complex channel_imp_resp(CHAN_IMP_RESP_LENGTH*d_OSR);
+        std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH*d_OSR);
         int t1, t2, t3;
         int burst_start = 0;
         unsigned char output_binary[BURST_SIZE];
@@ -190,7 +184,7 @@ receiver_impl::work(int noutput_items,
     //in this state receiver is synchronized and it processes bursts according to burst type for given burst number
     case synchronized:
     {
-        vector_complex channel_imp_resp(CHAN_IMP_RESP_LENGTH*d_OSR);
+        std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH*d_OSR);
         int offset = 0;
         int to_consume = 0;
         unsigned char output_binary[BURST_SIZE];
@@ -361,7 +355,7 @@ receiver_impl::work(int noutput_items,
 
 bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems, double & computed_freq_offset)
 {
-    circular_buffer_float phase_diff_buffer(FCCH_HITS_NEEDED * d_OSR); //circular buffer used to scan throug signal to find
+    boost::circular_buffer<float> phase_diff_buffer(FCCH_HITS_NEEDED * d_OSR); //circular buffer used to scan throug signal to find
     //best match for FCCH burst
     float phase_diff = 0;
     gr_complex conjprod;
@@ -377,7 +371,7 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems, d
     int sample_number = 0;
     bool end = false;
     bool result = false;
-    circular_buffer_float::iterator buffer_iter;
+    boost::circular_buffer<float>::iterator buffer_iter;
     
     /**@name Possible states of FCCH search algorithm*/
     //@{
@@ -579,9 +573,9 @@ bool receiver_impl::reach_sch_burst(const int nitems)
 
 int receiver_impl::get_sch_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp)
 {
-    vector_complex correlation_buffer;
-    vector_float power_buffer;
-    vector_float window_energy_buffer;
+    std::vector<gr_complex> correlation_buffer;
+    std::vector<float> power_buffer;
+    std::vector<float> window_energy_buffer;
 
     int strongest_window_nr;
     int burst_start = 0;
@@ -596,11 +590,11 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex *input, gr_complex * c
         power_buffer.push_back(std::pow(abs(correlation), 2));
     }
     //compute window energies
-    vector_float::iterator iter = power_buffer.begin();
+    std::vector<float>::iterator iter = power_buffer.begin();
     bool loop_end = false;
     while (iter != power_buffer.end())
     {
-        vector_float::iterator iter_ii = iter;
+        std::vector<float>::iterator iter_ii = iter;
         energy = 0;
 
         for (int ii = 0; ii < (d_chan_imp_length) *d_OSR; ii++, iter_ii++)
@@ -740,9 +734,9 @@ inline void receiver_impl::mafi(const gr_complex * input, int nitems, gr_complex
 //especially computations of strongest_window_nr
 int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * chan_imp_resp, float *corr_max, int bcc)
 {
-    vector_complex correlation_buffer;
-    vector_float power_buffer;
-    vector_float window_energy_buffer;
+    std::vector<gr_complex> correlation_buffer;
+    std::vector<float> power_buffer;
+    std::vector<float> window_energy_buffer;
 
     int strongest_window_nr;
     int burst_start = 0;
@@ -763,11 +757,11 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
     }
 //    plot(power_buffer);
     //compute window energies
-    vector_float::iterator iter = power_buffer.begin();
+    std::vector<float>::iterator iter = power_buffer.begin();
     bool loop_end = false;
     while (iter != power_buffer.end())
     {
-        vector_float::iterator iter_ii = iter;
+        std::vector<float>::iterator iter_ii = iter;
         energy = 0;
 
         for (int ii = 0; ii < (d_chan_imp_length - 2)*d_OSR; ii++, iter_ii++)

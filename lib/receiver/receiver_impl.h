@@ -30,9 +30,6 @@
 
 namespace gr {
   namespace gsm {
-
-    typedef std::vector<gr_complex> vector_complex;
-
     class receiver_impl : public receiver
     {
      private:
