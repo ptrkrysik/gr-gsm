@@ -3,7 +3,17 @@
   <name>Bursts printer</name>
   <key>gsm_bursts_printer</key>
   <import>import grgsm</import>
-  <make>grgsm.bursts_printer()</make>
+  <import>import pmt</import>
+  <make>grgsm.bursts_printer(pmt.intern($prepend_string))</make>
+
+  <param>
+    <name>Prepend String</name>
+    <key>prepend_string</key>
+    <value></value>
+    <type>string</type>
+    <hide>part</hide>
+  </param>
+
   <sink>
     <name>bursts</name>
     <type>message</type>

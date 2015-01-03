@@ -32,8 +32,9 @@ namespace gr {
     {
      private:
       void message_print(pmt::pmt_t msg);
+      pmt::pmt_t d_prepend_string;
      public:
-      message_printer_impl();
+      message_printer_impl(pmt::pmt_t prepend_string);
       ~message_printer_impl();
     };
 
