@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Sat Jan  3 00:30:45 2015
+# Generated: Wed Jan  7 15:39:23 2015
 ##################################################
 
 from PyQt4 import Qt
@@ -152,31 +152,6 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.qtgui_freq_sink_x_0.set_update_time(0.10)
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
-        
-        if complex == type(float()):
-          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
-        
-        labels = ["", "", "", "", "",
-                  "", "", "", "", ""]
-        widths = [1, 1, 1, 1, 1,
-                  1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-                  1.0, 1.0, 1.0, 1.0, 1.0]
-        for i in xrange(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
-        
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
@@ -190,7 +165,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
 
         ##################################################
         # Connections
@@ -251,25 +226,25 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
 
     def set_ppm_slider(self, ppm_slider):
         self.ppm_slider = ppm_slider
-        self.rtlsdr_source_0.set_freq_corr(self.ppm_slider, 0)
         Qt.QMetaObject.invokeMethod(self._ppm_slider_counter, "setValue", Qt.Q_ARG("double", self.ppm_slider))
+        self.rtlsdr_source_0.set_freq_corr(self.ppm_slider, 0)
 
     def get_g_slider(self):
         return self.g_slider
 
     def set_g_slider(self, g_slider):
         self.g_slider = g_slider
-        self.rtlsdr_source_0.set_gain(self.g_slider, 0)
         Qt.QMetaObject.invokeMethod(self._g_slider_counter, "setValue", Qt.Q_ARG("double", self.g_slider))
+        self.rtlsdr_source_0.set_gain(self.g_slider, 0)
 
     def get_fc_slider(self):
         return self.fc_slider
 
     def set_fc_slider(self, fc_slider):
         self.fc_slider = fc_slider
-        self.rtlsdr_source_0.set_center_freq(self.fc_slider, 0)
         Qt.QMetaObject.invokeMethod(self._fc_slider_counter, "setValue", Qt.Q_ARG("double", self.fc_slider))
         Qt.QMetaObject.invokeMethod(self._fc_slider_slider, "setValue", Qt.Q_ARG("double", self.fc_slider))
+        self.rtlsdr_source_0.set_center_freq(self.fc_slider, 0)
 
     def get_SDCCH(self):
         return self.SDCCH
@@ -332,8 +307,7 @@ if __name__ == '__main__':
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
         help="Set samp_rate [default=%default]")
     (options, args) = parser.parse_args()
-    if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
-        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
+    Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
     tb = airprobe_rtlsdr(ppm=options.ppm, fc=options.fc, gain=options.gain, samp_rate=options.samp_rate)
     tb.start()
