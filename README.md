@@ -110,7 +110,7 @@ https://www.youtube.com/watch?v=Eofnb7zr8QE
 
 Credits
 =======
-*Piotr Krysik* \<pkrysik (at) gmail.com\> - main author and project maintainer
+*Piotr Krysik* \<ptrkrysik (at) gmail.com\> - main author and project maintainer
 
 *Steve* \<steve (at) segfault.net\>  - functions for decoding channel codes
 
