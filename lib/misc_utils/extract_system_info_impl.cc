@@ -65,11 +65,8 @@ namespace gr {
         uint8_t * msg_elements = (uint8_t *)(message_plus_header+sizeof(gsmtap_hdr));
 
         if(msg_elements[2]==0x1b){
-            //wyciągnij arfcn
-            pmt::pmt_t header_blob = pmt::car(msg);
-            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
             chan_info info;
-            info.id = header->arfcn;
+            info.id = header->arfcn;             //take arfcn
             info.pwr_db = header->signal_dbm;
             info.cell_id = (msg_elements[3]<<8)+msg_elements[4];         //take cell id
             info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
@@ -83,10 +80,8 @@ namespace gr {
             d_c0_channels.insert(info);
         }
         else if(msg_elements[2]==0x1c){
-            pmt::pmt_t header_blob = pmt::car(msg);
-            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_blob);
             chan_info info;
-            info.id = header->arfcn;
+            info.id = header->arfcn;             //take arfcn
             info.pwr_db = header->signal_dbm;
             info.lac = (msg_elements[6]<<8)+msg_elements[7];       //take lac
             info.mnc = (msg_elements[5]>>4);                       //take mnc
