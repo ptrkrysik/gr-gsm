@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_TMSI_DUMPER_IMPL_H
 #define INCLUDED_GSM_TMSI_DUMPER_IMPL_H
 
-#include <gsm/tmsi_dumper.h>
+#include <grgsm/misc_utils/tmsi_dumper.h>
 
 namespace gr {
   namespace gsm {
@@ -31,11 +31,12 @@ namespace gr {
     class tmsi_dumper_impl : public tmsi_dumper
     {
      private:
-      // Nothing to declare in this block.
+      void dump_tmsi(pmt::pmt_t msg);
 
      public:
       tmsi_dumper_impl();
       ~tmsi_dumper_impl();
+    };
   } // namespace gsm
 } // namespace gr
 

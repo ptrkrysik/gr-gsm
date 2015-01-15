@@ -26,10 +26,27 @@
 
 #include <gnuradio/io_signature.h>
 #include "tmsi_dumper_impl.h"
+#include "grgsm/gsmtap.h"
+#include <stdio.h>
 
 namespace gr {
   namespace gsm {
-
+   
+    void tmsi_dumper_impl::dump_tmsi(pmt::pmt_t msg)
+    {
+        pmt::pmt_t message_plus_header_blob = pmt::cdr(msg);
+        uint8_t * message_plus_header = (uint8_t *)pmt::blob_data(message_plus_header_blob);
+        size_t message_plus_header_len=pmt::blob_length(message_plus_header_blob);
+        
+        gsmtap_hdr * header = (gsmtap_hdr *)message_plus_header;
+        
+        for(int ii=sizeof(gsmtap_hdr); ii<message_plus_header_len; ii++)
+        {
+            printf(" %02x", message_plus_header[ii]);
+        }
+        std::cout << std::endl;
+    }
+    
     tmsi_dumper::sptr
     tmsi_dumper::make()
     {
@@ -44,7 +61,10 @@ namespace gr {
       : gr::block("tmsi_dumper",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
-    {}
+    {
+        message_port_register_in(pmt::mp("msgs"));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&tmsi_dumper_impl::dump_tmsi, this, _1));
+    }
 
     /*
      * Our virtual destructor.
@@ -52,7 +72,6 @@ namespace gr {
     tmsi_dumper_impl::~tmsi_dumper_impl()
     {
     }
-
   } /* namespace gsm */
 } /* namespace gr */
 
