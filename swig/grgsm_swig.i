@@ -18,6 +18,7 @@
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
 #include "grgsm/misc_utils/extract_system_info.h"
 #include "grgsm/misc_utils/message_printer.h"
+#include "grgsm/misc_utils/tmsi_dumper.h"
 %}
 
 
@@ -45,3 +46,6 @@ GR_SWIG_BLOCK_MAGIC2(gsm, controlled_rotator_cc);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
 %include "grgsm/misc_utils/message_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
+%include "grgsm/misc_utils/tmsi_dumper.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, tmsi_dumper);
+
