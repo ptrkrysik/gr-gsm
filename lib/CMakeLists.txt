@@ -40,6 +40,7 @@ list(APPEND gsm_sources
     misc_utils/controlled_const_source_f_impl.cc
     misc_utils/message_printer_impl.cc
     decryption/decryption_impl.cc
+    tmsi_dumper_impl.cc
 )
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
