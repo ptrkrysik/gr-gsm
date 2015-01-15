@@ -24,7 +24,7 @@
 #ifndef INCLUDED_GSM_TMSI_DUMPER_H
 #define INCLUDED_GSM_TMSI_DUMPER_H
 
-#include <gsm/api.h>
+#include <grgsm/api.h>
 #include <gnuradio/block.h>
 
 namespace gr {
