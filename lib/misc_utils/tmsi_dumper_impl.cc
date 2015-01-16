@@ -97,9 +97,34 @@ namespace gr {
 	}
 	  break;
 	case 65:
-	  //printf("INSIDE 65\n");
-	  // tmsiFile = fopen("tmsicount.txt", "a");
-	  //fclose(tmsiFile);
+	  //printf("INSIDE 65\n"); (41 hex) (65 int) 6-8 13-16
+	   if(message_plus_header[ii+2] == 33)//21 hex
+	   {
+	      tmsiFile = fopen("tmsicount.txt", "a+");
+	      fprintf(tmsiFile,"%02.2x%02.2x%02.2x%02.2x-%02d%02d%02d%02d%02d%02d-%i\n%02.2x%02.2x%02.2x%02.2x-%02d%02d%02d%02d%02d%02d-%i\n",
+		  (unsigned char)message_plus_header[ii+6],
+		  (unsigned char)message_plus_header[ii+7],
+		  (unsigned char)message_plus_header[ii+8],
+		  (unsigned char)message_plus_header[ii+9],
+		   	   1900 + ltm->tm_year-2000,
+		   	   1+ltm->tm_mon,
+		   	   ltm->tm_mday,
+		   	   ltm->tm_hour,
+		   	   ltm->tm_min,
+		   	   ltm->tm_sec,0,
+
+		  (unsigned char)message_plus_header[ii+13],
+		  (unsigned char)message_plus_header[ii+14],
+		  (unsigned char)message_plus_header[ii+15],
+		  (unsigned char)message_plus_header[ii+16],
+		   	   1900 + ltm->tm_year-2000,
+		   	   1+ltm->tm_mon,
+		   	   ltm->tm_mday,
+		   	   ltm->tm_hour,
+		   	   ltm->tm_min,
+		   	   ltm->tm_sec,0);
+		  fclose(tmsiFile);
+	   }
 	  break;
 	case 73:
 	  //printf("INSIDE 73\n");
