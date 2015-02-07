@@ -32,7 +32,6 @@ list(APPEND gsm_sources
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
-    demapping/get_bcch_or_ccch_bursts_impl.cc
     decoding/control_channels_decoder_impl.cc
     decoding/cch.c
     decoding/fire_crc.c

@@ -18,6 +18,5 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_get_bcch_or_ccch_bursts.xml
     gsm_universal_ctrl_chans_demapper.xml DESTINATION share/gnuradio/grc/blocks
 )

@@ -21,6 +21,5 @@
 # Install public header files
 ########################################################################
 install(FILES
-    universal_ctrl_chans_demapper.h
-    get_bcch_or_ccch_bursts.h DESTINATION include/grgsm/demapping
+    universal_ctrl_chans_demapper.h DESTINATION include/grgsm/demapping
 )
