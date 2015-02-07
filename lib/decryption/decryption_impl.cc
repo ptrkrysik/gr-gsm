@@ -27,6 +27,8 @@
 #include <grgsm/gsmtap.h>
 #include "decryption_impl.h"
 #include "a5_1_2.h"
+#include "stdio.h"//!!
+#include <algorithm>//!!
 
 const uint32_t BURST_SIZE=148;
 
@@ -80,16 +82,16 @@ namespace gr {
         } else
         {
             uint8_t decrypted_data[BURST_SIZE];
-            uint8_t AtoBkeystream[15];
-            uint8_t BtoAkeystream[15];
+            uint8_t AtoBkeystream[114];
+            uint8_t BtoAkeystream[114];
             uint8_t * keystream;
             
             pmt::pmt_t header_plus_burst = pmt::cdr(msg);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
             uint8_t * burst_binary = (uint8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
             
-            uint32_t frame_number = be32toh(header->frame_number) & 0x3fff;
-            bool uplink_burst = (be32toh(header->frame_number) & 0x4000) ? true : false;
+            uint32_t frame_number = be32toh(header->frame_number);
+            bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
             uint32_t t1 = frame_number / (26*51);
             uint32_t t2 = frame_number % 26;
             uint32_t t3 = frame_number % 51;
