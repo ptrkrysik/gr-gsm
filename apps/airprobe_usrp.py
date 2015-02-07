@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Usrp
-# Generated: Sat Jan  3 00:30:50 2015
+# Generated: Sat Feb  7 19:31:03 2015
 ##################################################
 
 from PyQt4 import Qt
@@ -25,7 +25,7 @@ import time
 from distutils.version import StrictVersion
 class airprobe_usrp(gr.top_block, Qt.QWidget):
 
-    def __init__(self, samp_rate=2000000.052982, gain=30, fc=939.4e6):
+    def __init__(self, gain=30, fc=939.4e6, samp_rate=2000000.052982):
         gr.top_block.__init__(self, "Airprobe Usrp")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Airprobe Usrp")
@@ -52,9 +52,9 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         ##################################################
         # Parameters
         ##################################################
-        self.samp_rate = samp_rate
         self.gain = gain
         self.fc = fc
+        self.samp_rate = samp_rate
 
         ##################################################
         # Variables
@@ -159,7 +159,7 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
+        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(0, ([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
         self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
         self.gsm_message_printer_0 = grgsm.message_printer(pmt.intern(""))
         self.gsm_input_0 = grgsm.gsm_input(
@@ -174,31 +174,18 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
-        self.connect((self.uhd_usrp_source_0, 0), (self.gsm_input_0, 0))
-        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))
-
-        ##################################################
-        # Message Connections
-        ##################################################
-        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.gsm_message_printer_0, "msgs")
-        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
-        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
-        self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
+        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.blocks_socket_pdu_0, 'pdus')    
+        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.gsm_message_printer_0, 'msgs')    
+        self.msg_connect(self.gsm_receiver_0, 'C0', self.gsm_universal_ctrl_chans_demapper_0, 'bursts')    
+        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, 'bursts', self.gsm_control_channels_decoder_0, 'bursts')    
+        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))    
+        self.connect((self.uhd_usrp_source_0, 0), (self.gsm_input_0, 0))    
+        self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))    
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "airprobe_usrp")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
-
-    def get_samp_rate(self):
-        return self.samp_rate
-
-    def set_samp_rate(self, samp_rate):
-        self.samp_rate = samp_rate
-        self.gsm_input_0.set_samp_rate_in(self.samp_rate)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
-        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_gain(self):
         return self.gain
@@ -215,6 +202,15 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.gsm_input_0.set_fc(self.fc)
         self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.set_fc_slider(self.fc)
+
+    def get_samp_rate(self):
+        return self.samp_rate
+
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
+        self.gsm_input_0.set_samp_rate_in(self.samp_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
+        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_g_slider(self):
         return self.g_slider
@@ -285,17 +281,17 @@ if __name__ == '__main__':
         except:
             print "Warning: failed to XInitThreads()"
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
-        help="Set samp_rate [default=%default]")
     parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=eng_notation.num_to_str(30),
         help="Set gain [default=%default]")
     parser.add_option("-f", "--fc", dest="fc", type="eng_float", default=eng_notation.num_to_str(939.4e6),
         help="Set fc [default=%default]")
+    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
+        help="Set samp_rate [default=%default]")
     (options, args) = parser.parse_args()
     if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
         Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
-    tb = airprobe_usrp(samp_rate=options.samp_rate, gain=options.gain, fc=options.fc)
+    tb = airprobe_usrp(gain=options.gain, fc=options.fc, samp_rate=options.samp_rate)
     tb.start()
     tb.show()
     def quitting():

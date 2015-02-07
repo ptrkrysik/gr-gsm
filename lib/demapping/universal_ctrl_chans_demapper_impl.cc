@@ -33,22 +33,24 @@ namespace gr {
   namespace gsm {
 
     universal_ctrl_chans_demapper::sptr
-    universal_ctrl_chans_demapper::make(const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types)
+    universal_ctrl_chans_demapper::make(unsigned int timeslot_nr, const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types)
     {
       return gnuradio::get_initial_sptr
-        (new universal_ctrl_chans_demapper_impl(starts_fn_mod51, channel_types));
+        (new universal_ctrl_chans_demapper_impl(timeslot_nr, starts_fn_mod51, channel_types));
     }
 
     /*
      * The private constructor
      */
-    universal_ctrl_chans_demapper_impl::universal_ctrl_chans_demapper_impl(const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types)
+    universal_ctrl_chans_demapper_impl::universal_ctrl_chans_demapper_impl(unsigned int timeslot_nr, const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types)
       : gr::block("universal_ctrl_chans_demapper",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+       d_timeslot(timeslot_nr)
+              
     {
     
-        d_timeslot=0;
+        
         for(int ii=0; ii<51; ii++)
         {
             d_starts_fn_mod51[ii]=0;

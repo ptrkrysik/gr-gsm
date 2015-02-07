@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Wed Jan  7 15:39:23 2015
+# Generated: Sat Feb  7 19:30:54 2015
 ##################################################
 
 from PyQt4 import Qt
@@ -154,7 +154,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
+        self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(0, ([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
         self.gsm_receiver_0 = grgsm.receiver(4, ([0]), ([]))
         self.gsm_message_printer_1 = grgsm.message_printer(pmt.intern(""))
         self.gsm_input_0 = grgsm.gsm_input(
@@ -165,24 +165,20 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))
-        self.connect((self.rtlsdr_source_0, 0), (self.gsm_input_0, 0))
-        self.connect((self.rtlsdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
-
-        ##################################################
-        # Message Connections
-        ##################################################
-        self.msg_connect(self.gsm_receiver_0, "measurements", self.gsm_clock_offset_control_0, "measurements")
-        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, "bursts", self.gsm_control_channels_decoder_0, "bursts")
-        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.blocks_socket_pdu_0, "pdus")
-        self.msg_connect(self.gsm_control_channels_decoder_0, "msgs", self.gsm_message_printer_1, "msgs")
-        self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
-        self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
+        self.msg_connect(self.gsm_clock_offset_control_0, 'ppm', self.gsm_input_0, 'ppm_in')    
+        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.blocks_socket_pdu_0, 'pdus')    
+        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.gsm_message_printer_1, 'msgs')    
+        self.msg_connect(self.gsm_receiver_0, 'measurements', self.gsm_clock_offset_control_0, 'measurements')    
+        self.msg_connect(self.gsm_receiver_0, 'C0', self.gsm_universal_ctrl_chans_demapper_0, 'bursts')    
+        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, 'bursts', self.gsm_control_channels_decoder_0, 'bursts')    
+        self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))    
+        self.connect((self.rtlsdr_source_0, 0), (self.gsm_input_0, 0))    
+        self.connect((self.rtlsdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))    
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "airprobe_rtlsdr")
@@ -307,7 +303,8 @@ if __name__ == '__main__':
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
         help="Set samp_rate [default=%default]")
     (options, args) = parser.parse_args()
-    Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
+    if(StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0")):
+        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
     tb = airprobe_rtlsdr(ppm=options.ppm, fc=options.fc, gain=options.gain, samp_rate=options.samp_rate)
     tb.start()

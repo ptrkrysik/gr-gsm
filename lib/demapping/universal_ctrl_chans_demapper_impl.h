@@ -37,7 +37,7 @@ namespace gr {
       uint32_t d_frame_numbers[4];
       pmt::pmt_t d_bursts[4];
      public:
-      universal_ctrl_chans_demapper_impl(const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types);
+      universal_ctrl_chans_demapper_impl(unsigned int timeslot_nr, const std::vector<int> &starts_fn_mod51, const std::vector<int> &channel_types);
       ~universal_ctrl_chans_demapper_impl();
 
       void filter_ctrl_chans(pmt::pmt_t msg);

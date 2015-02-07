@@ -3,7 +3,15 @@
   <name>Universal ctrl chans demapper</name>
   <key>gsm_universal_ctrl_chans_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.universal_ctrl_chans_demapper($starts_fn_mod51, $channel_types)</make>
+  <make>grgsm.universal_ctrl_chans_demapper($timemeslot_nr, $starts_fn_mod51, $channel_types)</make>
+
+  <param>
+    <name>timemeslot_nr</name>
+    <key>timemeslot_nr</key>
+    <value>0</value>
+    <type>int</type>
+    <hide>part</hide>
+  </param>
 
   <param>
     <name>starts_fn_mod51</name>
