@@ -8,6 +8,7 @@
   <param>
     <name>Kc session key</name>
     <key>k_c</key>
+    <value>[0,0,0,0,0,0,0,0]</value>    
     <type>int_vector</type>
   </param>
 
