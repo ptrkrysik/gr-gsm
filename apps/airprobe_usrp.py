@@ -2,8 +2,19 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Usrp
-# Generated: Sat Feb  7 19:31:03 2015
+# Generated: Mon Feb  9 12:52:54 2015
 ##################################################
+
+# Call XInitThreads as the _very_ first thing.
+# After some Qt import, it's too late
+import ctypes
+import sys
+if sys.platform.startswith('linux'):
+    try:
+        x11 = ctypes.cdll.LoadLibrary('libX11.so')
+        x11.XInitThreads()
+    except:
+        print "Warning: failed to XInitThreads()"
 
 from PyQt4 import Qt
 from PyQt4.QtCore import QObject, pyqtSlot
@@ -125,7 +136,7 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
         	1024, #size
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
-        	fc, #fc
+        	fc_slider, #fc
         	samp_rate, #bw
         	"", #name
         	1 #number of inputs
@@ -169,15 +180,15 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
             samp_rate_in=samp_rate,
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.blocks_socket_pdu_0, 'pdus')    
-        self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self.gsm_message_printer_0, 'msgs')    
-        self.msg_connect(self.gsm_receiver_0, 'C0', self.gsm_universal_ctrl_chans_demapper_0, 'bursts')    
-        self.msg_connect(self.gsm_universal_ctrl_chans_demapper_0, 'bursts', self.gsm_control_channels_decoder_0, 'bursts')    
+        self.msg_connect((self.gsm_control_channels_decoder_0, 'msgs'), (self.blocks_socket_pdu_0, 'pdus'))    
+        self.msg_connect((self.gsm_control_channels_decoder_0, 'msgs'), (self.gsm_message_printer_0, 'msgs'))    
+        self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_universal_ctrl_chans_demapper_0, 'bursts'))    
+        self.msg_connect((self.gsm_universal_ctrl_chans_demapper_0, 'bursts'), (self.gsm_control_channels_decoder_0, 'bursts'))    
         self.connect((self.gsm_input_0, 0), (self.gsm_receiver_0, 0))    
         self.connect((self.uhd_usrp_source_0, 0), (self.gsm_input_0, 0))    
         self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))    
@@ -200,7 +211,6 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
     def set_fc(self, fc):
         self.fc = fc
         self.gsm_input_0.set_fc(self.fc)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.set_fc_slider(self.fc)
 
     def get_samp_rate(self):
@@ -209,8 +219,8 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.gsm_input_0.set_samp_rate_in(self.samp_rate)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
         self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
 
     def get_g_slider(self):
         return self.g_slider
@@ -228,6 +238,7 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         Qt.QMetaObject.invokeMethod(self._fc_slider_counter, "setValue", Qt.Q_ARG("double", self.fc_slider))
         Qt.QMetaObject.invokeMethod(self._fc_slider_slider, "setValue", Qt.Q_ARG("double", self.fc_slider))
         self.uhd_usrp_source_0.set_center_freq(self.fc_slider, 0)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
 
     def get_SDCCH(self):
         return self.SDCCH
@@ -272,14 +283,6 @@ class airprobe_usrp(gr.top_block, Qt.QWidget):
         self.AGCH = AGCH
 
 if __name__ == '__main__':
-    import ctypes
-    import sys
-    if sys.platform.startswith('linux'):
-        try:
-            x11 = ctypes.cdll.LoadLibrary('libX11.so')
-            x11.XInitThreads()
-        except:
-            print "Warning: failed to XInitThreads()"
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
     parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=eng_notation.num_to_str(30),
         help="Set gain [default=%default]")
