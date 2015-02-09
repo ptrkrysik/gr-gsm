@@ -145,7 +145,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
         	1024, #size
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
-        	fc, #fc
+        	fc_slider, #fc
         	samp_rate, #bw
         	"", #name
         	1 #number of inputs
