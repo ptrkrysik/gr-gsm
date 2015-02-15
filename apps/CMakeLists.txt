@@ -26,7 +26,6 @@ GR_PYTHON_INSTALL(
 #    ${PYFILES}
     airprobe_file.py
     airprobe_rtlsdr.py
-    airprobe_usrp.py
 
     DESTINATION bin
 )
