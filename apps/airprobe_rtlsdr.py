@@ -146,7 +146,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
         	1024, #size
         	firdes.WIN_BLACKMAN_hARRIS, #wintype
-        	fc, #fc
+        	fc_slider, #fc
         	samp_rate, #bw
         	"", #name
         	1 #number of inputs
@@ -197,7 +197,6 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.fc = fc
         self.gsm_input_0.set_fc(self.fc)
         self.set_fc_slider(self.fc)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
 
     def get_gain(self):
         return self.gain
@@ -213,7 +212,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.gsm_input_0.set_samp_rate_in(self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc, self.samp_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
 
     def get_ppm(self):
         return self.ppm
@@ -246,6 +245,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         Qt.QMetaObject.invokeMethod(self._fc_slider_counter, "setValue", Qt.Q_ARG("double", self.fc_slider))
         Qt.QMetaObject.invokeMethod(self._fc_slider_slider, "setValue", Qt.Q_ARG("double", self.fc_slider))
         self.rtlsdr_source_0.set_center_freq(self.fc_slider, 0)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
 
     def get_SDCCH(self):
         return self.SDCCH
