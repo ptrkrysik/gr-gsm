@@ -75,7 +75,8 @@ receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, c
     d_failed_sch(0),
     d_signal_dbm(-120),
     d_tseq_nums(tseq_nums),
-    d_cell_allocation(cell_allocation)
+    d_cell_allocation(cell_allocation),
+    d_last_time(0.0)
 {
     int i;
                                                                       //don't send samples to the receiver until there are at least samples for one
@@ -110,6 +111,14 @@ receiver_impl::work(int noutput_items,
     std::vector<tag_t> freq_offset_tags;
     uint64_t start = nitems_read(0);
     uint64_t stop = start + noutput_items;
+
+    float current_time = static_cast<float>(start)/(GSM_SYMBOL_RATE*d_OSR);
+    if((current_time - d_last_time) > 0.1)
+    {
+        pmt::pmt_t msg = pmt::make_tuple(pmt::mp("current_time"),pmt::from_double(current_time));
+        message_port_pub(pmt::mp("measurements"), msg);
+        d_last_time = current_time;
+    }
 
     pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
     get_tags_in_range(freq_offset_tags, 0, start, stop, key);

@@ -1,3 +1,4 @@
+
 /* -*- c++ -*- */
 /*
  * @file
@@ -45,8 +46,7 @@ clock_offset_control::make(float fc)
 clock_offset_control_impl::clock_offset_control_impl(float fc)
     : gr::block("clock_offset_control",
                 gr::io_signature::make(0, 0, 0),
-                gr::io_signature::make(0, 0, 0)),
-                d_timer(d_io_service)
+                gr::io_signature::make(0, 0, 0))
 
 {
     message_port_register_in(pmt::mp("measurements"));
@@ -60,8 +60,9 @@ clock_offset_control_impl::clock_offset_control_impl(float fc)
     d_first_measurement = true;
     d_counter = 0;
     d_last_state = "";
-    
-    d_timer.async_wait(boost::bind(&clock_offset_control_impl::timed_reset, this));
+    d_current_time = 0;
+    d_last_fcch_time = 0;
+    d_first_time = true;
 }
 
 /*
@@ -81,6 +82,21 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
     if(pmt::is_tuple(msg))
     {
         std::string key = pmt::symbol_to_string(pmt::tuple_ref(msg,0));
+        if(key == "current_time")
+        {
+            d_current_time = pmt::to_double(pmt::tuple_ref(msg,1));
+            if(d_first_time==true)
+            {
+                d_last_fcch_time = d_current_time;
+                d_first_time = false;
+            }
+            else
+            if((d_current_time - d_last_fcch_time) > 0.5 && d_last_state == "fcch_search")
+            {
+                timed_reset();
+            }
+        }
+        else 
         if(key == "freq_offset")
         {
             float freq_offset = pmt::to_double(pmt::tuple_ref(msg,1));
@@ -89,7 +105,7 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
             d_last_state = state;
             if(abs(ppm) > 100) //safeguard against flawed measurements
             {
-                ppm = 0; //!!! do poprawki ten warunek
+                ppm=0;
                 reset();
             }
 
@@ -97,13 +113,12 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
             {
                 pmt::pmt_t msg_ppm = pmt::from_double(ppm);
                 message_port_pub(pmt::intern("ppm"), msg_ppm);
-                d_timer.cancel();
-                d_timer.async_wait(boost::bind(&clock_offset_control_impl::timed_reset, this));
+                d_last_fcch_time = d_current_time;
             } 
             else 
             if (state == "synchronized")
             {
-                d_timer.cancel();
+                d_last_fcch_time = d_current_time;
                 if(d_first_measurement)
                 {
                     d_ppm_estimate = ppm;

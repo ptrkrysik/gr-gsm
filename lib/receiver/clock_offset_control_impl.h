@@ -25,8 +25,6 @@
 
 #include <grgsm/receiver/clock_offset_control.h>
 #include <string>
-#include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace gr {
   namespace gsm {
@@ -40,8 +38,9 @@ namespace gr {
         bool  d_first_measurement;
         int   d_counter;
         std::string d_last_state;
-        boost::asio::io_service d_io_service;
-        boost::asio::deadline_timer d_timer;
+        float d_current_time;
+        float d_last_fcch_time;
+        bool  d_first_time;
                         
         void process_measurement(pmt::pmt_t msg);
         void timed_reset();

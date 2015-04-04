@@ -47,6 +47,8 @@ namespace gr {
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
         gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal and dummy burst
 
+        float d_last_time;
+
         /** Counts samples consumed by the receiver
          *
          * It is used in beetween find_fcch_burst and reach_sch_burst calls.
