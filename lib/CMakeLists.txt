@@ -29,6 +29,7 @@ list(APPEND gsm_sources
     receiver/receiver_config.cc 
     receiver/viterbi_detector.cc 
     receiver/sch.c
+    receiver/clock_offset_control_impl.cc
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc

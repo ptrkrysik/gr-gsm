@@ -21,5 +21,6 @@
 # Install public header files
 ########################################################################
 install(FILES
+    clock_offset_control.h
     receiver.h DESTINATION include/grgsm/receiver
 )
