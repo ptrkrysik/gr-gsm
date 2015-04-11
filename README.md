@@ -102,6 +102,40 @@ sudo wireshark -k -Y '!icmp && gsmtap' -i lo
 If you want to avoid the risks caused by running *Wireshark* with root privileges follow this short howto:
 https://ask.wireshark.org/questions/7976/wireshark-setup-linux-for-nonroot-user
 
+Manual compilation and installation of gr-gsm
+=============================================
+
+If you intend to develop gr-gsm or have problem with pyboms installation - here is description how to manually compile and install gr-gsm from source.
+
+You will need gnuradio, rtl-sdr, and gr-osmosdr. For their installation look at homepages of those projects:
+http://gnuradio.org/redmine/projects/gnuradio/wiki
+http://sdr.osmocom.org/trac/wiki/rtl-sdr
+http://sdr.osmocom.org/trac/wiki/GrOsmoSDR
+
+Sometimes it is possible to install these programs/libraries from distibution's repository. Keep in mind that gr-gsm need GNU Radio 3.7.3 and above.
+
+To download gr-gsm sources run following command:
+
+```
+git clone https://github.com/ptrkrysik/gr-gsm.git
+```
+
+Make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
+
+```
+sudo apt-get install cmake libboost-all-dev libcppunit-dev swig \
+                     doxygen liblog4cpp5-dev python-scipy
+```
+
+To compile and install gr-gsm run:
+
+```
+cd gr-gsm
+mkdir build
+cmake ..
+make
+sudo make install
+
 Videos
 ======
 Short presentation of *Airprobe*'like application of *gr-gsm*:
