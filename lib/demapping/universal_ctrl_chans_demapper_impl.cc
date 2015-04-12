@@ -101,9 +101,10 @@ namespace gr {
         uint32_t fn51_start = d_starts_fn_mod51[fn_mod51];
         uint32_t fn51_stop = fn51_start + 3;
         uint32_t ch_type = d_channel_types[fn_mod51];
-        header->sub_type = ch_type;
-
+        
         if(header->timeslot==d_timeslot){
+	    header->sub_type = ch_type;
+	    
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
                 uint32_t ii = fn_mod51 - fn51_start;
