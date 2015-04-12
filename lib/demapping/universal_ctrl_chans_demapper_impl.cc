@@ -62,7 +62,7 @@ namespace gr {
         
         for(s=starts_fn_mod51.begin(), ch_type=channel_types.begin();s != starts_fn_mod51.end(); s++)
         {
-            if((*s > 0) and (*s < (51-4)))
+            if((*s >= 0) and (*s <= (51-4)))
             {
                 for(int ii=0; ii<4; ii++){
                     d_starts_fn_mod51[*s+ii] = *s;
