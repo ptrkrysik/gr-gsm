@@ -4,7 +4,7 @@
   <key>gsm_bursts_printer</key>
   <import>import grgsm</import>
   <import>import pmt</import>
-  <make>grgsm.bursts_printer(pmt.intern($prepend_string))</make>
+  <make>grgsm.bursts_printer(pmt.intern($prepend_string), $prepend_fnr)</make>
 
   <param>
     <name>Prepend String</name>
@@ -12,6 +12,20 @@
     <value></value>
     <type>string</type>
     <hide>part</hide>
+  </param>
+  <param>
+    <name>Prepend Frame Number</name>
+    <key>prepend_fnr</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>False</name>
+      <key>False</key>
+    </option>
+    <option>
+      <name>True</name>
+      <key>True</key>
+    </option>
   </param>
 
   <sink>
