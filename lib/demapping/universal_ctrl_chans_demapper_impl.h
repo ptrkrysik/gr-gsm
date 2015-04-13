@@ -33,6 +33,7 @@ namespace gr {
      private:
       unsigned int d_starts_fn_mod51[51];
       unsigned int d_channel_types[51];
+      unsigned int d_subslots[102];
       unsigned int d_timeslot;
       uint32_t d_frame_numbers[4];
       pmt::pmt_t d_bursts[4];
