@@ -13,6 +13,7 @@
 #include "grgsm/decoding/control_channels_decoder.h"
 #include "grgsm/decryption/decryption.h"
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
+#include "grgsm/demapping/tch_f_chans_demapper.h"
 #include "grgsm/misc_utils/bursts_printer.h"
 #include "grgsm/misc_utils/controlled_const_source_f.h"
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
@@ -36,6 +37,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, decryption);
 
 %include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, universal_ctrl_chans_demapper);
+%include "grgsm/demapping/tch_f_chans_demapper.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_chans_demapper);
 
 %include "grgsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
