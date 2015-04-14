@@ -55,6 +55,8 @@ namespace gr {
         {
             d_starts_fn_mod51[ii]=0;
             d_channel_types[ii]=0;
+	    d_subslots[ii] = 0;
+	    d_subslots[ii+51] = 0;
         }
         
         std::vector<int>::const_iterator s;
@@ -62,7 +64,7 @@ namespace gr {
         
         for(s=starts_fn_mod51.begin(), ch_type=channel_types.begin();s != starts_fn_mod51.end(); s++)
         {
-            if((*s > 0) and (*s < (51-4)))
+            if((*s >= 0) and (*s <= (51-4)))
             {
                 for(int ii=0; ii<4; ii++){
                     d_starts_fn_mod51[*s+ii] = *s;
@@ -77,6 +79,48 @@ namespace gr {
                 }
             }
         }
+        
+        std::set<int> distinct_channels(channel_types.begin(), channel_types.end());
+	std::set<int>::iterator it;
+        unsigned int subslot;
+	
+	for (it=distinct_channels.begin(); it != distinct_channels.end(); it++)
+	{
+	    subslot = 0;
+	    for(s=starts_fn_mod51.begin();s != starts_fn_mod51.end(); s++)
+	    {
+		if ((d_channel_types[*s] == *it) and (*s >= 0) and (*s <= (51-4)))
+		{
+		    for(int ii=0; ii<4; ii++)
+		    {
+			d_subslots[*s+ii] = subslot;
+			d_subslots[*s+ii+51] = subslot;
+		    }
+		    subslot++;
+		}
+	    }
+	    
+	    if (*it == GSMTAP_CHANNEL_ACCH or 
+		*it == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH) or
+		*it == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH4) or
+		*it == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH8) or
+		*it == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F) or
+		*it == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_H)
+	    )
+	    {
+		for(s=starts_fn_mod51.begin();s != starts_fn_mod51.end(); s++)
+		{
+		    if ((d_channel_types[*s] == *it) and (*s >= 0) and (*s <= (51-4)))
+		    {
+			for(int ii=0; ii<4; ii++)
+			{
+			    d_subslots[*s+ii+51] = subslot;
+			}
+			subslot++;
+		    }
+		}
+	    }
+	}
         
         
         message_port_register_in(pmt::mp("bursts"));
@@ -101,9 +145,11 @@ namespace gr {
         uint32_t fn51_start = d_starts_fn_mod51[fn_mod51];
         uint32_t fn51_stop = fn51_start + 3;
         uint32_t ch_type = d_channel_types[fn_mod51];
-        header->sub_type = ch_type;
-
+        
         if(header->timeslot==d_timeslot){
+	    header->sub_type = ch_type;
+	    header->sub_slot = d_subslots[fn_mod51 + (51 * (frame_nr % 2))];
+	    
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
                 uint32_t ii = fn_mod51 - fn51_start;
