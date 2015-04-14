@@ -135,6 +135,8 @@ mkdir build
 cmake ..
 make
 sudo make install
+```
+
 
 Installation using Docker
 =========================
