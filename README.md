@@ -96,7 +96,7 @@ sudo apt-get install wireshark
 ```
 To start *Wireshark* straight to analysis of the *GSMTAP* packets obtained from *gr-gsm*'s airprobe use following command:
 ```
-sudo wireshark -k -Y '!icmp && gsmtap' -i lo
+sudo wireshark -k -f udp -Y gsmtap -i lo
 ````
 
 If you want to avoid the risks caused by running *Wireshark* with root privileges follow this short howto:
