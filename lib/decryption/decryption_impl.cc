@@ -25,8 +25,10 @@
 #include <gnuradio/io_signature.h>
 #include <grgsm/endian.h>
 #include <grgsm/gsmtap.h>
+#include <grgsm/endian.h>
 #include "decryption_impl.h"
 #include "a5_1_2.h"
+
 
 const uint32_t BURST_SIZE=148;
 
