@@ -27,8 +27,6 @@
 #include <grgsm/gsmtap.h>
 #include "decryption_impl.h"
 #include "a5_1_2.h"
-#include "stdio.h"//!!
-#include <algorithm>//!!
 
 const uint32_t BURST_SIZE=148;
 
