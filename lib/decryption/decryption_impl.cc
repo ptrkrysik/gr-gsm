@@ -1,17 +1,17 @@
 /* -*- c++ -*- */
-/* 
+/*
  * Copyright 2014 <+YOU OR YOUR COMPANY+>.
- * 
+ *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this software; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
@@ -23,7 +23,6 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/endian.h>
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
 #include "decryption_impl.h"
@@ -64,17 +63,17 @@ namespace gr {
     decryption_impl::~decryption_impl()
     {
     }
-    
+
     void decryption_impl::set_k_c(const std::vector<uint8_t> & k_c)
     {
         d_k_c = k_c;
     }
-    
+
     void decryption_impl::decrypt(pmt::pmt_t msg)
     {
         if(d_k_c.size() != 8){
             message_port_pub(pmt::mp("bursts"), msg);
-        } else 
+        } else
         if(d_k_c[0] == 0 && d_k_c[1] == 0 && d_k_c[2] == 0 && d_k_c[3] == 0 &
            d_k_c[4] == 0 && d_k_c[5] == 0 && d_k_c[6] == 0 && d_k_c[7] == 0)
         {
@@ -85,11 +84,11 @@ namespace gr {
             uint8_t AtoBkeystream[114];
             uint8_t BtoAkeystream[114];
             uint8_t * keystream;
-            
+
             pmt::pmt_t header_plus_burst = pmt::cdr(msg);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
             uint8_t * burst_binary = (uint8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
-            
+
             uint32_t frame_number = be32toh(header->frame_number);
             bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
             uint32_t t1 = frame_number / (26*51);
@@ -98,7 +97,7 @@ namespace gr {
             uint32_t frame_number_mod = (t1 << 11) + (t3 << 5) + t2;
             keysetup(&d_k_c[0], frame_number_mod);
             runA51(AtoBkeystream, BtoAkeystream);
-            
+
             if(uplink_burst){
                 //process uplink burst
                 keystream = BtoAkeystream;
@@ -129,14 +128,13 @@ namespace gr {
             uint8_t new_header_plus_burst[sizeof(gsmtap_hdr)+BURST_SIZE];
             memcpy(new_header_plus_burst, header, sizeof(gsmtap_hdr));
             memcpy(new_header_plus_burst+sizeof(gsmtap_hdr), decrypted_data, BURST_SIZE);
-            
+
             pmt::pmt_t msg_binary_blob = pmt::make_blob(new_header_plus_burst, sizeof(gsmtap_hdr)+BURST_SIZE);
             pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
-            
+
             message_port_pub(pmt::mp("bursts"), msg_out);
         }
         return;
     }
   } /* namespace gsm */
 } /* namespace gr */
-

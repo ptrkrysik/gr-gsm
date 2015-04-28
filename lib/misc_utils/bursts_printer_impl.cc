@@ -26,6 +26,7 @@
 
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
+#include <grgsm/endian.h>
 #include <iterator>
 #include <algorithm>
 #include "bursts_printer_impl.h"
@@ -44,13 +45,13 @@ namespace gr {
         int8_t * burst = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
         size_t burst_len=pmt::blob_length(header_plus_burst)-sizeof(gsmtap_hdr);
         uint32_t frame_nr;
-        
+
         std::cout << d_prepend_string;
-        if (d_prepend_fnr) 
+        if (d_prepend_fnr)
         {
             frame_nr = be32toh(header->frame_number);
             std::cout << frame_nr << ":";
-        } 
+        }
 
         for(int ii=0; ii<burst_len; ii++)
         {
@@ -58,7 +59,7 @@ namespace gr {
         }
         std::cout << std::endl;
     }
-     
+
     bursts_printer::sptr
     bursts_printer::make(pmt::pmt_t prepend_string, bool prepend_fnr)
     {
@@ -79,7 +80,7 @@ namespace gr {
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, _1));
     }
-    
+
     /*
      * Our virtual destructor.
      */
@@ -90,4 +91,3 @@ namespace gr {
 
   } /* namespace gsm */
 } /* namespace gr */
-
