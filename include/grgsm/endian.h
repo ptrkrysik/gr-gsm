@@ -9,6 +9,7 @@
 #  define htobe16(x) OSSwapHostToBigInt16(x)
 #  define htobe32(x) OSSwapHostToBigInt32(x)
 
+#  define be16toh(x) OSSwapBigToHostInt16(x)
 #  define be32toh(x) OSSwapBigToHostInt32(x)
 #endif
 
