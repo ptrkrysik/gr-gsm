@@ -31,13 +31,13 @@ namespace gr {
     class tch_f_chans_demapper_impl : public tch_f_chans_demapper
     {
      private:
-      unsigned int d_starts_fn_mod26[26];
       unsigned int d_timeslot;
-      uint32_t d_frame_numbers[4];
+      uint32_t d_frame_numbers[3][8];
       uint32_t d_frame_numbers_sacch[4];
-      pmt::pmt_t d_bursts[4];
-      bool d_bursts_stolen;
+      pmt::pmt_t d_bursts[3][8];
       pmt::pmt_t d_bursts_sacch[4];
+      bool d_bursts_stolen[3];
+
      public:
       tch_f_chans_demapper_impl(unsigned int timeslot_nr);
       ~tch_f_chans_demapper_impl();
