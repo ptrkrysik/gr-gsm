@@ -22,7 +22,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.6)
-project(gr-gsm CXX C)
+project(gr-grgsm CXX C)
 enable_testing()
 
 #set(CMAKE_BUILD_TYPE "Debug")
