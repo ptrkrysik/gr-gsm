@@ -49,16 +49,12 @@ namespace gr {
               gr::io_signature::make(0, 0, 0)),
        d_timeslot(timeslot_nr)
               
-    {
-        for(int ii=0; ii<13; ii++)
+    {                
+        for (int ii=0; ii<3; ii++) 
         {
-            int startpos = ((int)(ii / 4) * 4);
-            d_starts_fn_mod26[ii] = startpos;
-            d_starts_fn_mod26[ii + 13] = startpos + 13;
+            d_bursts_stolen[ii] = false;
         }
         
-        d_bursts_stolen = false;
-
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_f_chans_demapper_impl::filter_tch_chans, this, _1));
         message_port_register_out(pmt::mp("tch_bursts"));
@@ -79,14 +75,14 @@ namespace gr {
 
         uint32_t frame_nr = be32toh(header->frame_number);
         uint32_t fn_mod26 = frame_nr % 26;
-        uint32_t fn26_start = d_starts_fn_mod26[fn_mod26];
-        uint32_t fn26_stop = fn26_start + 3;
+        uint32_t fn_mod13 = frame_nr % 13;
+        bool frames_are_consecutive = true;
         int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
 
         if(header->timeslot == d_timeslot){
             header->sub_type = GSMTAP_CHANNEL_TCH_F;
             
-            if (fn_mod26 == 12 || fn_mod26 == 25)
+            if (fn_mod13 == 12)
             {
                 header->sub_type = GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F;
                 
@@ -115,7 +111,7 @@ namespace gr {
                     {
                         //check for a situation where some bursts were lost
                         //in this situation frame numbers won't be consecutive
-                        bool frames_are_consecutive = true;
+                        frames_are_consecutive = true;
                         for(int jj=1; jj<4; jj++)
                         {
                             if((d_frame_numbers_sacch[jj]-d_frame_numbers_sacch[jj-1]) != 26)
@@ -136,49 +132,118 @@ namespace gr {
             }
             else
             {
-                if(fn_mod26>=fn26_start && fn_mod26<=fn26_stop)
+                if (fn_mod13 <= 3) 
                 {
-                    uint32_t ii = fn_mod26 - fn26_start;
-                    d_frame_numbers[ii] = frame_nr;
-                    d_bursts[ii] = msg;
+                    // add to b1 and b3
+                    d_bursts[0][fn_mod13] = msg;
+                    d_bursts[2][fn_mod13 + 4] = msg;
+                    
+                    // set framenumber
+                    d_frame_numbers[0][fn_mod13] = frame_nr;
+                    d_frame_numbers[2][fn_mod13 + 4] = frame_nr;
                     
                     // check if stealing bits are set
-                    // see gsm 05.03 
-                    if (static_cast<int>(burst_bits[60]) == 1 && static_cast<int>(burst_bits[87]) == 1)
+                    // see 4.2.5 in gsm 05.03 
+                    if (static_cast<int>(burst_bits[60]) == 1)
                     {
-                        d_bursts_stolen = true;
+                        d_bursts_stolen[2] = true;
+                    }
+                    if (static_cast<int>(burst_bits[87]) == 1)
+                    {
+                        d_bursts_stolen[0] = true;
                     }
                 }
-                
-                if(fn_mod26==fn26_stop)
+                else if (fn_mod13 >= 4 && fn_mod13 <= 7)
                 {
+                    // add to b1 and b2
+                    d_bursts[0][fn_mod13] = msg;
+                    d_bursts[1][fn_mod13 - 4] = msg;
+                    
+                    // set framenumber
+                    d_frame_numbers[0][fn_mod13] = frame_nr;
+                    d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
+                    
+                    // check if stealing bits are set
+                    // see 4.2.5 in gsm 05.03 
+                    if (static_cast<int>(burst_bits[60]) == 1)
+                    {
+                        d_bursts_stolen[0] = true;
+                    }
+                    if (static_cast<int>(burst_bits[87]) == 1)
+                    {
+                        d_bursts_stolen[1] = true;
+                    }
+                }
+                else if (fn_mod13 >= 8 && fn_mod13 <= 11)
+                {
+                    // add to b2 and b3
+                    d_bursts[1][fn_mod13 - 4] = msg;
+                    d_bursts[2][fn_mod13 - 8] = msg;
+                    
+                    // set framenumber
+                    d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
+                    d_frame_numbers[2][fn_mod13 - 8] = frame_nr;
+                    
+                    // check if stealing bits are set
+                    // see 4.2.5 in gsm 05.03 
+                    if (static_cast<int>(burst_bits[60]) == 1)
+                    {
+                        d_bursts_stolen[1] = true;
+                    }
+                    if (static_cast<int>(burst_bits[87]) == 1)
+                    {
+                        d_bursts_stolen[2] = true;
+                    }
+                }
+
+                // send burst 1 or burst 2 to output
+                if (fn_mod13 == 3 || fn_mod13 == 7 || fn_mod13 == 11)
+                {
+                    int tch_burst_nr = 0;
+                    
+                    if (fn_mod13 == 11) 
+                    {
+                        tch_burst_nr = 1;
+                    }
+                    else if (fn_mod13 == 3)
+                    {
+                        tch_burst_nr = 2;
+                    }
+
                     //check for a situation where some bursts were lost
                     //in this situation frame numbers won't be consecutive
-                    bool frames_are_consecutive = true;
+                    frames_are_consecutive = true;
                     
-                    for(int jj=1; jj<4; jj++)
+                    for(int jj=1; jj<8; jj++)
                     {
-                        if((d_frame_numbers[jj]-d_frame_numbers[jj-1])!=1)
+                        if((d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj-1]) != 1)
                         {
                             frames_are_consecutive = false;
+                            // burst 3 has 1 sacch burst in between
+                            if (tch_burst_nr == 2 && jj == 4 
+                                && d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj - 1] == 2) 
+                            {
+                                frames_are_consecutive = true;
+                            }
                         }
                     }
+                    
                     if(frames_are_consecutive)
                     {
                         //send bursts to the output
-                        for(int jj=0; jj<4; jj++)
+                        for(int jj=0; jj<8; jj++)
                         {
-                            if (d_bursts_stolen)
+                            if (d_bursts_stolen[tch_burst_nr])
                             {
-                                message_port_pub(pmt::mp("acch_bursts"), d_bursts[jj]);
+                                message_port_pub(pmt::mp("acch_bursts"), d_bursts[tch_burst_nr][jj]);
                             }
                             else
                             {
-                                message_port_pub(pmt::mp("tch_bursts"), d_bursts[jj]);
+                                message_port_pub(pmt::mp("tch_bursts"), d_bursts[tch_burst_nr][jj]);
                             }
                         }
-                        d_bursts_stolen = false;
-                    } 
+                        d_bursts_stolen[tch_burst_nr] = false;
+                    }
                 }
             }
         }

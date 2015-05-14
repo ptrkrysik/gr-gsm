@@ -24,7 +24,7 @@ include(GrPlatform) #define LIB_SUFFIX
 
 include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND gsm_sources
+list(APPEND grgsm_sources
     receiver/receiver_impl.cc
     receiver/receiver_config.cc 
     receiver/viterbi_detector.cc 
@@ -42,9 +42,9 @@ list(APPEND gsm_sources
     misc_utils/message_printer_impl.cc
     misc_utils/tmsi_dumper_impl.cc
     decryption/decryption_impl.cc
-)
+    )
 
-add_library(gnuradio-gsm SHARED ${gsm_sources})
+add_library(gnuradio-gsm SHARED ${grgsm_sources})
 target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
@@ -69,13 +69,13 @@ install(TARGETS gnuradio-gsm
 
 #include_directories(${CPPUNIT_INCLUDE_DIRS})
 
-#list(APPEND test_gsm_sources
+#list(APPEND test_grgsm_sources
 #    ${CMAKE_CURRENT_SOURCE_DIR}/test_gsm.cc
 #    ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm.cc
 #    ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.cc
 #)
 
-#add_executable(test-gsm ${test_gsm_sources})
+#add_executable(test-gsm ${test_grgsm_sources})
 
 #target_link_libraries(
 #  test-gsm

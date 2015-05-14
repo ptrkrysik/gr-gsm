@@ -96,7 +96,7 @@ sudo apt-get install wireshark
 ```
 To start *Wireshark* straight to analysis of the *GSMTAP* packets obtained from *gr-gsm*'s airprobe use following command:
 ```
-sudo wireshark -k -Y '!icmp && gsmtap' -i lo
+sudo wireshark -k -f udp -Y gsmtap -i lo
 ````
 
 If you want to avoid the risks caused by running *Wireshark* with root privileges follow this short howto:
@@ -135,6 +135,8 @@ mkdir build
 cmake ..
 make
 sudo make install
+```
+
 
 Installation using Docker
 =========================
@@ -142,6 +144,12 @@ It is possible to install gr-gsm with use of Docker image prepared by Marcel Maa
 This method of installation might be easier for people using distributions where pybombs doesn't work.
 The installation guide is available here:
 https://github.com/marcelmaatkamp/docker-gnuradio-gr-gsm-ptrkrysik
+
+Development
+===========
+New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, corretion of bug y).
+
+If you wish to develop something for gr-gsm but don't know exactly what, then look for issues with label "Enhancement". Select one that you feel you are able to complete. After that claim it by commenting in the comment section of the issue. If there is any additional information about gr-gsm needed by you to make completing the task easier - just ask.
 
 Videos
 ======

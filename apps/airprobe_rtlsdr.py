@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Airprobe Rtlsdr
-# Generated: Sun Feb 15 11:35:00 2015
+# Generated: Tue Apr 28 22:47:46 2015
 ##################################################
 
 from PyQt4 import Qt
@@ -118,13 +118,13 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
             def setValue(self, value):
                 super(Qwt.QwtCounter, self).setValue(value)
         self._fc_slider_counter = qwt_counter_pyslot()
-        self._fc_slider_counter.setRange(925e6, 960e6, 2e5)
+        self._fc_slider_counter.setRange(925e6, 1990e6, 2e5)
         self._fc_slider_counter.setNumButtons(2)
         self._fc_slider_counter.setValue(self.fc_slider)
         self._fc_slider_tool_bar.addWidget(self._fc_slider_counter)
         self._fc_slider_counter.valueChanged.connect(self.set_fc_slider)
         self._fc_slider_slider = Qwt.QwtSlider(None, Qt.Qt.Horizontal, Qwt.QwtSlider.BottomScale, Qwt.QwtSlider.BgSlot)
-        self._fc_slider_slider.setRange(925e6, 960e6, 2e5)
+        self._fc_slider_slider.setRange(925e6, 1990e6, 2e5)
         self._fc_slider_slider.setValue(self.fc_slider)
         self._fc_slider_slider.setMinimumWidth(100)
         self._fc_slider_slider.valueChanged.connect(self.set_fc_slider)
@@ -153,6 +153,27 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.qtgui_freq_sink_x_0.set_update_time(0.10)
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(False)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+        
+        labels = ["", "", "", "", "",
+                  "", "", "", "", ""]
+        widths = [1, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+        for i in xrange(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+        
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.gsm_universal_ctrl_chans_demapper_0 = grgsm.universal_ctrl_chans_demapper(0, ([2,6,12,16,22,26,32,36,42,46]), ([BCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH,CCCH]))
@@ -166,7 +187,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
 
         ##################################################
         # Connections
@@ -176,7 +197,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.connect((self.rtlsdr_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
 
         ##################################################
-        # Message Connections
+        # Asynch Message Connections
         ##################################################
         self.msg_connect(self.gsm_receiver_0, "C0", self.gsm_universal_ctrl_chans_demapper_0, "bursts")
         self.msg_connect(self.gsm_clock_offset_control_0, "ppm", self.gsm_input_0, "ppm_in")
