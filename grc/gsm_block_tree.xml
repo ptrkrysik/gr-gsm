@@ -31,6 +31,7 @@
     <cat>
       <name>Decoding</name>
       <block>gsm_control_channels_decoder</block>
+      <block>gsm_tch_f_decoder</block>
     </cat>
     <cat>
       <name>Utilities</name>

@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_control_channels_decoder.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_control_channels_decoder.xml 
+    gsm_tch_f_decoder.xml DESTINATION share/gnuradio/grc/blocks
 )
