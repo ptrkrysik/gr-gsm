@@ -11,6 +11,7 @@
 #include "grgsm/receiver/receiver.h"
 #include "grgsm/receiver/clock_offset_control.h"
 #include "grgsm/decoding/control_channels_decoder.h"
+#include "grgsm/decoding/tch_f_decoder.h"
 #include "grgsm/decryption/decryption.h"
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 #include "grgsm/demapping/tch_f_chans_demapper.h"
@@ -31,6 +32,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, clock_offset_control);
 
 %include "grgsm/decoding/control_channels_decoder.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, control_channels_decoder);
+%include "grgsm/decoding/tch_f_decoder.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_decoder);
 
 %include "grgsm/decryption/decryption.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, decryption);
