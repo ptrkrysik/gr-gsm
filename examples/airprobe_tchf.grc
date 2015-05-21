@@ -42,7 +42,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>airprobe_file</value>
+      <value>airprobe_tchf</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -85,7 +85,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(936, 11)</value>
+      <value>(968, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -112,7 +112,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(720, 11)</value>
+      <value>(752, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -139,7 +139,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(792, 11)</value>
+      <value>(824, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -166,7 +166,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(576, 11)</value>
+      <value>(608, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -193,7 +193,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1008, 11)</value>
+      <value>(1040, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -220,7 +220,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(864, 11)</value>
+      <value>(896, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -247,7 +247,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1080, 11)</value>
+      <value>(1112, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -333,7 +333,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(328, 11)</value>
+      <value>(360, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -423,7 +423,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1032, 312)</value>
+      <value>(1032, 248)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -462,7 +462,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(864, 616)</value>
+      <value>(1008, 320)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -501,7 +501,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(832, 307)</value>
+      <value>(832, 171)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -509,11 +509,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>gsm_decryption_0</value>
+      <value>gsm_decryption_0_0_0</value>
     </param>
     <param>
       <key>k_c</key>
-      <value>[0xAD, 0x6A, 0x3E, 0xC2, 0xB4, 0x42, 0xE4, 0x00]</value>
+      <value>[0x1e, 0xf0, 0x0b, 0xab, 0x3b, 0xac, 0x70, 0x02]</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -544,7 +544,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(824, 203)</value>
+      <value>(824, 243)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -552,11 +552,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>gsm_decryption_0_1</value>
+      <value>gsm_decryption_0_0_0_0</value>
     </param>
     <param>
       <key>k_c</key>
-      <value>[0xAD, 0x6A, 0x3E, 0xC2, 0xB4, 0x42, 0xE4, 0x00]</value>
+      <value>[0x1e, 0xf0, 0x0b, 0xab, 0x3b, 0xac, 0x70, 0x02]</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -638,11 +638,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1248, 312)</value>
+      <value>(1248, 248)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -677,7 +677,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1112, 616)</value>
+      <value>(1248, 320)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -712,7 +712,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1248, 208)</value>
+      <value>(1248, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -802,7 +802,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(600, 208)</value>
+      <value>(600, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -822,7 +822,7 @@
     </param>
     <param>
       <key>timemeslot_nr</key>
-      <value>7</value>
+      <value>5</value>
     </param>
   </block>
   <block>
@@ -845,7 +845,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1032, 195)</value>
+      <value>(1048, 163)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -865,11 +865,11 @@
     </param>
     <param>
       <key>mode</key>
-      <value>grgsm.MODE_SPEECH_EFR</value>
+      <value>grgsm.MODE_SPEECH_FR</value>
     </param>
     <param>
       <key>file</key>
-      <value>/home/piotr/lol.gsm</value>
+      <value>speech.au.gsm</value>
     </param>
   </block>
   <block>
@@ -892,7 +892,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(600, 616)</value>
+      <value>(632, 320)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -939,7 +939,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(208, 11)</value>
+      <value>(200, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -963,7 +963,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>conversation.cfile</value>
+      <value>vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile</value>
     </param>
   </block>
   <block>
@@ -982,7 +982,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(416, 11)</value>
+      <value>(448, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1006,7 +1006,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>64e6/112</value>
+      <value>100e6/174</value>
     </param>
   </block>
   <connection>
@@ -1034,14 +1034,14 @@
     <sink_key>msgs</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_decryption_0</source_block_id>
-    <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
+    <source_block_id>gsm_decryption_0_0_0</source_block_id>
+    <sink_block_id>gsm_tch_f_decoder_0</sink_block_id>
     <source_key>bursts</source_key>
     <sink_key>bursts</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_decryption_0_1</source_block_id>
-    <sink_block_id>gsm_tch_f_decoder_0</sink_block_id>
+    <source_block_id>gsm_decryption_0_0_0_0</source_block_id>
+    <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
     <source_key>bursts</source_key>
     <sink_key>bursts</sink_key>
   </connection>
@@ -1071,13 +1071,13 @@
   </connection>
   <connection>
     <source_block_id>gsm_tch_f_chans_demapper_0</source_block_id>
-    <sink_block_id>gsm_decryption_0</sink_block_id>
+    <sink_block_id>gsm_decryption_0_0_0_0</sink_block_id>
     <source_key>acch_bursts</source_key>
     <sink_key>bursts</sink_key>
   </connection>
   <connection>
     <source_block_id>gsm_tch_f_chans_demapper_0</source_block_id>
-    <sink_block_id>gsm_decryption_0_1</sink_block_id>
+    <sink_block_id>gsm_decryption_0_0_0</sink_block_id>
     <source_key>tch_bursts</source_key>
     <sink_key>bursts</sink_key>
   </connection>
