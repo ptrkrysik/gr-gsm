@@ -33,9 +33,15 @@ list(APPEND grgsm_sources
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
+    demapping/tch_f_chans_demapper_impl.cc
     decoding/control_channels_decoder_impl.cc
     decoding/cch.c
     decoding/fire_crc.c
+    decoding/tch_f_decoder_impl.cc
+    decoding/BitVector.cpp
+    decoding/GSM610Tables.cpp
+    decoding/GSM660Tables.cpp
+    decoding/GSM690Tables.cpp
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_const_source_f_impl.cc
     misc_utils/message_printer_impl.cc

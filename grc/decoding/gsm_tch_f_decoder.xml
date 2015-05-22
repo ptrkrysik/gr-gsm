@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<block>
+  <name>TCH/F decoder</name>
+  <key>gsm_tch_f_decoder</key>
+  <import>import grgsm</import>
+  <make>grgsm.tch_f_decoder($mode, $file)</make>
+
+  <param>
+    <name>TCH coding mode</name>
+    <key>mode</key>
+    <type>enum</type>
+    <option>
+      <name>GSM-FR</name>
+      <key>grgsm.MODE_SPEECH_FR</key>
+    </option>
+    <option>
+      <name>GSM-EFR</name>
+      <key>grgsm.MODE_SPEECH_EFR</key>
+    </option>
+  </param>
+  <param>
+    <name>destination file</name>
+    <key>file</key>
+    <value>/tmp/speech.gsm</value>
+    <type>file_open</type>
+  </param>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>msgs</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>

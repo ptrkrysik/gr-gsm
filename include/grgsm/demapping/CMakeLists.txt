@@ -21,5 +21,6 @@
 # Install public header files
 ########################################################################
 install(FILES
-    universal_ctrl_chans_demapper.h DESTINATION include/grgsm/demapping
+    universal_ctrl_chans_demapper.h 
+    tch_f_chans_demapper.h DESTINATION include/grgsm/demapping
 )
