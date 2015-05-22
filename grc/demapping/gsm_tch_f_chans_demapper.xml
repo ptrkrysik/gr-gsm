@@ -3,11 +3,11 @@
   <name>TCH/F chans demapper</name>
   <key>gsm_tch_f_chans_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.tch_f_chans_demapper($timemeslot_nr)</make>
+  <make>grgsm.tch_f_chans_demapper($timeslot_nr)</make>
 
   <param>
-    <name>timemeslot_nr</name>
-    <key>timemeslot_nr</key>
+    <name>timeslot_nr</name>
+    <key>timeslot_nr</key>
     <value>2</value>
     <type>int</type>
     <hide>part</hide>
