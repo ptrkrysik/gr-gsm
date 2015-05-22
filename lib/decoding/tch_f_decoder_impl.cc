@@ -57,6 +57,11 @@ namespace gr {
             throw std::runtime_error("TCH/F Decoder: can't open file\n");
         }
 
+        if (d_tch_mode == MODE_SPEECH_EFR)
+        {
+            fwrite(amr_nb_magic, 1, 6, d_speech_file);
+        }
+
         int j, k, B;
         for (k = 0; k < CONV_SIZE; k++)
         {

@@ -53,6 +53,7 @@ namespace gr {
                 FILE * d_speech_file;
                 enum tch_mode d_tch_mode;
                 void decode(pmt::pmt_t msg);
+                const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
             public:
                 tch_f_decoder_impl(tch_mode mode, const std::string &file);
                 ~tch_f_decoder_impl();
