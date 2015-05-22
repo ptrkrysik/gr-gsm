@@ -160,7 +160,7 @@ https://www.youtube.com/watch?v=Eofnb7zr8QE
 Credits
 =======
 *Piotr Krysik* \<ptrkrysik (at) gmail.com\> - main author and project maintainer
-
+*Roman Khassraf* \<rkhassraf (at) gmail.com\> - decoding of voice channels
 *Steve* \<steve (at) segfault.net\>  - functions for decoding channel codes
 
 
