@@ -183,7 +183,7 @@ namespace gr {
 
                     for(int jj=1; jj<8; jj++)
                     {
-                        if((d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj-1]) != 1)
+                        if (((d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj-1]) != 1) && frames_are_consecutive)
                         {
                             frames_are_consecutive = false;
                             // burst 3 has 1 sacch burst in between
