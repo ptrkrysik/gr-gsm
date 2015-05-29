@@ -25,7 +25,7 @@
 #define INCLUDED_GSM_MESSAGE_PRINTER_H
 
 #include <grgsm/api.h>
-#include <gnuradio/sync_block.h>
+#include <gnuradio/block.h>
 
 namespace gr {
   namespace gsm {
