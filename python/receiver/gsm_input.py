@@ -41,8 +41,8 @@ class gsm_input(gr.hier_block2):
         self.low_pass_filter_0_0 = filter.fir_filter_ccf(1, firdes.low_pass(
         	1, samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
         self.gsm_clock_offset_corrector_0 = grgsm.clock_offset_corrector(
-            fc=936.6e6,
-            ppm=0,
+            fc=fc,
+            ppm=ppm,
             samp_rate_in=samp_rate_in,
         )
         self.fractional_resampler_xx_0 = filter.fractional_resampler_cc(0, samp_rate_in/samp_rate_out)
