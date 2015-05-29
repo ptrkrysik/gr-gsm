@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<block>
+  <name>SDCCH/8 demapper</name>
+  <key>gsm_sdcch8_demapper</key>
+  <import>import grgsm</import>
+  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $starts_fn_mod51, $channel_types)</make>
+
+  <param>
+    <name>Timeslot</name>
+    <key>timeslot_nr</key>
+    <value>1</value>
+    <type>int</type>
+    <hide>none</hide>
+  </param>
+
+  <param>
+    <name>starts_fn_mod51</name>
+    <key>starts_fn_mod51</key>
+    <value>[0,4,8,12,16,20,24,28,32,36,40,44]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <param>
+    <name>channel_types</name>
+    <key>channel_types</key>
+    <value>[8,8,8,8,8,8,8,8,136,136,136,136]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+  </source>
+  
+  <doc>
+      Demapper for SDCCH/8 + SACCH/C8 control channels.
+      This corresponds to channel combination vii specified in GSM 05.02, section 6.4
+  </doc>
+</block>
