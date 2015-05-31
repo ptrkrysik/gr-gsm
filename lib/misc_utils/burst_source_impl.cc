@@ -101,7 +101,8 @@ namespace gr {
             pmt::pmt_t burst = pmt::deserialize_str(s);
             message_port_pub(pmt::mp("out"), burst);
         }
-        d_finished = true;
+        d_input_file.close();
+        stop();
     }
   } /* namespace gsm */
 } /* namespace gr */
