@@ -174,14 +174,9 @@ namespace gr {
             // 3.1.2.1
             // check parity of class 1A
             unsigned sentParity = (~mTCHU.peekField(91, 3)) & 0x07;
-            //unsigned calcParity = mTCHD.head(50).parity(mTCHParity) & 0x07;
             unsigned calcParity = mClass1A_d.parity(mTCHParity) & 0x07;
 
-            // 3.1.2.2
-            // Check the tail bits, too.
-            unsigned tail = mTCHU.peekField(185, 4);
-
-            bool good = (sentParity == calcParity) && (tail == 0);
+            bool good = (sentParity == calcParity);
 
             if (good)
             {
