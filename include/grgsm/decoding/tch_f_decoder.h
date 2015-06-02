@@ -32,8 +32,16 @@ namespace gr {
 
     enum tch_mode
     {
-        MODE_SPEECH_FR,
-        MODE_SPEECH_EFR,
+        TCH_AFS12_2,
+        TCH_AFS10_2,
+        TCH_AFS7_95,
+        TCH_AFS7_4,
+        TCH_AFS6_7,
+        TCH_AFS5_9,
+        TCH_AFS5_15,
+        TCH_AFS4_75,
+        TCH_FS,
+        TCH_EFR
     };
 
     /*!

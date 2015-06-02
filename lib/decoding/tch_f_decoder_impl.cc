@@ -57,7 +57,7 @@ namespace gr {
             throw std::runtime_error("TCH/F Decoder: can't open file\n");
         }
 
-        if (d_tch_mode == MODE_SPEECH_EFR)
+        if (d_tch_mode != TCH_FS)
         {
             fwrite(amr_nb_magic, 1, 6, d_speech_file);
         }
@@ -196,7 +196,7 @@ namespace gr {
                 unsigned char mTCHFrame[33];
                 unsigned int  mTCHFrameLength;
 
-                if (d_tch_mode == MODE_SPEECH_FR) // GSM-FR
+                if (d_tch_mode == TCH_FS) // GSM-FR
                 {
                     // Undo Um's importance-sorted bit ordering.
                     // See GSM 05.03 3.1 and Tablee 2.
@@ -207,7 +207,7 @@ namespace gr {
                     mVFrame.pack(mTCHFrame);
                     mTCHFrameLength = 33;
                 }
-                else if (d_tch_mode == MODE_SPEECH_EFR) // GSM-EFR / AMR 12.2
+                else if (d_tch_mode == TCH_EFR) // GSM-EFR / AMR 12.2
                 {
                     VocoderAMRFrame mVFrameAMR;
 
