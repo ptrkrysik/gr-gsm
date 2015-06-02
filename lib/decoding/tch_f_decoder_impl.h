@@ -55,6 +55,24 @@ namespace gr {
                 enum tch_mode d_tch_mode;
                 void decode(pmt::pmt_t msg);
                 const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
+
+                ViterbiR2O4 mVR204Coder;
+
+                BitVector mU;
+                BitVector mP;
+                BitVector mD;
+                BitVector mDP;
+                Parity mBlockCoder;
+
+                unsigned char iBLOCK[2*BLOCKS*iBLOCK_SIZE];
+                SoftVector mC;
+                SoftVector mClass1_c;
+                SoftVector mClass2_c;
+                BitVector mTCHU;
+                BitVector mTCHD;
+                BitVector mClass1A_d;
+
+
             public:
                 tch_f_decoder_impl(tch_mode mode, const std::string &file);
                 ~tch_f_decoder_impl();

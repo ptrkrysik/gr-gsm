@@ -49,7 +49,16 @@ namespace gr {
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
       d_tch_mode(mode),
-      d_collected_bursts_num(0)
+      d_collected_bursts_num(0),
+      mBlockCoder(0x10004820009ULL, 40, 224),
+      mU(228),
+      mP(mU.segment(184,40)), mD(mU.head(184)), mDP(mU.head(224)),
+      mC(CONV_SIZE),
+      mClass1_c(mC.head(378)),
+      mClass2_c(mC.segment(378, 78)),
+      mTCHU(189),
+      mTCHD(260),
+      mClass1A_d(mTCHD.head(50))
     {
         d_speech_file = fopen( file.c_str(), "wb" );
         if (d_speech_file == NULL)
@@ -89,15 +98,6 @@ namespace gr {
 
         if (d_collected_bursts_num == 8)
         {
-            unsigned char iBLOCK[2*BLOCKS*iBLOCK_SIZE];
-            SoftVector mC(CONV_SIZE);
-            SoftVector mClass1_c(mC.head(378));
-            SoftVector mClass2_c(mC.segment(378, 78));
-            BitVector mTCHU(189);
-            BitVector mTCHD(260);
-            BitVector mClass1A_d(mTCHD.head(50));
-            ViterbiR2O4 mVCoder;
-
             d_collected_bursts_num = 0;
 
             // reorganize data
@@ -127,14 +127,7 @@ namespace gr {
             // Decode stolen frames as FACCH/F
             if (stolen)
             {
-                BitVector mU(228);
-                BitVector mP(mU.segment(184,40));
-                BitVector mD(mU.head(184));
-                BitVector mDP(mU.head(224));
-                Parity mBlockCoder(0x10004820009ULL, 40, 224);
-
-//                mC.decode(mVCoder, mU);
-                mVCoder.decode(mC, mU);
+                mVR204Coder.decode(mC, mU);
                 mP.invert();
 
                 unsigned syndrome = mBlockCoder.syndrome(mDP);
@@ -166,8 +159,7 @@ namespace gr {
                 }
             }
 
-            mVCoder.decode(mClass1_c, mTCHU);
-//            mClass1_c.decode(mVCoder, mTCHU);
+            mVR204Coder.decode(mClass1_c, mTCHU);
             mClass2_c.sliced().copyToSegment(mTCHD, 182);
 
             // 3.1.2.1
