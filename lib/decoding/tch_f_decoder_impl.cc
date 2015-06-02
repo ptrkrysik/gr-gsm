@@ -133,7 +133,8 @@ namespace gr {
                 BitVector mDP(mU.head(224));
                 Parity mBlockCoder(0x10004820009ULL, 40, 224);
 
-                mC.decode(mVCoder, mU);
+//                mC.decode(mVCoder, mU);
+                mVCoder.decode(mC, mU);
                 mP.invert();
 
                 unsigned syndrome = mBlockCoder.syndrome(mDP);
@@ -165,7 +166,8 @@ namespace gr {
                 }
             }
 
-            mClass1_c.decode(mVCoder, mTCHU);
+            mVCoder.decode(mClass1_c, mTCHU);
+//            mClass1_c.decode(mVCoder, mTCHU);
             mClass2_c.sliced().copyToSegment(mTCHD, 182);
 
             // 3.1.2.1
