@@ -344,14 +344,10 @@ receiver_impl::work(int noutput_items,
                 break;      //do nothing
             }
             
-            if(input_nr==0)
+            if(input_nr==input_items.size()-1)
             {
                 d_burst_nr++;   //go to next burst
                 to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();  //consume samples of the burst up to next guard period
-            }
-            
-            if(input_nr==input_items.size()-1)
-            {
                 consume_each(to_consume);
             }
             //and add offset which is introduced by
