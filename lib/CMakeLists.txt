@@ -26,8 +26,8 @@ include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND grgsm_sources
     receiver/receiver_impl.cc
-    receiver/receiver_config.cc 
-    receiver/viterbi_detector.cc 
+    receiver/receiver_config.cc
+    receiver/viterbi_detector.cc
     receiver/sch.c
     receiver/clock_offset_control_impl.cc
     misc_utils/bursts_printer_impl.cc
@@ -42,7 +42,6 @@ list(APPEND grgsm_sources
     decoding/BitVector.cpp
     decoding/GSM610Tables.cpp
     decoding/GSM660Tables.cpp
-    decoding/GSM690Tables.cpp
     decoding/GSM503Tables.cpp
     decoding/ViterbiR204.cpp
     misc_utils/controlled_rotator_cc_impl.cc

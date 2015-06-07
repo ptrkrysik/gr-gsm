@@ -25,11 +25,9 @@
 
 #include "AmrCoder.h"
 #include "BitVector.h"
-#include "VocoderFrame.h"
 #include "GSM503Tables.h"
 #include "GSM610Tables.h"
 #include "GSM660Tables.h"
-#include "GSM690Tables.h"
 #include "ViterbiR204.h"
 #include <grgsm/decoding/tch_f_decoder.h>
 

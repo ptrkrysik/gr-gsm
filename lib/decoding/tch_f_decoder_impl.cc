@@ -236,7 +236,7 @@ namespace gr {
                           EFRBits[k-8] = TCHW[k] & 1;
 
                         // Map bits as AMR 12.2k
-                        EFRBits.map(GSM::g690_12_2_BitOrder, 244, payload);
+                        EFRBits.map(GSM::gAMRBitOrderTCH_AFS12_2, 244, payload);
 
                         // Put the whole frame (hdr + payload)
                         mTCHFrameLength = 32;
