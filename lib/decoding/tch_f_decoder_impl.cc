@@ -52,13 +52,16 @@ namespace gr {
       d_collected_bursts_num(0),
       mBlockCoder(0x10004820009ULL, 40, 224),
       mU(228),
-      mP(mU.segment(184,40)), mD(mU.head(184)), mDP(mU.head(224)),
+      mP(mU.segment(184,40)),
+      mD(mU.head(184)),
+      mDP(mU.head(224)),
       mC(CONV_SIZE),
       mClass1_c(mC.head(378)),
       mClass2_c(mC.segment(378, 78)),
       mTCHU(189),
       mTCHD(260),
-      mClass1A_d(mTCHD.head(50))
+      mClass1A_d(mTCHD.head(50)),
+      mTCHParity(0x0b, 3, 50)
     {
         d_speech_file = fopen( file.c_str(), "wb" );
         if (d_speech_file == NULL)
@@ -83,6 +86,8 @@ namespace gr {
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_f_decoder_impl::decode, this, _1));
         message_port_register_out(pmt::mp("msgs"));
+
+        setCodingMode(mode);
     }
 
     tch_f_decoder_impl::~tch_f_decoder_impl()
@@ -159,75 +164,203 @@ namespace gr {
                 }
             }
 
-            mVR204Coder.decode(mClass1_c, mTCHU);
-            mClass2_c.sliced().copyToSegment(mTCHD, 182);
-
-            // 3.1.2.1
-            // copy class 1 bits u[] to d[]
-            for (unsigned k = 0; k <= 90; k++) {
-              mTCHD[2*k] = mTCHU[k];
-              mTCHD[2*k+1] = mTCHU[184-k];
-            }
-
-            Parity mTCHParity(0x0b, 3, 50);
-
-            // 3.1.2.1
-            // check parity of class 1A
-            unsigned sentParity = (~mTCHU.peekField(91, 3)) & 0x07;
-            unsigned calcParity = mClass1A_d.parity(mTCHParity) & 0x07;
-
-            bool good = (sentParity == calcParity);
-
-            if (good)
+            // Decode voice frames and write to file
+            if (d_tch_mode == TCH_FS || d_tch_mode == TCH_EFR)
             {
-                unsigned char mTCHFrame[33];
-                unsigned int  mTCHFrameLength;
+                mVR204Coder.decode(mClass1_c, mTCHU);
+                mClass2_c.sliced().copyToSegment(mTCHD, 182);
 
-                if (d_tch_mode == TCH_FS) // GSM-FR
-                {
-                    // Undo Um's importance-sorted bit ordering.
-                    // See GSM 05.03 3.1 and Tablee 2.
-                    VocoderFrame mVFrame;
-
-                    BitVector payload = mVFrame.payload();
-                    mTCHD.unmap(GSM::g610BitOrder, 260, payload);
-                    mVFrame.pack(mTCHFrame);
-                    mTCHFrameLength = 33;
+                // 3.1.2.1
+                // copy class 1 bits u[] to d[]
+                for (unsigned k = 0; k <= 90; k++) {
+                  mTCHD[2*k] = mTCHU[k];
+                  mTCHD[2*k+1] = mTCHU[184-k];
                 }
-                else if (d_tch_mode == TCH_EFR) // GSM-EFR / AMR 12.2
+
+                // 3.1.2.1
+                // check parity of class 1A
+                unsigned sentParity = (~mTCHU.peekField(91, 3)) & 0x07;
+                unsigned calcParity = mClass1A_d.parity(mTCHParity) & 0x07;
+
+                bool good = (sentParity == calcParity);
+
+                if (good)
                 {
-                    VocoderAMRFrame mVFrameAMR;
+                    unsigned char frameBuffer[33];
+                    unsigned int  mTCHFrameLength;
 
-                    BitVector payload = mVFrameAMR.payload();
-                    BitVector TCHW(260), EFRBits(244);
+                    if (d_tch_mode == TCH_FS) // GSM-FR
+                    {
+                        unsigned char mFrameHeader = 0x0d;
+                        mTCHFrameLength = 33;
 
-                    // Undo Um's EFR bit ordering.
-                    mTCHD.unmap(GSM::g660BitOrder, 260, TCHW);
+                        // Undo Um's importance-sorted bit ordering.
+                        // See GSM 05.03 3.1 and Table 2.
+                        BitVector frFrame(260 + 4); // FR has a frameheader of 4 bits only
+                        BitVector payload = frFrame.tail(4);
 
-                    // Remove repeating bits and CRC to get raw EFR frame (244 bits)
-                    for (unsigned k=0; k<71; k++)
-                      EFRBits[k] = TCHW[k] & 1;
+                        mTCHD.unmap(GSM::g610BitOrder, 260, payload);
+                        frFrame.pack(frameBuffer);
 
-                    for (unsigned k=73; k<123; k++)
-                      EFRBits[k-2] = TCHW[k] & 1;
+                    }
+                    else if (d_tch_mode == TCH_EFR) // GSM-EFR
+                    {
+                        unsigned char mFrameHeader = 0x3c;
 
-                    for (unsigned k=125; k<178; k++)
-                      EFRBits[k-4] = TCHW[k] & 1;
+                        // AMR Frame, consisting of a 8 bit frame header, plus the payload from decoding
+                        BitVector amrFrame(244 + 8); // Same output length as AMR 12.2
+                        BitVector payload = amrFrame.tail(8);
 
-                    for (unsigned k=180; k<230; k++)
-                      EFRBits[k-6] = TCHW[k] & 1;
+                        BitVector TCHW(260), EFRBits(244);
 
-                    for (unsigned k=232; k<252; k++)
-                      EFRBits[k-8] = TCHW[k] & 1;
+                        // write frame header
+                        amrFrame.fillField(0, mFrameHeader, 8);
 
-                    // Map bits as AMR 12.2k
-                    EFRBits.map(GSM::g690_12_2_BitOrder, 244, payload);
+                        // Undo Um's EFR bit ordering.
+                        mTCHD.unmap(GSM::g660BitOrder, 260, TCHW);
 
-                    // Put the whole frame (hdr + payload)
-                    mVFrameAMR.pack(mTCHFrame);
-                    mTCHFrameLength = 32;
+                        // Remove repeating bits and CRC to get raw EFR frame (244 bits)
+                        for (unsigned k=0; k<71; k++)
+                          EFRBits[k] = TCHW[k] & 1;
+
+                        for (unsigned k=73; k<123; k++)
+                          EFRBits[k-2] = TCHW[k] & 1;
+
+                        for (unsigned k=125; k<178; k++)
+                          EFRBits[k-4] = TCHW[k] & 1;
+
+                        for (unsigned k=180; k<230; k++)
+                          EFRBits[k-6] = TCHW[k] & 1;
+
+                        for (unsigned k=232; k<252; k++)
+                          EFRBits[k-8] = TCHW[k] & 1;
+
+                        // Map bits as AMR 12.2k
+                        EFRBits.map(GSM::g690_12_2_BitOrder, 244, payload);
+
+                        // Put the whole frame (hdr + payload)
+                        mTCHFrameLength = 32;
+                        amrFrame.pack(frameBuffer);
+
+                    }
+                    fwrite(frameBuffer, 1 , mTCHFrameLength, d_speech_file);
                 }
-                fwrite(mTCHFrame, 1 , mTCHFrameLength, d_speech_file);
+            }
+            else
+            {
+                // Handle inband bits, see 3.9.4.1
+                // OpenBTS source takes last 8 bits as inband bits for some reason. This may be either a
+                // divergence between their implementation and GSM specification, which works because
+                // both their encoder and decoder do it same way, or they handle the issue at some other place
+                // SoftVector cMinus8 = mC.segment(0, mC.size() - 8);
+                SoftVector cMinus8 = mC.segment(8, mC.size());
+                cMinus8.copyUnPunctured(mTCHUC, mPuncture, mPunctureLth);
+
+                // 3.9.4.4
+                // decode from uc[] to u[]
+                mViterbi->decode(mTCHUC, mTCHU);
+
+                // 3.9.4.3 -- class 1a bits in u[] to d[]
+                for (unsigned k=0; k < mClass1ALth; k++) {
+                    mTCHD[k] = mTCHU[k];
+                }
+
+                // 3.9.4.3 -- class 1b bits in u[] to d[]
+                for (unsigned k=0; k < mClass1BLth; k++) {
+                    mTCHD[k+mClass1ALth] = mTCHU[k+mClass1ALth+6];
+                }
+
+                // Check parity
+                unsigned sentParity = (~mTCHU.peekField(mClass1ALth,6)) & 0x3f;
+                BitVector class1A = mTCHU.segment(0, mClass1ALth);
+                unsigned calcParity = class1A.parity(mTCHParity) & 0x3f;
+
+                bool good = (sentParity == calcParity);
+
+                if (good)
+                {
+                    unsigned char frameBuffer[mAMRFrameLth];
+                    // AMR Frame, consisting of a 8 bit frame header, plus the payload from decoding
+                    BitVector amrFrame(mKd + 8);
+                    BitVector payload = amrFrame.tail(8);
+
+                    // write frame header
+                    amrFrame.fillField(0, mAMRFrameHeader, 8);
+
+                    // We don't unmap here, but copy the decoded bits directly
+                    // Decoder already delivers correct bit order
+                    // mTCHD.unmap(mAMRBitOrder, payload.size(), payload);
+                    mTCHD.copyTo(payload);
+                    amrFrame.pack(frameBuffer);
+                    fwrite(frameBuffer, 1 , mAMRFrameLth, d_speech_file);
+                }
+            }
+        }
+    }
+
+    void tch_f_decoder_impl::setCodingMode(tch_mode mode)
+    {
+        if (d_tch_mode  != TCH_FS && d_tch_mode != TCH_EFR)
+        {
+            mKd = GSM::gAMRKd[d_tch_mode];
+            mTCHD.resize(mKd);
+            mTCHU.resize(mKd+6);
+            mTCHParity = Parity(0x06f,6, GSM::gAMRClass1ALth[d_tch_mode]);
+            mAMRBitOrder = GSM::gAMRBitOrder[d_tch_mode];
+            mClass1ALth = GSM::gAMRClass1ALth[d_tch_mode];
+            mClass1BLth = GSM::gAMRKd[d_tch_mode] - GSM::gAMRClass1ALth[d_tch_mode];
+            mTCHUC.resize(GSM::gAMRTCHUCLth[d_tch_mode]);
+            mPuncture = GSM::gAMRPuncture[d_tch_mode];
+            mPunctureLth = GSM::gAMRPunctureLth[d_tch_mode];
+            mClass1A_d.dup(mTCHD.head(mClass1ALth));
+
+            switch (d_tch_mode)
+            {
+                case TCH_AFS12_2:
+                    mViterbi = new ViterbiTCH_AFS12_2();
+                    mAMRFrameLth = 32;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS10_2:
+                    mViterbi = new ViterbiTCH_AFS10_2();
+                    mAMRFrameLth = 27;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS7_95:
+                    mViterbi = new ViterbiTCH_AFS7_95();
+                    mAMRFrameLth = 21;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS7_4:
+                    mViterbi = new ViterbiTCH_AFS7_4();
+                    mAMRFrameLth = 20;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS6_7:
+                    mViterbi = new ViterbiTCH_AFS6_7();
+                    mAMRFrameLth = 18;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS5_9:
+                    mViterbi = new ViterbiTCH_AFS5_9();
+                    mAMRFrameLth = 16;
+                    mAMRFrameHeader = 0x14;
+                    break;
+                case TCH_AFS5_15:
+                    mViterbi = new ViterbiTCH_AFS5_15();
+                    mAMRFrameLth = 14;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                case TCH_AFS4_75:
+                    mViterbi = new ViterbiTCH_AFS4_75();
+                    mAMRFrameLth = 13;
+                    mAMRFrameHeader = 0x3c;
+                    break;
+                default:
+                    mViterbi = new ViterbiTCH_AFS12_2();
+                    mAMRFrameLth = 32;
+                    mAMRFrameHeader = 0x3c;
+                    break;
             }
         }
     }

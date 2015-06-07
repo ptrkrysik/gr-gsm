@@ -243,6 +243,10 @@ class BitVector : public VectorBase<char>
 
 	/** Pack into a char array. */
 	void pack(unsigned char*) const;
+
+	/*  Roman: This is here for debugging */
+	void pack2(unsigned char*) const;
+
 	// Same as pack but return a string.
 	std::string packToString() const;
 

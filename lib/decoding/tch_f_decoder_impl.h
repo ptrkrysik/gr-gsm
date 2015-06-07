@@ -23,7 +23,10 @@
 #ifndef INCLUDED_GSM_TCH_F_DECODER_IMPL_H
 #define INCLUDED_GSM_TCH_F_DECODER_IMPL_H
 
+#include "AmrCoder.h"
+#include "BitVector.h"
 #include "VocoderFrame.h"
+#include "GSM503Tables.h"
 #include "GSM610Tables.h"
 #include "GSM660Tables.h"
 #include "GSM690Tables.h"
@@ -53,26 +56,39 @@ namespace gr {
                 pmt::pmt_t d_bursts[8];
                 FILE * d_speech_file;
                 enum tch_mode d_tch_mode;
-                void decode(pmt::pmt_t msg);
-                const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
-
-                ViterbiR2O4 mVR204Coder;
 
                 BitVector mU;
                 BitVector mP;
                 BitVector mD;
                 BitVector mDP;
-                Parity mBlockCoder;
-
-                unsigned char iBLOCK[2*BLOCKS*iBLOCK_SIZE];
-                SoftVector mC;
-                SoftVector mClass1_c;
-                SoftVector mClass2_c;
                 BitVector mTCHU;
                 BitVector mTCHD;
                 BitVector mClass1A_d;
+                SoftVector mC;
+                SoftVector mClass1_c;
+                SoftVector mClass2_c;
+                SoftVector mTCHUC;
 
+                Parity mBlockCoder;
+                Parity mTCHParity;
 
+                ViterbiR2O4 mVR204Coder;
+                ViterbiBase *mViterbi;
+
+                const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
+                unsigned char iBLOCK[2*BLOCKS*iBLOCK_SIZE];
+                unsigned char mAMRFrameHeader;
+
+                const unsigned *mAMRBitOrder;
+                const unsigned *mPuncture;
+                unsigned mClass1ALth;
+                unsigned mClass1BLth;
+                unsigned mPunctureLth;
+                uint8_t mAMRFrameLth;
+                uint8_t mKd;
+
+                void decode(pmt::pmt_t msg);
+                void setCodingMode(tch_mode mode);
             public:
                 tch_f_decoder_impl(tch_mode mode, const std::string &file);
                 ~tch_f_decoder_impl();

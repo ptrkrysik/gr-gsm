@@ -375,6 +375,34 @@ void BitVector::pack(unsigned char* targ) const
 	targ[bytes] = peekField(whole,rem) << (8-rem);
 }
 
+void BitVector::pack2(unsigned char* targ) const
+{
+    unsigned int i;
+    unsigned char curbyte = 0;
+
+    for (i = 0; i < size(); i++)
+    {
+        uint8_t bitnum = 7 - (i % 8);
+        curbyte |= ((char)bit(i) << bitnum);
+        if(i % 8 == 7){
+            *targ++ = curbyte;
+            curbyte = 0;
+        }
+    }
+
+	// Assumes MSB-first packing.
+//	unsigned bytes = size()/8;
+//	for (unsigned i=0; i<bytes; i++) {
+//		targ[i] = peekField(i*8,8);
+//	}
+//	unsigned whole = bytes*8;
+//	unsigned rem = size() - whole;
+//	if (rem==0) return;
+//	targ[bytes] = peekField(whole,rem) << (8-rem);
+}
+
+
+
 string BitVector::packToString() const
 {
 	string result;

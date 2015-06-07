@@ -40,4 +40,23 @@ class VocoderAMRFrame : public BitVector {
 
 };
 
+class VocoderAMR_5_9_Frame : public BitVector {
+
+        public:
+
+        VocoderAMR_5_9_Frame()
+                :BitVector(118+8)
+        { fillField(0,0x14,8); /* AMR-NB 12.2 */ }
+
+        /** Construct by unpacking a char[32]. */
+        VocoderAMR_5_9_Frame(const unsigned char *src)
+                :BitVector(118+8)
+        { unpack(src); }
+
+        BitVector payload() { return tail(8); }
+//        const BitVector payload() const { return tail(8); }
+
+};
+
+
 #endif
