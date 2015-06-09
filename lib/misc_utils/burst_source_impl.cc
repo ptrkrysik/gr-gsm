@@ -58,13 +58,9 @@ namespace gr {
      */
     burst_source_impl::~burst_source_impl()
     {
-        if (d_input_file.is_open())
-        {
-            d_input_file.close();
+        if (d_finished == false){
+            d_finished = true;
         }
-        d_finished = true;
-        d_thread->interrupt();
-        d_thread->join();
     }
 
     bool burst_source_impl::start()
@@ -78,8 +74,6 @@ namespace gr {
     bool burst_source_impl::stop()
     {
         d_finished = true;
-        d_thread->interrupt();
-        d_thread->join();
         return block::stop();
     }
 
@@ -97,11 +91,14 @@ namespace gr {
             {
                 break;
             }
+
             std::string s(unserialized, PMT_SIZE);
             pmt::pmt_t burst = pmt::deserialize_str(s);
             message_port_pub(pmt::mp("out"), burst);
         }
-        d_finished = true;
+        d_input_file.close();
+        d_thread->interrupt();
+        d_thread->join();    
     }
   } /* namespace gsm */
 } /* namespace gr */

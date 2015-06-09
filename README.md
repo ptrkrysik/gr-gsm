@@ -161,7 +161,9 @@ Credits
 =======
 *Piotr Krysik* \<ptrkrysik (at) gmail.com\> - main author and project maintainer
 
-*Steve* \<steve (at) segfault.net\>  - functions for decoding channel codes
+*Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels
+
+*Steve* \<steve (at) segfault.net\>  - functions for decoding control channels
 
 
 Thanks
