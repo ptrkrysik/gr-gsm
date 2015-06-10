@@ -26,6 +26,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {
@@ -48,7 +49,7 @@ namespace gr {
        * class. gsm::cx_channel_hopper::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int ma, int maio, int hsn);
+      static sptr make(const std::vector<int> &ma, int maio, int hsn);
     };
 
   } // namespace gsm

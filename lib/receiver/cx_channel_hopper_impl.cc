@@ -25,32 +25,35 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <grgsm/gsmtap.h>
 #include "cx_channel_hopper_impl.h"
 
 namespace gr {
   namespace gsm {
 
     cx_channel_hopper::sptr
-    cx_channel_hopper::make(int ma, int maio, int hsn)
+    cx_channel_hopper::make(const std::vector<int> &ma, int maio, int hsn)
     {
-      return gnuradio::get_initial_sptr
-        (new cx_channel_hopper_impl(ma, maio, hsn));
+        return gnuradio::get_initial_sptr
+          (new cx_channel_hopper_impl(ma, maio, hsn));
     }
 
     /*
      * The private constructor
      */
-    cx_channel_hopper_impl::cx_channel_hopper_impl(int ma, int maio, int hsn)
-      : gr::block("cx_channel_hopper",
-              gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+    cx_channel_hopper_impl::cx_channel_hopper_impl(const std::vector<int> &ma, int maio, int hsn)
+        : gr::block("cx_channel_hopper",
+                gr::io_signature::make(0, 0, 0),
+                gr::io_signature::make(0, 0, 0)),
+        d_ma(ma),
+        d_maio(maio),
+        d_hsn(hsn)
     {
-      d_ma = ma;
-      d_maio = maio;
-      d_hsn = hsn;
+        d_narfcn = ma.size();
 
-      message_port_register_in(pmt::mp("CX"));
-      message_port_register_out(pmt::mp("bursts"));
+        message_port_register_in(pmt::mp("CX"));
+        set_msg_handler(pmt::mp("CX"), boost::bind(&cx_channel_hopper_impl::assemble_bursts, this, _1));
+        message_port_register_out(pmt::mp("bursts"));
     }
 
     /*
@@ -58,6 +61,75 @@ namespace gr {
      */
     cx_channel_hopper_impl::~cx_channel_hopper_impl()
     {
+    }
+
+    /**
+     * Random number table used for calculating the 
+     * hopping sequence. Defined in GSM 05.02.
+     */
+    unsigned char RNTABLE[114] = {
+        48, 98, 63, 1, 36, 95, 78, 102, 94, 73, \
+        0, 64, 25, 81, 76, 59, 124, 23, 104, 100, \
+        101, 47, 118, 85, 18, 56, 96, 86, 54, 2, \
+        80, 34, 127, 13, 6, 89, 57, 103, 12, 74, \
+        55, 111, 75, 38, 109, 71, 112, 29, 11, 88, \
+        87, 19, 3, 68, 110, 26, 33, 31, 8, 45, \
+        82, 58, 40, 107, 32, 5, 106, 92, 62, 67, \
+        77, 108, 122, 37, 60, 66, 121, 42, 51, 126, \
+        117, 114, 4, 90, 43, 52, 53, 113, 120, 72, \
+        16, 49, 7, 79, 119, 61, 22, 84, 9, 97, \
+        91, 15, 21, 24, 46, 39, 93, 105, 65, 70, \
+        125, 99, 17, 123 \
+    };
+
+    /*
+     * Slow Frequency Hopping (SFH) MAI calculation based
+     * on airprobe-hopping by Bogdan Diaconescu.
+     */
+    int cx_channel_hopper_impl::calculate_ma_sfh(int maio, int hsn, int n, int fn)
+    {
+        int mai = 0;
+        int s = 0;
+        int nbin = floor(log2(n) + 1);
+        int t1 = fn / 1326;
+        int t2 = fn % 26;
+        int t3 = fn % 51;
+
+        if (hsn == 0)
+            mai = (fn + maio) % n;
+        else {
+            int t1r = t1 % 64;
+            int m = t2 + RNTABLE[(hsn ^ t1r) + t3];
+            int mprim = m % (1 << nbin);
+            int tprim = t3 % (1 << nbin);
+
+            if (mprim < n)
+                s = mprim;
+            else
+                s = (mprim + tprim) % n;
+
+            mai = (s + maio) % n;
+        }
+
+        return (mai);
+    }
+
+    /**
+     * Given MA, MAIO, HSN, and FN, decide which frames
+     * to forward to the demapper.
+     */
+    void cx_channel_hopper_impl::assemble_bursts(pmt::pmt_t msg)
+    {
+        pmt::pmt_t header_plus_burst = pmt::cdr(msg);
+        gsmtap_hdr *header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
+
+        uint32_t frame_nr = be32toh(header->frame_number);
+        uint16_t frame_ca = be16toh(header->arfcn);
+        int mai = calculate_ma_sfh(d_maio, d_hsn, d_narfcn, frame_nr);
+
+        if(d_ma[mai] == frame_ca) {
+            message_port_pub(pmt::mp("bursts"), msg);
+        }
     }
 
   } /* namespace gsm */

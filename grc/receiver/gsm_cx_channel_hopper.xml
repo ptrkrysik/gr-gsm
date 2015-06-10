@@ -7,7 +7,8 @@
   <param>
     <name>MA</name>
     <key>ma</key>
-    <type>int</type>
+    <value>[]</value>
+    <type>int_vector</type>
   </param>
 
   <param>

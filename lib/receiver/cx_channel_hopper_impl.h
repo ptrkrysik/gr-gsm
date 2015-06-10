@@ -31,12 +31,16 @@ namespace gr {
     class cx_channel_hopper_impl : public cx_channel_hopper
     {
      private:
-      int d_ma;
-      int d_maio;
-      int d_hsn;
+      std::vector<int> d_ma; // Mobile Allocation list. Contains all channels that are used while channel hopping
+      int d_maio; // Mobile Allocation Index Offset
+      int d_hsn; // Hopping Sequence Number
+      int d_narfcn; // Length of d_ma
+
+      int calculate_ma_sfh(int maio, int hsn, int n, int fn);
+      void assemble_bursts(pmt::pmt_t msg);
 
      public:
-      cx_channel_hopper_impl(int ma, int maio, int hsn);
+      cx_channel_hopper_impl(const std::vector<int> &ma, int maio, int hsn);
       ~cx_channel_hopper_impl();
     };
 
