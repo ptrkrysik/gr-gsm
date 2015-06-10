@@ -30,6 +30,7 @@ list(APPEND grgsm_sources
     receiver/viterbi_detector.cc 
     receiver/sch.c
     receiver/clock_offset_control_impl.cc
+    receiver/cx_channel_hopper_impl.cc
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
@@ -48,8 +49,7 @@ list(APPEND grgsm_sources
     misc_utils/tmsi_dumper_impl.cc
     misc_utils/burst_sink_impl.cc
     misc_utils/burst_source_impl.cc
-    decryption/decryption_impl.cc
-    )
+    decryption/decryption_impl.cc )
 
 add_library(gnuradio-gsm SHARED ${grgsm_sources})
 target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
