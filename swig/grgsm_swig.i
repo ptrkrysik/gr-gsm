@@ -10,6 +10,7 @@
 %{
 #include "grgsm/receiver/receiver.h"
 #include "grgsm/receiver/clock_offset_control.h"
+#include "grgsm/receiver/cx_channel_hopper.h"
 #include "grgsm/decoding/control_channels_decoder.h"
 #include "grgsm/decoding/tch_f_decoder.h"
 #include "grgsm/decryption/decryption.h"
@@ -30,7 +31,8 @@
 GR_SWIG_BLOCK_MAGIC2(gsm, receiver);
 %include "grgsm/receiver/clock_offset_control.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, clock_offset_control);
-
+%include "grgsm/receiver/cx_channel_hopper.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, cx_channel_hopper);
 
 %include "grgsm/decoding/control_channels_decoder.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, control_channels_decoder);
@@ -61,4 +63,3 @@ GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
 %include "grgsm/misc_utils/tmsi_dumper.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, tmsi_dumper);
-

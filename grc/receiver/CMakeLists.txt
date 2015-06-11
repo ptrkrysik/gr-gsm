@@ -23,5 +23,6 @@ install(FILES
     gsm_fcch_burst_tagger.xml
     gsm_sch_detector.xml
     gsm_fcch_detector.xml
+    gsm_cx_channel_hopper.xml
     gsm_clock_offset_control.xml DESTINATION share/gnuradio/grc/blocks
 )
