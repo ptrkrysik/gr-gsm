@@ -2079,7 +2079,7 @@
       <value>True</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>0</value>
     </param>
     <param>
@@ -2337,7 +2337,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>1</value>
     </param>
     <param>
@@ -2629,7 +2629,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>7</value>
     </param>
     <param>
@@ -2676,7 +2676,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>6</value>
     </param>
     <param>
@@ -2723,7 +2723,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>5</value>
     </param>
     <param>
@@ -2770,7 +2770,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>4</value>
     </param>
     <param>
@@ -2817,7 +2817,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>3</value>
     </param>
     <param>
@@ -2864,7 +2864,7 @@
       <value>False</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>2</value>
     </param>
     <param>

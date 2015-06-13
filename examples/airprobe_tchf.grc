@@ -821,7 +821,7 @@
       <value>0</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>5</value>
     </param>
   </block>
@@ -919,7 +919,7 @@
       <value>[2,6,12,16,22,26,32,36,42,46]</value>
     </param>
     <param>
-      <key>timemeslot_nr</key>
+      <key>timeslot_nr</key>
       <value>0</value>
     </param>
   </block>
