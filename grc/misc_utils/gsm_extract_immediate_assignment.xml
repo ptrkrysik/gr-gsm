@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<block>
+  <name>Extract immediate assignment</name>
+  <key>gsm_extract_immediate_assignment</key>
+  <import>import grgsm</import>
+  <make>grgsm.extract_immediate_assignment()</make>
+
+  <sink>
+    <name>msgs</name>
+    <type>message</type>
+  </sink>  
+</block>
