@@ -145,6 +145,14 @@ This method of installation might be easier for people using distributions where
 The installation guide is available here:
 https://github.com/marcelmaatkamp/docker-gnuradio-gr-gsm-ptrkrysik
 
+Mailing list
+============
+Current gr-gsm project's mailing list address is following:
+gr-gsm@googlegroups.com
+
+To join the group with any e-mail addres (google account is not required) use this link:
+https://groups.google.com/forum/#!forum/gr-gsm/join
+
 Development
 ===========
 New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, corretion of bug y).
