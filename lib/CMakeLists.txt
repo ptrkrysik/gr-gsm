@@ -53,19 +53,19 @@ list(APPEND grgsm_sources
     misc_utils/burst_source_impl.cc
     decryption/decryption_impl.cc )
 
-add_library(gnuradio-gsm SHARED ${grgsm_sources})
-target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
+add_library(gnuradio-grgsm SHARED ${grgsm_sources})
+target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
 #    boost_filesystem
 )
-set_target_properties(gnuradio-gsm PROPERTIES DEFINE_SYMBOL "gnuradio_gsm_EXPORTS")
+set_target_properties(gnuradio-grgsm PROPERTIES DEFINE_SYMBOL "gnuradio_grgsm_EXPORTS")
 
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-gsm
+install(TARGETS gnuradio-grgsm
     LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
     ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
     RUNTIME DESTINATION bin              # .dll file
@@ -91,7 +91,7 @@ install(TARGETS gnuradio-gsm
 #  ${GNURADIO_RUNTIME_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${CPPUNIT_LIBRARIES}
-#  gnuradio-gsm
+#  gnuradio-grgsm
 #)
 
 #GR_ADD_TEST(test_gsm test-gsm)
