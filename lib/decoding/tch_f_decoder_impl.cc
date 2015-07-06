@@ -68,6 +68,8 @@ namespace gr {
         {
             throw std::runtime_error("TCH/F Decoder: can't open file\n");
         }
+        
+        const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
 
         if (d_tch_mode != TCH_FS)
         {
