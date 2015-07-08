@@ -24,6 +24,7 @@
 #define INCLUDED_GSM_CX_CHANNEL_HOPPER_IMPL_H
 
 #include <grgsm/receiver/cx_channel_hopper.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {

@@ -27,6 +27,7 @@
 #include <grgsm/gsmtap.h>
 #include <gsm_constants.h>
 #include <receiver_config.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {

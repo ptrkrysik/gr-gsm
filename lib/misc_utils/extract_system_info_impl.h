@@ -26,6 +26,7 @@
 #include <grgsm/misc_utils/extract_system_info.h>
 #include <set>
 #include <map>
+#include <vector>
 
 namespace gr {
   namespace gsm {

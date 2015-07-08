@@ -28,6 +28,7 @@
 #include "universal_ctrl_chans_demapper_impl.h"
 #include <grgsm/endian.h>
 #include <grgsm/gsmtap.h>
+#include <set>
 
 namespace gr {
   namespace gsm {

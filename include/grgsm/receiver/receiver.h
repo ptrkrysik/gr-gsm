@@ -28,6 +28,7 @@
 #include <gnuradio/block.h>
 #include <gnuradio/feval.h>
 #include <gnuradio/sync_block.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {
