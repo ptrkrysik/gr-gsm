@@ -27,6 +27,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {

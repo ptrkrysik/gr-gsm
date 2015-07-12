@@ -4,9 +4,19 @@ The *gr-gsm* project is based on the *gsm-receiver* written by Piotr Krysik (als
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
+Mailing list
+============
+Current gr-gsm project's mailing list address is following:
+
+gr-gsm@googlegroups.com
+
+To join the group with any e-mail addres (google account is not required) use this link:
+
+https://groups.google.com/forum/#!forum/gr-gsm/join
+
 Installation
 ============
-The project is based on *GNU Radio* signal processing framework and takes advantage of its great features like stream tagging and message passing.
+The *gr-gsm* is based on *GNU Radio* signal processing framework and takes advantage of its great features like stream tagging and message passing.
 Presence of *GNU Radio* is therefore a basic requirement for compilation and installation of *gr-gsm*. 
 
 The easiest way to install *gr-gsm* it to use *pybombs* installer (GNU Radio install management system). Installation with this tool was tested on Ubuntu 14.04 and 14.10 (on 14.10 installation will be much faster as compilation of *GNU Radio* is not necessary).

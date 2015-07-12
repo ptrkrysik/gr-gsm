@@ -22,6 +22,7 @@
 #define INCLUDED_GSM_DECRYPTION_IMPL_H
 
 #include <grgsm/decryption/decryption.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {

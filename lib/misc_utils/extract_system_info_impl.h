@@ -24,24 +24,32 @@
 #define INCLUDED_GSM_EXTRACT_SYSTEM_INFO_IMPL_H
 
 #include <grgsm/misc_utils/extract_system_info.h>
-
+#include <set>
+#include <map>
+#include <vector>
 
 namespace gr {
   namespace gsm {
-
     class chan_info {
       public:
         unsigned int id;
         int8_t pwr_db;
         unsigned int arfcn;
-        float freq;
         unsigned int lac;
         unsigned int cell_id;
         unsigned int mnc;
+        std::set<int> neighbour_cells;
         
-        chan_info() :  id(-1), pwr_db(0), arfcn(0), freq(0), lac(0), cell_id(0), mnc(0){}
-        chan_info(const chan_info & info) : id(info.id), pwr_db(info.pwr_db), arfcn(info.arfcn), freq(info.freq), lac(info.lac), cell_id(info.cell_id), mnc(info.mnc){}
+        chan_info() :  id(-1), pwr_db(0), arfcn(0), lac(0), cell_id(0), mnc(0){}
+        chan_info(const chan_info & info) : id(info.id), pwr_db(info.pwr_db), arfcn(info.arfcn), lac(info.lac), cell_id(info.cell_id), mnc(info.mnc){}
         ~chan_info(){}
+        void copy_nonzero_elements(const chan_info & info){
+            pwr_db = info.pwr_db;
+            arfcn = info.arfcn;
+            lac = (info.lac!=0) ? info.lac : lac;
+            cell_id = (info.cell_id!=0) ? info.cell_id : cell_id;
+            mnc = (info.mnc!=0) ? info.mnc : mnc;
+        }
     };
 
 
@@ -58,21 +66,23 @@ namespace gr {
         }
     };
 
-
+    typedef std::map<unsigned int, chan_info> chan_info_map;
     class extract_system_info_impl : public extract_system_info
     {
      private:
       void process_bursts(pmt::pmt_t burst);
       void process_sysinfo(pmt::pmt_t msg);
-      std::set<chan_info, compare_id> d_c0_channels;
+      chan_info_map d_c0_channels;
       bool after_reset;
+      void decode_neighbour_cells(uint8_t * data, unsigned int offset, unsigned int chan_id);
+//      void dissect_channel_list_n_range(guint32 offset, guint len, gint range)
      public:
-      virtual void show();
       virtual std::vector<int> get_chans();
       virtual std::vector<int> get_pwrs();
       virtual std::vector<int> get_lac();
       virtual std::vector<int> get_cell_id();
       virtual std::vector<int> get_mnc();
+      virtual std::vector<int> get_neighbours(int chan_id);
       virtual void reset();
       extract_system_info_impl();
       ~extract_system_info_impl();

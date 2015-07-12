@@ -44,7 +44,7 @@ GR_PYTHON_INSTALL(
 ########################################################################
 #include(GrTest)
 
-#set(GR_TEST_TARGET_DEPS gnuradio-gsm)
+#set(GR_TEST_TARGET_DEPS gnuradio-grgsm)
 #set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
 #GR_ADD_TEST(qa_receiver ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.py)
 #GR_ADD_TEST(qa_receiver_hier ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver_hier.py)

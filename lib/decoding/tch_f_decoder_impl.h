@@ -73,7 +73,6 @@ namespace gr {
                 ViterbiR2O4 mVR204Coder;
                 ViterbiBase *mViterbi;
 
-                const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
                 unsigned char iBLOCK[2*BLOCKS*iBLOCK_SIZE];
                 unsigned char mAMRFrameHeader;
 

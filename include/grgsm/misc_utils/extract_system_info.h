@@ -26,6 +26,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {
@@ -49,12 +50,12 @@ namespace gr {
        * creating new instances.
        */
       static sptr make();
-      virtual void show() = 0;
       virtual std::vector<int> get_chans() = 0;
       virtual std::vector<int> get_pwrs() = 0;
       virtual std::vector<int> get_lac() = 0;
       virtual std::vector<int> get_cell_id() = 0;
       virtual std::vector<int> get_mnc() = 0;
+      virtual std::vector<int> get_neighbours(int chan_id) = 0;
       virtual void reset() = 0;
     };
 
