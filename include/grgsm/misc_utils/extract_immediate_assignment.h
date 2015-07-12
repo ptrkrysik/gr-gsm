@@ -26,10 +26,10 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <vector>
 
 namespace gr {
   namespace gsm {
-
     /*!
      * \brief <+description of block+>
      * \ingroup gsm
@@ -49,6 +49,16 @@ namespace gr {
        * creating new instances.
        */
       static sptr make();
+      virtual std::vector<int> get_frame_numbers() = 0;
+      virtual std::vector<std::string> get_channel_types() = 0;
+      virtual std::vector<int> get_timeslots() = 0;
+      virtual std::vector<int> get_subchannels() = 0;
+      virtual std::vector<int> get_hopping() = 0;
+      virtual std::vector<int> get_maios() = 0;
+      virtual std::vector<int> get_hsns() = 0;
+      virtual std::vector<int> get_arfcns() = 0;
+      virtual std::vector<int> get_timing_advances() = 0;
+      virtual std::vector<std::string> get_mobile_allocations() = 0;
     };
   } // namespace gsm
 } // namespace gr

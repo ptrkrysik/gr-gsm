@@ -28,9 +28,12 @@
 #include <grgsm/gsmtap.h>
 #include <unistd.h>
 #include <set>
+#include <map>
 #include <iterator>
 #include <algorithm>
 #include <iostream>
+#include <endian.h>
+#include <boost/foreach.hpp>
 
 #include "extract_immediate_assignment_impl.h"
 
@@ -47,9 +50,11 @@ namespace gr {
 
         if(msg_elements[2]==0x3f)
         {
+            immediate_assignment current;
             std::cout << "\n------------------------------------------------------------------\n" << std::endl;
-            std::cout << "Immediate assignment found !" << std::endl;
             std::cout << "FrameNr: " << (unsigned)frame_nr << std::endl;
+
+            current.frame_nr = frame_nr;
 
             uint8_t mode = msg_elements[3] & (1 << 4);
 
@@ -101,8 +106,14 @@ namespace gr {
             }
             else
             {
+                channel_type = "GPRS - Temporary Block Flow TBF";
+                subchannel = 0;
                 std::cout << "Channel type: " << "GPRS - Temporary Block Flow TBF" << std::endl;
             }
+
+            current.channel_type = channel_type;
+            current.timeslot = timeslot;
+            current.subchannel = subchannel;
 
             /*
                 msg_elements[5], msg_elements[6] are octets 3 and 4 in specs
@@ -123,6 +134,7 @@ namespace gr {
                         6bit HSN
             */
             uint8_t hopping = (msg_elements[5] >> 4) & 1;
+            current.hopping = hopping;
 
             std::cout << "Hopping: " << (unsigned)hopping << std::endl;
 
@@ -133,6 +145,9 @@ namespace gr {
 
                 uint8_t hsn = (msg_elements[6] & 0x3f);
 
+                current.maio = maio;
+                current.hsn = hsn;
+
                 std::cout << "MAIO: " << (unsigned)maio << std::endl;
                 std::cout << "HSN: " << (unsigned)hsn << std::endl;
             }
@@ -140,6 +155,8 @@ namespace gr {
             {
                 uint16_t arfcn = (msg_elements[5] & 3) << 8;
                 arfcn |= msg_elements[6];
+
+                current.arfcn = arfcn;
 
                 std::cout << "ARFCN: " << (unsigned)arfcn << std::endl;
             }
@@ -153,21 +170,136 @@ namespace gr {
             uint8_t timing_advance = msg_elements[10];
             std::cout << "TA: " << (unsigned)timing_advance << std::endl;
 
+            current.timing_advance = timing_advance;
+
+
             /*
                 msg_elements[11] - 20:   mobile allocation, flexible length, see 10.5.2.21
             */
-
             uint8_t mobile_allocation_len = msg_elements[11];
             if (mobile_allocation_len > 0)
             {
                 uint8_t mobile_allocation[mobile_allocation_len];
+                std::string ma;
+
                 for (int i=0; i<mobile_allocation_len; i++)
                 {
                     mobile_allocation[i] = msg_elements[12 + i];
-                    std::cout << "MA: " << (unsigned)mobile_allocation[i] << std::endl;
+
+                    for (int j=0; j<8; j++)
+                    {
+                        ma.push_back('0' + ((mobile_allocation[i] >> (7-j)) & 0x1));
+                    }
+
+//                    std::cout << "MA: " << (unsigned)mobile_allocation[i] << std::endl;
+                    std::cout << "MA: " << ma << std::endl;
                 }
+
+                current.mobile_allocation = ma;
             }
+
+            d_assignment_map[current.frame_nr] = current;
         }
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_frame_numbers()
+    {
+        std::vector<int> fnrs;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            fnrs.push_back(i.second.frame_nr);
+        }
+        return fnrs;
+    }
+
+    std::vector<std::string> extract_immediate_assignment_impl::get_channel_types()
+    {
+        std::vector<std::string> types;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            types.push_back(i.second.channel_type);
+        }
+        return types;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_timeslots()
+    {
+        std::vector<int> timeslots;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            timeslots.push_back(i.second.timeslot);
+        }
+        return timeslots;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_subchannels()
+    {
+        std::vector<int> subchannels;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            subchannels.push_back(i.second.subchannel);
+        }
+        return subchannels;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_hopping()
+    {
+        std::vector<int> hopping;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            hopping.push_back(i.second.hopping);
+        }
+        return hopping;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_maios()
+    {
+        std::vector<int> maios;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            maios.push_back(i.second.maio);
+        }
+        return maios;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_hsns()
+    {
+        std::vector<int> hsns;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            hsns.push_back(i.second.hsn);
+        }
+        return hsns;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_arfcns()
+    {
+        std::vector<int> arfcns;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            arfcns.push_back(i.second.arfcn);
+        }
+        return arfcns;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_timing_advances()
+    {
+        std::vector<int> tas;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            tas.push_back(i.second.timing_advance);
+        }
+        return tas;
+    }
+
+    std::vector<std::string> extract_immediate_assignment_impl::get_mobile_allocations()
+    {
+        std::vector<std::string> mobile_allocations;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            mobile_allocations.push_back(i.second.mobile_allocation);
+        }
+        return mobile_allocations;
     }
 
     extract_immediate_assignment::sptr
