@@ -24,7 +24,6 @@
 #define INCLUDED_GSM_EXTRACT_IMMEDIATE_ASSIGNMENT_IMPL_H
 
 #include <grgsm/misc_utils/extract_immediate_assignment.h>
-#include <set>
 #include <map>
 #include <vector>
 
@@ -57,6 +56,7 @@ namespace gr {
         private:
             void process_message(pmt::pmt_t msg);
             immediate_assignment_map d_assignment_map;
+            bool d_print_immediate_assignments;
         public:
             virtual std::vector<int> get_frame_numbers();
             virtual std::vector<std::string> get_channel_types();
@@ -68,7 +68,7 @@ namespace gr {
             virtual std::vector<int> get_arfcns();
             virtual std::vector<int> get_timing_advances();
             virtual std::vector<std::string> get_mobile_allocations();
-            extract_immediate_assignment_impl();
+            extract_immediate_assignment_impl(bool print_immediate_assignments=false);
             ~extract_immediate_assignment_impl();
     };
   } // namespace gsm

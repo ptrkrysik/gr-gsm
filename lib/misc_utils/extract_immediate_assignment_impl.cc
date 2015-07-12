@@ -27,11 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
 #include <unistd.h>
-#include <set>
 #include <map>
-#include <iterator>
-#include <algorithm>
-#include <iostream>
 #include <endian.h>
 #include <boost/foreach.hpp>
 
@@ -51,12 +47,7 @@ namespace gr {
         if(msg_elements[2]==0x3f)
         {
             immediate_assignment current;
-            std::cout << "\n------------------------------------------------------------------\n" << std::endl;
-            std::cout << "FrameNr: " << (unsigned)frame_nr << std::endl;
-
             current.frame_nr = frame_nr;
-
-            uint8_t mode = msg_elements[3] & (1 << 4);
 
             /*
                 channel description, see table 10.23 in GSM 04.08
@@ -71,49 +62,36 @@ namespace gr {
                     01TTT   SDCCH/8, subchannel/TDMA offset TTT
                 3 bits timeslot number TN
             */
+            current.timeslot = (msg_elements[4] & 7);
+
             uint8_t channeltype = (msg_elements[4] >> 3);
-            uint8_t timeslot = (msg_elements[4] & 7);
-            uint8_t subchannel;
-            std::string channel_type;
-
-            std::cout << "Timeslot: " << (unsigned)timeslot << std::endl;
-
+            uint8_t mode = msg_elements[3] & (1 << 4);
             if (mode == 0)
             {
                 if (channeltype >= 8)
                 {
-                    channel_type = "SDCCH/8";
-                    subchannel = (channeltype & 7);
+                    current.channel_type = "SDCCH/8";
+                    current.subchannel = (channeltype & 7);
                 }
                 else if (channeltype >= 4 && channeltype <= 7)
                 {
-                    channel_type = "SDCCH/4";
-                    subchannel = (channeltype & 3);
+                    current.channel_type = "SDCCH/4";
+                    current.subchannel = (channeltype & 3);
                 }
                 else if (channeltype >= 2 && channeltype <= 3)
                 {
-                    channel_type = "TCH/H";
-                    subchannel = (channeltype & 1);
+                    current.channel_type = "TCH/H";
+                    current.subchannel = (channeltype & 1);
                 }
                 else
                 {
-                    channel_type = "TCH/F";
-                    subchannel = 0;
+                    current.channel_type = "TCH/F";
                 }
-
-                std::cout << "Channel type: " << channel_type << std::endl;
-                std::cout << "Subchannel: " << (unsigned)subchannel << std::endl;
             }
             else
             {
-                channel_type = "GPRS - Temporary Block Flow TBF";
-                subchannel = 0;
-                std::cout << "Channel type: " << "GPRS - Temporary Block Flow TBF" << std::endl;
+                current.channel_type = "GPRS - Temporary Block Flow TBF";
             }
-
-            current.channel_type = channel_type;
-            current.timeslot = timeslot;
-            current.subchannel = subchannel;
 
             /*
                 msg_elements[5], msg_elements[6] are octets 3 and 4 in specs
@@ -133,72 +111,73 @@ namespace gr {
                         2 bit low part of MAIO
                         6bit HSN
             */
-            uint8_t hopping = (msg_elements[5] >> 4) & 1;
-            current.hopping = hopping;
-
-            std::cout << "Hopping: " << (unsigned)hopping << std::endl;
-
-            if (hopping)
+            current.hopping = (msg_elements[5] >> 4) & 1;
+            if (current.hopping)
             {
                 uint8_t maio = (msg_elements[5] & 0xf) << 2;
                 maio |= (msg_elements[6] >> 6);
-
-                uint8_t hsn = (msg_elements[6] & 0x3f);
-
                 current.maio = maio;
-                current.hsn = hsn;
-
-                std::cout << "MAIO: " << (unsigned)maio << std::endl;
-                std::cout << "HSN: " << (unsigned)hsn << std::endl;
+                current.hsn = (msg_elements[6] & 0x3f);
             }
             else
             {
                 uint16_t arfcn = (msg_elements[5] & 3) << 8;
                 arfcn |= msg_elements[6];
-
                 current.arfcn = arfcn;
-
-                std::cout << "ARFCN: " << (unsigned)arfcn << std::endl;
             }
 
-            // request reference as ID in set, so we get only one immediate assignment per reference
+            // TODO: add option where request reference is set as ID,
+            // so we get only one immediate assignment per reference
             /*
                 msg_elements[7 - 9], octets 5 - 7 in specs : request reference, maybe later
 
                 msg_elements[10]:   timing advance
             */
-            uint8_t timing_advance = msg_elements[10];
-            std::cout << "TA: " << (unsigned)timing_advance << std::endl;
-
-            current.timing_advance = timing_advance;
-
+            current.timing_advance = msg_elements[10];
 
             /*
-                msg_elements[11] - 20:   mobile allocation, flexible length, see 10.5.2.21
+                msg_elements[11 - 20]:   mobile allocation, flexible length, see 10.5.2.21
             */
             uint8_t mobile_allocation_len = msg_elements[11];
             if (mobile_allocation_len > 0)
             {
-                uint8_t mobile_allocation[mobile_allocation_len];
                 std::string ma;
-
                 for (int i=0; i<mobile_allocation_len; i++)
                 {
-                    mobile_allocation[i] = msg_elements[12 + i];
-
                     for (int j=0; j<8; j++)
                     {
-                        ma.push_back('0' + ((mobile_allocation[i] >> (7-j)) & 0x1));
+                        ma.push_back('0' + ((msg_elements[12 + i] >> (7-j)) & 0x1));
                     }
-
-//                    std::cout << "MA: " << (unsigned)mobile_allocation[i] << std::endl;
-                    std::cout << "MA: " << ma << std::endl;
                 }
-
                 current.mobile_allocation = ma;
             }
 
             d_assignment_map[current.frame_nr] = current;
+
+            if (d_print_immediate_assignments)
+            {
+                std::cout << "\n------------------------------------------------\n" << std::endl;
+                std::cout << "FrameNr: " << (unsigned)current.frame_nr << std::endl;
+                std::cout << "Channel type: " << current.channel_type << std::endl;
+                std::cout << "Timeslot: " << (unsigned)current.timeslot << std::endl;
+                // Dont print subchannel if mode == 1 or if the assigned channel is TCH/F
+                if (mode == 0 && channeltype >= 2)
+                {
+                    std::cout << "Subchannel: " << (unsigned)current.subchannel << std::endl;
+                }
+                std::cout << "Hopping: " << (unsigned)current.hopping << std::endl;
+                if (current.hopping)
+                {
+                    std::cout << "MAIO: " << (unsigned)current.maio << std::endl;
+                    std::cout << "HSN: " << (unsigned)current.hsn << std::endl;
+                    std::cout << "Mobile Allocation: " << current.mobile_allocation << std::endl;
+                }
+                else
+                {
+                    std::cout << "ARFCN: " << (unsigned)current.arfcn << std::endl;
+                }
+                std::cout << "Timing Advance: " << (unsigned)current.timing_advance << std::endl;
+            }
         }
     }
 
@@ -303,20 +282,21 @@ namespace gr {
     }
 
     extract_immediate_assignment::sptr
-    extract_immediate_assignment::make()
+    extract_immediate_assignment::make(bool print_immediate_assignments)
     {
       return gnuradio::get_initial_sptr
-        (new extract_immediate_assignment_impl());
+        (new extract_immediate_assignment_impl(print_immediate_assignments));
     }
 
     /*
      * The private constructor
      */
-    extract_immediate_assignment_impl::extract_immediate_assignment_impl()
+    extract_immediate_assignment_impl::extract_immediate_assignment_impl(bool print_immediate_assignments)
       : gr::block("extract_immediate_assignment",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
+        d_print_immediate_assignments = print_immediate_assignments;
         message_port_register_in(pmt::mp("msgs"));
         set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_immediate_assignment_impl::process_message, this, _1));
     }
