@@ -54,13 +54,18 @@
   </sink>
 
   <doc>
-      Extracts the assignment information from immediate assignments, i.e. timeslot, channel type, etc.
+Extracts the assignment information from immediate assignments, i.e. timeslot, channel type, etc.
 
-      Input: decoded control channel messages
+Input: decoded control channel messages
 
-      If "Print" is enabled, the information will be printed to output also,
-      else the data can be retrieved using functions:
+If "Print" is enabled, the information will be printed to output also,
+else the data can be retrieved using functions:
 
-      get_frame_numbers(), get_channel_types(), get_timeslots(), get_subchannels(), get_hopping(), get_maios(), get_hsns(), get_arfcns(), get_timing_advances(), get_mobile_allocations()
+get_frame_numbers(), get_channel_types(), get_timeslots(), get_subchannels(), get_hopping(), get_maios(), get_hsns(), get_arfcns(), get_timing_advances(), get_mobile_allocations()
+
+If "Ignore GPRS" is enabled, the extractor will ignore Immediate Assignments that assign GPRS channels.
+
+If "Unique per request ref" is enabled, the extractor will capture the first Immediate Assignment for every unique request reference, and ignore further duplicate assignments
+
   </doc>
 </block>
