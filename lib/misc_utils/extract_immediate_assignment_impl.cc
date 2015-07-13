@@ -131,11 +131,22 @@ namespace gr {
                 current.arfcn = arfcn;
             }
 
-            // TODO: add option where request reference is set as ID,
-            // so we get only one immediate assignment per reference
             /*
-                msg_elements[7 - 9], octets 5 - 7 in specs : request reference, maybe later
+                msg_elements[7 - 9], octets 5 - 7 in specs, see 10.5.2.30 request reference, maybe later
+            */
+            uint8_t random_access_info = msg_elements[7];
+            uint8_t rr_t1 = (msg_elements[8] >> 3);
+            uint8_t rr_t2 = (msg_elements[9] & 0x1F);
+            uint8_t rr_t3 = (msg_elements[8] & 0x7) << 3;
+            rr_t3 |= (msg_elements[9] >> 5);
+            uint32_t request_fnr = 51*((rr_t3-rr_t2) % 26) + rr_t3 + (51*26*rr_t1);
 
+            // we will use random_access_info and request_fnr together as request_reference in the map,
+            // if unique_references is set true
+            uint32_t request_ref = (random_access_info << 0x16);
+            request_ref |= request_fnr;
+
+            /*
                 msg_elements[10]:   timing advance
             */
             current.timing_advance = msg_elements[10];
@@ -157,9 +168,24 @@ namespace gr {
                 current.mobile_allocation = ma;
             }
 
-            d_assignment_map[current.frame_nr] = current;
+            bool is_duplicate = false;
+            if (d_unique_references)
+            {
+                if (d_assignment_map.find(request_ref) != d_assignment_map.end())
+                {
+                    is_duplicate = true;
+                }
+                else
+                {
+                    d_assignment_map[request_ref] = current;
+                }
+            }
+            else
+            {
+                d_assignment_map[current.frame_nr] = current;
+            }
 
-            if (d_print_immediate_assignments)
+            if (d_print_immediate_assignments && !is_duplicate)
             {
                 std::cout << "\n------------------------------------------------\n" << std::endl;
                 std::cout << "FrameNr: " << (unsigned)current.frame_nr << std::endl;
@@ -287,22 +313,24 @@ namespace gr {
     }
 
     extract_immediate_assignment::sptr
-    extract_immediate_assignment::make(bool print_immediate_assignments, bool ignore_gprs)
+    extract_immediate_assignment::make(bool print_immediate_assignments, bool ignore_gprs, bool unique_references)
     {
       return gnuradio::get_initial_sptr
-        (new extract_immediate_assignment_impl(print_immediate_assignments, ignore_gprs));
+        (new extract_immediate_assignment_impl(print_immediate_assignments, ignore_gprs, unique_references));
     }
 
     /*
      * The private constructor
      */
-    extract_immediate_assignment_impl::extract_immediate_assignment_impl(bool print_immediate_assignments, bool ignore_gprs)
+    extract_immediate_assignment_impl::extract_immediate_assignment_impl(bool print_immediate_assignments,
+        bool ignore_gprs, bool unique_references)
       : gr::block("extract_immediate_assignment",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
         d_print_immediate_assignments = print_immediate_assignments;
         d_ignore_gprs = ignore_gprs;
+        d_unique_references = unique_references;
         message_port_register_in(pmt::mp("msgs"));
         set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_immediate_assignment_impl::process_message, this, _1));
     }

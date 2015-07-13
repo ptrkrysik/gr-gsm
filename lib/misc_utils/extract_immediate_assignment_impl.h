@@ -58,6 +58,7 @@ namespace gr {
             immediate_assignment_map d_assignment_map;
             bool d_print_immediate_assignments;
             bool d_ignore_gprs;
+            bool d_unique_references;
         public:
             virtual std::vector<int> get_frame_numbers();
             virtual std::vector<std::string> get_channel_types();
@@ -69,7 +70,8 @@ namespace gr {
             virtual std::vector<int> get_arfcns();
             virtual std::vector<int> get_timing_advances();
             virtual std::vector<std::string> get_mobile_allocations();
-            extract_immediate_assignment_impl(bool print_immediate_assignments=false, bool ignore_gprs=false);
+            extract_immediate_assignment_impl(bool print_immediate_assignments=false,
+                bool ignore_gprs=false, bool unique_references=false);
             ~extract_immediate_assignment_impl();
     };
   } // namespace gsm
