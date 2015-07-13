@@ -35,8 +35,11 @@ namespace gr {
       void bursts_print(pmt::pmt_t burst);
       pmt::pmt_t d_prepend_string;
       bool d_prepend_fnr;
+      bool d_prepend_frame_count;
+      bool d_print_payload_only;
      public:
-      bursts_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr=false);
+      bursts_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr=false,
+        bool prepend_frame_count=false, bool print_payload_only=false);
       ~bursts_printer_impl();
     };
 
