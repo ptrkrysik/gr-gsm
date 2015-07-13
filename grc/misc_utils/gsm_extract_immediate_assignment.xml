@@ -3,11 +3,25 @@
   <name>Extract immediate assignment</name>
   <key>gsm_extract_immediate_assignment</key>
   <import>import grgsm</import>
-  <make>grgsm.extract_immediate_assignment($print_immediate_assignments)</make>
+  <make>grgsm.extract_immediate_assignment($print_immediate_assignments, $ignore_gprs)</make>
 
   <param>
     <name>Print</name>
     <key>print_immediate_assignments</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>False</name>
+      <key>False</key>
+    </option>
+    <option>
+      <name>True</name>
+      <key>True</key>
+    </option>
+  </param>
+  <param>
+    <name>Ignore GPRS</name>
+    <key>ignore_gprs</key>
     <value>False</value>
     <type>bool</type>
     <option>

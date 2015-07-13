@@ -90,6 +90,11 @@ namespace gr {
             }
             else
             {
+                // We return if ignore_gprs is set true
+                if (d_ignore_gprs)
+                {
+                    return;
+                }
                 current.channel_type = "GPRS - Temporary Block Flow TBF";
             }
 
@@ -282,21 +287,22 @@ namespace gr {
     }
 
     extract_immediate_assignment::sptr
-    extract_immediate_assignment::make(bool print_immediate_assignments)
+    extract_immediate_assignment::make(bool print_immediate_assignments, bool ignore_gprs)
     {
       return gnuradio::get_initial_sptr
-        (new extract_immediate_assignment_impl(print_immediate_assignments));
+        (new extract_immediate_assignment_impl(print_immediate_assignments, ignore_gprs));
     }
 
     /*
      * The private constructor
      */
-    extract_immediate_assignment_impl::extract_immediate_assignment_impl(bool print_immediate_assignments)
+    extract_immediate_assignment_impl::extract_immediate_assignment_impl(bool print_immediate_assignments, bool ignore_gprs)
       : gr::block("extract_immediate_assignment",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
         d_print_immediate_assignments = print_immediate_assignments;
+        d_ignore_gprs = ignore_gprs;
         message_port_register_in(pmt::mp("msgs"));
         set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_immediate_assignment_impl::process_message, this, _1));
     }

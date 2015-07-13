@@ -48,7 +48,7 @@ namespace gr {
        * class. gsm::extract_immediate_assignment::make is the public interface for
        * creating new instances.
        */
-      static sptr make(bool print_immediate_assignments=false);
+      static sptr make(bool print_immediate_assignments=false, bool ignore_gprs=false);
       virtual std::vector<int> get_frame_numbers() = 0;
       virtual std::vector<std::string> get_channel_types() = 0;
       virtual std::vector<int> get_timeslots() = 0;
