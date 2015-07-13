@@ -60,4 +60,16 @@
     <name>bursts</name>
     <type>message</type>
   </sink>
+
+  <doc>
+This block prints bursts to output. By default the whole burst including tail bits, stealing bits and training sequence is printed.
+
+If "Prepend Frame Number" is enabled, then the framenumber is prepended to each burst.
+
+If "Prepend Frame Count" is enabled, then the frame count for A5 is prependend to each burst.
+
+If "Print payload only" is enabled, then only the two data blocks of a burst are printed, tail bits, stealing bits and training sequence are omitted.
+
+Enabling all three options results in an output that is similar to the output of airprobe, i.e. the format is "frame_nr frame_count: databits"
+  </doc>
 </block>

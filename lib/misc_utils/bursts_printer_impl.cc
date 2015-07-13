@@ -69,7 +69,7 @@ namespace gr {
 
         if (d_prepend_fnr || d_prepend_frame_count)
         {
-            std::cout << ":";
+            std::cout << ": ";
         }
 
         if (d_print_payload_only)
