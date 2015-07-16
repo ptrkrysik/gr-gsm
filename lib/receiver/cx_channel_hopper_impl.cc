@@ -27,6 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
+#include <boost/algorithm/clamp.hpp>
 #include "cx_channel_hopper_impl.h"
 
 namespace gr {
@@ -51,6 +52,23 @@ namespace gr {
         d_hsn(hsn)
     {
         d_narfcn = ma.size();
+
+        // Check user input for GSM 05.02, p16 compliance
+        if(d_narfcn < 1 || d_narfcn > 64) {
+            std::cerr << "warning: clamping number of RFCNs in the MA (" << d_narfcn << "), which should be 1 <= N <= 64." << std::endl;
+            d_narfcn = boost::algorithm::clamp(d_narfcn, 1, 64);
+            d_ma.resize(d_narfcn);
+        }
+
+        if(d_maio < 0 || d_maio >= d_narfcn) {
+            std::cerr << "warning: clamping MAIO (" << d_maio << "), which should be 0 <= MAIO < N." << std::endl;
+            d_maio = boost::algorithm::clamp(d_maio, 0, d_narfcn - 1);
+        }
+
+        if(d_hsn < 0 || d_hsn > 63) {
+            std::cerr << "warning: clamping HSN (" << d_hsn << "), which should be 0 <= HSN < 64." << std::endl;
+            d_hsn = boost::algorithm::clamp(d_hsn, 0, 63);
+        }
 
         message_port_register_in(pmt::mp("CX"));
         set_msg_handler(pmt::mp("CX"), boost::bind(&cx_channel_hopper_impl::assemble_bursts, this, _1));
@@ -128,7 +146,7 @@ namespace gr {
         uint16_t frame_ca = be16toh(header->arfcn);
         int mai = calculate_ma_sfh(d_maio, d_hsn, d_narfcn, frame_nr);
 
-        if(d_ma[mai] == frame_ca) {
+        if(d_ma[mai] == (int)frame_ca) {
             message_port_pub(pmt::mp("bursts"), msg);
         }
     }
