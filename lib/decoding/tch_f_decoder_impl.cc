@@ -68,7 +68,7 @@ namespace gr {
         {
             throw std::runtime_error("TCH/F Decoder: can't open file\n");
         }
-        
+
         const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
 
         if (d_tch_mode != TCH_FS)
@@ -163,6 +163,56 @@ namespace gr {
                     pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
 
                     message_port_pub(pmt::mp("msgs"), msg_out);
+
+                    // if we are in an AMR-mode and we receive a channel mode modify message,
+                    // we set the mode according to the multirate configuration from the message
+                    // see GSM 04.18, section 9.1.5 and 10.5.2.21aa
+                    if (d_tch_mode  != TCH_FS && d_tch_mode != TCH_EFR)
+                    {
+                        if (outmsg[3] == 0x06 && outmsg[4] == 0x10)
+                        {
+                            // Verify that multirate version 1 is set
+                            if ((outmsg[11] >> 5) == 1)
+                            {
+                                // the set of active codecs, max 4 modes
+                                // active_codec_set[0] corresponds to CODEC_MODE_1 with lowest bit rate
+                                // active_codec_set[3] corresponds to CODEC_MODE_4 with highest bit rate
+                                tch_mode active_codec_set[4];
+                                uint8_t mode_count = 0;
+                                for (i = 0; i<8; i++)
+                                {
+                                    if (((outmsg[12] >> i) & 0x1) == 1 && mode_count < 4)
+                                    {
+                                        active_codec_set[mode_count++] = static_cast<tch_mode>(7-i);
+                                    }
+                                }
+
+                                // check Initial Codec Mode Indicator ICMI
+                                // if ICMI == 1, then use the one defined in start mode field
+                                // else use implicit rule defined in GSM 05.09, section 3.4.3
+                                if (((outmsg[11] >> 3) & 0x1) == 1)
+                                {
+                                    // from start field
+                                    setCodingMode(active_codec_set[ (outmsg[11] & 0x3) ]);
+                                }
+                                else
+                                {
+                                    // implicit mode
+                                    // if the set contains only 1 codec, we use that one
+                                    // else if there are 2 or 3 codecs in the set, we use the one with lowest bitrate
+                                    if (mode_count >= 1 && mode_count <= 3)
+                                    {
+                                        setCodingMode(active_codec_set[0]);
+                                    }
+                                    // if there are 4 codecs in the set, we use the second lowest bitrate
+                                    else if (mode_count == 4)
+                                    {
+                                        setCodingMode(active_codec_set[1]);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -302,8 +352,9 @@ namespace gr {
 
     void tch_f_decoder_impl::setCodingMode(tch_mode mode)
     {
-        if (d_tch_mode  != TCH_FS && d_tch_mode != TCH_EFR)
+        if (mode  != TCH_FS && d_tch_mode != TCH_EFR)
         {
+            d_tch_mode = mode;
             mKd = GSM::gAMRKd[d_tch_mode];
             mTCHD.resize(mKd);
             mTCHU.resize(mKd+6);
