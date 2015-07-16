@@ -33,6 +33,7 @@ list(APPEND grgsm_sources
     receiver/cx_channel_hopper_impl.cc
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
+    misc_utils/extract_immediate_assignment_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
     demapping/tch_f_chans_demapper_impl.cc
     decoding/control_channels_decoder_impl.cc
