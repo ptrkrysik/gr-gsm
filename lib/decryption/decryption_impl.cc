@@ -26,8 +26,10 @@
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
 #include "decryption_impl.h"
-#include "a5_1_2.h"
 
+extern "C" {
+    #include <osmocom/gsm/a5.h>
+}
 
 const uint32_t BURST_SIZE=148;
 
@@ -66,14 +68,24 @@ namespace gr {
 
     void decryption_impl::set_k_c(const std::vector<uint8_t> & k_c)
     {
-        d_k_c = k_c;
+        if (k_c.size() == 8)
+        {
+            for (int i=0; i<8; i++)
+            {
+                d_k_c[i] = k_c[i];
+            }
+        }
+        else
+        {
+            for (int i=0; i<8; i++)
+            {
+                d_k_c[i] = 0;
+            }
+        }
     }
 
     void decryption_impl::decrypt(pmt::pmt_t msg)
     {
-        if(d_k_c.size() != 8){
-            message_port_pub(pmt::mp("bursts"), msg);
-        } else
         if(d_k_c[0] == 0 && d_k_c[1] == 0 && d_k_c[2] == 0 && d_k_c[3] == 0 &
            d_k_c[4] == 0 && d_k_c[5] == 0 && d_k_c[6] == 0 && d_k_c[7] == 0)
         {
@@ -81,9 +93,7 @@ namespace gr {
         } else
         {
             uint8_t decrypted_data[BURST_SIZE];
-            uint8_t AtoBkeystream[114];
-            uint8_t BtoAkeystream[114];
-            uint8_t * keystream;
+            uint8_t keystream[114];
 
             pmt::pmt_t header_plus_burst = pmt::cdr(msg);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
@@ -91,19 +101,13 @@ namespace gr {
 
             uint32_t frame_number = be32toh(header->frame_number);
             bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
-            uint32_t t1 = frame_number / (26*51);
-            uint32_t t2 = frame_number % 26;
-            uint32_t t3 = frame_number % 51;
-            uint32_t frame_number_mod = (t1 << 11) + (t3 << 5) + t2;
-            keysetup(&d_k_c[0], frame_number_mod);
-            runA51(AtoBkeystream, BtoAkeystream);
 
             if(uplink_burst){
                 //process uplink burst
-                keystream = BtoAkeystream;
+                osmo_a5(1, d_k_c, frame_number, NULL, keystream);
             } else {
                 //process downlink burst
-                keystream = AtoBkeystream;
+                osmo_a5(1, d_k_c, frame_number, keystream, NULL);
             }
             /* guard bits */
             for (int i = 0; i < 3; i++) {
