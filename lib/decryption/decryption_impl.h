@@ -30,13 +30,16 @@ namespace gr {
     class decryption_impl : public decryption
     {
      private:
-//      std::vector<uint8_t> d_k_c;
-      uint8_t d_k_c[8];
+      std::vector<uint8_t> d_k_c;
+      bool d_k_c_valid;
+      uint8_t d_a5_version;
       void decrypt(pmt::pmt_t msg);
+      void validate_k_c();
      public:
-      decryption_impl(const std::vector<uint8_t> & k_c);
+      decryption_impl(const std::vector<uint8_t> & k_c, unsigned int a5_version);
       ~decryption_impl();
       virtual void set_k_c(const std::vector<uint8_t> & k_c);
+      virtual void set_a5_version(unsigned int a5_version);
     };
   } // namespace gsm
 } // namespace gr
