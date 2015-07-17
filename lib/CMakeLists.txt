@@ -55,7 +55,7 @@ list(APPEND grgsm_sources
     decryption/decryption_impl.cc )
 
 add_library(gnuradio-grgsm SHARED ${grgsm_sources})
-target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES}
+target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
