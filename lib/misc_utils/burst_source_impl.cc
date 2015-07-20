@@ -74,6 +74,8 @@ namespace gr {
     bool burst_source_impl::stop()
     {
         d_finished = true;
+        d_thread->interrupt();
+        d_thread->join();
         return block::stop();
     }
 
@@ -97,8 +99,7 @@ namespace gr {
             message_port_pub(pmt::mp("out"), burst);
         }
         d_input_file.close();
-        d_thread->interrupt();
-        d_thread->join();    
+        post(pmt::mp("system"), pmt::cons(pmt::mp("done"), pmt::from_long(1)));
     }
   } /* namespace gsm */
 } /* namespace gr */
