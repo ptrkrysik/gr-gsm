@@ -25,9 +25,12 @@
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
+#include <numeric>
 #include "decryption_impl.h"
-#include "a5_1_2.h"
 
+extern "C" {
+    #include <osmocom/gsm/a5.h>
+}
 
 const uint32_t BURST_SIZE=148;
 
@@ -35,21 +38,24 @@ namespace gr {
   namespace gsm {
 
     decryption::sptr
-    decryption::make(const std::vector<uint8_t> & k_c)
+    decryption::make(const std::vector<uint8_t> & k_c, unsigned int a5_version)
     {
       return gnuradio::get_initial_sptr
-        (new decryption_impl(k_c));
+        (new decryption_impl(k_c, a5_version));
     }
 
     /*
      * The private constructor
      */
-    decryption_impl::decryption_impl(const std::vector<uint8_t> & k_c)
+    decryption_impl::decryption_impl(const std::vector<uint8_t> & k_c, unsigned int a5_version)
       : gr::block("decryption",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+        d_k_c_valid(false)
     {
         set_k_c(k_c);
+        set_a5_version(a5_version);
+        validate_k_c();
 
 //        std::cout << "Be careful with decryption block - it wasn't tested yet!" << std::endl;
         message_port_register_in(pmt::mp("bursts"));
@@ -69,21 +75,50 @@ namespace gr {
         d_k_c = k_c;
     }
 
+    void decryption_impl::set_a5_version(unsigned int a5_version)
+    {
+        d_a5_version = 1;
+        if (a5_version >= 1 && a5_version <= 4)
+        {
+            d_a5_version = a5_version;
+        }
+    }
+
+    void decryption_impl::validate_k_c()
+    {
+        if (d_k_c.size() == 0)
+        {
+            d_k_c_valid = false;
+            return;
+        }
+        else if ((d_a5_version < 4 && d_k_c.size() != 8) || (d_a5_version == 4 && d_k_c.size() != 16))
+        {
+            d_k_c_valid = false;
+            return;
+        }
+        else
+        {
+            for (int i=0; i<d_k_c.size(); i++)
+            {
+                if (d_k_c[i] != 0)
+                {
+                    d_k_c_valid = true;
+                    return;
+                }
+            }
+        }
+    }
+
     void decryption_impl::decrypt(pmt::pmt_t msg)
     {
-        if(d_k_c.size() != 8){
-            message_port_pub(pmt::mp("bursts"), msg);
-        } else
-        if(d_k_c[0] == 0 && d_k_c[1] == 0 && d_k_c[2] == 0 && d_k_c[3] == 0 &
-           d_k_c[4] == 0 && d_k_c[5] == 0 && d_k_c[6] == 0 && d_k_c[7] == 0)
+        if (!d_k_c_valid)
         {
             message_port_pub(pmt::mp("bursts"), msg);
-        } else
+        }
+        else
         {
             uint8_t decrypted_data[BURST_SIZE];
-            uint8_t AtoBkeystream[114];
-            uint8_t BtoAkeystream[114];
-            uint8_t * keystream;
+            uint8_t keystream[114];
 
             pmt::pmt_t header_plus_burst = pmt::cdr(msg);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
@@ -91,19 +126,13 @@ namespace gr {
 
             uint32_t frame_number = be32toh(header->frame_number);
             bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
-            uint32_t t1 = frame_number / (26*51);
-            uint32_t t2 = frame_number % 26;
-            uint32_t t3 = frame_number % 51;
-            uint32_t frame_number_mod = (t1 << 11) + (t3 << 5) + t2;
-            keysetup(&d_k_c[0], frame_number_mod);
-            runA51(AtoBkeystream, BtoAkeystream);
 
             if(uplink_burst){
                 //process uplink burst
-                keystream = BtoAkeystream;
+                osmo_a5(d_a5_version, &d_k_c[0], frame_number, NULL, keystream);
             } else {
                 //process downlink burst
-                keystream = AtoBkeystream;
+                osmo_a5(d_a5_version, &d_k_c[0], frame_number, keystream, NULL);
             }
             /* guard bits */
             for (int i = 0; i < 3; i++) {

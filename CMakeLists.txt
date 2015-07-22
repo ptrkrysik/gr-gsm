@@ -93,6 +93,7 @@ find_package(Gnuradio)
 find_package(Volk)
 find_package(CppUnit)
 find_package(Doxygen)
+find_package(Libosmocore)
 
 if(NOT GNURADIO_RUNTIME_FOUND)
     message(FATAL_ERROR "GnuRadio Runtime required to compile gr-gsm")
@@ -102,6 +103,9 @@ if(NOT VOLK_FOUND)
 endif()
 if(NOT CPPUNIT_FOUND)
     message(FATAL_ERROR "CppUnit required to compile gr-gsm")
+endif()
+if(NOT LIBOSMOCORE_FOUND)
+    message(FATAL_ERROR "Libosmocore required to compile gr-gsm")
 endif()
 
 ########################################################################
@@ -124,6 +128,7 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
     ${GNURADIO_RUNTIME_INCLUDE_DIRS}
+    ${LIBOSMOCORE_INCLUDE_DIR}
 )
 
 link_directories(
