@@ -4,7 +4,8 @@
   <key>gsm_bursts_printer</key>
   <import>import grgsm</import>
   <import>import pmt</import>
-  <make>grgsm.bursts_printer(pmt.intern($prepend_string), $prepend_fnr, $prepend_frame_count, $print_payload_only)</make>
+  <make>grgsm.bursts_printer(pmt.intern($prepend_string), $prepend_fnr,
+    $prepend_frame_count, $print_payload_only, $ignore_dummy_bursts)</make>
 
   <param>
     <name>Prepend String</name>
@@ -55,6 +56,20 @@
       <key>True</key>
     </option>
   </param>
+  <param>
+    <name>Ignore dummy bursts</name>
+    <key>ignore_dummy_bursts</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>False</name>
+      <key>False</key>
+    </option>
+    <option>
+      <name>True</name>
+      <key>True</key>
+    </option>
+  </param>
 
   <sink>
     <name>bursts</name>
@@ -70,6 +85,8 @@ If "Prepend Frame Count" is enabled, then the frame count for A5 is prependend t
 
 If "Print payload only" is enabled, then only the two data blocks of a burst are printed, tail bits, stealing bits and training sequence are omitted.
 
-Enabling all three options results in an output that is similar to the output of airprobe, i.e. the format is "frame_nr frame_count: databits"
+If "Ignore dummy bursts" is enabled, then the burst printer will not print dummy bursts (see GSM 05.02)
+
+Enabling first three options (or all four options) results in an output that is similar to the output of airprobe, i.e. the format is "frame_nr frame_count: databits"
   </doc>
 </block>
