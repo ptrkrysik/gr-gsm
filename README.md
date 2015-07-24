@@ -171,7 +171,9 @@ Credits
 =======
 *Piotr Krysik* \<ptrkrysik (at) gmail.com\> - main author and project maintainer
 
-*Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels
+*Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels,  decryption block supporting all ciphers used in GSM, blocks for storing and reading GSM bursts, project planning and user support
+
+*Pieter Robyns* \<pieter.robyns (at) uhasselt.be\> - block reversing channel hopping
 
 *Steve* \<steve (at) segfault.net\>  - functions for decoding control channels
 
