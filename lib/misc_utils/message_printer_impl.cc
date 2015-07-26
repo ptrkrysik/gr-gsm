@@ -41,7 +41,15 @@ namespace gr {
         gsmtap_hdr * header = (gsmtap_hdr *)message_plus_header;
         
         std::cout << d_prepend_string;
-        for(int ii=sizeof(gsmtap_hdr); ii<message_plus_header_len; ii++)
+        
+        int start_index = sizeof(gsmtap_hdr);
+        
+        if (d_print_gsmtap_header)
+        {
+            start_index = 0;
+        }
+        
+        for(int ii=start_index; ii<message_plus_header_len; ii++)
         {
             printf(" %02x", message_plus_header[ii]);
         }
@@ -49,24 +57,24 @@ namespace gr {
     }
 
     message_printer::sptr
-    message_printer::make(pmt::pmt_t prepend_string)
+    message_printer::make(pmt::pmt_t prepend_string, bool print_gsmtap_header)
     {
       return gnuradio::get_initial_sptr
-        (new message_printer_impl(prepend_string));
+        (new message_printer_impl(prepend_string, print_gsmtap_header));
     }
 
     /*
      * The private constructor
      */
-    message_printer_impl::message_printer_impl(pmt::pmt_t prepend_string)
+    message_printer_impl::message_printer_impl(pmt::pmt_t prepend_string, bool print_gsmtap_header)
       : gr::block("message_printer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
         d_prepend_string = prepend_string;
+        d_print_gsmtap_header = print_gsmtap_header;
         message_port_register_in(pmt::mp("msgs"));
         set_msg_handler(pmt::mp("msgs"), boost::bind(&message_printer_impl::message_print, this, _1));
-
     }
 
     /*

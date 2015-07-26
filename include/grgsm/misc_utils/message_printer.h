@@ -48,7 +48,7 @@ namespace gr {
        * class. gsm::message_printer::make is the public interface for
        * creating new instances.
        */
-      static sptr make(pmt::pmt_t prepend_string);
+      static sptr make(pmt::pmt_t prepend_string, bool print_gsmtap_header=false);
     };
 
   } // namespace gsm
