@@ -31,5 +31,6 @@ install(FILES
     controlled_rotator_cc.h
     controlled_const_source_f.h
     message_printer.h 
-    tmsi_dumper.h DESTINATION include/grgsm/misc_utils
+    tmsi_dumper.h 
+    message_source.h DESTINATION include/grgsm/misc_utils
 )

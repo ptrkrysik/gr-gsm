@@ -54,7 +54,8 @@ list(APPEND grgsm_sources
     misc_utils/burst_source_impl.cc
     misc_utils/burst_sink_qa_impl.cc
     misc_utils/burst_source_qa_impl.cc
-    decryption/decryption_impl.cc )
+    misc_utils/message_source_impl.cc 
+    decryption/decryption_impl.cc)
 
 add_library(gnuradio-grgsm SHARED ${grgsm_sources})
 target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}

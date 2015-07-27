@@ -29,5 +29,6 @@ install(FILES
     gsm_burst_sink.xml
     gsm_burst_source.xml
     gsm_burst_source_qa.xml
-    gsm_burst_sink_qa.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_sink_qa.xml 
+    gsm_message_source.xml DESTINATION share/gnuradio/grc/blocks
 )
