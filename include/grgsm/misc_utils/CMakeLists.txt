@@ -30,7 +30,8 @@ install(FILES
     extract_immediate_assignment.h
     controlled_rotator_cc.h
     controlled_const_source_f.h
-    message_printer.h 
-    tmsi_dumper.h 
-    message_source.h DESTINATION include/grgsm/misc_utils
+    message_printer.h
+    tmsi_dumper.h
+    message_source.h
+    message_sink.h DESTINATION include/grgsm/misc_utils
 )
