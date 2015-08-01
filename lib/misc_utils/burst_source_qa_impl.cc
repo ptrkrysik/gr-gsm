@@ -27,6 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include "burst_source_qa_impl.h"
 #include "stdio.h"
+#include <boost/scoped_ptr.hpp>
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
 
