@@ -20,32 +20,42 @@
  *
  */
 
-#ifndef INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
-#define INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
+#ifndef INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H
+#define INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H
 
-#include <grgsm/misc_utils/message_source.h>
+#define BURST_SIZE  148
+
+#include <grgsm/qa_utils/burst_source_qa.h>
+#include <fstream>
+
 
 namespace gr {
   namespace gsm {
 
-    class message_source_impl : public message_source
+    class burst_source_qa_impl : public burst_source_qa
     {
      private:
         boost::shared_ptr<gr::thread::thread> d_thread;
-        std::vector<std::vector<uint8_t> > d_msgs;
+        std::vector<int> d_framenumbers;
+        std::vector<int> d_timeslots;
+        std::vector<std::string> d_burst_data;
         bool d_finished;
         void run();
      public:
-      message_source_impl(const std::vector<std::string> &msg_data);
-      ~message_source_impl();
-      virtual void set_msg_data(const std::vector<std::string> &msg_data);
-      bool start();
-      bool stop();
-      bool finished();
+        burst_source_qa_impl(const std::vector<int> &framenumbers,
+            const std::vector<int> &timeslots,
+            const std::vector<std::string> &burst_data);
+        ~burst_source_qa_impl();
+        virtual void set_framenumbers(const std::vector<int> &framenumbers);
+        virtual void set_timeslots(const std::vector<int> &timeslots);
+        virtual void set_burst_data(const std::vector<std::string> &burst_data);
+        bool start();
+        bool stop();
+        bool finished();
     };
-
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H */
+
 

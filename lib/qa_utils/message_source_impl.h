@@ -20,28 +20,32 @@
  *
  */
 
-#ifndef INCLUDED_GSM_MESSAGE_SINK_IMPL_H
-#define INCLUDED_GSM_MESSAGE_SINK_IMPL_H
+#ifndef INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
+#define INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
 
-#include <grgsm/misc_utils/message_sink.h>
+#include <grgsm/qa_utils/message_source.h>
 
 namespace gr {
   namespace gsm {
 
-    class message_sink_impl : public message_sink
+    class message_source_impl : public message_source
     {
      private:
-      std::vector<std::string> d_messages;
-
+        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::vector<std::vector<uint8_t> > d_msgs;
+        bool d_finished;
+        void run();
      public:
-      message_sink_impl();
-      ~message_sink_impl();
-      void process_message(pmt::pmt_t msg);
-      virtual std::vector<std::string> get_messages();
+      message_source_impl(const std::vector<std::string> &msg_data);
+      ~message_source_impl();
+      virtual void set_msg_data(const std::vector<std::string> &msg_data);
+      bool start();
+      bool stop();
+      bool finished();
     };
 
-  } // namespace gsm
+  } // namespace grgsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_SINK_IMPL_H */
+#endif /* INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H */
 

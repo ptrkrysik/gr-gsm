@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_BURST_SINK_QA_IMPL_H
 #define INCLUDED_GSM_BURST_SINK_QA_IMPL_H
 
-#include <grgsm/misc_utils/burst_sink_qa.h>
+#include <grgsm/qa_utils/burst_sink_qa.h>
 #include <fstream>
 
 namespace gr {
