@@ -51,7 +51,8 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(pmt::pmt_t prepend_string, bool prepend_fnr=false,
-        bool prepend_frame_count=false, bool print_payload_only=false);
+        bool prepend_frame_count=false, bool print_payload_only=false,
+        bool ignore_dummy_bursts=false);
     };
 
   } // namespace gsm
