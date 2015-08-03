@@ -25,7 +25,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "burst_source_qa_impl.h"
+#include "burst_source_impl.h"
 #include "stdio.h"
 #include <boost/scoped_ptr.hpp>
 #include <grgsm/gsmtap.h>
@@ -36,22 +36,22 @@
 namespace gr {
   namespace gsm {
 
-    burst_source_qa::sptr
-    burst_source_qa::make(const std::vector<int> &framenumbers,
+    burst_source::sptr
+    burst_source::make(const std::vector<int> &framenumbers,
             const std::vector<int> &timeslots,
             const std::vector<std::string> &burst_data)
     {
       return gnuradio::get_initial_sptr
-        (new burst_source_qa_impl(framenumbers, timeslots, burst_data));
+        (new burst_source_impl(framenumbers, timeslots, burst_data));
     }
 
     /*
      * The private constructor
      */
-    burst_source_qa_impl::burst_source_qa_impl(const std::vector<int> &framenumbers,
+    burst_source_impl::burst_source_impl(const std::vector<int> &framenumbers,
             const std::vector<int> &timeslots,
             const std::vector<std::string> &burst_data)
-      : gr::block("burst_source_qa",
+      : gr::block("burst_source",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
               d_finished(false)
@@ -65,37 +65,37 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    burst_source_qa_impl::~burst_source_qa_impl()
+    burst_source_impl::~burst_source_impl()
     {
         if (d_finished == false){
             d_finished = true;
         }
     }
 
-    void burst_source_qa_impl::set_framenumbers(const std::vector<int> &framenumbers)
+    void burst_source_impl::set_framenumbers(const std::vector<int> &framenumbers)
     {
         d_framenumbers = framenumbers;
     }
 
-    void  burst_source_qa_impl::set_timeslots(const std::vector<int> &timeslots)
+    void  burst_source_impl::set_timeslots(const std::vector<int> &timeslots)
     {
         d_timeslots = timeslots;
     }
 
-    void burst_source_qa_impl::set_burst_data(const std::vector<std::string> &burst_data)
+    void burst_source_impl::set_burst_data(const std::vector<std::string> &burst_data)
     {
         d_burst_data = burst_data;
     }
 
-    bool burst_source_qa_impl::start()
+    bool burst_source_impl::start()
     {
         d_finished = false;
         d_thread = boost::shared_ptr<gr::thread::thread>
-            (new gr::thread::thread(boost::bind(&burst_source_qa_impl::run, this)));
+            (new gr::thread::thread(boost::bind(&burst_source_impl::run, this)));
         return block::start();
     }
 
-    bool burst_source_qa_impl::stop()
+    bool burst_source_impl::stop()
     {
         d_finished = true;
         d_thread->interrupt();
@@ -103,12 +103,12 @@ namespace gr {
         return block::stop();
     }
 
-    bool burst_source_qa_impl::finished()
+    bool burst_source_impl::finished()
     {
         return d_finished;
     }
 
-    void burst_source_qa_impl::run()
+    void burst_source_impl::run()
     {
         char *unserialized = (char*)malloc(sizeof(char) * PMT_SIZE);
 

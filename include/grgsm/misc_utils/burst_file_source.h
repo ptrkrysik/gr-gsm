@@ -1,7 +1,6 @@
 /* -*- c++ -*- */
-/*
- * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+/* @file
+ * @author Roman Khassraf <rkhassraf@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -18,11 +17,11 @@
  * along with gr-gsm; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
+ *
  */
 
-
-#ifndef INCLUDED_GSM_MESSAGE_PRINTER_H
-#define INCLUDED_GSM_MESSAGE_PRINTER_H
+#ifndef INCLUDED_GSM_BURST_FILE_SOURCE_H
+#define INCLUDED_GSM_BURST_FILE_SOURCE_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -35,24 +34,24 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API message_printer : virtual public gr::block
+    class GSM_API burst_file_source : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<message_printer> sptr;
+      typedef boost::shared_ptr<burst_file_source> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::message_printer.
+       * \brief Return a shared_ptr to a new instance of grgsm::burst_file_source.
        *
-       * To avoid accidental use of raw pointers, gsm::message_printer's
+       * To avoid accidental use of raw pointers, grgsm::burst_file_source's
        * constructor is in a private implementation
-       * class. gsm::message_printer::make is the public interface for
+       * class. grgsm::burst_file_source::make is the public interface for
        * creating new instances.
        */
-      static sptr make(pmt::pmt_t prepend_string, bool print_gsmtap_header=false);
+      static sptr make(const std::string &filename);
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_PRINTER_H */
+#endif /* INCLUDED_GSM_BURST_FILE_SOURCE_H */
 

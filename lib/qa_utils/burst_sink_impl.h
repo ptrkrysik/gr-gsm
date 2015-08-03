@@ -20,37 +20,32 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_H
-#define INCLUDED_GSM_BURST_SINK_H
+#ifndef INCLUDED_GSM_BURST_SINK_IMPL_H
+#define INCLUDED_GSM_BURST_SINK_IMPL_H
 
-#include <grgsm/api.h>
-#include <gnuradio/block.h>
+#include <grgsm/qa_utils/burst_sink.h>
+#include <fstream>
 
 namespace gr {
   namespace gsm {
 
-    /*!
-     * \brief <+description of block+>
-     * \ingroup gsm
-     *
-     */
-    class GSM_API burst_sink : virtual public gr::block
+    class burst_sink_impl : public burst_sink
     {
+     private:
+      std::vector<int> d_framenumbers;
+      std::vector<int> d_timeslots;
+      std::vector<std::string> d_burst_data;
      public:
-      typedef boost::shared_ptr<burst_sink> sptr;
-
-      /*!
-       * \brief Return a shared_ptr to a new instance of grgsm::burst_sink.
-       *
-       * To avoid accidental use of raw pointers, grgsm::burst_sink's
-       * constructor is in a private implementation
-       * class. grgsm::burst_sink::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(const std::string &filename);
+      burst_sink_impl();
+      ~burst_sink_impl();
+      void process_burst(pmt::pmt_t msg);
+      virtual std::vector<int> get_framenumbers();
+      virtual std::vector<int> get_timeslots();
+      virtual std::vector<std::string> get_burst_data();
     };
+
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_H */
+#endif /* INCLUDED_GSM_BURST_SINK_IMPL_H */
 

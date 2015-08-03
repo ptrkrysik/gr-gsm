@@ -20,32 +20,31 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_QA_IMPL_H
-#define INCLUDED_GSM_BURST_SINK_QA_IMPL_H
+#ifndef INCLUDED_GSM_BURST_FILE_SOURCE_IMPL_H
+#define INCLUDED_GSM_BURST_FILE_SOURCE_IMPL_H
 
-#include <grgsm/misc_utils/burst_sink_qa.h>
+#include <grgsm/misc_utils/burst_file_source.h>
 #include <fstream>
 
 namespace gr {
   namespace gsm {
 
-    class burst_sink_qa_impl : public burst_sink_qa
+    class burst_file_source_impl : public burst_file_source
     {
      private:
-      std::vector<int> d_framenumbers;
-      std::vector<int> d_timeslots;
-      std::vector<std::string> d_burst_data;
+        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::ifstream d_input_file;
+        bool d_finished;
+        void run();
      public:
-      burst_sink_qa_impl();
-      ~burst_sink_qa_impl();
-      void process_burst(pmt::pmt_t msg);
-      virtual std::vector<int> get_framenumbers();
-      virtual std::vector<int> get_timeslots();
-      virtual std::vector<std::string> get_burst_data();
+        burst_file_source_impl(const std::string &filename);
+        ~burst_file_source_impl();
+        bool start();
+        bool stop();
+        bool finished();
     };
-
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_QA_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_FILE_SOURCE_IMPL_H */
 

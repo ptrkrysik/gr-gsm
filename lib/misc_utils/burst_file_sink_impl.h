@@ -20,27 +20,27 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_IMPL_H
-#define INCLUDED_GSM_BURST_SINK_IMPL_H
+#ifndef INCLUDED_GSM_BURST_FILE_SINK_IMPL_H
+#define INCLUDED_GSM_BURST_FILE_SINK_IMPL_H
 
-#include <grgsm/misc_utils/burst_sink.h>
+#include <grgsm/misc_utils/burst_file_sink.h>
 #include <fstream>
 
 namespace gr {
   namespace gsm {
 
-    class burst_sink_impl : public burst_sink
+    class burst_file_sink_impl : public burst_file_sink
     {
      private:
         std::ofstream d_output_file;
      public:
-      burst_sink_impl(const std::string &filename);
-      ~burst_sink_impl();
+      burst_file_sink_impl(const std::string &filename);
+      ~burst_file_sink_impl();
       void process_burst(pmt::pmt_t msg);
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_FILE_SINK_IMPL_H */
 

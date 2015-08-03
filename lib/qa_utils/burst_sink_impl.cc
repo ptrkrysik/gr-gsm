@@ -25,7 +25,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "burst_sink_qa_impl.h"
+#include "burst_sink_impl.h"
 #include <stdio.h>
 #include <sstream>
 #include <grgsm/gsmtap.h>
@@ -33,29 +33,29 @@
 namespace gr {
   namespace gsm {
 
-    burst_sink_qa::sptr
-    burst_sink_qa::make()
+    burst_sink::sptr
+    burst_sink::make()
     {
       return gnuradio::get_initial_sptr
-        (new burst_sink_qa_impl());
+        (new burst_sink_impl());
     }
 
     /*
      * The private constructor
      */
-    burst_sink_qa_impl::burst_sink_qa_impl()
-      : gr::block("burst_sink_qa",
+    burst_sink_impl::burst_sink_impl()
+      : gr::block("burst_sink",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
         message_port_register_in(pmt::mp("in"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_qa_impl::process_burst, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_impl::process_burst, this, _1));
     }
 
     /*
      * Our virtual destructor.
      */
-    burst_sink_qa_impl::~burst_sink_qa_impl()
+    burst_sink_impl::~burst_sink_impl()
     {
 //         for (int i=0; i<d_burst_data.size(); i++)
 //         {
@@ -63,7 +63,7 @@ namespace gr {
 //         }
     }
 
-    void burst_sink_qa_impl::process_burst(pmt::pmt_t msg)
+    void burst_sink_impl::process_burst(pmt::pmt_t msg)
     {
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
 
@@ -90,17 +90,17 @@ namespace gr {
         d_burst_data.push_back(burst_str.str());
     }
 
-    std::vector<int> burst_sink_qa_impl::get_framenumbers()
+    std::vector<int> burst_sink_impl::get_framenumbers()
     {
         return d_framenumbers;
     }
 
-    std::vector<int> burst_sink_qa_impl::get_timeslots()
+    std::vector<int> burst_sink_impl::get_timeslots()
     {
         return d_timeslots;
     }
 
-    std::vector<std::string> burst_sink_qa_impl::get_burst_data()
+    std::vector<std::string> burst_sink_impl::get_burst_data()
     {
         return d_burst_data;
     }

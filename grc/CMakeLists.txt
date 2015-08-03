@@ -23,6 +23,5 @@ add_subdirectory(demapping)
 add_subdirectory(receiver)
 add_subdirectory(misc_utils)
 install(FILES
-    gsm_block_tree.xml
-    DESTINATION share/gnuradio/grc/blocks
+    gsm_block_tree.xml DESTINATION share/gnuradio/grc/blocks
 )

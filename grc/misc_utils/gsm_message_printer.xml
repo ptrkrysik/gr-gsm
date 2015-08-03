@@ -4,7 +4,7 @@
   <key>gsm_message_printer</key>
   <import>import grgsm</import>
   <import>import pmt</import>
-  <make>grgsm.message_printer(pmt.intern($prepend_string))</make>
+  <make>grgsm.message_printer(pmt.intern($prepend_string), $print_gsmtap_header)</make>
 
   <param>
     <name>Prepend String</name>
@@ -12,6 +12,20 @@
     <value></value>
     <type>string</type>
     <hide>part</hide>
+  </param>
+  <param>
+    <name>Print GSMTap header</name>
+    <key>print_gsmtap_header</key>
+    <value>False</value>
+    <type>bool</type>
+    <option>
+      <name>False</name>
+      <key>False</key>
+    </option>
+    <option>
+      <name>True</name>
+      <key>True</key>
+    </option>
   </param>
 
   <sink>

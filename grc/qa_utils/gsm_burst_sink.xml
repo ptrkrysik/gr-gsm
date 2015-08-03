@@ -3,14 +3,7 @@
   <name>Burst sink</name>
   <key>gsm_burst_sink</key>
   <import>import grgsm</import>
-  <make>grgsm.burst_sink($filename)</make>
-
-  <param>
-    <name>Destination file</name>
-    <key>filename</key>
-    <value>/tmp/bursts</value>
-    <type>file_open</type>
-  </param>
+  <make>grgsm.burst_sink()</make>
 
   <sink>
     <name>in</name>
