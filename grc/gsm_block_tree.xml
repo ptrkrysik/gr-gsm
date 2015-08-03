@@ -42,6 +42,8 @@
       <block>gsm_bursts_printer</block>
       <block>gsm_burst_sink</block>
       <block>gsm_burst_source</block>
+      <block>gsm_message_file_sink</block>
+      <block>gsm_message_file_source</block>
       <block>gsm_burst_sink_qa</block>
       <block>gsm_burst_source_qa</block>
       <block>gsm_extract_system_info</block>

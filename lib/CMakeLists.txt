@@ -54,6 +54,8 @@ list(APPEND grgsm_sources
     misc_utils/burst_source_impl.cc
     misc_utils/burst_sink_qa_impl.cc
     misc_utils/burst_source_qa_impl.cc
+    misc_utils/message_file_sink_impl.cc
+    misc_utils/message_file_source_impl.cc
     decryption/decryption_impl.cc )
 
 add_library(gnuradio-grgsm SHARED ${grgsm_sources})

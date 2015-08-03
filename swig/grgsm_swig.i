@@ -27,6 +27,8 @@
 #include "grgsm/misc_utils/burst_sink_qa.h"
 #include "grgsm/misc_utils/burst_source.h"
 #include "grgsm/misc_utils/burst_source_qa.h"
+#include "grgsm/misc_utils/message_file_sink.h"
+#include "grgsm/misc_utils/message_file_source.h"
 %}
 
 
@@ -72,3 +74,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
 %include "grgsm/misc_utils/tmsi_dumper.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, tmsi_dumper);
+%include "grgsm/misc_utils/message_file_sink.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, message_file_sink);
+%include "grgsm/misc_utils/message_file_source.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, message_file_source);
