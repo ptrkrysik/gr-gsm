@@ -20,19 +20,19 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H
-#define INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H
+#ifndef INCLUDED_GSM_BURST_SOURCE_IMPL_H
+#define INCLUDED_GSM_BURST_SOURCE_IMPL_H
 
 #define BURST_SIZE  148
 
-#include <grgsm/qa_utils/burst_source_qa.h>
+#include <grgsm/qa_utils/burst_source.h>
 #include <fstream>
 
 
 namespace gr {
   namespace gsm {
 
-    class burst_source_qa_impl : public burst_source_qa
+    class burst_source_impl : public burst_source
     {
      private:
         boost::shared_ptr<gr::thread::thread> d_thread;
@@ -42,10 +42,10 @@ namespace gr {
         bool d_finished;
         void run();
      public:
-        burst_source_qa_impl(const std::vector<int> &framenumbers,
+        burst_source_impl(const std::vector<int> &framenumbers,
             const std::vector<int> &timeslots,
             const std::vector<std::string> &burst_data);
-        ~burst_source_qa_impl();
+        ~burst_source_impl();
         virtual void set_framenumbers(const std::vector<int> &framenumbers);
         virtual void set_timeslots(const std::vector<int> &timeslots);
         virtual void set_burst_data(const std::vector<std::string> &burst_data);
@@ -56,6 +56,6 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SOURCE_QA_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_SOURCE_IMPL_H */
 
 

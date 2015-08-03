@@ -21,8 +21,8 @@
 # Install public header files
 ########################################################################
 install(FILES
-    burst_sink_qa.h
-    burst_source_qa.h
+    burst_sink.h
+    burst_source.h
     message_source.h
     message_sink.h DESTINATION include/grgsm/qa_utils
 )

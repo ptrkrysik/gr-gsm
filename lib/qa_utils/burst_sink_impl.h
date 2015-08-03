@@ -20,24 +20,24 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_QA_IMPL_H
-#define INCLUDED_GSM_BURST_SINK_QA_IMPL_H
+#ifndef INCLUDED_GSM_BURST_SINK_IMPL_H
+#define INCLUDED_GSM_BURST_SINK_IMPL_H
 
-#include <grgsm/qa_utils/burst_sink_qa.h>
+#include <grgsm/qa_utils/burst_sink.h>
 #include <fstream>
 
 namespace gr {
   namespace gsm {
 
-    class burst_sink_qa_impl : public burst_sink_qa
+    class burst_sink_impl : public burst_sink
     {
      private:
       std::vector<int> d_framenumbers;
       std::vector<int> d_timeslots;
       std::vector<std::string> d_burst_data;
      public:
-      burst_sink_qa_impl();
-      ~burst_sink_qa_impl();
+      burst_sink_impl();
+      ~burst_sink_impl();
       void process_burst(pmt::pmt_t msg);
       virtual std::vector<int> get_framenumbers();
       virtual std::vector<int> get_timeslots();
@@ -47,5 +47,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_QA_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_SINK_IMPL_H */
 

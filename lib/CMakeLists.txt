@@ -52,8 +52,8 @@ list(APPEND grgsm_sources
     misc_utils/tmsi_dumper_impl.cc
     misc_utils/burst_file_sink_impl.cc
     misc_utils/burst_file_source_impl.cc
-    qa_utils/burst_sink_qa_impl.cc
-    qa_utils/burst_source_qa_impl.cc
+    qa_utils/burst_sink_impl.cc
+    qa_utils/burst_source_impl.cc
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc

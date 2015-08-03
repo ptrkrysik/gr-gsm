@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>QA Burst sink</name>
-  <key>gsm_burst_sink_qa</key>
+  <name>Burst sink</name>
+  <key>gsm_burst_sink</key>
   <import>import grgsm</import>
-  <make>grgsm.burst_sink_qa()</make>
+  <make>grgsm.burst_sink()</make>
 
   <sink>
     <name>in</name>
