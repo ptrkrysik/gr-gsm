@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst sink</name>
-  <key>gsm_burst_sink</key>
+  <name>Burst file sink</name>
+  <key>gsm_burst_file_sink</key>
   <import>import grgsm</import>
-  <make>grgsm.burst_sink($filename)</make>
+  <make>grgsm.burst_file_sink($filename)</make>
 
   <param>
     <name>Destination file</name>

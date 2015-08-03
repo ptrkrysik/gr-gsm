@@ -20,27 +20,38 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_IMPL_H
-#define INCLUDED_GSM_BURST_SINK_IMPL_H
+#ifndef INCLUDED_GSM_BURST_FILE_SOURCE_H
+#define INCLUDED_GSM_BURST_FILE_SOURCE_H
 
-#include <grgsm/misc_utils/burst_sink.h>
-#include <fstream>
+#include <grgsm/api.h>
+#include <gnuradio/block.h>
 
 namespace gr {
   namespace gsm {
 
-    class burst_sink_impl : public burst_sink
+    /*!
+     * \brief <+description of block+>
+     * \ingroup gsm
+     *
+     */
+    class GSM_API burst_file_source : virtual public gr::block
     {
-     private:
-        std::ofstream d_output_file;
      public:
-      burst_sink_impl(const std::string &filename);
-      ~burst_sink_impl();
-      void process_burst(pmt::pmt_t msg);
+      typedef boost::shared_ptr<burst_file_source> sptr;
+
+      /*!
+       * \brief Return a shared_ptr to a new instance of grgsm::burst_file_source.
+       *
+       * To avoid accidental use of raw pointers, grgsm::burst_file_source's
+       * constructor is in a private implementation
+       * class. grgsm::burst_file_source::make is the public interface for
+       * creating new instances.
+       */
+      static sptr make(const std::string &filename);
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_FILE_SOURCE_H */
 

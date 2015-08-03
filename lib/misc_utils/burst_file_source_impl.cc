@@ -25,7 +25,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "burst_source_impl.h"
+#include "burst_file_source_impl.h"
 #include "stdio.h"
 
 #define PMT_SIZE 174
@@ -33,18 +33,18 @@
 namespace gr {
   namespace gsm {
 
-    burst_source::sptr
-    burst_source::make(const std::string &filename)
+    burst_file_source::sptr
+    burst_file_source::make(const std::string &filename)
     {
       return gnuradio::get_initial_sptr
-        (new burst_source_impl(filename));
+        (new burst_file_source_impl(filename));
     }
 
     /*
      * The private constructor
      */
-    burst_source_impl::burst_source_impl(const std::string &filename)
-      : gr::block("burst_source",
+    burst_file_source_impl::burst_file_source_impl(const std::string &filename)
+      : gr::block("burst_file_source",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
               d_input_file(filename.c_str(), std::ifstream::binary),
@@ -56,22 +56,22 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    burst_source_impl::~burst_source_impl()
+    burst_file_source_impl::~burst_file_source_impl()
     {
         if (d_finished == false){
             d_finished = true;
         }
     }
 
-    bool burst_source_impl::start()
+    bool burst_file_source_impl::start()
     {
         d_finished = false;
         d_thread = boost::shared_ptr<gr::thread::thread>
-            (new gr::thread::thread(boost::bind(&burst_source_impl::run, this)));
+            (new gr::thread::thread(boost::bind(&burst_file_source_impl::run, this)));
         return block::start();
     }
 
-    bool burst_source_impl::stop()
+    bool burst_file_source_impl::stop()
     {
         d_finished = true;
         d_thread->interrupt();
@@ -79,12 +79,12 @@ namespace gr {
         return block::stop();
     }
 
-    bool burst_source_impl::finished()
+    bool burst_file_source_impl::finished()
     {
         return d_finished;
     }
 
-    void burst_source_impl::run()
+    void burst_file_source_impl::run()
     {
         char *unserialized = (char*)malloc(sizeof(char) * PMT_SIZE);
         while (d_input_file.read(unserialized, PMT_SIZE) && !d_finished)

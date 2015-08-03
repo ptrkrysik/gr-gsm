@@ -23,8 +23,8 @@
 #include "grgsm/misc_utils/extract_immediate_assignment.h"
 #include "grgsm/misc_utils/message_printer.h"
 #include "grgsm/misc_utils/tmsi_dumper.h"
-#include "grgsm/misc_utils/burst_sink.h"
-#include "grgsm/misc_utils/burst_source.h"
+#include "grgsm/misc_utils/burst_file_sink.h"
+#include "grgsm/misc_utils/burst_file_source.h"
 #include "grgsm/qa_utils/burst_sink_qa.h"
 #include "grgsm/qa_utils/burst_source_qa.h"
 #include "grgsm/qa_utils/message_source.h"
@@ -54,10 +54,10 @@ GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_chans_demapper);
 
 %include "grgsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
-%include "grgsm/misc_utils/burst_sink.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, burst_sink);
-%include "grgsm/misc_utils/burst_source.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
+%include "grgsm/misc_utils/burst_file_sink.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_sink);
+%include "grgsm/misc_utils/burst_file_source.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_source);
 %include "grgsm/misc_utils/extract_system_info.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
 %include "grgsm/misc_utils/extract_immediate_assignment.h"

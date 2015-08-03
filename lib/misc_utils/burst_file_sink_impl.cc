@@ -25,36 +25,36 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "burst_sink_impl.h"
+#include "burst_file_sink_impl.h"
 #include "stdio.h"
 
 namespace gr {
   namespace gsm {
 
-    burst_sink::sptr
-    burst_sink::make(const std::string &filename)
+    burst_file_sink::sptr
+    burst_file_sink::make(const std::string &filename)
     {
       return gnuradio::get_initial_sptr
-        (new burst_sink_impl(filename));
+        (new burst_file_sink_impl(filename));
     }
 
     /*
      * The private constructor
      */
-    burst_sink_impl::burst_sink_impl(const std::string &filename)
-      : gr::block("burst_sink",
+    burst_file_sink_impl::burst_file_sink_impl(const std::string &filename)
+      : gr::block("burst_file_sink",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
               d_output_file(filename.c_str(), std::ofstream::binary)
     {
         message_port_register_in(pmt::mp("in"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_impl::process_burst, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&burst_file_sink_impl::process_burst, this, _1));
     }
 
     /*
      * Our virtual destructor.
      */
-    burst_sink_impl::~burst_sink_impl()
+    burst_file_sink_impl::~burst_file_sink_impl()
     {
         if (d_output_file.is_open())
         {
@@ -62,7 +62,7 @@ namespace gr {
         }
     }
 
-    void burst_sink_impl::process_burst(pmt::pmt_t msg)
+    void burst_file_sink_impl::process_burst(pmt::pmt_t msg)
     {
         std::string s = pmt::serialize_str(msg);
         const char *serialized = s.data();
