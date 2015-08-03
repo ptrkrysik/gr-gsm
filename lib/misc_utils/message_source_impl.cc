@@ -26,11 +26,11 @@
 
 #include <gnuradio/io_signature.h>
 #include "message_source_impl.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
 #include <algorithm>
-
+#include <boost/scoped_ptr.hpp>
 #include <iostream>
 #include <string>
 #include <sstream>
