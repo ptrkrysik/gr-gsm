@@ -46,6 +46,7 @@ list(APPEND grgsm_sources
     decoding/GSM660Tables.cpp
     decoding/GSM503Tables.cpp
     decoding/ViterbiR204.cpp
+    flow_control/burst_timeslot_splitter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_const_source_f_impl.cc
     misc_utils/message_printer_impl.cc

@@ -17,19 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-########################################################################
-# Install public header files
-########################################################################
 install(FILES
-    plotting.hpp
-    api.h
-    gsmtap.h
-    DESTINATION include/grgsm
+    gsm_burst_timeslot_splitter.xml DESTINATION share/gnuradio/grc/blocks
 )
-
-add_subdirectory(decoding)
-add_subdirectory(decryption)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-add_subdirectory(misc_utils)
-add_subdirectory(flow_control)

@@ -16,6 +16,7 @@
 #include "grgsm/decryption/decryption.h"
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 #include "grgsm/demapping/tch_f_chans_demapper.h"
+#include "grgsm/flow_control/burst_timeslot_splitter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
 #include "grgsm/misc_utils/controlled_const_source_f.h"
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
@@ -28,7 +29,6 @@
 #include "grgsm/misc_utils/burst_source.h"
 #include "grgsm/misc_utils/burst_source_qa.h"
 %}
-
 
 %include "grgsm/receiver/receiver.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, receiver);
@@ -49,6 +49,9 @@ GR_SWIG_BLOCK_MAGIC2(gsm, decryption);
 GR_SWIG_BLOCK_MAGIC2(gsm, universal_ctrl_chans_demapper);
 %include "grgsm/demapping/tch_f_chans_demapper.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_chans_demapper);
+
+%include "grgsm/flow_control/burst_timeslot_splitter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_timeslot_splitter);
 
 %include "grgsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);

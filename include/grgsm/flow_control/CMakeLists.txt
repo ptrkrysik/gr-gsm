@@ -21,15 +21,5 @@
 # Install public header files
 ########################################################################
 install(FILES
-    plotting.hpp
-    api.h
-    gsmtap.h
-    DESTINATION include/grgsm
+    burst_timeslot_splitter.h DESTINATION include/grgsm/flow_control
 )
-
-add_subdirectory(decoding)
-add_subdirectory(decryption)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-add_subdirectory(misc_utils)
-add_subdirectory(flow_control)
