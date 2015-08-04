@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_burst_timeslot_splitter.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_timeslot_splitter.xml
+    gsm_burst_fnr_filter.xml DESTINATION share/gnuradio/grc/blocks
 )

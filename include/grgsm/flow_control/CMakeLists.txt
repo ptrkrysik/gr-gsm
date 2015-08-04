@@ -21,5 +21,6 @@
 # Install public header files
 ########################################################################
 install(FILES
-    burst_timeslot_splitter.h DESTINATION include/grgsm/flow_control
+    burst_timeslot_splitter.h
+    burst_fnr_filter.h DESTINATION include/grgsm/flow_control
 )

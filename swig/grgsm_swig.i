@@ -17,6 +17,7 @@
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 #include "grgsm/demapping/tch_f_chans_demapper.h"
 #include "grgsm/flow_control/burst_timeslot_splitter.h"
+#include "grgsm/flow_control/burst_fnr_filter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
 #include "grgsm/misc_utils/controlled_const_source_f.h"
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
@@ -52,6 +53,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_chans_demapper);
 
 %include "grgsm/flow_control/burst_timeslot_splitter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_timeslot_splitter);
+%include "grgsm/flow_control/burst_fnr_filter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_fnr_filter);
 
 %include "grgsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
