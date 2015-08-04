@@ -19,5 +19,6 @@
 
 install(FILES
     gsm_burst_timeslot_splitter.xml
-    gsm_burst_fnr_filter.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_fnr_filter.xml 
+    gsm_dummy_burst_filter.xml DESTINATION share/gnuradio/grc/blocks
 )

@@ -41,6 +41,7 @@
       <name>Flow control</name>
       <block>gsm_burst_timeslot_splitter</block>
       <block>gsm_burst_fnr_filter</block>
+      <block>gsm_dummy_burst_filter</block>
     </cat>
     <cat>
       <name>Utilities</name>

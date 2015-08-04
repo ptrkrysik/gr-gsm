@@ -22,5 +22,6 @@
 ########################################################################
 install(FILES
     burst_timeslot_splitter.h
-    burst_fnr_filter.h DESTINATION include/grgsm/flow_control
+    burst_fnr_filter.h
+    dummy_burst_filter.h DESTINATION include/grgsm/flow_control
 )
