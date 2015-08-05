@@ -27,5 +27,7 @@ install(FILES
     gsm_clock_offset_corrector.xml
     gsm_tmsi_dumper.xml
     gsm_burst_file_sink.xml
-    gsm_burst_file_source.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_file_source.xml
+    gsm_message_file_sink.xml
+    gsm_message_file_source.xml DESTINATION share/gnuradio/grc/blocks
 )

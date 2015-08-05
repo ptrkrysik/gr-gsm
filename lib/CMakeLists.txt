@@ -56,12 +56,15 @@ list(APPEND grgsm_sources
     misc_utils/tmsi_dumper_impl.cc
     misc_utils/burst_file_sink_impl.cc
     misc_utils/burst_file_source_impl.cc
+    misc_utils/message_file_sink_impl.cc
+    misc_utils/message_file_source_impl.cc   
     qa_utils/burst_sink_impl.cc
     qa_utils/burst_source_impl.cc
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
 )
+
 
 add_library(gnuradio-grgsm SHARED ${grgsm_sources})
 target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}

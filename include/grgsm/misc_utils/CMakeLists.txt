@@ -24,6 +24,8 @@ install(FILES
     bursts_printer.h
     burst_file_source.h
     burst_file_sink.h
+    message_file_sink.h
+    message_file_source.h
     extract_system_info.h
     extract_immediate_assignment.h
     controlled_rotator_cc.h
