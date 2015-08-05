@@ -38,6 +38,13 @@
       <block>gsm_tch_f_decoder</block>
     </cat>
     <cat>
+      <name>Flow control</name>
+      <block>gsm_burst_timeslot_splitter</block>
+      <block>gsm_burst_sdcch_subslot_splitter</block>
+      <block>gsm_burst_fnr_filter</block>
+      <block>gsm_dummy_burst_filter</block>
+    </cat>
+    <cat>
       <name>Utilities</name>
       <block>gsm_bursts_printer</block>
       <block>gsm_burst_file_sink</block>
