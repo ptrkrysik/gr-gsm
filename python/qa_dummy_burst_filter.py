@@ -85,8 +85,8 @@ class qa_dummy_burst_filter (gr_unittest.TestCase):
 
         dummy_burst_filter = grgsm.dummy_burst_filter()
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
-        sink = grgsm.burst_sink_qa()
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
+        sink = grgsm.burst_sink()
 
         self.tb.msg_connect(src, "out", dummy_burst_filter, "in")
         self.tb.msg_connect(dummy_burst_filter, "out", sink, "in")

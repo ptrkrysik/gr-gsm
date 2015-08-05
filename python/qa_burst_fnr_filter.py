@@ -88,8 +88,8 @@ class qa_burst_fnr_filter (gr_unittest.TestCase):
 
         fnr_filter = grgsm.burst_fnr_filter(grgsm.FILTER_LESS_OR_EQUAL, 1500123)
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
-        sink = grgsm.burst_sink_qa()
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
+        sink = grgsm.burst_sink()
 
         self.tb.msg_connect(src, "out", fnr_filter, "in")
         self.tb.msg_connect(fnr_filter, "out", sink, "in")
@@ -152,8 +152,8 @@ class qa_burst_fnr_filter (gr_unittest.TestCase):
 
         fnr_filter = grgsm.burst_fnr_filter(grgsm.FILTER_GREATER_OR_EQUAL, 1500123)
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
-        sink = grgsm.burst_sink_qa()
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
+        sink = grgsm.burst_sink()
 
         self.tb.msg_connect(src, "out", fnr_filter, "in")
         self.tb.msg_connect(fnr_filter, "out", sink, "in")

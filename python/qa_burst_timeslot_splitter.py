@@ -115,16 +115,16 @@ class qa_burst_timeslot_splitter (gr_unittest.TestCase):
         ]
 
 
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         splitter = grgsm.burst_timeslot_splitter()
-        sink_0 = grgsm.burst_sink_qa()
-        sink_1 = grgsm.burst_sink_qa()
-        sink_2 = grgsm.burst_sink_qa()
-        sink_3 = grgsm.burst_sink_qa()
-        sink_4 = grgsm.burst_sink_qa()
-        sink_5 = grgsm.burst_sink_qa()
-        sink_6 = grgsm.burst_sink_qa()
-        sink_7 = grgsm.burst_sink_qa()
+        sink_0 = grgsm.burst_sink()
+        sink_1 = grgsm.burst_sink()
+        sink_2 = grgsm.burst_sink()
+        sink_3 = grgsm.burst_sink()
+        sink_4 = grgsm.burst_sink()
+        sink_5 = grgsm.burst_sink()
+        sink_6 = grgsm.burst_sink()
+        sink_7 = grgsm.burst_sink()
 
         self.tb.msg_connect(src, "out", splitter, "in")
         self.tb.msg_connect(splitter, "out0", sink_0, "in")
