@@ -74,7 +74,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern(""), False, False, False, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -101,7 +101,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "Test 0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern("Test "), False, False, False, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -128,7 +128,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "2569046: 0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern(""), True, False, False, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -155,7 +155,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "3967724: 0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern(""), False, True, False, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -182,7 +182,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "2569046 3967724: 0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern(""), True, True, False, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -219,7 +219,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "test_006: 1099605 1699245: 111110110111011000001010010011100000100100010000000111110111010010100011001100111001111010011111000100101111101010"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern("test_006: "), True, True, True, False)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -252,7 +252,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "test_007: 2569046 3967724: 110101011111001000101011010110000001110110001111111010010111000000001010010111001111111011001000000001001000011101"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern("test_007: "), True, True, True, True)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
@@ -285,7 +285,7 @@ class qa_burst_printer (gr_unittest.TestCase):
             "test_008: 2569046 3967724: 0001101010111110010001010110101100000011101100011111110100101000110101110010000011010111111000000001010010111001111111011001000000001001000011101000"
         ]
         
-        src = grgsm.burst_source_qa(framenumbers_input, timeslots_input, bursts_input)
+        src = grgsm.burst_source(framenumbers_input, timeslots_input, bursts_input)
         printer = grgsm.bursts_printer(pmt.intern("test_008: "), True, True, False, True)
         self.tb.msg_connect(src, "out", printer, "bursts")
         self.tb.run()
