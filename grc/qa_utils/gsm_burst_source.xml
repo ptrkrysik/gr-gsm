@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>QA Burst source</name>
-  <key>gsm_burst_source_qa</key>
+  <name>Burst source</name>
+  <key>gsm_burst_source</key>
   <import>import grgsm</import>
-  <make>grgsm.burst_source_qa($framenumbers, $timeslots, $bursts)</make>
+  <make>grgsm.burst_source($framenumbers, $timeslots, $bursts)</make>
 
   <param>
     <name>Frame numbers</name>

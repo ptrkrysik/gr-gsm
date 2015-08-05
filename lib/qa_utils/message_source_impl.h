@@ -1,7 +1,6 @@
 /* -*- c++ -*- */
-/*
- * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+/* @file
+ * @author Roman Khassraf <rkhassraf@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -18,29 +17,35 @@
  * along with gr-gsm; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
+ *
  */
 
-#ifndef INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
-#define INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
+#ifndef INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
+#define INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
 
-#include <grgsm/misc_utils/message_printer.h>
+#include <grgsm/qa_utils/message_source.h>
 
 namespace gr {
   namespace gsm {
 
-    class message_printer_impl : public message_printer
+    class message_source_impl : public message_source
     {
      private:
-      void message_print(pmt::pmt_t msg);
-      pmt::pmt_t d_prepend_string;
-      bool d_print_gsmtap_header;
+        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::vector<std::vector<uint8_t> > d_msgs;
+        bool d_finished;
+        void run();
      public:
-      message_printer_impl(pmt::pmt_t prepend_string, bool print_gsmtap_header=false);
-      ~message_printer_impl();
+      message_source_impl(const std::vector<std::string> &msg_data);
+      ~message_source_impl();
+      virtual void set_msg_data(const std::vector<std::string> &msg_data);
+      bool start();
+      bool stop();
+      bool finished();
     };
 
-  } // namespace gsm
+  } // namespace grgsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H */
+#endif /* INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H */
 

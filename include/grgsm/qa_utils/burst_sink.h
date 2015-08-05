@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SINK_QA_H
-#define INCLUDED_GSM_BURST_SINK_QA_H
+#ifndef INCLUDED_GSM_BURST_SINK_H
+#define INCLUDED_GSM_BURST_SINK_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -34,17 +34,17 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API burst_sink_qa : virtual public gr::block
+    class GSM_API burst_sink : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<burst_sink_qa> sptr;
+      typedef boost::shared_ptr<burst_sink> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of grgsm::burst_sink_qa.
+       * \brief Return a shared_ptr to a new instance of grgsm::burst_sink.
        *
-       * To avoid accidental use of raw pointers, grgsm::burst_sink_qa's
+       * To avoid accidental use of raw pointers, grgsm::burst_sink's
        * constructor is in a private implementation
-       * class. grgsm::burst_sink_qa::make is the public interface for
+       * class. grgsm::burst_sink::make is the public interface for
        * creating new instances.
        */
       static sptr make();
@@ -56,5 +56,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SINK_QA_H */
+#endif /* INCLUDED_GSM_BURST_SINK_H */
 

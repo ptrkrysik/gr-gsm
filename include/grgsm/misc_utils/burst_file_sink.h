@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef INCLUDED_GSM_BURST_SOURCE_QA_H
-#define INCLUDED_GSM_BURST_SOURCE_QA_H
+#ifndef INCLUDED_GSM_BURST_FILE_SINK_H
+#define INCLUDED_GSM_BURST_FILE_SINK_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -34,31 +34,23 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API burst_source_qa : virtual public gr::block
+    class GSM_API burst_file_sink : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<burst_source_qa> sptr;
+      typedef boost::shared_ptr<burst_file_sink> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of grgsm::burst_source_qa.
+       * \brief Return a shared_ptr to a new instance of grgsm::burst_file_sink.
        *
-       * To avoid accidental use of raw pointers, grgsm::burst_source_qa's
+       * To avoid accidental use of raw pointers, grgsm::burst_file_sink's
        * constructor is in a private implementation
-       * class. grgsm::burst_source_qa::make is the public interface for
+       * class. grgsm::burst_file_sink::make is the public interface for
        * creating new instances.
        */
-      static sptr make(const std::vector<int> &framenumbers,
-        const std::vector<int> &timeslots,
-        const std::vector<std::string> &burst_data);
-
-      virtual void set_framenumbers(const std::vector<int> &framenumbers) = 0;
-      virtual void set_timeslots(const std::vector<int> &timeslots) = 0;
-      virtual void set_burst_data(const std::vector<std::string> &burst_data) = 0;
+      static sptr make(const std::string &filename);
     };
-
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_BURST_SOURCE_QA_H */
-
+#endif /* INCLUDED_GSM_BURST_FILE_SINK_H */
 

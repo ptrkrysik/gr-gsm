@@ -21,13 +21,8 @@
 # Install public header files
 ########################################################################
 install(FILES
-    bursts_printer.h
-    burst_file_source.h
-    burst_file_sink.h
-    extract_system_info.h
-    extract_immediate_assignment.h
-    controlled_rotator_cc.h
-    controlled_const_source_f.h
-    message_printer.h
-    tmsi_dumper.h DESTINATION include/grgsm/misc_utils
+    burst_sink.h
+    burst_source.h
+    message_source.h
+    message_sink.h DESTINATION include/grgsm/qa_utils
 )
