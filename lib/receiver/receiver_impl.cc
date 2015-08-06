@@ -52,20 +52,21 @@ namespace gr
 namespace gsm
 {
 receiver::sptr
-receiver::make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums)
+receiver::make(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink)
 {
     return gnuradio::get_initial_sptr
-           (new receiver_impl(osr, cell_allocation, tseq_nums));
+           (new receiver_impl(osr, cell_allocation, tseq_nums, process_uplink));
 }
 
 /*
  * The private constructor
  */
-receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums)
+receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink)
     : gr::sync_block("receiver",
                 gr::io_signature::make(1, -1, sizeof(gr_complex)),
                 gr::io_signature::make(0, 0, 0)),
     d_OSR(osr),
+    d_process_uplink(process_uplink),
     d_chan_imp_length(CHAN_IMP_RESP_LENGTH),
     d_counter(0),
     d_fcch_start_pos(0),
@@ -88,6 +89,7 @@ receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, c
                                                                                                      //if first bit of the seqeunce ==1  first symbol ==-1
         gmsk_mapper(train_seq[i], N_TRAIN_BITS, d_norm_training_seq[i], startpoint);
     }
+    
     message_port_register_out(pmt::mp("C0"));
     message_port_register_out(pmt::mp("CX"));
     message_port_register_out(pmt::mp("measurements"));
@@ -198,10 +200,15 @@ receiver_impl::work(int noutput_items,
         int offset = 0;
         int to_consume = 0;
         unsigned char output_binary[BURST_SIZE];
-
         burst_type b_type;
+        unsigned int inputs_to_process=d_cell_allocation.size();
         
-        for(int input_nr=0; input_nr<d_cell_allocation.size(); input_nr++)
+        if(d_process_uplink)
+        {
+            inputs_to_process = 2*inputs_to_process;
+        }
+        
+        for(int input_nr=0; input_nr<inputs_to_process; input_nr++)
         {
             double signal_pwr = 0;
             input = (gr_complex *)input_items[input_nr];
@@ -333,7 +340,7 @@ receiver_impl::work(int noutput_items,
                     }
                     burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, tseq_num);
 //                  if(abs(d_c0_burst_start-burst_start)<=2){ //unused check/filter based on timing
-                    if((normal_corr_max/sqrt(signal_pwr))>=0.9){
+                    if((normal_corr_max/sqrt(signal_pwr))>=0.8){
                         detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
                         send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
                     }
@@ -824,10 +831,21 @@ void receiver_impl::send_burst(burst_counter burst_nr, const unsigned char * bur
     tap_header->version = GSMTAP_VERSION;
     tap_header->hdr_len = sizeof(gsmtap_hdr)/4;
     tap_header->type = GSMTAP_TYPE_UM_BURST;
-    tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
-    tap_header->frame_number = htobe32(d_burst_nr.get_frame_nr());
     tap_header->sub_type = burst_type;
-    tap_header->arfcn = htobe16(d_cell_allocation[input_nr]) ; 
+    bool uplink_burst = (input_nr >= d_cell_allocation.size());
+    if(!uplink_burst) // downlink burst
+    {
+        tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
+        tap_header->frame_number = htobe32(d_burst_nr.get_frame_nr());
+        tap_header->arfcn = htobe16(d_cell_allocation[input_nr]) ; 
+    }
+    else //uplink burst
+    {
+        tap_header->timeslot = static_cast<uint8_t>(d_burst_nr.subtract_timeslots(3).get_timeslot_nr());
+        tap_header->frame_number = htobe32(d_burst_nr.subtract_timeslots(3).get_frame_nr());
+        input_nr = input_nr - d_cell_allocation.size();
+        tap_header->arfcn = htobe16(d_cell_allocation[input_nr] | 0x4000);
+    }
     tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
     tap_header->snr_db = 0;
 
