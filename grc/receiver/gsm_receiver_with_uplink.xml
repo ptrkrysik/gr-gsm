@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>GSM Receiver</name>
-  <key>gsm_receiver</key>
+  <name>GSM Receiver (with uplink)</name>
+  <key>gsm_receiver_with_uplink</key>
   <import>import grgsm</import>
-  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, False)</make>
+  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, True)</make>
 
   <param>
     <name>Oversampling ratio</name>
@@ -35,10 +35,18 @@
     <type>int</type>
     <hide>part</hide>
   </param>
+
   <check>$num_streams &gt;= 0</check>
   
   <sink>
-    <name>in</name>
+    <name>C</name>
+    <type>complex</type>
+    <nports>$num_streams</nports>
+  </sink>
+
+
+  <sink>
+    <name>C_up</name>
     <type>complex</type>
     <nports>$num_streams</nports>
   </sink>

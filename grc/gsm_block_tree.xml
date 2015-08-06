@@ -13,6 +13,7 @@
     <cat>
       <name>Receiver</name>
       <block>gsm_receiver</block>
+      <block>gsm_receiver_with_uplink</block>
       <block>gsm_cx_channel_hopper</block>
       <block>gsm_fcch_burst_tagger</block>
       <block>gsm_sch_detector</block>
