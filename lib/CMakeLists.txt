@@ -49,6 +49,7 @@ list(APPEND grgsm_sources
     flow_control/burst_timeslot_splitter_impl.cc
     flow_control/burst_sdcch_subslot_splitter_impl.cc
     flow_control/burst_timeslot_filter_impl.cc
+    flow_control/burst_sdcch_subslot_filter_impl.cc
     flow_control/burst_fnr_filter_impl.cc
     flow_control/dummy_burst_filter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
