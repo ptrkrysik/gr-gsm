@@ -104,16 +104,17 @@ namespace gr {
             boost::mutex::scoped_lock lock(extract_mutex);
             //read neighbour cells
             gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0xce, 0x01);
-            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
-                if(freq[arfcn].mask==0x01){
-                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
-                }
-            }
             
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
             } else {
                 d_c0_channels[info.id] = info;
+            }
+            
+            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
+                if(freq[arfcn].mask==0x01){
+                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
+                }
             }
         }
         else if(msg_elements[2]==0x02){ //System Information Type 2bis
@@ -124,16 +125,16 @@ namespace gr {
             boost::mutex::scoped_lock lock(extract_mutex);
             //read neighbour cells
             gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0xce, 0x01);
-            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
-                if(freq[arfcn].mask==0x01){
-                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
-                }
-            }
-            
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
             } else {
                 d_c0_channels[info.id] = info;
+            }
+            
+            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
+                if(freq[arfcn].mask==0x01){
+                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
+                }
             }
         }
         else if(msg_elements[2]==0x03){ //System Information Type 2ter
@@ -144,16 +145,16 @@ namespace gr {
             boost::mutex::scoped_lock lock(extract_mutex);
             //read neighbour cells
             gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8e, 0x01);
-            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
-                if(freq[arfcn].mask==0x01){
-                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
-                }
-            }
-            
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
             } else {
                 d_c0_channels[info.id] = info;
+            }
+            
+            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
+                if(freq[arfcn].mask==0x01){
+                    d_c0_channels[info.id].neighbour_cells.insert(arfcn);
+                }
             }
         }
     }

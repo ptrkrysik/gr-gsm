@@ -44,6 +44,7 @@ namespace gr {
         chan_info(const chan_info & info) : id(info.id), pwr_db(info.pwr_db), arfcn(info.arfcn), lac(info.lac), cell_id(info.cell_id), mnc(info.mnc){}
         ~chan_info(){}
         void copy_nonzero_elements(const chan_info & info){
+            id = info.id;
             pwr_db = info.pwr_db;
             arfcn = info.arfcn;
             lac = (info.lac!=0) ? info.lac : lac;
