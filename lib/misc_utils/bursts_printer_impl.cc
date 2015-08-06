@@ -37,6 +37,19 @@
 namespace gr {
   namespace gsm {
     boost::mutex printer_mutex;
+    // dummy burst defined in gsm 05.02, section 5.2.6
+    const int8_t bursts_printer_impl::d_dummy_burst[] = {0,0,0,
+        1,1,1,1,1,0,1,1,0,1,1,1,0,1,1,0,
+        0,0,0,0,1,0,1,0,0,1,0,0,1,1,1,0,
+        0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,
+        0,0,0,1,1,1,1,1,0,0,0,1,1,1,0,0,
+        0,1,0,1,1,1,0,0,0,1,0,1,1,1,0,0,
+        0,1,0,1,0,1,1,1,0,1,0,0,1,0,1,0,
+        0,0,1,1,0,0,1,1,0,0,1,1,1,0,0,1,
+        1,1,1,0,1,0,0,1,1,1,1,1,0,0,0,1,
+        0,0,1,0,1,1,1,1,1,0,1,0,1,0,
+        0,0,0 };
+
     void bursts_printer_impl::bursts_print(pmt::pmt_t msg)
     {
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
@@ -45,6 +58,11 @@ namespace gr {
         int8_t * burst = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
         size_t burst_len=pmt::blob_length(header_plus_burst)-sizeof(gsmtap_hdr);
         uint32_t frame_nr = be32toh(header->frame_number);
+
+        if (d_ignore_dummy_bursts && is_dummy_burst(burst, burst_len))
+        {
+            return;
+        }
 
         std::cout << d_prepend_string;
         if (d_prepend_fnr)
@@ -94,19 +112,38 @@ namespace gr {
         std::cout << std::endl;
     }
 
+    bool bursts_printer_impl::is_dummy_burst(int8_t *burst, size_t burst_len)
+    {
+        if (burst_len != DUMMY_BURST_LEN)
+        {
+            return false;
+        }
+        for (int i=0; i<DUMMY_BURST_LEN; i++)
+        {
+            if (burst[i] != d_dummy_burst[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     bursts_printer::sptr
     bursts_printer::make(pmt::pmt_t prepend_string, bool prepend_fnr,
-        bool prepend_frame_count, bool print_payload_only)
+        bool prepend_frame_count, bool print_payload_only,
+        bool ignore_dummy_bursts)
     {
       return gnuradio::get_initial_sptr
-        (new bursts_printer_impl(prepend_string, prepend_fnr, prepend_frame_count, print_payload_only));
+        (new bursts_printer_impl(prepend_string, prepend_fnr, prepend_frame_count,
+            print_payload_only, ignore_dummy_bursts));
     }
 
     /*
      * The private constructor
      */
     bursts_printer_impl::bursts_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr,
-        bool prepend_frame_count, bool print_payload_only)
+        bool prepend_frame_count, bool print_payload_only,
+        bool ignore_dummy_bursts)
       : gr::block("bursts_printer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
@@ -115,6 +152,8 @@ namespace gr {
         d_prepend_fnr = prepend_fnr;
         d_prepend_frame_count = prepend_frame_count;
         d_print_payload_only = print_payload_only;
+        d_ignore_dummy_bursts = ignore_dummy_bursts;
+
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, _1));
     }

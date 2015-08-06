@@ -46,15 +46,25 @@ list(APPEND grgsm_sources
     decoding/GSM660Tables.cpp
     decoding/GSM503Tables.cpp
     decoding/ViterbiR204.cpp
+    flow_control/burst_timeslot_splitter_impl.cc
+    flow_control/burst_sdcch_subslot_splitter_impl.cc
+    flow_control/burst_fnr_filter_impl.cc
+    flow_control/dummy_burst_filter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_const_source_f_impl.cc
     misc_utils/message_printer_impl.cc
     misc_utils/tmsi_dumper_impl.cc
-    misc_utils/burst_sink_impl.cc
-    misc_utils/burst_source_impl.cc
-    misc_utils/burst_sink_qa_impl.cc
-    misc_utils/burst_source_qa_impl.cc
-    decryption/decryption_impl.cc )
+    misc_utils/burst_file_sink_impl.cc
+    misc_utils/burst_file_source_impl.cc
+    misc_utils/message_file_sink_impl.cc
+    misc_utils/message_file_source_impl.cc   
+    qa_utils/burst_sink_impl.cc
+    qa_utils/burst_source_impl.cc
+    qa_utils/message_source_impl.cc
+    qa_utils/message_sink_impl.cc
+    decryption/decryption_impl.cc
+)
+
 
 add_library(gnuradio-grgsm SHARED ${grgsm_sources})
 target_link_libraries(gnuradio-grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}

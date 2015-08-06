@@ -23,6 +23,8 @@
 #ifndef INCLUDED_GSM_BURSTS_PRINTER_IMPL_H
 #define INCLUDED_GSM_BURSTS_PRINTER_IMPL_H
 
+#define DUMMY_BURST_LEN 148
+
 #include <grgsm/misc_utils/bursts_printer.h>
 #include <set>
 
@@ -37,9 +39,13 @@ namespace gr {
       bool d_prepend_fnr;
       bool d_prepend_frame_count;
       bool d_print_payload_only;
+      bool d_ignore_dummy_bursts;
+      bool is_dummy_burst(int8_t *burst, size_t burst_len);
+      static const int8_t d_dummy_burst[];
      public:
       bursts_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr=false,
-        bool prepend_frame_count=false, bool print_payload_only=false);
+        bool prepend_frame_count=false, bool print_payload_only=false,
+        bool ignore_dummy_bursts=false);
       ~bursts_printer_impl();
     };
 

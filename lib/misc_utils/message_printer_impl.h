@@ -33,8 +33,9 @@ namespace gr {
      private:
       void message_print(pmt::pmt_t msg);
       pmt::pmt_t d_prepend_string;
+      bool d_print_gsmtap_header;
      public:
-      message_printer_impl(pmt::pmt_t prepend_string);
+      message_printer_impl(pmt::pmt_t prepend_string, bool print_gsmtap_header=false);
       ~message_printer_impl();
     };
 
