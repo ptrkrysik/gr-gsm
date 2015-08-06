@@ -23,6 +23,8 @@
 install(FILES
     burst_timeslot_splitter.h
     burst_sdcch_subslot_splitter.h
+    burst_timeslot_filter.h
+    burst_sdcch_subslot_filter.h
     burst_fnr_filter.h
     dummy_burst_filter.h DESTINATION include/grgsm/flow_control
 )

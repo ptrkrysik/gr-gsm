@@ -41,6 +41,8 @@
       <name>Flow control</name>
       <block>gsm_burst_timeslot_splitter</block>
       <block>gsm_burst_sdcch_subslot_splitter</block>
+      <block>gsm_burst_timeslot_filter</block>
+      <block>gsm_burst_sdcch_subslot_filter</block>
       <block>gsm_burst_fnr_filter</block>
       <block>gsm_dummy_burst_filter</block>
     </cat>
