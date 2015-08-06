@@ -3,7 +3,7 @@
   <name>Universal ctrl chans demapper</name>
   <key>gsm_universal_ctrl_chans_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $starts_fn_mod51, $channel_types)</make>
+  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $downlink_starts_fn_mod51, $downlink_channel_types, $uplink_starts_fn_mod51, $uplink_channel_types)</make>
 
   <param>
     <name>timeslot_nr</name>
@@ -14,16 +14,32 @@
   </param>
 
   <param>
-    <name>starts_fn_mod51</name>
-    <key>starts_fn_mod51</key>
+    <name>downlink_starts_fn_mod51</name>
+    <key>downlink_starts_fn_mod51</key>
     <value>[2,6,12,16,22,26,32,36,42,46]</value>
     <type>int_vector</type>
     <hide>part</hide>
   </param>
 
   <param>
-    <name>channel_types</name>
-    <key>channel_types</key>
+    <name>downlink_channel_types</name>
+    <key>downlink_channel_types</key>
+    <value>[1,2,2,2,2,2,2,2,2,2]</value>
+    <type>int_vector</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>uplink_starts_fn_mod51</name>
+    <key>uplink_starts_fn_mod51</key>
+    <value>[2,6,12,16,22,26,32,36,42,46]</value>
+    <type>int_vector</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>uplink_channel_types</name>
+    <key>uplink_channel_types</key>
     <value>[1,2,2,2,2,2,2,2,2,2]</value>
     <type>int_vector</type>
     <hide>part</hide>
@@ -37,4 +53,7 @@
     <name>bursts</name>
     <type>message</type>
   </source>
+  <doc>
+      Universal demapper for control channels.
+  </doc>
 </block>

@@ -3,7 +3,7 @@
   <name>BCCH + CCCH demapper</name>
   <key>gsm_bcch_ccch_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $starts_fn_mod51, $channel_types)</make>
+  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $downlink_starts_fn_mod51, $downlink_channel_types, $uplink_starts_fn_mod51, $uplink_channel_types)</make>
 
   <param>
     <name>Timeslot</name>
@@ -14,7 +14,7 @@
   </param>
 
   <param>
-    <name>starts_fn_mod51</name>
+    <name>downlink_starts_fn_mod51</name>
     <key>starts_fn_mod51</key>
     <value>[2,6,12,16,22,26,32,36,42,46]</value>
     <type>int_vector</type>
@@ -22,7 +22,23 @@
   </param>
 
   <param>
-    <name>channel_types</name>
+    <name>downlink_channel_types</name>
+    <key>channel_types</key>
+    <value>[1,2,2,2,2,2,2,2,2,2]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <param>
+    <name>uplink_starts_fn_mod51</name>
+    <key>starts_fn_mod51</key>
+    <value>[2,6,12,16,22,26,32,36,42,46]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <param>
+    <name>uplink_channel_types</name>
     <key>channel_types</key>
     <value>[1,2,2,2,2,2,2,2,2,2]</value>
     <type>int_vector</type>
