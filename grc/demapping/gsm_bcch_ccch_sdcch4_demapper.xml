@@ -15,7 +15,7 @@
 
   <param>
     <name>downlink_starts_fn_mod51</name>
-    <key>starts_fn_mod51</key>
+    <key>downlink_starts_fn_mod51</key>
     <value>[2,6,12,16,22,26,32,36,42,46]</value>
     <type>int_vector</type>
     <hide>all</hide>
@@ -23,7 +23,7 @@
 
   <param>
     <name>downlink_channel_types</name>
-    <key>channel_types</key>
+    <key>downlink_channel_types</key>
     <value>[1,2,2,2,7,7,7,7,135,135]</value>
     <type>int_vector</type>
     <hide>all</hide>
@@ -31,7 +31,7 @@
 
   <param>
     <name>uplink_starts_fn_mod51</name>
-    <key>starts_fn_mod51</key>
+    <key>uplink_starts_fn_mod51</key>
     <value>[0,6,10,37,41,47]</value>
     <type>int_vector</type>
     <hide>all</hide>
@@ -39,7 +39,7 @@
 
   <param>
     <name>uplink_channel_types</name>
-    <key>channel_types</key>
+    <key>uplink_channel_types</key>
     <value>[7,135,135,7,7,7]</value>
     <type>int_vector</type>
     <hide>all</hide>
