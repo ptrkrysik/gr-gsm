@@ -35,21 +35,23 @@ namespace gr {
   namespace gsm {
 
     tch_f_decoder::sptr
-    tch_f_decoder::make(tch_mode mode, const std::string &file)
+    tch_f_decoder::make(tch_mode mode, const std::string &file, bool boundary_check)
     {
       return gnuradio::get_initial_sptr
-        (new tch_f_decoder_impl(mode, file));
+        (new tch_f_decoder_impl(mode, file, boundary_check));
     }
 
     /*
      * Constructor
      */
-    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, const std::string &file)
+    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, const std::string &file, bool boundary_check)
       : gr::block("tch_f_decoder",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
       d_tch_mode(mode),
       d_collected_bursts_num(0),
+      d_boundary_check(boundary_check),
+      d_boundary_decode(!boundary_check),
       mBlockCoder(0x10004820009ULL, 40, 224),
       mU(228),
       mP(mU.segment(184,40)),
@@ -163,6 +165,32 @@ namespace gr {
                     pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
 
                     message_port_pub(pmt::mp("msgs"), msg_out);
+                    
+                    // if d_boundary_check is enabled, we set d_boundary_decode to true, when a 
+                    // "Connect" or "Connect Acknowledge" message is received, and
+                    // we set d_boundary_decode back to false, when "Release" message is received
+                    if (d_boundary_check)
+                    {
+                        // check if this is a call control message
+                        if ((outmsg[3] & 0x0f) == 0x03)
+                        {
+                            // Connect specified in GSM 04.08, 9.3.5
+                            if ((outmsg[4] & 0x3f) == 0x07)
+                            {
+                                d_boundary_decode = true;
+                            }
+                            // Connect Acknowledge specified in GSM 04.08, 9.3.6
+                            else if ((outmsg[4] & 0x3f) == 0x0f)
+                            {
+                                d_boundary_decode = true;
+                            }
+                            // Release specified in GSM 04.08, 9.3.18
+                            else if ((outmsg[4] & 0x3f) == 0x2d)
+                            {
+                                d_boundary_decode = false;
+                            }
+                        }
+                    }
 
                     // if we are in an AMR-mode and we receive a channel mode modify message,
                     // we set the mode according to the multirate configuration from the message
@@ -214,6 +242,12 @@ namespace gr {
                         }
                     }
                 }
+            }
+            
+            // if boundary_check is enabled and d_boundary_decode is false, we are done
+            if (d_boundary_check && !d_boundary_decode)
+            {
+                return;
             }
 
             // Decode voice frames and write to file
