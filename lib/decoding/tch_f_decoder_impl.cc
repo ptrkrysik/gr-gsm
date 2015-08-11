@@ -244,7 +244,7 @@ namespace gr {
                 }
             }
             
-            // if boundary_check is enabled and d_boundary_decode is false, we are done
+            // if voice boundary_check is enabled and d_boundary_decode is false, we are done
             if (d_boundary_check && !d_boundary_decode)
             {
                 return;
@@ -283,6 +283,7 @@ namespace gr {
                         // Undo Um's importance-sorted bit ordering.
                         // See GSM 05.03 3.1 and Table 2.
                         BitVector frFrame(260 + 4); // FR has a frameheader of 4 bits only
+                        frFrame.fillField(0, mFrameHeader, 4);
                         BitVector payload = frFrame.tail(4);
 
                         mTCHD.unmap(GSM::g610BitOrder, 260, payload);
