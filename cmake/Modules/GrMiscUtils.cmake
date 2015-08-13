@@ -259,37 +259,6 @@ function(GR_LOGGING)
 endfunction(GR_LOGGING)
 
 ########################################################################
-# Run GRCC to compile .grc files into .py files.
-#
-# Usage: GRCC(filename, directory)
-#    - filenames: List of file name of .grc file
-#    - directory: directory of built .py file - usually in
-#                 ${CMAKE_CURRENT_BINARY_DIR}
-#    - Sets PYFILES: output converted GRC file names to Python files.
-########################################################################
-function(GRCC)
-  # Extract directory from list of args, remove it for the list of filenames.
-  list(GET ARGV -1 directory)
-  list(REMOVE_AT ARGV -1)
-  set(filenames ${ARGV})
-  file(MAKE_DIRECTORY ${directory})
-
-  SET(GRCC_COMMAND ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc)
-
-  foreach(f ${filenames})
-    execute_process(
-      COMMAND ${GRCC_COMMAND} -d ${directory} "${CMAKE_CURRENT_SOURCE_DIR}/${f}"
-    )
-    string(REPLACE ".grc" ".py" pyfile ${f})
-    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" pyfile "${pyfile}")
-    set(pyfile "${CMAKE_CURRENT_BINARY_DIR}/${pyfile}")
-    list(APPEND pyfiles ${pyfile})
-  endforeach(f)
-
-  set(PYFILES ${pyfiles} PARENT_SCOPE)
-endfunction(GRCC)
-
-########################################################################
 # Check if HAVE_PTHREAD_SETSCHEDPARAM and HAVE_SCHED_SETSCHEDULER
 #  should be defined
 ########################################################################

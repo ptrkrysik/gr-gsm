@@ -19,13 +19,28 @@
 
 include(GrPython)
 
-#GRCC( airprobe_file.grc airprobe_rtlsdr.grc airprobe_usrp.grc ${CMAKE_CURRENT_BINARY_DIR} ) #PK: removed untill I figure out how to do this correctly
+SET(APPS_DIR ${CMAKE_SOURCE_DIR}/apps)
+
+SET(GRCC_COMMAND ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc)
+
+ADD_CUSTOM_TARGET(airprobe_file.py ALL)
+ADD_CUSTOM_COMMAND(
+ TARGET airprobe_file.py
+ COMMAND ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
+ ARGS "airprobe_file.grc"
+ WORKING_DIRECTORY ${APPS_DIR}
+)
+
+ADD_CUSTOM_TARGET(airprobe_rtlsdr.py ALL)
+ADD_CUSTOM_COMMAND(
+ TARGET airprobe_rtlsdr.py
+ COMMAND ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
+ ARGS "airprobe_rtlsdr.grc"
+ WORKING_DIRECTORY ${APPS_DIR}
+)
 
 GR_PYTHON_INSTALL(
-    PROGRAMS
-#    ${PYFILES}
     airprobe_file.py
     airprobe_rtlsdr.py
-
     DESTINATION bin
 )
