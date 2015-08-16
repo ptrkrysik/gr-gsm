@@ -10,6 +10,12 @@ Current gr-gsm project's mailing list address is following:
 
 gr-gsm@googlegroups.com
 
+Mailing list is a place for general discussions, questions about the usage and installation. In case of problem with installation please try to provide full information that will help reproducing it. Minimum information should contain:
+- operating system with version,
+- kind of installation (how gr-gsm and its dependencies were installed: with pybombs, from distibution's repository, compiled manually)
+- version of gnuradio (it can be obtained with: gnuradio-companion --version)
+- error messages (in case of pybombs installation they can be obtained after switching it to verbous mode with -v option).
+
 To join the group with any e-mail addres (google account is not required) use this link:
 
 https://groups.google.com/forum/#!forum/gr-gsm/join
