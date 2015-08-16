@@ -29,6 +29,8 @@
 #include <grgsm/endian.h>
 #include <grgsm/gsmtap.h>
 
+#define BURST_SIZE 148
+
 namespace gr {
   namespace gsm {
 
@@ -80,12 +82,20 @@ namespace gr {
         int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
 
         if(header->timeslot == d_timeslot){
-            header->sub_type = GSMTAP_CHANNEL_TCH_F;
+            int8_t new_msg[sizeof(gsmtap_hdr)+BURST_SIZE];
+            gsmtap_hdr * new_hdr = (gsmtap_hdr*)new_msg;
+            memcpy(new_msg, header, sizeof(gsmtap_hdr)+BURST_SIZE);
+
+            new_hdr->sub_type = GSMTAP_CHANNEL_TCH_F;
+            if (fn_mod13 == 12)
+                header->sub_type = GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F;
+
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
+            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
+
 
             if (fn_mod13 == 12)
             {
-                header->sub_type = GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F;
-
                 // position of SACCH burst based on timeslot
                 // see specification gsm 05.02
                 uint32_t index;
@@ -104,7 +114,7 @@ namespace gr {
 
                 if (is_sacch)
                 {
-                    d_bursts_sacch[index] = msg;
+                    d_bursts_sacch[index] = msg_out;
                     d_frame_numbers_sacch[index] = frame_nr;
 
                     if (index == 3)
@@ -135,8 +145,8 @@ namespace gr {
                 if (fn_mod13 <= 3)
                 {
                     // add to b1 and b3
-                    d_bursts[0][fn_mod13] = msg;
-                    d_bursts[2][fn_mod13 + 4] = msg;
+                    d_bursts[0][fn_mod13] = msg_out;
+                    d_bursts[2][fn_mod13 + 4] = msg_out;
 
                     // set framenumber
                     d_frame_numbers[0][fn_mod13] = frame_nr;
@@ -145,8 +155,8 @@ namespace gr {
                 else if (fn_mod13 >= 4 && fn_mod13 <= 7)
                 {
                     // add to b1 and b2
-                    d_bursts[0][fn_mod13] = msg;
-                    d_bursts[1][fn_mod13 - 4] = msg;
+                    d_bursts[0][fn_mod13] = msg_out;
+                    d_bursts[1][fn_mod13 - 4] = msg_out;
 
                     // set framenumber
                     d_frame_numbers[0][fn_mod13] = frame_nr;
@@ -155,8 +165,8 @@ namespace gr {
                 else if (fn_mod13 >= 8 && fn_mod13 <= 11)
                 {
                     // add to b2 and b3
-                    d_bursts[1][fn_mod13 - 4] = msg;
-                    d_bursts[2][fn_mod13 - 8] = msg;
+                    d_bursts[1][fn_mod13 - 4] = msg_out;
+                    d_bursts[2][fn_mod13 - 8] = msg_out;
 
                     // set framenumber
                     d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
