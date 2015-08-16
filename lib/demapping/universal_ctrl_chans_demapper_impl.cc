@@ -30,6 +30,8 @@
 #include <grgsm/gsmtap.h>
 #include <set>
 
+#define BURST_SIZE 148
+
 namespace gr {
   namespace gsm {
 
@@ -140,7 +142,7 @@ namespace gr {
     {
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
-
+            
         uint32_t frame_nr = be32toh(header->frame_number);
         uint32_t fn_mod51 = frame_nr % 51;
         uint32_t fn51_start = d_starts_fn_mod51[fn_mod51];
@@ -148,14 +150,19 @@ namespace gr {
         uint32_t ch_type = d_channel_types[fn_mod51];
         
         if(header->timeslot==d_timeslot){
-	    header->sub_type = ch_type;
-	    header->sub_slot = d_subslots[fn_mod51 + (51 * (frame_nr % 2))];
+            int8_t new_msg[sizeof(gsmtap_hdr)+BURST_SIZE];
+            gsmtap_hdr * new_hdr = (gsmtap_hdr*)new_msg;
+            memcpy(new_msg, header, sizeof(gsmtap_hdr)+BURST_SIZE);
+            new_hdr->sub_type = ch_type;
+            new_hdr->sub_slot = d_subslots[fn_mod51 + (51 * (frame_nr % 2))];
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
+            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
 	    
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
                 uint32_t ii = fn_mod51 - fn51_start;
                 d_frame_numbers[ii] = frame_nr;
-                d_bursts[ii] = msg;
+                d_bursts[ii] = msg_out;
             }
             
             if(fn_mod51==fn51_stop)

@@ -137,13 +137,10 @@ namespace gr {
            //send message with header of the first burst
             pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(first_header_plus_burst);
-            header->type = GSMTAP_TYPE_UM;
-            
-            int8_t * header_content = (int8_t *)header;
-            
             int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
-            memcpy(header_plus_data, header_content, sizeof(gsmtap_hdr));
+            memcpy(header_plus_data, header, sizeof(gsmtap_hdr));
             memcpy(header_plus_data+sizeof(gsmtap_hdr), outmsg, DATA_BYTES);
+            ((gsmtap_hdr*)header_plus_data)->type = GSMTAP_TYPE_UM;
             
             pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr));
             pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
