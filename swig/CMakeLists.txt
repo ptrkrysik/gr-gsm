@@ -28,6 +28,12 @@ endif()
 include(GrSwig)
 include(GrPython)
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  # Mac OS X specific code
+  # Without this flag it does not find some of the libraries
+  SET(CMAKE_MODULE_LINKER_FLAGS "-undefined dynamic_lookup")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
 ########################################################################
 # Setup swig generation
 ########################################################################
