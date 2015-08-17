@@ -40,8 +40,10 @@ ADD_CUSTOM_COMMAND(
  WORKING_DIRECTORY ${APPS_DIR}
 )
 
+
 GR_PYTHON_INSTALL(
-    airprobe_file.py
-    airprobe_rtlsdr.py
+    PROGRAMS
+    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_file.py
+    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_rtlsdr.py
     DESTINATION bin
 )
