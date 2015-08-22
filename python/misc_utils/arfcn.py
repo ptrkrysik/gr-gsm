@@ -21,15 +21,21 @@
 #
 #
 
+import collections
+
+
 # first uplink freq, first arfcn, last arfcn, downlink frequence distance
-__band_conf = {'GSM450': {'first_freq': 450.6e6, 'first_arfcn': 259, 'last_arfcn': 293, 'downlink_dist': 10e6},
-            'GSM480': {'first_freq': 479e6, 'first_arfcn': 306, 'last_arfcn': 340, 'downlink_dist': 10e6},
-            'GSM850': {'first_freq': 824.2e6, 'first_arfcn': 128, 'last_arfcn': 251, 'downlink_dist': 45e6},
-            'P-GSM': {'first_freq': 890.2e6, 'first_arfcn': 1, 'last_arfcn': 124, 'downlink_dist':  45e6},
-            'E-GSM': {'first_freq': 880.2e6, 'first_arfcn': 975, 'last_arfcn': 1023, 'downlink_dist':  45e6},           
-            'R-GSM': {'first_freq': 876.2e6, 'first_arfcn': 955, 'last_arfcn': 1023, 'downlink_dist':  45e6},
-            'DCS1800': {'first_freq': 1710.2e6, 'first_arfcn': 512, 'last_arfcn': 885, 'downlink_dist':  95e6},
-            'PCS1900': {'first_freq': 1850.2e6, 'first_arfcn': 512, 'last_arfcn': 810, 'downlink_dist':  80e6}}
+# entries are ordered by relevance
+__band_conf = collections.OrderedDict([
+    ('P-GSM', {'first_freq': 890.2e6, 'first_arfcn': 1, 'last_arfcn': 124, 'downlink_dist': 45e6}),
+    ('DCS1800', {'first_freq': 1710.2e6, 'first_arfcn': 512, 'last_arfcn': 885, 'downlink_dist': 95e6}),
+    ('PCS1900', {'first_freq': 1850.2e6, 'first_arfcn': 512, 'last_arfcn': 810, 'downlink_dist': 80e6}),
+    ('E-GSM', {'first_freq': 880.2e6, 'first_arfcn': 975, 'last_arfcn': 1023, 'downlink_dist': 45e6}),           
+    ('R-GSM', {'first_freq': 876.2e6, 'first_arfcn': 955, 'last_arfcn': 1023, 'downlink_dist': 45e6}),
+    ('GSM450',{'first_freq': 450.6e6, 'first_arfcn': 259, 'last_arfcn': 293, 'downlink_dist': 10e6}),
+    ('GSM480', {'first_freq': 479e6, 'first_arfcn': 306, 'last_arfcn': 340, 'downlink_dist': 10e6}),
+    ('GSM850', {'first_freq': 824.2e6, 'first_arfcn': 128, 'last_arfcn': 251, 'downlink_dist': 45e6})
+    ])
 
 __chan_spacing = 2e5
 
