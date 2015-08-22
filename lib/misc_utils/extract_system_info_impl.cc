@@ -31,7 +31,7 @@
 #include <iterator>
 #include <algorithm>
 #include <iostream>
-#include <endian.h>
+#include <grgsm/endian.h>
 #include <boost/foreach.hpp>
 extern "C" {
     #include <osmocom/gsm/gsm48_ie.h>

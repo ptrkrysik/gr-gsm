@@ -28,7 +28,7 @@
 #include <grgsm/gsmtap.h>
 #include <unistd.h>
 #include <map>
-#include <endian.h>
+#include <grgsm/endian.h>
 #include <boost/foreach.hpp>
 
 #include "extract_immediate_assignment_impl.h"
