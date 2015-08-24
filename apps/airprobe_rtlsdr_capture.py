@@ -38,7 +38,7 @@ import sys
 
 class airprobe_rtlsdr_capture(gr.top_block):
 
-    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, verbose=False):
+    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False):
 
         gr.top_block.__init__(self, "Airprobe RTL-SDR Capture")
                 
@@ -52,6 +52,7 @@ class airprobe_rtlsdr_capture(gr.top_block):
         self.arfcn = arfcn
         self.cfile = cfile
         self.burst_file = burst_file
+        self.band = band
         self.verbose = verbose
         self.shiftoff = shiftoff = 400e3
         
@@ -121,6 +122,22 @@ class airprobe_rtlsdr_capture(gr.top_block):
         self.fc = fc
         if self.verbose or self.burst_file:
             self.gsm_input.set_fc(self.fc)
+            
+    def get_arfcn(self):
+        return self.arfcn
+
+    def set_arfcn(self, arfcn):
+        self.arfcn = arfcn
+        if self.verbose or self.burst_file:
+            self.gsm_receiver.set_cell_allocation([self.arfcn])
+            if options.band:
+                new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn, self.band)
+            else:
+                for band in grgsm.arfcn.get_bands():
+                    if grgsm.arfcn.is_valid_arfcn(arfcn, band):
+                        new_freq = grgsm.arfcn.arfcn2downlink(arfcn, band)
+                        break
+            self.set_fc(new_freq)
 
     def get_gain(self):
         return self.gain
@@ -221,7 +238,7 @@ if __name__ == '__main__':
      
     tb = airprobe_rtlsdr_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
                          ppm=options.ppm, arfcn=arfcn, cfile=options.cfile, 
-                         burst_file=options.burst_file, verbose=options.verbose)
+                         burst_file=options.burst_file, band=options.band, verbose=options.verbose)
     
     def signal_handler(signal, frame):
         tb.stop()
