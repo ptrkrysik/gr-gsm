@@ -153,14 +153,6 @@ make
 sudo make install
 ```
 
-
-Installation using Docker
-=========================
-It is possible to install gr-gsm with use of Docker image prepared by Marcel Maatkamp.
-This method of installation might be easier for people using distributions where pybombs doesn't work.
-The installation guide is available here:
-https://github.com/marcelmaatkamp/docker-gnuradio-gr-gsm-ptrkrysik
-
 Development
 ===========
 New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, corretion of bug y).
