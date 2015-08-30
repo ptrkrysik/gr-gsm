@@ -123,10 +123,15 @@ Manual compilation and installation of gr-gsm
 
 If you intend to develop gr-gsm or have problem with pyboms installation - here is description how to manually compile and install gr-gsm from source.
 
-You will need gnuradio, rtl-sdr, and gr-osmosdr. For their installation look at homepages of those projects:
+You will need gnuradio, rtl-sdr, gr-osmosdr and libosmocor.e For their installation look at homepages of those projects:
+
 http://gnuradio.org/redmine/projects/gnuradio/wiki
+
 http://sdr.osmocom.org/trac/wiki/rtl-sdr
+
 http://sdr.osmocom.org/trac/wiki/GrOsmoSDR
+
+http://bb.osmocom.org/trac/wiki/libosmocore
 
 Sometimes it is possible to install these programs/libraries from distibution's repository. Keep in mind that gr-gsm need GNU Radio 3.7.3 and above.
 
