@@ -1,0 +1,6 @@
+[submodule "test_data"]
+	path = test_data
+	url = https://github.com/ptrkrysik/test_data.git
+[submodule "examples"]
+	path = examples
+	url = https://github.com/ptrkrysik/examples.git

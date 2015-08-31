@@ -1,1 +1,0 @@
-experimental_receiver_components_test.grc - a test of blocks being components for a new modular gsm receiver (fcch_detector, fcch_burst_tagger, sch_detector)
