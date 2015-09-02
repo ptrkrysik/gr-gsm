@@ -19,31 +19,32 @@
 
 include(GrPython)
 
-SET(APPS_DIR ${CMAKE_SOURCE_DIR}/apps)
+#SET(APPS_DIR ${CMAKE_SOURCE_DIR}/apps)
 
-SET(GRCC_COMMAND ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc)
-SET(BLOCK_PATH ../grc/)
+#SET(GRCC_COMMAND ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc)
+#SET(BLOCK_PATH ../grc/)
 
-ADD_CUSTOM_TARGET(airprobe_file.py ALL)
-ADD_CUSTOM_COMMAND(
- TARGET airprobe_file.py
- COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
- ARGS "airprobe_file.grc"
- WORKING_DIRECTORY ${APPS_DIR}
-)
+#ADD_CUSTOM_TARGET(airprobe_file.py ALL)
+#ADD_CUSTOM_COMMAND(
+# TARGET airprobe_file.py
+# COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
+# ARGS "airprobe_file.grc"
+# WORKING_DIRECTORY ${APPS_DIR}
+#)
 
-ADD_CUSTOM_TARGET(airprobe_rtlsdr.py ALL)
-ADD_CUSTOM_COMMAND(
- TARGET airprobe_rtlsdr.py
- COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
- ARGS "airprobe_rtlsdr.grc"
- WORKING_DIRECTORY ${APPS_DIR}
-)
-
+#ADD_CUSTOM_TARGET(airprobe_rtlsdr.py ALL)
+#ADD_CUSTOM_COMMAND(
+# TARGET airprobe_rtlsdr.py
+# COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
+# ARGS "airprobe_rtlsdr.grc"
+# WORKING_DIRECTORY ${APPS_DIR}
+#)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_file.py
-    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_rtlsdr.py
+#    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_rtlsdr.py
+    airprobe_rtlsdr.py
+    airprobe_decode.py
+    airprobe_rtlsdr_capture
     DESTINATION bin
 )
