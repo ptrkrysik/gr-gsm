@@ -45,6 +45,6 @@ GR_PYTHON_INSTALL(
 #    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_rtlsdr.py
     airprobe_rtlsdr.py
     airprobe_decode.py
-    airprobe_rtlsdr_capture
+    airprobe_rtlsdr_capture.py
     DESTINATION bin
 )
