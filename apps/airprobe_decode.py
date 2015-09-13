@@ -323,7 +323,7 @@ if __name__ == '__main__':
     if options.a5 < 0 or options.a5 > 3:
         parser.error("Invalid A5 version\n")
 
-    if (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
+    if options.cfile and (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
         parser.error("You have to provide either a frequency or an ARFCN (but not both).\n")
 
     # handle frequency / arfcn input
