@@ -31,8 +31,10 @@
 #include <algorithm>
 #include "bursts_printer_impl.h"
 #include <unistd.h>
-
 #include <iostream>
+extern "C" {
+    #include <osmocom/gsm/a5.h>
+}
 
 namespace gr {
   namespace gsm {
@@ -77,12 +79,8 @@ namespace gr {
 
         if (d_prepend_frame_count)
         {
-            // calculate frame count for A5
-            uint16_t t1 = frame_nr/1326;
-            uint8_t t2 = frame_nr % 26;
-            uint8_t t3 = frame_nr % 51;
-            uint32_t frame_count = (t1<<11)|(t3<<5)|t2;
-            std::cout << frame_count;
+            // calculate fn count using libosmogsm
+            std::cout << osmo_a5_fn_count(frame_nr);
         }
 
         if (d_prepend_fnr || d_prepend_frame_count)
