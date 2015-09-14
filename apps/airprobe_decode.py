@@ -28,6 +28,7 @@ from gnuradio.eng_option import eng_option
 from optparse import OptionParser, OptionGroup
 import collections
 import grgsm
+import pmt
 import socket
 
 
@@ -37,7 +38,8 @@ class airprobe_decoder(gr.top_block):
                  burst_file=None,
                  cfile=None, fc=939.4e6, samp_rate=2e6, arfcn=None,
                  a5=1, a5_kc=None,
-                 speech_file=None, speech_codec=None):
+                 speech_file=None, speech_codec=None,
+                 verbose=False):
 
         gr.top_block.__init__(self, "Airprobe Decode")
 
@@ -58,6 +60,7 @@ class airprobe_decoder(gr.top_block):
             self.kc = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         self.speech_file = speech_file
         self.speech_codec = speech_codec
+        self.verbose = verbose
 
         ##################################################
         # Blocks
@@ -110,6 +113,9 @@ class airprobe_decoder(gr.top_block):
         self.cch_decoder = grgsm.control_channels_decoder()
 
         self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
+        if self.verbose:
+            self.message_printer = grgsm.message_printer(pmt.intern(""), True, True, False)
+
 
         ##################################################
         # Asynch Message Connections
@@ -137,6 +143,8 @@ class airprobe_decoder(gr.top_block):
 
             self.msg_connect(self.bcch_demapper, "bursts", self.cch_decoder, "bursts")
             self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            if self.verbose:
+                self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
 
         elif self.chan_mode == 'BCCH_SDCCH4':
             if self.subslot_filter is not None:
@@ -148,9 +156,13 @@ class airprobe_decoder(gr.top_block):
                 self.msg_connect(self.bcch_sdcch4_demapper, "bursts", self.decryption, "bursts")
                 self.msg_connect(self.decryption, "bursts", self.cch_decoder_decrypted, "bursts")
                 self.msg_connect(self.cch_decoder_decrypted, "msgs", self.socket_pdu, "pdus")
+                if self.verbose:
+                    self.msg_connect(self.cch_decoder_decrypted, "msgs", self.message_printer, "msgs")
 
             self.msg_connect(self.bcch_sdcch4_demapper, "bursts", self.cch_decoder, "bursts")
             self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            if self.verbose:
+                self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
 
         elif self.chan_mode == 'SDCCH8':
             if self.subslot_filter is not None:
@@ -162,9 +174,13 @@ class airprobe_decoder(gr.top_block):
                 self.msg_connect(self.sdcch8_demapper, "bursts", self.decryption, "bursts")
                 self.msg_connect(self.decryption, "bursts", self.cch_decoder_decrypted, "bursts")
                 self.msg_connect(self.cch_decoder_decrypted, "msgs", self.socket_pdu, "pdus")
+                if self.verbose:
+                    self.msg_connect(self.cch_decoder_decrypted, "msgs", self.message_printer, "msgs")
 
             self.msg_connect(self.sdcch8_demapper, "bursts", self.cch_decoder, "bursts")
             self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            if self.verbose:
+                self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
 
         elif self.chan_mode == 'TCHF':
             self.msg_connect(self.timeslot_filter, "out", self.tch_f_demapper, "bursts")
@@ -180,6 +196,9 @@ class airprobe_decoder(gr.top_block):
 
             self.msg_connect(self.tch_f_decoder, "msgs", self.socket_pdu, "pdus")
             self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            if self.verbose:
+                self.msg_connect(self.tch_f_decoder, "msgs", self.message_printer, "msgs")
+                self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
             
 
 if __name__ == '__main__':
@@ -243,6 +262,8 @@ if __name__ == '__main__':
                       help="Subslot to decode. Use in combination with channel type BCCH_SDCCH4 and SDCCH8")
     parser.add_option("-b", "--burst-file", dest="burst_file", help="Input file (bursts)")
     parser.add_option("-c", "--cfile", dest="cfile", help="Input file (cfile)")
+    parser.add_option("-v", "--verbose", action="store_true",
+                      help="If set, the decoded messages (with frame number and count) are printed to stdout")
 
     # group cfile options together
     cfile_options = OptionGroup(
@@ -302,7 +323,7 @@ if __name__ == '__main__':
     if options.a5 < 0 or options.a5 > 3:
         parser.error("Invalid A5 version\n")
 
-    if (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
+    if options.cfile and (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
         parser.error("You have to provide either a frequency or an ARFCN (but not both).\n")
 
     # handle frequency / arfcn input
@@ -347,7 +368,8 @@ if __name__ == '__main__':
                           burst_file=options.burst_file,
                           cfile=options.cfile, arfcn=arfcn, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,
-                          speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec))
+                          speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
+                          verbose=options.verbose)
 
     # run
     tb.start()
