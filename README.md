@@ -6,7 +6,7 @@ The aim is to provide set of tools for receiving information transmitted by GSM 
 
 Installation and usage
 ======================
-Please see project's wiki https://github.com/ptrkrysik/gr-gsm/wiki for information on [installation](Installation) and [usage](Usage) of gr-gsm.
+Please see project's wiki https://github.com/ptrkrysik/gr-gsm/wiki for information on [installation](https://github.com/ptrkrysik/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
 
 Mailing list
 ============
