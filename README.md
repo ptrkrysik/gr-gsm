@@ -67,6 +67,11 @@ At the end create the `~/.gnuradio/config.conf` config file so gnuradio-companio
 local_blocks_path=/usr/local/share/gnuradio/grc/blocks
 ```
 
+On OS X, to compile from source, you have to make sure you point cmake to the proper python version otherwise swig will crash later one at runtime
+e.g. (if using gnuradio from macports):
+
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/local -DPYTHON_LIBRARY=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib -DPYTHON_INCLUDE_DIR=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/ ..
+
 Usage
 =====
 There are many possible applications of *gr-gsm*. At this moment there is one application that is ready out of the box. It is improved replacement of the old *Airprobe* - the program that lets you receive and decode GSM control messages from *timeslot 0* on the broadcasting channel of a BTS. After installation of *gr-gsm* there are two python executables that will be installed:
