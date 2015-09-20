@@ -38,7 +38,7 @@ import sys
 
 class airprobe_rtlsdr_capture(gr.top_block):
 
-    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False):
+    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False, rec_length=None):
 
         gr.top_block.__init__(self, "Airprobe RTL-SDR Capture")
                 
@@ -55,6 +55,7 @@ class airprobe_rtlsdr_capture(gr.top_block):
         self.band = band
         self.verbose = verbose
         self.shiftoff = shiftoff = 400e3
+        self.rec_length = rec_length
         
         ##################################################
         # Processing Blocks
@@ -73,7 +74,10 @@ class airprobe_rtlsdr_capture(gr.top_block):
         self.rtlsdr_source.set_antenna("", 0)
         self.rtlsdr_source.set_bandwidth(250e3+abs(shiftoff), 0)
         self.blocks_rotator = blocks.rotator_cc(-2*pi*shiftoff/samp_rate)
-
+        
+        if self.rec_length is not None:
+            self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex, int(samp_rate*rec_length))
+        
         if self.verbose or self.burst_file:
             self.gsm_receiver = grgsm.receiver(4, ([self.arfcn]), ([]))
             self.gsm_input = grgsm.gsm_input(
@@ -99,7 +103,11 @@ class airprobe_rtlsdr_capture(gr.top_block):
         # Connections
         ##################################################
 
-        self.connect((self.rtlsdr_source, 0), (self.blocks_rotator, 0))
+        if self.rec_length is not None: #if recording length is defined connect head block after the source
+            self.connect((self.rtlsdr_source, 0), (self.blocks_head_0, 0))
+            self.connect((self.blocks_head_0, 0), (self.blocks_rotator, 0))
+        else:
+            self.connect((self.rtlsdr_source, 0), (self.blocks_rotator, 0))
 
         if self.cfile:
             self.connect((self.blocks_rotator, 0), (self.blocks_file_sink, 0))
@@ -161,6 +169,14 @@ class airprobe_rtlsdr_capture(gr.top_block):
         self.ppm = ppm
         self.set_ppm_slider(self.ppm)
 
+    def get_rec_length(self):
+        return self.rec_length
+
+    def set_rec_length(self, rec_length):
+        self.rec_length = rec_length
+        self.blocks_head_0.set_length(int(self.samp_rate*self.rec_length))
+
+
 if __name__ == '__main__':
 
     parser = OptionParser(option_class=eng_option, usage="%prog [options]",
@@ -195,7 +211,10 @@ if __name__ == '__main__':
     
     parser.add_option("-v", "--verbose", action="store_true", 
                       help="If set, the captured bursts are printed to stdout")
-    
+
+    parser.add_option("-T", "--rec-length", dest="rec_length", type="eng_float",
+        help="Set length of recording in seconds [default=%default]")
+
     (options, args) = parser.parse_args()
     
     if options.cfile is None and options.burst_file is None:
@@ -238,7 +257,8 @@ if __name__ == '__main__':
      
     tb = airprobe_rtlsdr_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
                          ppm=options.ppm, arfcn=arfcn, cfile=options.cfile, 
-                         burst_file=options.burst_file, band=options.band, verbose=options.verbose)
+                         burst_file=options.burst_file, band=options.band, verbose=options.verbose,
+                         rec_length=options.rec_length)
     
     def signal_handler(signal, frame):
         tb.stop()
