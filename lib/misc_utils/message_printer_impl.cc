@@ -28,6 +28,9 @@
 #include <stdio.h>
 #include "message_printer_impl.h"
 #include "grgsm/gsmtap.h"
+#include <grgsm/endian.h>
+
+
 extern "C" {
     #include <osmocom/gsm/a5.h>
 }
