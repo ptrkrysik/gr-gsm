@@ -262,6 +262,25 @@ class qa_arfcn (gr_unittest.TestCase):
         self.assertEqual(512, grgsm.arfcn.downlink2arfcn(1930.2e6, 'PCS1900'))
         self.assertEqual(810, grgsm.arfcn.downlink2arfcn(1989.8e6, 'PCS1900'))
         
+    def test_008_firstarfcn(self):
+        self.assertEqual(259, grgsm.arfcn.get_first_arfcn('GSM450'))
+        self.assertEqual(306, grgsm.arfcn.get_first_arfcn('GSM480'))
+        self.assertEqual(128, grgsm.arfcn.get_first_arfcn('GSM850'))
+        self.assertEqual(1, grgsm.arfcn.get_first_arfcn('P-GSM'))
+        self.assertEqual(975, grgsm.arfcn.get_first_arfcn('E-GSM'))
+        self.assertEqual(955, grgsm.arfcn.get_first_arfcn('R-GSM'))
+        self.assertEqual(512, grgsm.arfcn.get_first_arfcn('DCS1800'))
+        self.assertEqual(512, grgsm.arfcn.get_first_arfcn('PCS1900'))
+
+    def test_009_firstarfcn(self):
+        self.assertEqual(293, grgsm.arfcn.get_last_arfcn('GSM450'))
+        self.assertEqual(340, grgsm.arfcn.get_last_arfcn('GSM480'))
+        self.assertEqual(251, grgsm.arfcn.get_last_arfcn('GSM850'))
+        self.assertEqual(124, grgsm.arfcn.get_last_arfcn('P-GSM'))
+        self.assertEqual(1023, grgsm.arfcn.get_last_arfcn('E-GSM'))
+        self.assertEqual(1023, grgsm.arfcn.get_last_arfcn('R-GSM'))
+        self.assertEqual(885, grgsm.arfcn.get_last_arfcn('DCS1800'))
+        self.assertEqual(810, grgsm.arfcn.get_last_arfcn('PCS1900'))        
         
 if __name__ == '__main__':
     gr_unittest.run(qa_arfcn, "qa_arfcn.xml")
