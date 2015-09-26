@@ -76,6 +76,8 @@ namespace gr {
             info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
             info.mcc =  ((msg_elements[5] & 0xF)  * 100) + (((msg_elements[5] & 0xF0) >> 4) * 10) + ((msg_elements[6] & 0xF)); // take mcc
             info.mnc = (msg_elements[7] & 0xF) * 10 + (msg_elements[7]>>4); //take mnc
+            info.ccch_conf = (msg_elements[10] & 0x7); // ccch_conf
+            
             boost::mutex::scoped_lock lock(extract_mutex);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
@@ -213,6 +215,15 @@ namespace gr {
             pwrs.push_back(i.second.pwr_db);
         }
         return pwrs;
+    }
+    
+    std::vector<int> extract_system_info_impl::get_ccch_conf()
+    {
+        std::vector<int> ccch_confs;
+        BOOST_FOREACH(chan_info_map::value_type &i, d_c0_channels){
+            ccch_confs.push_back(i.second.ccch_conf);
+        }
+        return ccch_confs;
     }
     
     std::vector<int> extract_system_info_impl::get_neighbours(int chan_id)
