@@ -70,7 +70,7 @@ namespace gr {
         unsigned int frame_nr = be32toh(header->frame_number);
         
         if ((d_mode == FILTER_LESS_OR_EQUAL && frame_nr <= d_framenr)
-            || d_mode == FILTER_GREATER_OR_EQUAL && frame_nr >= d_framenr)
+            || (d_mode == FILTER_GREATER_OR_EQUAL && frame_nr >= d_framenr))
         {
             message_port_pub(pmt::mp("out"), msg);
         }
