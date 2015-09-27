@@ -46,5 +46,6 @@ GR_PYTHON_INSTALL(
     airprobe_rtlsdr.py
     airprobe_decode.py
     airprobe_rtlsdr_capture.py
+    airprobe_rtlsdr_scanner.py
     DESTINATION bin
 )
