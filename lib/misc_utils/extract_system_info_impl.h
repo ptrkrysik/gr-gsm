@@ -41,6 +41,7 @@ namespace gr {
         unsigned int mnc;
         unsigned int ccch_conf;
         std::set<int> neighbour_cells;
+        std::set<int> cell_arfcns;
         
         chan_info() :  id(-1), pwr_db(0), arfcn(0), lac(0), cell_id(0), mcc(0), mnc(0), ccch_conf(-1){}
         chan_info(const chan_info & info) : id(info.id), pwr_db(info.pwr_db), arfcn(info.arfcn), lac(info.lac), cell_id(info.cell_id), mcc(info.mcc), mnc(info.mnc), ccch_conf(info.ccch_conf){}
@@ -89,6 +90,7 @@ namespace gr {
       virtual std::vector<int> get_mcc();
       virtual std::vector<int> get_mnc();
       virtual std::vector<int> get_ccch_conf();
+      virtual std::vector<int> get_cell_arfcns(int chan_id);
       virtual std::vector<int> get_neighbours(int chan_id);
       virtual void reset();
       extract_system_info_impl();

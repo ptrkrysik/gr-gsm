@@ -161,6 +161,27 @@ namespace gr {
                 }
             }
         }
+        else if(msg_elements[2]==0x19)
+        { //System Information Type 1
+            memset(freq, 0, sizeof(freq));
+            chan_info info;
+            info.id = be16toh(header->arfcn);                            //take arfcn
+            info.pwr_db = header->signal_dbm;
+            boost::mutex::scoped_lock lock(extract_mutex);
+            //read cell arfcn's
+            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8c, 0x01);
+            if(d_c0_channels.find(info.id) != d_c0_channels.end()){
+                d_c0_channels[info.id].copy_nonzero_elements(info);
+            } else {
+                d_c0_channels[info.id] = info;
+            }
+            
+            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
+                if(freq[arfcn].mask==0x01){
+                    d_c0_channels[info.id].cell_arfcns.insert(arfcn);
+                }
+            }
+        }
     }
     
     std::vector<int> extract_system_info_impl::get_chans()
@@ -233,6 +254,15 @@ namespace gr {
             neighbour_cells.push_back(n);
         }
         return neighbour_cells;
+    }
+        
+    std::vector<int> extract_system_info_impl::get_cell_arfcns(int chan_id)
+    {
+        std::vector<int> cell_arfcns;
+        BOOST_FOREACH(int n, d_c0_channels[chan_id].cell_arfcns){
+            cell_arfcns.push_back(n);
+        }
+        return cell_arfcns;
     }
     
     void extract_system_info_impl::reset()
