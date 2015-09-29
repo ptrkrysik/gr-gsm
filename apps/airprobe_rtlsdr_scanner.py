@@ -199,7 +199,7 @@ class wideband_receiver(gr.hier_block2):
         return self.samp_rate
 
 
-class WidebandScanner(gr.top_block):
+class wideband_scanner(gr.top_block):
     
     def __init__(self, rec_len=3, sample_rate=2e6, carrier_frequency=939e6, ppm=0):
         
@@ -250,7 +250,7 @@ class WidebandScanner(gr.top_block):
 
        
         
-class ChannelInfo(object):
+class channel_info(object):
     
     def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns):
         self.arfcn = arfcn
@@ -323,6 +323,9 @@ if __name__ == '__main__':
     if options.speed < 0 or options.speed > 5:
         parser.error("Invalid scan speed.\n")
         
+    if (options.samp_rate / 0.2e6) % 2 != 0:
+        parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
+        
     channels_num = int(options.samp_rate/0.2e6)
     
     first_arfcn = grgsm.arfcn.get_first_arfcn(options.band)
@@ -345,7 +348,7 @@ if __name__ == '__main__':
         os.dup2(null_fds[1], 2)
         
         # instantiate scanner and processor
-        scanner = WidebandScanner(rec_len=6-options.speed, 
+        scanner = wideband_scanner(rec_len=6-options.speed, 
                             sample_rate=options.samp_rate, 
                             carrier_frequency=current_freq, 
                             ppm=options.ppm)
@@ -381,7 +384,7 @@ if __name__ == '__main__':
                 cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                 neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
 
-                info = ChannelInfo(grgsm.arfcn.downlink2arfcn(found_freqs[i], options.band), found_freqs[i], cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i], neighbour_list, cell_arfcn_list)
+                info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i], options.band), found_freqs[i], cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i], neighbour_list, cell_arfcn_list)
                 found_list.append(info)
                             
             for info in sorted(found_list):
