@@ -44,6 +44,24 @@ def get_bands():
     return __band_conf.keys()
 
 
+def get_first_arfcn(band):
+    """
+    Returns the first arfcn (i.e. the one with the lowest number) in the given band.
+    """
+    if band in __band_conf:
+        conf = __band_conf.get(band)
+        return conf['first_arfcn']
+
+
+def get_last_arfcn(band):
+    """
+    Returns the last arfcn (i.e. the one with the highest number) in the given band
+    """
+    if band in __band_conf:
+        conf = __band_conf.get(band)
+        return conf['last_arfcn']
+    
+    
 def is_valid_arfcn(arfcn, band):
     """
     Returns True if arfcn is valid in the given band, else False

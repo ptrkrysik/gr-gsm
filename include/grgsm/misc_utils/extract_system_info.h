@@ -54,7 +54,10 @@ namespace gr {
       virtual std::vector<int> get_pwrs() = 0;
       virtual std::vector<int> get_lac() = 0;
       virtual std::vector<int> get_cell_id() = 0;
+      virtual std::vector<int> get_mcc() = 0;
       virtual std::vector<int> get_mnc() = 0;
+      virtual std::vector<int> get_ccch_conf() = 0;
+      virtual std::vector<int> get_cell_arfcns(int chan_id) = 0;
       virtual std::vector<int> get_neighbours(int chan_id) = 0;
       virtual void reset() = 0;
     };

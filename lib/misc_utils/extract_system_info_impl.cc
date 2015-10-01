@@ -74,7 +74,10 @@ namespace gr {
             info.pwr_db = header->signal_dbm;
             info.cell_id = (msg_elements[3]<<8)+msg_elements[4];         //take cell id
             info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
-            info.mnc = (msg_elements[7]>>4);                             //take mnc
+            info.mcc =  ((msg_elements[5] & 0xF)  * 100) + (((msg_elements[5] & 0xF0) >> 4) * 10) + ((msg_elements[6] & 0xF)); // take mcc
+            info.mnc = (msg_elements[7] & 0xF) * 10 + (msg_elements[7]>>4); //take mnc
+            info.ccch_conf = (msg_elements[10] & 0x7); // ccch_conf
+            
             boost::mutex::scoped_lock lock(extract_mutex);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
@@ -87,8 +90,9 @@ namespace gr {
             info.id = be16toh(header->arfcn);                            //take arfcn
             info.pwr_db = header->signal_dbm;
             info.lac = (msg_elements[6]<<8)+msg_elements[7];            //take lac
-            info.mnc = (msg_elements[5]>>4);                            //take mnc
-
+            info.mcc =  ((msg_elements[3] & 0xF) * 100) + (((msg_elements[3] & 0xF0) >> 4) * 10) + ((msg_elements[3] & 0xF)); // take mcc
+            info.mnc = (msg_elements[5] & 0xF) * 10 + (msg_elements[5]>>4); //take mnc
+            
             boost::mutex::scoped_lock lock(extract_mutex);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
@@ -157,6 +161,27 @@ namespace gr {
                 }
             }
         }
+        else if(msg_elements[2]==0x19)
+        { //System Information Type 1
+            memset(freq, 0, sizeof(freq));
+            chan_info info;
+            info.id = be16toh(header->arfcn);                            //take arfcn
+            info.pwr_db = header->signal_dbm;
+            boost::mutex::scoped_lock lock(extract_mutex);
+            //read cell arfcn's
+            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8c, 0x01);
+            if(d_c0_channels.find(info.id) != d_c0_channels.end()){
+                d_c0_channels[info.id].copy_nonzero_elements(info);
+            } else {
+                d_c0_channels[info.id] = info;
+            }
+            
+            for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
+                if(freq[arfcn].mask==0x01){
+                    d_c0_channels[info.id].cell_arfcns.insert(arfcn);
+                }
+            }
+        }
     }
     
     std::vector<int> extract_system_info_impl::get_chans()
@@ -175,6 +200,15 @@ namespace gr {
             lacs.push_back(i.second.lac);
         }
         return lacs;
+    }
+    
+    std::vector<int> extract_system_info_impl::get_mcc()
+    {
+        std::vector<int> mccs;
+        BOOST_FOREACH(chan_info_map::value_type &i, d_c0_channels){
+            mccs.push_back(i.second.mcc);
+        }
+        return mccs;
     }
     
     std::vector<int> extract_system_info_impl::get_mnc()
@@ -203,6 +237,16 @@ namespace gr {
         }
         return pwrs;
     }
+    
+    std::vector<int> extract_system_info_impl::get_ccch_conf()
+    {
+        std::vector<int> ccch_confs;
+        BOOST_FOREACH(chan_info_map::value_type &i, d_c0_channels){
+            ccch_confs.push_back(i.second.ccch_conf);
+        }
+        return ccch_confs;
+    }
+    
     std::vector<int> extract_system_info_impl::get_neighbours(int chan_id)
     {
         std::vector<int> neighbour_cells;
@@ -210,6 +254,15 @@ namespace gr {
             neighbour_cells.push_back(n);
         }
         return neighbour_cells;
+    }
+        
+    std::vector<int> extract_system_info_impl::get_cell_arfcns(int chan_id)
+    {
+        std::vector<int> cell_arfcns;
+        BOOST_FOREACH(int n, d_c0_channels[chan_id].cell_arfcns){
+            cell_arfcns.push_back(n);
+        }
+        return cell_arfcns;
     }
     
     void extract_system_info_impl::reset()
