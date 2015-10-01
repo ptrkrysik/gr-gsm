@@ -51,6 +51,7 @@ from sch_detector import sch_detector
 from fcch_detector import fcch_detector
 from clock_offset_corrector import clock_offset_corrector
 from gsm_input import gsm_input
+from gsm_wideband_input import gsm_wideband_input
 import arfcn
 
 
