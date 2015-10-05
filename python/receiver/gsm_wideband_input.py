@@ -34,14 +34,12 @@ class gsm_wideband_input(gr.hier_block2):
         self.blocks_fir_filters = {}
         self.blocks_resamplers = {}
         self.blocks_ocs = {}
-        self.band = 'E-GSM'  # TODO make selectable
-        band = 'E-GSM'
+        self.band = band = 'E-GSM'  # TODO make selectable
 
         ##################################################
         # Variables
         ##################################################
         self.samp_rate_out = samp_rate_out = 1625000.0/6.0*osr
-        #self.samp_rate_out = samp_rate_out = 1000000
 
         ##################################################
         # Blocks
@@ -61,7 +59,6 @@ class gsm_wideband_input(gr.hier_block2):
 
         self.connect((self, 0), (self.gsm_clock_offset_corrector_0, 0))
 
-
         output_port = 0
         for channel in ca:
             channel_freq = arfcn.arfcn2downlink(channel, band)
@@ -71,29 +68,12 @@ class gsm_wideband_input(gr.hier_block2):
             freq_diff = channel_freq - fc
             print("ARFCN %d is at C0 %+d KHz" % (channel, int(freq_diff / 1000.0)))
 
-            #self.blocks_ocs[channel] = grgsm.clock_offset_corrector(fc=fc, ppm=ppm, samp_rate_in=samp_rate_in)
             self.blocks_resamplers[channel] = filter.fractional_resampler_cc(0, samp_rate_in/samp_rate_out)
-            self.blocks_fir_filters[channel] = filter.freq_xlating_fir_filter_ccc(1, (self.lpf), freq_diff, samp_rate_in)
+            self.blocks_fir_filters[channel] = filter.freq_xlating_fir_filter_ccc(1, self.lpf, freq_diff, samp_rate_in)
             self.connect((self.gsm_clock_offset_corrector_0, 0), (self.blocks_fir_filters[channel], 0))
             self.connect((self.blocks_fir_filters[channel], 0), (self.blocks_resamplers[channel], 0))
             self.connect((self.blocks_resamplers[channel], 0), (self, output_port))
             output_port += 1
-
-
-        """"
-        output_port = 0
-        for channel in ca:
-            channel_freq = arfcn.arfcn2downlink(channel, band)
-            if channel_freq is None:
-                print("Warning: invalid ARFCN %d for band %s" % (channel, band))
-                continue
-            freq_diff = channel_freq - fc
-            print("ARFCN %d is at C0 %+d KHz" % (channel, int(freq_diff / 1000.0)))
-            self.blocks_fir_filters[channel] = filter.freq_xlating_fir_filter_ccc(20, (firdes.low_pass(1, samp_rate_in, 300000, 100000)), freq_diff, samp_rate_in)
-            self.connect((self, 0), (self.blocks_fir_filters[channel], 0))
-            self.connect((self.blocks_fir_filters[channel], 0), (self, output_port))
-            output_port += 1
-        """
 
         ##################################################
         # Asynch Message Connections
@@ -113,3 +93,27 @@ class gsm_wideband_input(gr.hier_block2):
     def set_fc(self, fc):
         self.fc = fc
         self.gsm_clock_offset_corrector_0.set_fc(self.fc)
+
+    def get_osr(self):
+        return self.osr
+
+    def set_osr(self, osr):
+        self.osr = osr
+        self.set_samp_rate_out(1625000.0/6.0*self.osr)
+
+    def get_samp_rate_in(self):
+        return self.samp_rate_in
+
+    def set_samp_rate_in(self, samp_rate_in):
+        self.samp_rate_in = samp_rate_in
+        for channel in self.blocks_resamplers:
+            self.blocks_resamplers[channel].set_resamp_ratio(self.samp_rate_in / self.samp_rate_out)
+        self.gsm_clock_offset_corrector_0.set_samp_rate_in(self.samp_rate_in)
+
+    def get_samp_rate_out(self):
+        return self.samp_rate_out
+
+    def set_samp_rate_out(self, samp_rate_out):
+        self.samp_rate_out = samp_rate_out
+        for channel in self.blocks_resamplers:
+            self.blocks_resamplers[channel].set_resamp_ratio(self.samp_rate_in / self.samp_rate_out)
