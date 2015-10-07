@@ -1,0 +1,78 @@
+<block>
+  <name>GSM wideband input adaptor</name>
+  <key>gsm_wideband_input</key>
+  <category></category>
+  <import>import grgsm</import>
+  <make>grgsm.gsm_wideband_input(
+    ppm=$ppm,
+    osr=$osr,
+    fc=$fc,
+    samp_rate_in=$samp_rate_in,
+    ca=$cell_allocation,
+)</make>
+  <callback>set_ppm($ppm)</callback>
+  <callback>set_osr($osr)</callback>
+  <callback>set_fc($fc)</callback>
+  <callback>set_samp_rate_in($samp_rate_in)</callback>
+  <param>
+    <name>ppm</name>
+    <key>ppm</key>
+    <value>ppm</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>OSR</name>
+    <key>osr</key>
+    <value>osr</value>
+    <type>int</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>fc</name>
+    <key>fc</key>
+    <value>fc</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>Cell allocation</name>
+    <key>cell_allocation</key>
+    <value>[]</value>
+    <type>float_vector</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>samp_rate_in</name>
+    <key>samp_rate_in</key>
+    <value>samp_rate_in</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+  <param>
+    <name>Num Streams</name>
+    <key>num_streams</key>
+    <value>1</value>
+    <type>int</type>
+    <hide>part</hide>
+  </param>
+  <check>$num_streams &gt;= 0</check>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <sink>
+    <name>ppm_in</name>
+    <type>message</type>
+    <optional>True</optional>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+    <nports>$num_streams</nports>
+  </source>
+  <doc>Piotr Krysik
+Adaptor of input stream for the GSM receiver. Contains frequency offset corrector and resampler to correct carrier frequency and sampling frequency offsets. At the end it has LP filter for filtering of a GSM channel.</doc>
+</block>
