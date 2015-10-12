@@ -109,34 +109,34 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         )
         self.qtgui_freq_sink_x_0.set_update_time(0.10)
         self.qtgui_freq_sink_x_0.set_y_axis(-140, 10)
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0.enable_control_panel(False)
-        
-        if not True:
-          self.qtgui_freq_sink_x_0.disable_legend()
-        
-        if complex == type(float()):
-          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
-        
-        labels = ["", "", "", "", "",
-                  "", "", "", "", ""]
-        widths = [1, 1, 1, 1, 1,
-                  1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-                  1.0, 1.0, 1.0, 1.0, 1.0]
-        for i in xrange(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+#        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+#        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+#        self.qtgui_freq_sink_x_0.enable_grid(False)
+#        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+#        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+#        
+#        if not True:
+#          self.qtgui_freq_sink_x_0.disable_legend()
+#        
+#        if complex == type(float()):
+#          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
+#        
+#        labels = ["", "", "", "", "",
+#                  "", "", "", "", ""]
+#        widths = [1, 1, 1, 1, 1,
+#                  1, 1, 1, 1, 1]
+#        colors = ["blue", "red", "green", "black", "cyan",
+#                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+#        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+#                  1.0, 1.0, 1.0, 1.0, 1.0]
+#        for i in xrange(1):
+#            if len(labels[i]) == 0:
+#                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+#            else:
+#                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+#            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+#            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+#            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
         
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
@@ -154,8 +154,10 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc-shiftoff)
         self.gsm_bcch_ccch_demapper_0 = grgsm.universal_ctrl_chans_demapper(0, ([2,6,12,16,22,26,32,36,42,46]), ([1,2,2,2,2,2,2,2,2,2]))
-        self.blocks_socket_pdu_0_0 = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000, False)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
+#        self.blocks_socket_pdu_0_0 = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000, False)
+        self.blocks_socket_pdu_0_0 = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000)
+#        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
+        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
         self.blocks_rotator_cc_0 = blocks.rotator_cc(-2*pi*shiftoff/samp_rate)
 
         ##################################################
@@ -259,9 +261,10 @@ if __name__ == '__main__':
     parser.add_option("-o", "--shiftoff", dest="shiftoff", type="eng_float", default=eng_notation.num_to_str(400e3),
         help="Set shiftoff [default=%default]")
     (options, args) = parser.parse_args()
-    from distutils.version import StrictVersion
-    if StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0"):
-        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
+#    from distutils.version import StrictVersion
+#    if StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0"):
+#        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
+    Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
     tb = airprobe_rtlsdr(fc=options.fc, gain=options.gain, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff)
     tb.start()
