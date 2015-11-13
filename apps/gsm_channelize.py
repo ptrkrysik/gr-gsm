@@ -82,9 +82,6 @@ class gsm_channelize(gr.top_block):
         # Blocks and connections
         ##################################################
         self.blocks_file_source = blocks.file_source(gr.sizeof_gr_complex, path, False)
-        self.blocks_throttle = blocks.throttle(gr.sizeof_gr_complex, samp_rate,True)
-
-        self.connect((self.blocks_file_source, 0), (self.blocks_throttle, 0))
 
         c0_arfcn = arfcn.downlink2arfcn(fc, band)
         self.channels.insert(0, c0_arfcn)
@@ -99,7 +96,7 @@ class gsm_channelize(gr.top_block):
             print("ARFCN %d is at C0 %+d KHz" % (channel, int(freq_diff / 1000.0)))
 
             self.blocks_fir_filters[channel] = filter.freq_xlating_fir_filter_ccc(decim, (firdes.low_pass(1, samp_rate, ch_width, ch_twidth)), freq_diff, samp_rate)
-            self.connect((self.blocks_throttle, 0), (self.blocks_fir_filters[channel], 0))
+            self.connect((self.blocks_file_source, 0), (self.blocks_fir_filters[channel], 0))
 
             self.blocks_file_sinks[channel] = blocks.file_sink(gr.sizeof_gr_complex, "./gsm_channelizer/out_" + str(channel) + ".cfile", False)
             self.blocks_file_sinks[channel].set_unbuffered(False)
