@@ -21,6 +21,10 @@ class clock_offset_corrector(gr.hier_block2):
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
         )
+        if gr.version() >= '3.7.9':
+            self.message_port_register_hier_in("ppm_in")
+        else:
+            self.message_port_register_hier_out("ppm_in")
 
         ##################################################
         # Parameters
@@ -37,7 +41,6 @@ class clock_offset_corrector(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self.ppm_in = None;self.message_port_register_hier_out("ppm_in")
         self.gsm_controlled_rotator_cc_0 = grgsm.controlled_rotator_cc(0,samp_rate_out)
         self.gsm_controlled_const_source_f_0 = grgsm.controlled_const_source_f(ppm)
         self.fractional_resampler_xx_0 = filter.fractional_resampler_cc(0, samp_rate_in/samp_rate_out)
