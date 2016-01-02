@@ -10,6 +10,7 @@
 from gnuradio import filter
 from gnuradio import gr
 from gnuradio.filter import firdes
+from distutils.version import LooseVersion as version
 import grgsm
 
 class gsm_input(gr.hier_block2):
@@ -37,7 +38,7 @@ class gsm_input(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        if gr.version() >= '3.7.9':
+        if version(gr.version()) >= version('3.7.9'):
             self.message_port_register_hier_in("ppm_in")
         else:
             self.message_port_register_hier_out("ppm_in")

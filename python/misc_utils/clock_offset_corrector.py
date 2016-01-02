@@ -10,6 +10,7 @@ from gnuradio import blocks
 from gnuradio import filter
 from gnuradio import gr
 from gnuradio.filter import firdes
+from distutils.version import LooseVersion as version
 import grgsm
 import math
 
@@ -21,7 +22,7 @@ class clock_offset_corrector(gr.hier_block2):
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
         )
-        if gr.version() >= '3.7.9':
+        if version(gr.version()) >= version('3.7.9'):
             self.message_port_register_hier_in("ppm_in")
         else:
             self.message_port_register_hier_out("ppm_in")
