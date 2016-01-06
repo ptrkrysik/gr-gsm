@@ -40,16 +40,16 @@ import time
 
 #from wideband_receiver import *
 
-class receiver_with_decoder(gr.hier_block2):
+class receiver_with_decoder(grgsm.hier_block):
 
     def __init__(self, OSR=4, chan_num=0, fc=939.4e6, ppm=0, samp_rate=0.2e6):
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "Receiver With Decoder",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(0, 0, 0),
         )
-        self.message_port_register_hier_in("bursts")
-        self.message_port_register_hier_in("msgs")
+        self.message_port_register_hier_out("bursts")
+        self.message_port_register_hier_out("msgs")
 
         ##################################################
         # Parameters
@@ -134,16 +134,16 @@ class receiver_with_decoder(gr.hier_block2):
         self.samp_rate_out = samp_rate_out
 
 
-class wideband_receiver(gr.hier_block2):
+class wideband_receiver(grgsm.hier_block):
 
     def __init__(self, OSR=4, fc=939.4e6, samp_rate=0.4e6):
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "Wideband receiver",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(0, 0, 0),
         )
-        self.message_port_register_hier_in("bursts")
-        self.message_port_register_hier_in("msgs")
+        self.message_port_register_hier_out("bursts")
+        self.message_port_register_hier_out("msgs")
         self.__init(OSR, fc, samp_rate)
     
     def __init(self, OSR=4, fc=939.4e6, samp_rate=0.4e6):

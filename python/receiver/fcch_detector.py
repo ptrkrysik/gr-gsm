@@ -15,10 +15,10 @@ from gnuradio import gr
 from gnuradio.filter import firdes
 import grgsm
 
-class fcch_detector(gr.hier_block2):
+class fcch_detector(grgsm.hier_block):
 
     def __init__(self, OSR=4):
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "FCCH bursts detector",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),

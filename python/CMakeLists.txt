@@ -38,7 +38,8 @@ GR_PYTHON_INSTALL(
     receiver/fcch_detector.py
     receiver/chirpz.py
     misc_utils/arfcn.py
-    misc_utils/clock_offset_corrector.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    misc_utils/clock_offset_corrector.py 
+    misc_utils/hier_block.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )
 
 ########################################################################

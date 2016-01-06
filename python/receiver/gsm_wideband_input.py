@@ -14,10 +14,10 @@ from gnuradio.filter import firdes
 import grgsm.arfcn as arfcn
 import grgsm
 
-class gsm_wideband_input(gr.hier_block2):
+class gsm_wideband_input(grgsm.hier_block):
     def __init__(self, ppm=0, osr=4, fc=925.2e6, samp_rate_in=20e6, ca=[]):
         self.num_streams = len(ca)
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "GSM wideband input adaptor",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(self.num_streams, self.num_streams, gr.sizeof_gr_complex*1),

@@ -14,19 +14,16 @@ from distutils.version import LooseVersion as version
 import grgsm
 import math
 
-class clock_offset_corrector(gr.hier_block2):
+class clock_offset_corrector(grgsm.hier_block):
 
     def __init__(self, fc=936.6e6, ppm=0, samp_rate_in=1625000.0/6.0*4.0):
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "Clock offset corrector",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
         )
-        if version(gr.version()) >= version('3.7.9'):
-            self.message_port_register_hier_in("ppm_in")
-        else:
-            self.message_port_register_hier_out("ppm_in")
-
+        self.message_port_register_hier_in("ppm_in")
+        
         ##################################################
         # Parameters
         ##################################################
