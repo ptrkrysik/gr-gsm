@@ -38,10 +38,7 @@ class gsm_input(grgsm.hier_block):
         ##################################################
         # Blocks
         ##################################################
-        if version(gr.version()) >= version('3.7.9'):
-            self.message_port_register_hier_in("ppm_in")
-        else:
-            self.message_port_register_hier_out("ppm_in")
+        self.message_port_register_hier_in("ppm_in")
 
         self.low_pass_filter_0_0 = filter.fir_filter_ccf(1, firdes.low_pass(
         	1, samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
