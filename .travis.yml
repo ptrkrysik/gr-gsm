@@ -1,10 +1,20 @@
 os:
   - linux
 
+services:
+  - docker
+
+env: SAMPLE_FILE=https://github.com/ptrkrysik/test_data/raw/86df03f54d86093e2fe22daae8bb8c170cf31e58/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile
 matrix:
   include:
     - os: linux
       language: generic
       env: DOCKERFILE=Ubuntu.docker
+      env: IMGNAME=ubu-grgsm
 
-  script: cat $DOCKERFILE | docker build -
+before_install:
+  - cat $DOCKERFILE | docker build -t $IMGNAME -
+
+
+script:
+  - docker run -it --rm $IMGNAME --env CAPFILE=$SAMPLE_FILE /bin/bash /build_test.sh

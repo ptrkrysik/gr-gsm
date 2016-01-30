@@ -58,4 +58,7 @@ RUN /usr/bin/git clone $GRGSM_GIT && \
   cd build && \
   cmake .. && \
   make && \
-  sudo make install
+  sudo make install &&\
+  ldconfig
+
+COPY build_test.sh /
