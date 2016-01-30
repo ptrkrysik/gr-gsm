@@ -1,0 +1,14 @@
+os:
+  - linux
+
+script:
+  - cd src
+  - make all
+
+matrix:
+  include:
+    - os: linux
+      language: generic
+      env: DOCKERFILE=Ubuntu.docker
+
+  script: cat $DOCKERFILE | docker build -
