@@ -1,10 +1,6 @@
 os:
   - linux
 
-script:
-  - cd src
-  - make all
-
 matrix:
   include:
     - os: linux
