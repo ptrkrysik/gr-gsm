@@ -4,17 +4,15 @@ os:
 services:
   - docker
 
-env: SAMPLE_FILE=https://github.com/ptrkrysik/test_data/raw/86df03f54d86093e2fe22daae8bb8c170cf31e58/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile
 matrix:
   include:
     - os: linux
       language: generic
-      env: DOCKERFILE=Ubuntu.docker
-      env: IMGNAME=ubu-grgsm
+      env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
 
 before_install:
-  - cat $DOCKERFILE | docker build -t $IMGNAME -
-
+  - cat $DOCKERFILE | sed -e 's/SOURCE_IMAGE_NAME/$SRC_IMGNAME/g' > Dockerfile
+  - docker build -t $IMGNAME
 
 script:
-  - docker run -it --rm $IMGNAME --env CAPFILE=$SAMPLE_FILE /bin/bash /build_test.sh
+  - docker run -it --rm $IMGNAME --env CAPFILE=$SAMPLE_FILE /bin/bash /build_test_scripts/decode.sh
