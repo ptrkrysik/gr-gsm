@@ -1,16 +1,10 @@
-os: linux
-
-sudo: required
-
-language: generic
-
-services:
-  - docker
-
 matrix:
   include:
     - os: linux
       env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
+      sudo: required
+      services:
+        -docker
 
 before_install:
   - cat $DOCKERFILE | sed -e 's/SOURCE_IMAGE_NAME/$SRC_IMGNAME/g' > Dockerfile
