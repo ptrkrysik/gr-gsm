@@ -5,7 +5,7 @@ language: ruby
 env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
 
 services:
-  -docker
+  - docker
 
 before_install:
   - cat $DOCKERFILE | sed -e 's/SOURCE_IMAGE_NAME/$SRC_IMGNAME/g' > Dockerfile ; docker build -t $IMGNAME .
