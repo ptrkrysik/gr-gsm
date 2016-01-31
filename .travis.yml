@@ -1,5 +1,4 @@
-os:
-  - linux
+sudo: required
 
 services:
   - docker
@@ -12,7 +11,7 @@ matrix:
 
 before_install:
   - cat $DOCKERFILE | sed -e 's/SOURCE_IMAGE_NAME/$SRC_IMGNAME/g' > Dockerfile
-  - docker build -t $IMGNAME
+  - docker build -t $IMGNAME .
 
 script:
-  - docker run -it --rm $IMGNAME --env CAPFILE=$SAMPLE_FILE /bin/bash /build_test_scripts/decode.sh
+  - docker run -it --rm $IMGNAME /build_test_scripts/decode.sh
