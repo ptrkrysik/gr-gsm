@@ -1,5 +1,9 @@
 os: linux
+
+language: ruby
+
 env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
+
 services:
   -docker
 
