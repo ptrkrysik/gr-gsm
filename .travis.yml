@@ -1,4 +1,8 @@
+os: linux
+
 sudo: required
+
+language: generic
 
 services:
   - docker
@@ -6,7 +10,6 @@ services:
 matrix:
   include:
     - os: linux
-      language: generic
       env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
 
 before_install:
