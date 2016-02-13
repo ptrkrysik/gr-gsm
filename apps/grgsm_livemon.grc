@@ -1,16 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.8rc1'?>
+<?grc format='1' created='3.7.10'?>
 <flow_graph>
   <timestamp>Sat Dec 13 10:49:59 2014</timestamp>
   <block>
     <key>options</key>
     <param>
       <key>author</key>
-      <value></value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
+      <value>Piotr Krysik</value>
     </param>
     <param>
       <key>window_size</key>
@@ -26,7 +22,7 @@
     </param>
     <param>
       <key>description</key>
-      <value></value>
+      <value>Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -45,16 +41,28 @@
       <value>qt_gui</value>
     </param>
     <param>
+      <key>hier_block_src_path</key>
+      <value>.:</value>
+    </param>
+    <param>
       <key>id</key>
-      <value>grgsm_airprobe</value>
+      <value>grgsm_livemon</value>
     </param>
     <param>
       <key>max_nouts</key>
       <value>0</value>
     </param>
     <param>
+      <key>qt_qss_theme</key>
+      <value></value>
+    </param>
+    <param>
       <key>realtime_scheduling</key>
       <value></value>
+    </param>
+    <param>
+      <key>run_command</key>
+      <value>{python} -u {filename}</value>
     </param>
     <param>
       <key>run_options</key>
@@ -70,7 +78,7 @@
     </param>
     <param>
       <key>title</key>
-      <value></value>
+      <value>Gr-gsm Livemon</value>
     </param>
   </block>
   <block>
@@ -812,6 +820,14 @@
     <param>
       <key>id</key>
       <value>gsm_message_printer_1</value>
+    </param>
+    <param>
+      <key>prepend_frame_count</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>prepend_fnr</key>
+      <value>False</value>
     </param>
     <param>
       <key>prepend_string</key>

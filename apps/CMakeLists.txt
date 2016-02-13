@@ -21,11 +21,11 @@ include(GrPython)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    grgsm_airprobe.py
-    grgsm_capture.py
-    grgsm_decode.py
-    grgsm_scanner.py
-    gsm_channelize.py
+    grgsm_livemon
+    grgsm_scanner
+    grgsm_decode
+    helpers/grgsm_capture.py
+    helpers/grgsm_channelize.py
     DESTINATION bin
 )
 
@@ -40,10 +40,10 @@ macro(CREATE_SYMLINK _source _dest)
     )
 endmacro(CREATE_SYMLINK)
 
-CREATE_SYMLINK(grgsm_decode.py airprobe_decode.py)
-CREATE_SYMLINK(grgsm_capture.py airprobe_rtlsdr_capture.py)
-CREATE_SYMLINK(grgsm_airprobe.py airprobe_rtlsdr.py)
-CREATE_SYMLINK(grgsm_scanner.py airprobe_rtlsdr_scanner.py)
+CREATE_SYMLINK(grgsm_livemon airprobe_rtlsdr.py)
+CREATE_SYMLINK(helpers/grgsm_capture.py airprobe_rtlsdr_capture.py)
+CREATE_SYMLINK(grgsm_decode airprobe_decode.py)
+CREATE_SYMLINK(grgsm_scanner airprobe_rtlsdr_scanner.py)
 
 add_custom_target(multi_rtl_grc_xml_blocks ALL DEPENDS ${symlinks})
 
