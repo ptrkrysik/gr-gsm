@@ -32,7 +32,7 @@ import pmt
 import socket
 
 
-class airprobe_decoder(gr.top_block):
+class grgsm_decoder(gr.top_block):
 
     def __init__(self, timeslot=0, subslot=None, chan_mode='BCCH',
                  burst_file=None,
@@ -41,7 +41,7 @@ class airprobe_decoder(gr.top_block):
                  speech_file=None, speech_codec=None,
                  verbose=False):
 
-        gr.top_block.__init__(self, "Airprobe Decode")
+        gr.top_block.__init__(self, "Gr-gsm Decode")
 
         ##################################################
         # Parameters
@@ -364,7 +364,7 @@ if __name__ == '__main__':
     sock.bind(("localhost", 4729))
 
     # instanciate decoder
-    tb = airprobe_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
+    tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
                           burst_file=options.burst_file,
                           cfile=options.cfile, arfcn=arfcn, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,

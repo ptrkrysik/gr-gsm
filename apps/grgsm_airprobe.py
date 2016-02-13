@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 ##################################################
 # GNU Radio Python Flow Graph
-# Title: Airprobe Rtlsdr
+# Title: Gr-gsm Airprobe
 # Generated: Wed Sep  2 21:46:35 2015
 ##################################################
 
@@ -33,12 +33,12 @@ import sys
 import time
 
 
-class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
+class grgsm_airprobe(gr.top_block, Qt.QWidget):
 
     def __init__(self, fc=939.4e6, gain=30, ppm=0, samp_rate=2000000.052982, shiftoff=400e3):
-        gr.top_block.__init__(self, "Airprobe Rtlsdr")
+        gr.top_block.__init__(self, "Gr-gsm Airprobe")
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Airprobe Rtlsdr")
+        self.setWindowTitle("Gr-gsm Airprobe")
         try:
              self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
         except:
@@ -55,7 +55,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "airprobe_rtlsdr")
+        self.settings = Qt.QSettings("GNU Radio", "grgsm_airprobe")
         self.restoreGeometry(self.settings.value("geometry").toByteArray())
 
         ##################################################
@@ -180,7 +180,7 @@ class airprobe_rtlsdr(gr.top_block, Qt.QWidget):
         self.connect((self.rtlsdr_source_0, 0), (self.blocks_rotator_cc_0, 0))    
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "airprobe_rtlsdr")
+        self.settings = Qt.QSettings("GNU Radio", "grgsm_airprobe")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
 #        Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     Qt.QApplication.setGraphicsSystem(gr.prefs().get_string('qtgui','style','raster'))
     qapp = Qt.QApplication(sys.argv)
-    tb = airprobe_rtlsdr(fc=options.fc, gain=options.gain, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff)
+    tb = grgsm_airprobe(fc=options.fc, gain=options.gain, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff)
     tb.start()
     tb.show()
 

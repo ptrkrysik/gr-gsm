@@ -36,11 +36,11 @@ import signal
 import sys
 
 
-class airprobe_rtlsdr_capture(gr.top_block):
+class grgsm_capture(gr.top_block):
 
     def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False, rec_length=None):
 
-        gr.top_block.__init__(self, "Airprobe RTL-SDR Capture")
+        gr.top_block.__init__(self, "Gr-gsm Capture")
                 
         ##################################################
         # Parameters
@@ -255,7 +255,7 @@ if __name__ == '__main__':
                     arfcn = grgsm.arfcn.downlink2arfcn(options.fc, band)
                     break
      
-    tb = airprobe_rtlsdr_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
+    tb = grgsm_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
                          ppm=options.ppm, arfcn=arfcn, cfile=options.cfile, 
                          burst_file=options.burst_file, band=options.band, verbose=options.verbose,
                          rec_length=options.rec_length)

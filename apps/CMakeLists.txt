@@ -19,33 +19,36 @@
 
 include(GrPython)
 
-#SET(APPS_DIR ${CMAKE_SOURCE_DIR}/apps)
-
-#SET(GRCC_COMMAND ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc)
-#SET(BLOCK_PATH ../grc/)
-
-#ADD_CUSTOM_TARGET(airprobe_file.py ALL)
-#ADD_CUSTOM_COMMAND(
-# TARGET airprobe_file.py
-# COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
-# ARGS "airprobe_file.grc"
-# WORKING_DIRECTORY ${APPS_DIR}
-#)
-
-#ADD_CUSTOM_TARGET(airprobe_rtlsdr.py ALL)
-#ADD_CUSTOM_COMMAND(
-# TARGET airprobe_rtlsdr.py
-# COMMAND GRC_BLOCKS_PATH=${BLOCK_PATH} ${GRCC_COMMAND} -d ${CMAKE_CURRENT_BINARY_DIR} 
-# ARGS "airprobe_rtlsdr.grc"
-# WORKING_DIRECTORY ${APPS_DIR}
-#)
-
 GR_PYTHON_INSTALL(
     PROGRAMS
-#    ${CMAKE_CURRENT_BINARY_DIR}/airprobe_rtlsdr.py
-    airprobe_rtlsdr.py
-    airprobe_decode.py
-    airprobe_rtlsdr_capture.py
-    airprobe_rtlsdr_scanner.py
+    grgsm_airprobe.py
+    grgsm_capture.py
+    grgsm_decode.py
+    grgsm_scanner.py
+    gsm_channelize.py
+    DESTINATION bin
+)
+
+#create logical links in order to keep legacy names of apps
+macro(CREATE_SYMLINK _source _dest)
+    set(source ${CMAKE_CURRENT_SOURCE_DIR}/${_source})
+    set(dest ${CMAKE_CURRENT_BINARY_DIR}/${_dest})
+    list(APPEND symlinks ${dest})
+    add_custom_command(
+        DEPENDS ${source} OUTPUT ${dest}
+        COMMAND ln -sf ${_source} ${_dest}
+    )
+endmacro(CREATE_SYMLINK)
+
+CREATE_SYMLINK(grgsm_decode.py airprobe_decode.py)
+CREATE_SYMLINK(grgsm_capture.py airprobe_rtlsdr_capture.py)
+CREATE_SYMLINK(grgsm_airprobe.py airprobe_rtlsdr.py)
+CREATE_SYMLINK(grgsm_scanner.py airprobe_rtlsdr_scanner.py)
+
+add_custom_target(multi_rtl_grc_xml_blocks ALL DEPENDS ${symlinks})
+
+install(
+    PROGRAMS
+    ${symlinks}
     DESTINATION bin
 )

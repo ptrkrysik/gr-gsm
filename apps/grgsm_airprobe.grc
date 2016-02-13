@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>airprobe_rtlsdr</value>
+      <value>grgsm_airprobe</value>
     </param>
     <param>
       <key>max_nouts</key>
