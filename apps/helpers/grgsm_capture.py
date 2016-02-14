@@ -38,7 +38,7 @@ import sys
 
 class grgsm_capture(gr.top_block):
 
-    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False, rec_length=None):
+    def __init__(self, fc, gain, samp_rate, ppm, arfcn, cfile=None, burst_file=None, band=None, verbose=False, rec_length=None, args=""):
 
         gr.top_block.__init__(self, "Gr-gsm Capture")
                 
@@ -209,6 +209,9 @@ if __name__ == '__main__':
     parser.add_option("--band", dest="band", 
                       help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list + ".\nIf no band is specified, it will be determined automatically, defaulting to 0." )
     
+    parser.add_option("", "--args", dest="args", type="string", default="",
+        help="Set device arguments [default=%default]")
+
     parser.add_option("-v", "--verbose", action="store_true", 
                       help="If set, the captured bursts are printed to stdout")
 
