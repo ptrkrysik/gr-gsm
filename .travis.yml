@@ -2,13 +2,13 @@ sudo: required
 
 language: ruby
 
-env: DOCKERFILE=Ubuntu14.docker IMGNAME=ubu-grgsm SRC_IMGNAME=ubuntu:14.04
+env: DOCKERFILE=DebianJessie.docker IMGNAME=debjess-grgsm
 
 services:
   - docker
 
 before_install:
-  - cat $DOCKERFILE | sed -e 's/SOURCE_IMAGE_NAME/$SRC_IMGNAME/g' > Dockerfile ; docker build -t $IMGNAME .
+  - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
   - docker run -it --rm $IMGNAME /src/build_test_scripts/decode.sh

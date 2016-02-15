@@ -6,4 +6,5 @@ export RUNLINE="$AP_DECODE -c $CAPFILE -s $((100000000/174)) -a 725 -m BCCH -t 0
 echo "Testing with:"
 echo "  $RUNLINE"
 cd $TEST_FIXTURE_DIRECTORY
+gnuradio-companion --version
 $RUNLINE
