@@ -770,7 +770,7 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex *input, gr_complex * 
         std::vector<float>::iterator iter_ii = iter;
         energy = 0;
 
-        for (int ii = 0; ii < (d_chan_imp_length - 2)*d_OSR; ii++, iter_ii++)
+        for (int ii = 0; ii < (d_chan_imp_length)*d_OSR; ii++, iter_ii++)
         {
             if (iter_ii == power_buffer.end())
             {

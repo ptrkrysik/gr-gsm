@@ -13,7 +13,7 @@ FIND_PATH(
 
 FIND_LIBRARY(
     GR_GSM_LIBRARIES
-    NAMES gnuradio-grgsm
+    NAMES grgsm
     HINTS $ENV{GR_GSM_DIR}/lib
         ${PC_GR_GSM_LIBDIR}
     PATHS ${CMAKE_INSTALL_PREFIX}/lib

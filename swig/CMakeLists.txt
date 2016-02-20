@@ -40,8 +40,9 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gnuradio/swig)
 endforeach(incdir)
+list(APPEND GR_SWIG_INCLUDE_DIRS ${FFTW3F_INCLUDE_DIRS})
 
-set(GR_SWIG_LIBRARIES gnuradio-grgsm)
+set(GR_SWIG_LIBRARIES grgsm)
 set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i)
 set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 

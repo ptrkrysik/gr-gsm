@@ -19,21 +19,17 @@
 
 include(GrPython)
 include(CreateSymlink)
-add_subdirectory(helpers)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    grgsm_livemon
-    grgsm_scanner
-    grgsm_decode
+    grgsm_capture.py
+    grgsm_channelize.py
     DESTINATION bin
 )
 
-CREATE_SYMLINK(grgsm_livemon airprobe_rtlsdr.py)
-CREATE_SYMLINK(grgsm_decode airprobe_decode.py)
-CREATE_SYMLINK(grgsm_scanner airprobe_rtlsdr_scanner.py)
+CREATE_SYMLINK(grgsm_capture.py airprobe_rtlsdr_capture.py)
 
-add_custom_target(apps_symlinks ALL DEPENDS ${symlinks})
+add_custom_target(helpers_symlinks ALL DEPENDS ${symlinks})
 
 install(
     PROGRAMS

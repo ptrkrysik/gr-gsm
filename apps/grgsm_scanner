@@ -201,7 +201,7 @@ class wideband_receiver(grgsm.hier_block):
 
 class wideband_scanner(gr.top_block):
     
-    def __init__(self, rec_len=3, sample_rate=2e6, carrier_frequency=939e6, ppm=0):
+    def __init__(self, rec_len=3, sample_rate=2e6, carrier_frequency=939e6, ppm=0, args=""):
         
         gr.top_block.__init__(self, "Wideband Scanner")
         
@@ -211,7 +211,8 @@ class wideband_scanner(gr.top_block):
         self.ppm = ppm
         
         # if no file name is given process data from rtl_sdr source
-        self.rtlsdr_source = osmosdr.source( args="numchan=" + str(1) + " " + "" )
+        print "Args=",args
+        self.rtlsdr_source = osmosdr.source( args="numchan=" + str(1) + " " + args )
         
         self.rtlsdr_source.set_sample_rate(sample_rate)
         
@@ -302,10 +303,12 @@ if __name__ == '__main__':
                       help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list)
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="float", default=2e6,
         help="Set sample rate [default=%default] - allowed values even_number*0.2e6")
-    parser.add_option("-p", "--ppm", dest="ppm", type="intx", default=-45,
+    parser.add_option("-p", "--ppm", dest="ppm", type="intx", default=0,
         help="Set frequency correction in ppm [default=%default]")
     parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=24.0,
         help="Set gain [default=%default]")
+    parser.add_option("", "--args", dest="args", type="string", default="",
+        help="Set device arguments [default=%default]")
     parser.add_option("--speed", dest="speed", type="intx", default=4,
         help="Scan speed [default=%default]. Value range 0-5.")
     parser.add_option("-v", "--verbose", action="store_true", 
@@ -351,7 +354,7 @@ if __name__ == '__main__':
         scanner = wideband_scanner(rec_len=6-options.speed, 
                             sample_rate=options.samp_rate, 
                             carrier_frequency=current_freq, 
-                            ppm=options.ppm)
+                            ppm=options.ppm, args=options.args)
 
         # start recording
         scanner.start()

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.8rc1'?>
+<?grc format='1' created='3.7.8'?>
 <flow_graph>
   <timestamp>Sat Dec 13 10:49:59 2014</timestamp>
   <block>
     <key>options</key>
     <param>
       <key>author</key>
-      <value></value>
+      <value>Piotr Krysik</value>
     </param>
     <param>
       <key>alias</key>
@@ -26,7 +26,7 @@
     </param>
     <param>
       <key>description</key>
-      <value></value>
+      <value>Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>airprobe_rtlsdr</value>
+      <value>grgsm_livemon</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -70,7 +70,7 @@
     </param>
     <param>
       <key>title</key>
-      <value></value>
+      <value>Gr-gsm Livemon</value>
     </param>
   </block>
   <block>
@@ -260,6 +260,49 @@
     <param>
       <key>widget</key>
       <value>counter</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(872, 11)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>args</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Device Arguments</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>""</value>
     </param>
   </block>
   <block>
@@ -814,6 +857,14 @@
       <value>gsm_message_printer_1</value>
     </param>
     <param>
+      <key>prepend_frame_count</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>prepend_fnr</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>prepend_string</key>
       <value>""</value>
     </param>
@@ -944,7 +995,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(880, 11)</value>
+      <value>(1016, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2585,7 +2636,7 @@
     </param>
     <param>
       <key>args</key>
-      <value></value>
+      <value>args</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -2712,7 +2763,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 75)</value>
+      <value>(16, 115)</value>
     </param>
     <param>
       <key>_rotation</key>
