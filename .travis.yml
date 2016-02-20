@@ -2,7 +2,10 @@ sudo: required
 
 language: ruby
 
-env: DOCKERFILE=DebianJessie.docker IMGNAME=debjess-grgsm
+env: 
+  - DOCKERFILE=DebianJessie.docker IMGNAME=debjess-grgsm
+  - DOCKERFILE=Ubuntu14.docker IMGNAME=ubu14-grgsm
+  - DOCKERFILE=Ubuntu15.docker IMGNAME=ubu15-grgsm
 
 services:
   - docker
