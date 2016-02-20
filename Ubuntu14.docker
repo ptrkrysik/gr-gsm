@@ -1,8 +1,6 @@
 FROM ubuntu:14.04
 
-ENV GRGSM_GIT=https://github.com/ptrkrysik/gr-gsm
 ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
-ENV GR_OSMOSDR_GIT=git://git.osmocom.org/gr-osmosdr
 
 # We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
 RUN apt-get update && apt-get install -y uhd-host || \
@@ -38,19 +36,19 @@ RUN apt-get update && apt-get install -y \
 
 
 RUN /usr/bin/git clone $OSMOCORE_GIT && \
-  cd libosmocore && \
-  autoreconf -i && \
-  ./configure && \
-  make && \
-  make install && \
-  ldconfig -i
+    cd libosmocore && \
+    autoreconf -i && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig -i
 
 
 COPY ./ /src/
-RUN ls /src
 RUN mkdir /src/build && \
     cd /src/build && \
     cmake .. && \
     make && \
+    make test && \
     make install && \
     ldconfig
