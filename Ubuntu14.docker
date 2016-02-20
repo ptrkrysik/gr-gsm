@@ -33,7 +33,8 @@ RUN apt-get update && apt-get install -y \
     librtlsdr-dev \
     librtlsdr0 \
     rtl-sdr \
-    wget
+    wget \
+    libxi-dev
 
 
 RUN /usr/bin/git clone $OSMOCORE_GIT && \
@@ -44,23 +45,6 @@ RUN /usr/bin/git clone $OSMOCORE_GIT && \
   make install && \
   ldconfig -i
 
-#RUN /usr/bin/git clone $GR_OSMOSDR_GIT && \
-#  cd gr-osmosdr && \
-#  mkdir build && \
-#  cd build && \
-#  cmake .. && \
-#  make && \
-#  make install && \
-#  ldconfig
-
-#RUN /usr/bin/git clone $GRGSM_GIT && \
-#  cd gr-gsm && \
-#  mkdir build && \
-#  cd build && \
-#  cmake .. && \
-#  make && \
-#  sudo make install &&\
-#  ldconfig
 
 COPY ./ /src/
 RUN ls /src
