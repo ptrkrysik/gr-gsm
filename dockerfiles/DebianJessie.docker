@@ -1,6 +1,5 @@
 FROM ashmastaflash/gradio37_debjessie
 
-ENV GRGSM_GIT=https://github.com/ptrkrysik/gr-gsm
 ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
 ENV GR_OSMOSDR_GIT=git://git.osmocom.org/gr-osmosdr
 
@@ -29,14 +28,6 @@ RUN apt-get update && apt-get install -y \
     rtl-sdr \
     wget \
     libxi-dev
-
-#RUN /usr/bin/git clone $OSMOCORE_GIT && \
-#  cd libosmocore && \
-#  autoreconf -i && \
-#  ./configure && \
-#  make && \
-#  make install && \
-#  ldconfig -i
 
 COPY ./ /src/
 RUN ls /src
