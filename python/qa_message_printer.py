@@ -127,7 +127,7 @@ class qa_message_printer (gr_unittest.TestCase):
         ]
         
         src = grgsm.message_source(msgs_input)
-        printer = grgsm.message_printer(pmt.intern(""), True)
+        printer = grgsm.message_printer(pmt.intern(""), False, False, True)
         self.tb.msg_connect(src, "msgs", printer, "msgs")
         self.tb.run()
 
@@ -154,10 +154,10 @@ class qa_message_printer (gr_unittest.TestCase):
         ]
         
         src = grgsm.message_source(msgs_input)
-        printer = grgsm.message_printer(pmt.intern("test_004:"), True)
+        printer = grgsm.message_printer(pmt.intern("test_004:"), False, False, True)
         self.tb.msg_connect(src, "msgs", printer, "msgs")
         self.tb.run()
-
+        
         self.assertEqual(self.getOutput(), self.getOutputExpected(msgs_expected))
         
         
