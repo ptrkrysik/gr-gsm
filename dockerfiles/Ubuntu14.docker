@@ -2,6 +2,9 @@ FROM ubuntu:14.10
 
 ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
 
+# Fix repos in docker image:
+RUN sed -i "s/archive.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list
+
 # We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
 RUN apt-get update && apt-get install -y uhd-host || \
      sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
@@ -11,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     gnuradio-dev \
     gr-osmosdr \
-    libgnuradio-osmosdr0.0.0 \
+    libgnuradio-osmosdr0.1.1.4 \
     libosmosdr-dev \
     libosmosdr0 \
     osmo-sdr \
@@ -35,13 +38,13 @@ RUN apt-get update && apt-get install -y \
     libxi-dev
 
 
-RUN /usr/bin/git clone $OSMOCORE_GIT && \
-    cd libosmocore && \
-    autoreconf -i && \
-    ./configure && \
-    make && \
-    make install && \
-    ldconfig -i
+#RUN /usr/bin/git clone $OSMOCORE_GIT && \
+#    cd libosmocore && \
+#    autoreconf -i && \
+#    ./configure && \
+#    make && \
+#    make install && \
+#    ldconfig -i
 
 
 COPY ./ /src/

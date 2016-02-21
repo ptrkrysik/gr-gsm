@@ -54,13 +54,13 @@ RUN apt-get update && apt-get install -y \
     unzip
 
 # Build libosmosdr
-RUN git clone $OSMOSDR_GIT && \
-    cd libosmocore && \
-    autoreconf -i && \
-    ./configure && \
-    make && \
-    make install && \
-    ldconfig -i
+# RUN git clone $OSMOSDR_GIT && \
+#    cd libosmocore && \
+#    autoreconf -i && \
+#    ./configure && \
+#    make && \
+#    make install && \
+#    ldconfig -i
 
 COPY ./ /src/
 
