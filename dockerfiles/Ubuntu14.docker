@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:14.10
 
 ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
 
