@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y \
     python-talloc-dev \
     libtalloc2 \
     libtalloc-dev \
-    unzip 
+    unzip
 
 # Build libosmosdr
 RUN git clone $OSMOSDR_GIT && \
@@ -60,9 +60,13 @@ RUN git clone $OSMOSDR_GIT && \
     ./configure && \
     make && \
     make install && \
-    ldconfig -i 
+    ldconfig -i
 
 COPY ./ /src/
+
+RUN echo "[grc]\nlocal_blocks_path=/usr/local/share/gnuradio/grc/blocks" > \
+    /root/.gnuradio/config.conf
+
 RUN mkdir /src/build && \
     cd /src/build && \
     cmake .. && \
@@ -70,4 +74,3 @@ RUN mkdir /src/build && \
     make test && \
     make install && \
     ldconfig
-
