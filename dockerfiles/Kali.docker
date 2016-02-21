@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
     g++ \
     libstdc++-4.9-dev \
     libcppunit-dev \
-    swig2.0 \
+    swig \
     doxygen \
     liblog4cpp5-dev \
     build-essential \
