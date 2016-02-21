@@ -1,6 +1,7 @@
 FROM ubuntu:14.10
 
 ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
+ENV OSMOCORE_TAG=0.9.0
 
 # Fix repos in docker image:
 RUN sed -i "s/archive.ubuntu.com/old-releases.ubuntu.com/g" /etc/apt/sources.list
@@ -38,13 +39,14 @@ RUN apt-get update && apt-get install -y \
     libxi-dev
 
 
-#RUN /usr/bin/git clone $OSMOCORE_GIT && \
-#    cd libosmocore && \
-#    autoreconf -i && \
-#    ./configure && \
-#    make && \
-#    make install && \
-#    ldconfig -i
+RUN /usr/bin/git clone $OSMOCORE_GIT && \
+    cd libosmocore && \
+    git checkout tags/$OSMOCORE_TAG && \
+    autoreconf -i && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig -i
 
 
 COPY ./ /src/
