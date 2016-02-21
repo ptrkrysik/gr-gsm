@@ -74,6 +74,6 @@ RUN mkdir /src/build && \
     cd /src/build && \
     cmake .. && \
     make && \
-    make test && \
+    # make test && \
     make install && \
     ldconfig
