@@ -6,7 +6,7 @@ export TEST_CONTROL_DIRECTORY="/src/build_test/control"
 export RUNLINE="$AP_DECODE -c $CAPFILE -s $((100000000/174)) -a 725 -m BCCH -t 0 -v "
 echo "Testing with:"
 echo "  $RUNLINE"
-cd $TEST_FIXTURE_DIRECTORY
+cd $TEST_DATA_DIRECTORY
 gnuradio-companion --version
 
 $RUNLINE | tail -n +2 >  grgsm_decode_test1_result
