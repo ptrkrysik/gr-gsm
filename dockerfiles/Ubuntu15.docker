@@ -64,6 +64,7 @@ RUN git clone $OSMOSDR_GIT && \
 
 COPY ./ /src/
 
+RUN mkdir /root/.gnuradio/
 RUN echo "[grc]\nlocal_blocks_path=/usr/local/share/gnuradio/grc/blocks" > \
     /root/.gnuradio/config.conf
 
