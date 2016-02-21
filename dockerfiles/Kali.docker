@@ -23,7 +23,6 @@ RUN apt-get update && apt-get install -y \
     swig \
     swig2.0 \
     doxygen \
-    liblog4cpp5 \
     liblog4cpp5-dev \
     build-essential \
     libtool \
@@ -35,10 +34,10 @@ RUN apt-get update && apt-get install -y \
     gr-osmosdr \
     libfftw3-dev \
     libusb-1.0-0-dev \
-    libvolk-dev \
-    libvolk0.0.0 \
+    libvolk1-dev \
+    libvolk1.1 \
     libboost-all-dev \
-    libgnuradio-osmosdr0.1.3 \
+    libgnuradio-osmosdr0.1.4 \
     libmirisdr0 \
     libosmosdr-dev \
     libosmosdr0 \
