@@ -6,7 +6,7 @@ env:
   - DOCKERFILE=dockerfiles/DebianJessie.docker IMGNAME=debjess-grgsm
   - DOCKERFILE=dockerfiles/Ubuntu14.docker IMGNAME=ubu14-grgsm
   - DOCKERFILE=dockerfiles/Ubuntu15.docker IMGNAME=ubu15-grgsm
-  - DOCKERFILE=dockerfiles/Kali.docker IMGNAME=kali-grgsm
+  # - DOCKERFILE=dockerfiles/Kali.docker IMGNAME=kali-grgsm
 
 services:
   - docker
