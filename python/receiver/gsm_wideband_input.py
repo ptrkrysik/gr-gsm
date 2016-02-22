@@ -45,7 +45,7 @@ class gsm_wideband_input(grgsm.hier_block):
         # Blocks
         ##################################################
         self.ppm_in = None
-        self.message_port_register_hier_out("ppm_in")
+        self.message_port_register_hier_in("ppm_in")
         #self.lpf = firdes.low_pass(1, samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76)
         self.lpf = firdes.low_pass(1, samp_rate_in, 125e3, 75e3, firdes.WIN_HAMMING, 6.76)
         self.gsm_clock_offset_corrector_0 = grgsm.clock_offset_corrector(
