@@ -33,14 +33,8 @@ namespace gr {
      private:
       // hardcoded subslots of the channels, both SDCCH and the associated SACCH
       // -1 means that the particular position in the frame is not SDCCH
-      const int8_t d_subslots_sdcch4[102] = {
-          -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,
-          -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1
-      };
-      const int8_t d_subslots_sdcch8[102] = {
-          0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1,-1,
-          0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,-1,-1,-1
-      };
+      const int8_t * const d_subslots_sdcch4;
+      const int8_t * const d_subslots_sdcch8;
       subslot_filter_mode d_mode;
       unsigned int d_subslot;
      public:
