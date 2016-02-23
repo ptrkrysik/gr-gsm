@@ -30,6 +30,15 @@
 #include <grgsm/endian.h>
 #include <grgsm/gsmtap.h>
 
+static const int8_t subslots_sdcch4[102] = {
+  -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,
+  -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 1, 1, 1, 1,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1, 2, 2, 2, 2, 3, 3, 3, 3,-1
+};
+static const int8_t subslots_sdcch8[102] = {
+  0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1,-1,
+  0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,-1,-1,-1
+};
+
 
 namespace gr {
   namespace gsm {
@@ -48,7 +57,9 @@ namespace gr {
       : gr::block("burst_sdcch_subslot_splitter",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
-      d_mode(mode)
+      d_mode(mode),
+      d_subslots_sdcch4(subslots_sdcch4),
+      d_subslots_sdcch8(subslots_sdcch8)
     {     
         message_port_register_in(pmt::mp("in"));
         
