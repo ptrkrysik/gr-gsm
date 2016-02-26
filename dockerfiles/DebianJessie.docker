@@ -1,0 +1,52 @@
+FROM ashmastaflash/gradio37_debjessie
+
+ENV OSMOCORE_GIT=git://git.osmocom.org/libosmocore.git
+ENV OSMOCORE_TAG=0.6.3
+ENV GR_OSMOSDR_GIT=git://git.osmocom.org/gr-osmosdr
+
+# We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
+#RUN apt-get update && apt-get install -y uhd-host || \
+#     sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
+
+RUN apt-get update && apt-get install -y \
+    git \
+    vim \
+    cmake \
+    autoconf \
+    libtool \
+    python-talloc-dev \
+    libtalloc2 \
+    libtalloc-dev \
+    libpcsclite-dev \
+    build-essential \
+    libboost-all-dev \
+    libcppunit-dev swig \
+    doxygen \
+    liblog4cpp5-dev \
+    python-scipy \
+    librtlsdr-dev \
+    librtlsdr0 \
+    rtl-sdr \
+    wget \
+    libxi-dev
+
+
+RUN /usr/bin/git clone $OSMOCORE_GIT && \
+    cd libosmocore && \
+    git checkout tags/$OSMOCORE_TAG && \
+    autoreconf -i && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig -i
+
+COPY ./ /src/
+RUN ls /src
+
+RUN mkdir /src/build && \
+    cd /src/build && \
+    cmake .. && \
+    make && \
+    # make test && \
+    make install && \
+    ldconfig
