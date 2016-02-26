@@ -15,4 +15,4 @@ before_install:
   - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
-  - docker run -it --rm $IMGNAME /src/build_test/scripts/decode.sh
+  - docker run -it --rm $IMGNAME /src/test/tests/decode.sh
