@@ -33,7 +33,7 @@ do
   for IMG in ${TEST_IMAGE_NAMES[*]}
   do
     echo "Now we test: $SCAN_COMMAND on $IMG"
-    docker run -it --rm $IMG `echo $SCAN_COMMAND`
+    docker run -it --rm --privileged $IMG `echo $SCAN_COMMAND`
   done
 done
 
