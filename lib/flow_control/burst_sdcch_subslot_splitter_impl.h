@@ -31,10 +31,6 @@ namespace gr {
     class burst_sdcch_subslot_splitter_impl : public burst_sdcch_subslot_splitter
     {
      private:
-      // hardcoded subslots of the channels, both SDCCH and the associated SACCH
-      // -1 means that the particular position in the frame is not SDCCH
-      const int8_t * const d_subslots_sdcch4;
-      const int8_t * const d_subslots_sdcch8;
       splitter_mode d_mode;
      public:
       burst_sdcch_subslot_splitter_impl(splitter_mode mode);

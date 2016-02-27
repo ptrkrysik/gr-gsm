@@ -31,10 +31,6 @@ namespace gr {
     class burst_sdcch_subslot_filter_impl : public burst_sdcch_subslot_filter
     {
      private:
-      // hardcoded subslots of the channels, both SDCCH and the associated SACCH
-      // -1 means that the particular position in the frame is not SDCCH
-      const int8_t * const d_subslots_sdcch4;
-      const int8_t * const d_subslots_sdcch8;
       subslot_filter_mode d_mode;
       unsigned int d_subslot;
      public:
