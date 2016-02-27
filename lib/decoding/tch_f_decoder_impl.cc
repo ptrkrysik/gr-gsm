@@ -143,7 +143,7 @@ namespace gr {
 
                 if (syndrome == 0)
                 {
-                    unsigned char outmsg[27];
+                    unsigned char outmsg[28];
                     unsigned char sbuf_len=224;
                     int i, j, c, pos=0;
                     for(i = 0; i < sbuf_len; i += 8) {
