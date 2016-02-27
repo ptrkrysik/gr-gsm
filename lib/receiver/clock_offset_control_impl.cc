@@ -103,7 +103,7 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
             float ppm = -freq_offset/d_fc*1.0e6;
             std::string state = pmt::symbol_to_string(pmt::tuple_ref(msg,2));
             d_last_state = state;
-            if(abs(ppm) > 100) //safeguard against flawed measurements
+            if(std::abs(ppm) > 100.0) //safeguard against flawed measurements
             {
                 ppm=0;
                 reset();
@@ -132,7 +132,7 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
                 if(d_counter == 5)
                 {
                     d_counter = 0;
-                    if(abs(d_last_ppm_estimate-d_ppm_estimate) > 0.1)
+                    if(std::abs(d_last_ppm_estimate-d_ppm_estimate) > 0.1)
                     {
                         pmt::pmt_t msg_ppm = pmt::from_double(ppm);
                         message_port_pub(pmt::intern("ppm"), msg_ppm);
