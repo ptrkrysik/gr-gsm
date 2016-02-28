@@ -15,7 +15,7 @@ import grgsm.arfcn as arfcn
 import grgsm
 
 class gsm_wideband_input(grgsm.hier_block):
-    def __init__(self, ppm=0, osr=4, fc=925.2e6, samp_rate_in=20e6, ca=[]):
+    def __init__(self, ppm=0, osr=4, fc=925.2e6, samp_rate_in=20e6, ca=[], band='P-GSM'):
         self.num_streams = len(ca)
         grgsm.hier_block.__init__(
             self, "GSM wideband input adaptor",
@@ -34,7 +34,7 @@ class gsm_wideband_input(grgsm.hier_block):
         self.blocks_fir_filters = {}
         self.blocks_resamplers = {}
         self.blocks_ocs = {}
-        self.band = band = 'E-GSM'  # TODO make selectable
+        self.band = band
 
         ##################################################
         # Variables
