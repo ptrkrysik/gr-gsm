@@ -9,6 +9,7 @@
     fc=$fc,
     samp_rate_in=$samp_rate_in,
     ca=$cell_allocation,
+    band=$band,
 )</make>
   <callback>set_ppm($ppm)</callback>
   <callback>set_osr($osr)</callback>
@@ -36,6 +37,45 @@
     <hide>part</hide>
   </param>
   <param>
+    <name>Band</name>
+    <key>band</key>
+    <value>E-GSM</value>
+    <type>string</type>
+    <hide>part</hide>
+    <option>
+      <name>P-GSM (1-124)</name>
+      <key>P-GSM</key>
+    </option>
+    <option>
+      <name>DCS1800 (512-885)</name>
+      <key>DCS1900</key>
+    </option>
+    <option>
+      <name>PCS1900 (512-810)</name>
+      <key>PCS1900</key>
+    </option>
+    <option>
+      <name>E-GSM (975-1023)</name>
+      <key>E-GSM</key>
+    </option>
+    <option>
+      <name>R-GSM (955-1023)</name>
+      <key>R-GSM</key>
+    </option>
+    <option>
+      <name>GSM450 (259-293)</name>
+      <key>GSM450</key>
+    </option>
+    <option>
+      <name>GSM480 (306-340)</name>
+      <key>GSM480</key>
+    </option> 
+    <option>
+      <name>GSM850 (128-251)</name>
+      <key>GSM850</key>
+    </option>
+  </param>
+  <param>
     <name>Cell allocation</name>
     <key>cell_allocation</key>
     <value>[]</value>
@@ -57,6 +97,7 @@
     <hide>part</hide>
   </param>
   <check>$num_streams &gt;= 0</check>
+  <check>$cell_allocation and all(grgsm.arfcn.is_valid_arfcn(c, $band) for c in $cell_allocation)</check>
   <sink>
     <name>in</name>
     <type>complex</type>
