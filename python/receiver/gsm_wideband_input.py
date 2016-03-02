@@ -54,8 +54,9 @@ class gsm_wideband_input(grgsm.hier_block):
             samp_rate_in=samp_rate_in,
         )
 
-        c0_arfcn = arfcn.downlink2arfcn(fc, band)
-        print("Extracting channels %s, given that the center frequency is at ARFCN %d (%s)" % (str(ca), c0_arfcn, eng_notation.num_to_str(fc)))
+        center_arfcn = arfcn.downlink2arfcn(fc, band)
+        fc_str = eng_notation.num_to_str(fc)
+        print("Extracting channels %s, given center frequency at %sHz (ARFCN %d)" % (str(ca), fc_str, center_arfcn))
 
         self.connect((self, 0), (self.gsm_clock_offset_corrector_0, 0))
 
@@ -66,7 +67,9 @@ class gsm_wideband_input(grgsm.hier_block):
                 print("Warning: invalid ARFCN %d for band %s" % (channel, band))
                 continue
             freq_diff = channel_freq - fc
-            print("ARFCN %d is at C0 %+d KHz" % (channel, int(freq_diff / 1000.0)))
+            freq_diff_str = "+" if 0 <= freq_diff else ""
+            freq_diff_str += eng_notation.num_to_str(freq_diff)
+            print("ARFCN %d is at %sHz %sHz" % (channel, fc_str, freq_diff_str))
 
             self.blocks_resamplers[channel] = filter.fractional_resampler_cc(0, samp_rate_in/samp_rate_out)
             self.blocks_fir_filters[channel] = filter.freq_xlating_fir_filter_ccc(1, self.lpf, freq_diff, samp_rate_in)

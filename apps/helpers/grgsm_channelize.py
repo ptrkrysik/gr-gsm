@@ -90,7 +90,8 @@ class grgsm_channelize(gr.top_block):
         elif data_type == "complex":
             self.source = blocks.file_source(gr.sizeof_gr_complex, input_file, False)
 
-        print("Extracting channels %s, given that the center frequency is at %s" % (str(channels), eng_notation.num_to_str(fc)))
+        fc_str = eng_notation.num_to_str(fc)
+        print("Extracting channels %s, given center frequency at %sHz (ARFCN %d)" % (str(ca), fc_str, center_arfcn))
 
         for channel in channels:
             channel_freq = arfcn.arfcn2downlink(channel, band)
@@ -98,7 +99,9 @@ class grgsm_channelize(gr.top_block):
                 print("Warning: invalid ARFCN %d for band %s" % (channel, band))
                 continue
             freq_diff = channel_freq - fc
-            print("ARFCN %d is at fc %+d KHz" % (channel, int(freq_diff / 1000.0)))
+            freq_diff_str = "+" if 0 <= freq_diff else ""
+            freq_diff_str += eng_notation.num_to_str(freq_diff)
+            print("ARFCN %d is at %sHz %sHz" % (channel, fc_str, freq_diff_str))
 
             self.blocks_resamplers[channel] = pfb.arb_resampler_ccf( resamp_rate, taps=None, flt_size=32)
             self.blocks_rotators[channel] = blocks.rotator_cc(-2*math.pi*(freq_diff)/samp_rate)
