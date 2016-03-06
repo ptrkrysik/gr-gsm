@@ -10,7 +10,7 @@ cd $TEST_DATA_DIRECTORY
 gnuradio-companion --version
 
 $RUNLINE | tail -n +2 | tee grgsm_decode_test1_result
-diff grgsm_decode_test1_result $TEST_CONTROL_DIRECTORY/grgsm_decode_test1_expected
+diff grgsm_decode_test1_result $TEST_FIXTURES_DIRECTORY/grgsm_decode_test1_expected
 TEST_RESULT=$?
 
 rm grgsm_decode_test1_result
