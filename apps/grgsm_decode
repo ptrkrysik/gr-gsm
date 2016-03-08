@@ -36,7 +36,7 @@ class grgsm_decoder(gr.top_block):
 
     def __init__(self, timeslot=0, subslot=None, chan_mode='BCCH',
                  burst_file=None,
-                 cfile=None, fc=939.4e6, samp_rate=2e6, arfcn=None,
+                 cfile=None, fc=939.4e6, samp_rate=2e6, 
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
                  verbose=False):
@@ -53,7 +53,6 @@ class grgsm_decoder(gr.top_block):
         self.cfile = cfile
         self.fc = fc
         self.samp_rate = samp_rate
-        self.arfcn = arfcn
         self.a5 = a5
         self.kc = a5_kc
         if len(a5_kc) < 8:
@@ -71,13 +70,11 @@ class grgsm_decoder(gr.top_block):
         elif self.cfile:
             self.file_source = blocks.file_source(gr.sizeof_gr_complex*1, self.cfile, False)
             self.receiver = grgsm.receiver(4, ([0]), ([]))
-            self.input_adapter = grgsm.gsm_input(
-                ppm=0,
-                osr=4,
-                fc=fc,
-                samp_rate_in=samp_rate,
-            )
-            self.offset_control = grgsm.clock_offset_control(fc)
+            if self.fc is not None:
+                self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, fc=self.fc, samp_rate_in=samp_rate)
+                self.offset_control = grgsm.clock_offset_control(self.fc)
+            else:
+                self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, samp_rate_in=samp_rate)
 
         self.dummy_burst_filter = grgsm.dummy_burst_filter()
         self.timeslot_filter = grgsm.burst_timeslot_filter(self.timeslot)
@@ -126,8 +123,9 @@ class grgsm_decoder(gr.top_block):
         elif self.cfile:
             self.connect((self.file_source, 0), (self.input_adapter, 0))
             self.connect((self.input_adapter, 0), (self.receiver, 0))
-            self.msg_connect(self.offset_control, "ppm", self.input_adapter, "ppm_in")
-            self.msg_connect(self.receiver, "measurements", self.offset_control, "measurements")
+            if self.fc is not None:
+                self.msg_connect(self.offset_control, "ppm", self.input_adapter, "ppm_in")
+                self.msg_connect(self.receiver, "measurements", self.offset_control, "measurements")
             self.msg_connect(self.receiver, "C0", self.dummy_burst_filter, "in")
 
         self.msg_connect(self.dummy_burst_filter, "out", self.timeslot_filter, "in")
@@ -324,7 +322,7 @@ if __name__ == '__main__':
         parser.error("Invalid A5 version\n")
 
     if options.cfile and (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
-        parser.error("You have to provide either a frequency or an ARFCN (but not both).\n")
+        print("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n")
 
     # handle frequency / arfcn input
     arfcn = 0
@@ -366,7 +364,7 @@ if __name__ == '__main__':
     # instanciate decoder
     tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
                           burst_file=options.burst_file,
-                          cfile=options.cfile, arfcn=arfcn, fc=fc, samp_rate=options.samp_rate,
+                          cfile=options.cfile, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
                           verbose=options.verbose)
