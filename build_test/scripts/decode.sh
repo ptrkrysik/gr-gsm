@@ -3,13 +3,13 @@ export AP_DECODE="grgsm_decode"
 export CAPFILE="vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"
 export TEST_DATA_DIRECTORY="/src/test_data/"
 export TEST_CONTROL_DIRECTORY="/src/build_test/control"
-export RUNLINE="$AP_DECODE -c $CAPFILE -s $((100000000/174)) -a 725 -m BCCH -t 0 -v "
+export RUNLINE="$AP_DECODE -c $CAPFILE -s $((100000000/174)) -m BCCH -t 0 -v "
 echo "Testing with:"
 echo "  $RUNLINE"
 cd $TEST_DATA_DIRECTORY
 gnuradio-companion --version
 
-$RUNLINE | tail -n +2 | tee grgsm_decode_test1_result
+$RUNLINE | tail -n +4 | tee grgsm_decode_test1_result
 diff grgsm_decode_test1_result $TEST_CONTROL_DIRECTORY/grgsm_decode_test1_expected
 TEST_RESULT=$?
 
