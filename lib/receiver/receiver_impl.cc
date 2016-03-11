@@ -172,7 +172,7 @@ receiver_impl::work(int noutput_items,
         {
             burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]); //get channel impulse response from it
             detect_burst(input, &channel_imp_resp[0], burst_start, output_binary); //detect bits using MLSE detection
-            if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0)   //decode SCH burst
+            if (decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc) == 0) //decode SCH burst
             {
                 d_burst_nr.set(t1, t2, t3, 0);                                  //set counter of bursts value
                 d_burst_nr++;
@@ -307,7 +307,7 @@ receiver_impl::work(int noutput_items,
                 float normal_corr_max=-1e6;
                 int max_tn;
                 std::vector<gr_complex> v(input, input + noutput_items);
-                if(d_signal_dbm>=d_c0_signal_dbm-13)
+                //if(d_signal_dbm>=d_c0_signal_dbm-13)
                 {
                     if(d_tseq_nums.size()==0)              //there is no information about training sequence
                     {                                      //however the receiver can detect it
@@ -326,14 +326,17 @@ receiver_impl::work(int noutput_items,
                         d_tseq_nums.push_back(ts_max_num);
                     }
                     int tseq_num;
-                    if(input_nr<=d_tseq_nums.size()){
+                    if(input_nr<=d_tseq_nums.size())
+                    {
                         tseq_num = d_tseq_nums[input_nr-1];
-                    } else {
+                    } else 
+                    {
                         tseq_num = d_tseq_nums.back();
                     }
                     burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, tseq_num);
 //                  if(abs(d_c0_burst_start-burst_start)<=2){ //unused check/filter based on timing
-                    if((normal_corr_max/sqrt(signal_pwr))>=0.9){
+                   // if((normal_corr_max/sqrt(signal_pwr))>=0.9)
+                    {
                         detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
                         send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
                     }
