@@ -91,7 +91,7 @@ class grgsm_channelize(gr.top_block):
             self.source = blocks.file_source(gr.sizeof_gr_complex, input_file, False)
 
         fc_str = eng_notation.num_to_str(fc)
-        print("Extracting channels %s, given center frequency at %sHz (ARFCN %d)" % (str(ca), fc_str, center_arfcn))
+        print("Extracting channels %s, given that the center frequency is at %s" % (str(channels), eng_notation.num_to_str(fc)))
 
         for channel in channels:
             channel_freq = arfcn.arfcn2downlink(channel, band)
