@@ -1,4 +1,7 @@
 #!/bin/bash
+
+TEST_DIR=`dirname "$0"`
+
 export AP_DECODE="grgsm_decode"
 export CAPFILE="../../test_data/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"
 export SHORTENED_CAPFILE="tmp.cfile"
@@ -9,6 +12,7 @@ echo "Testing with:"
 echo "  $RUNLINE"
 gnuradio-companion --version
 
+cd $TEST_DIR
 cat $CAPFILE | head -c 6000000 > $SHORTENED_CAPFILE
 
 $RUNLINE | tail -n +4 | tee $RESULT_OBTAINED
