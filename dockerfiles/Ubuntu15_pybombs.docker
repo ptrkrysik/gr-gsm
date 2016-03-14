@@ -12,5 +12,5 @@ RUN pybombs prefix init /usr/local -a default_prx
 RUN pybombs config default_prefix default_prx
 RUN pybombs recipes add gr-recipes git+https://github.com/gnuradio/gr-recipes.git
 RUN pybombs recipes add gr-etcetera git+https://github.com/gnuradio/gr-etcetera.git
-RUN pybombs install gr-gsm
+RUN pybombs -v install gr-gsm
 RUN ldconfig
