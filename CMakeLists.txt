@@ -64,6 +64,13 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost required to compile gr-gsm")
 endif()
 
+find_package(SWIG)
+
+if(NOT SWIG_FOUND)
+    message(FATAL_ERROR "SWIG required to compile gr-gsm")
+endif()
+
+
 ########################################################################
 # Install directories
 ########################################################################
