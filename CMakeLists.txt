@@ -66,9 +66,13 @@ endif()
 
 find_package(SWIG)
 
-if(NOT SWIG_FOUND)
-    message(FATAL_ERROR "SWIG required to compile gr-gsm")
-endif()
+if(SWIG_FOUND)
+    # Minimum SWIG version required is 1.3.31
+    set(SWIG_VERSION_CHECK FALSE)
+    if("${SWIG_VERSION}" VERSION_GREATER "1.3.30")
+        set(SWIG_VERSION_CHECK TRUE)
+    endif()
+endif(SWIG_FOUND)
 
 
 ########################################################################
