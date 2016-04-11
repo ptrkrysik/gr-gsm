@@ -1,11 +1,15 @@
-FROM ubuntu:16.04
+FROM ubuntu:15.04
 MAINTAINER Ash Wilson
+
+ENV OSMOSDR_GIT="git://git.osmocom.org/libosmocore.git"
+ENV OSMOCORE_TAG=0.6.3
 
 # We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
 RUN apt-get update && apt-get install -y uhd-host || \
      sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
 
-RUN apt-get update && apt-get install -y \
+
+RUN apt-get install -y \
     git \
     python \
     python-scipy \
@@ -19,8 +23,9 @@ RUN apt-get update && apt-get install -y \
     libstdc++-4.9-dev \
     libcppunit-dev \
     swig \
+    swig2.0 \
     doxygen \
-    liblog4cpp5v5 \
+    liblog4cpp5 \
     liblog4cpp5-dev \
     build-essential \
     libtool \
@@ -32,10 +37,10 @@ RUN apt-get update && apt-get install -y \
     gr-osmosdr \
     libfftw3-dev \
     libusb-1.0-0-dev \
-    libvolk1-dev \
-    libvolk1.1 \
+    libvolk-dev \
+    libvolk0.0.0 \
     libboost-all-dev \
-    libgnuradio-osmosdr0.1.4 \
+    libgnuradio-osmosdr0.1.3 \
     libmirisdr0 \
     libosmosdr-dev \
     libosmosdr0 \
@@ -47,9 +52,17 @@ RUN apt-get update && apt-get install -y \
     python-talloc-dev \
     libtalloc2 \
     libtalloc-dev \
-    unzip \
-    libosmocore-dev
+    unzip
 
+# Build libosmosdr
+ RUN git clone $OSMOSDR_GIT && \
+    cd libosmocore && \
+    git checkout tags/$OSMOCORE_TAG && \
+    autoreconf -i && \
+    ./configure && \
+    make && \
+    make install && \
+    ldconfig -i
 
 COPY ./ /src/
 

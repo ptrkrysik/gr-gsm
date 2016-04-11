@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script runs integration tests for gnuradio.
+# This script runs integration tests for grgsm_scanner.
 # Run it fron the enclosing directory.
 export TEST_IMAGE_NAMES=()
 export TEST_SCAN_BANDS=(P-GSM DCS1800 PCS1900 E-GSM R-GSM GSM450 GSM480 GSM850)
@@ -13,7 +13,7 @@ cp -R $GR_SRC_DIR $TEMP_DIR
 
 cd $TEMP_DIR/gr-gsm
 
-export DOCKERFILE_LIST=($TEMP_DIR/gr-gsm/dockerfiles/*.docker)
+export DOCKERFILE_LIST=($TEMP_DIR/gr-gsm/tests/dockerfiles/*.docker)
 
 for DOCKERFILE in ${DOCKERFILE_LIST[*]}
 do
@@ -29,7 +29,7 @@ done
 
 for BAND in ${TEST_SCAN_BANDS[*]}
 do
-  export SCAN_COMMAND="/usr/bin/python /usr/local/bin/airprobe_rtlsdr_scanner.py -b `echo $BAND` -v"
+  export SCAN_COMMAND="/usr/bin/python /usr/local/bin/grgsm_scanner -b `echo $BAND` -v"
   for IMG in ${TEST_IMAGE_NAMES[*]}
   do
     echo "Now we test: $SCAN_COMMAND on $IMG"

@@ -3,9 +3,9 @@
 TEST_DIR=`dirname "$0"`
 
 export AP_DECODE="grgsm_decode"
-export CAPFILE="/src/test_data/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"
+export CAPFILE="../../test_data/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"
 export SHORTENED_CAPFILE="tmp.cfile"
-export RESULT_EXPECTED="/src/test/fixtures/grgsm_decode_test1_expected"
+export RESULT_EXPECTED="../fixtures/grgsm_decode_test1_expected"
 export RESULT_OBTAINED="grgsm_decode_test1_result"
 export RUNLINE="$AP_DECODE -c $SHORTENED_CAPFILE -s $((100000000/174)) -m BCCH -t 0 -v "
 echo "Testing with:"
