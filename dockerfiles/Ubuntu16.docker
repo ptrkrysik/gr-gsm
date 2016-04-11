@@ -1,0 +1,66 @@
+FROM ubuntu:16.04
+MAINTAINER Ash Wilson
+
+# We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
+RUN apt-get update && apt-get install -y uhd-host || \
+     sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
+
+RUN apt-get update && apt-get install -y \
+    git \
+    python \
+    python-scipy \
+    cmake \
+    make \
+    autoconf \
+    automake \
+    cpp-4.9 \
+    gcc \
+    g++ \
+    libstdc++-4.9-dev \
+    libcppunit-dev \
+    swig \
+    doxygen \
+    liblog4cpp5v5 \
+    liblog4cpp5-dev \
+    build-essential \
+    libtool \
+    shtool \
+    pkg-config \
+    libpcsclite-dev \
+    gnuradio \
+    gnuradio-dev \
+    gr-osmosdr \
+    libfftw3-dev \
+    libusb-1.0-0-dev \
+    libvolk1-dev \
+    libvolk1.1 \
+    libboost-all-dev \
+    libgnuradio-osmosdr0.1.4 \
+    libmirisdr0 \
+    libosmosdr-dev \
+    libosmosdr0 \
+    librtlsdr-dev \
+    librtlsdr0 \
+    osmo-sdr \
+    rtl-sdr \
+    wget \
+    python-talloc-dev \
+    libtalloc2 \
+    libtalloc-dev \
+    unzip \
+    libosmocore-dev
+
+
+COPY ./ /src/
+
+RUN mkdir /root/.gnuradio/
+RUN echo "[grc]\nlocal_blocks_path=/usr/local/share/gnuradio/grc/blocks" > \
+    /root/.gnuradio/config.conf
+
+RUN mkdir /src/build && \
+    cd /src/build && \
+    cmake .. && \
+    make && \
+    # make test && \
+    make install && \
+    ldconfig
