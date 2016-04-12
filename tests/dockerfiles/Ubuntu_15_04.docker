@@ -2,15 +2,14 @@ FROM ubuntu:15.04
 MAINTAINER Ash Wilson
 
 ENV OSMOSDR_GIT="git://git.osmocom.org/libosmocore.git"
-#ENV OSMOCORE_TAG=0.6.3
-ENV OSMOCORE_TAG=0.6.6
+ENV OSMOCORE_TAG=0.6.3
 
 # We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
 RUN apt-get update && apt-get install -y uhd-host || \
      sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
 
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
     git \
     python \
     python-scipy \

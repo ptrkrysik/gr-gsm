@@ -3,12 +3,9 @@ sudo: required
 language: ruby
 
 env:
-  #- DOCKERFILE=dockerfiles/Ubuntu15_pybombs.docker IMGNAME=ubu15_pybombs-grgsm
-  # - DOCKERFILE=dockerfiles/DebianJessie.docker IMGNAME=debjess-grgsm
-  # - DOCKERFILE=dockerfiles/Ubuntu14.docker IMGNAME=ubu14-grgsm
-  # - DOCKERFILE=dockerfiles/Ubuntu15.docker IMGNAME=ubu15-grgsm
-  # - DOCKERFILE=dockerfiles/Kali.docker IMGNAME=kali-grgsm
-  - DOCKERFILE=dockerfiles/Ubuntu16.docker IMGNAME=ubu16-grgsm
+  #- DOCKERFILE=tests/dockerfiles/DebianJessie.docker IMGNAME=debjess-grgsm
+  #- DOCKERFILE=tests/dockerfiles/Ubuntu_15_04.docker IMGNAME=ubu15.04-grgsm
+  - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04.docker IMGNAME=ubu16.04-grgsm
 
 services:
   - docker
@@ -17,4 +14,4 @@ before_install:
   - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
-  - docker run -it --rm $IMGNAME /src/test/tests/decode.sh
+  - docker run -it --rm $IMGNAME /src/tests/scripts/decode.sh
