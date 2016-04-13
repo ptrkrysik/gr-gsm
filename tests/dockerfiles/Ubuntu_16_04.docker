@@ -5,29 +5,23 @@ RUN apt-get update && apt-get install -y \
     uhd-host \
     cmake \
     autoconf \
-    automake \
+    libtool \
     build-essential \
     libcppunit-dev \
     swig \
     doxygen \
     liblog4cpp5-dev \
-    libtool \
+    python-scipy \
     gnuradio-dev \
     gr-osmosdr \
-    libosmocore-dev \
-    python-scipy
+    libosmocore-dev
 
 COPY ./ /src/
-
-RUN mkdir /root/.gnuradio/
-RUN echo "[grc]\nlocal_blocks_path=/usr/local/share/gnuradio/grc/blocks" > \
-    /root/.gnuradio/config.conf
+RUN ls /src
 
 RUN mkdir /src/build && \
     cd /src/build && \
     cmake .. && \
     make && \
     make install && \
-    ldconfig && \
-
-
+    ldconfig
