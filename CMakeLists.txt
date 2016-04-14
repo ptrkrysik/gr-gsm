@@ -200,9 +200,10 @@ install(FILES cmake/Modules/gr-gsmConfig.cmake
 ########################################################################
 # Cpack stuff
 ########################################################################
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "gnuradio (>> 3.7.9), libboost-iostreams1.58.0, libboost-system1.58.0, libboost-filesystem1.58.0, liblog4cpp5, libosmosdr (>> 0.1.8) libpcsclite (>> 1.8.14), libqwt-dev (>> 6.1.2), libvolk1-bin, libvolk1.1, python-talloc (>> 2.1.5)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "gnuradio (>> 3.7.9), libboost-iostreams1.58.0, libboost-system1.58.0, libboost-filesystem1.58.0, liblog4cpp5, libosmosdr0, libpcsclite1, libqwt-dev (>> 6.1.2), libvolk1-bin, libvolk1.1, python-talloc (>> 2.1.5)")
 set(CPACK_PACKAGE_NAME gnuradio-grgsm)
 set(CPACK_PACKAGE_VERSION 0.9.0)
 set(CPACK_PACKAGE_MAINTAINER ptrkrysik@gmail.com)
 set(CPACK_PACKAGE_DESCRIPTION "GSM functionality for Gnuradio")
+set(CPACK_PACKAGE_CONTACT ptrkrysik@gmail.com)
 include(CPack)
