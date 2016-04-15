@@ -6,7 +6,7 @@ cd $THISPATH
 
 # Now, we check to see that the version env var is set
 ${CPACK_PACKAGE_VERSION:?"Need to set CPACK_PACKAGE_VERSION env var!"}
-$CPACK_DEBIAN_PACKAGE_ARCHITECTURE=`dpkg --print-architecture`
+export $CPACK_DEBIAN_PACKAGE_ARCHITECTURE=`dpkg --print-architecture`
 
 # OK, now we get down to the business of building...
 rm -rf ./build
