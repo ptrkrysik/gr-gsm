@@ -61,7 +61,7 @@ class grgsm_capture(gr.top_block):
         # Processing Blocks
         ##################################################
 
-        self.rtlsdr_source = osmosdr.source( args="numchan=" + str(1) + " " + args )
+        self.rtlsdr_source = osmosdr.source( args="numchan=" + str(1) + " " + "" )
         self.rtlsdr_source.set_sample_rate(samp_rate)
         self.rtlsdr_source.set_center_freq(fc - shiftoff, 0)
         self.rtlsdr_source.set_freq_corr(ppm, 0)
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     tb = grgsm_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
                          ppm=options.ppm, arfcn=arfcn, cfile=options.cfile, 
                          burst_file=options.burst_file, band=options.band, verbose=options.verbose,
-                         rec_length=options.rec_length, args=options.args)
+                         rec_length=options.rec_length)
     
     def signal_handler(signal, frame):
         tb.stop()

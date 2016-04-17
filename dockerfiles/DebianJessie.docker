@@ -50,4 +50,3 @@ RUN mkdir /src/build && \
     # make test && \
     make install && \
     ldconfig
-
