@@ -1,0 +1,26 @@
+FROM debian:testing
+
+RUN apt-get update && apt-get install -y \
+    uhd-host \
+    cmake \
+    autoconf \
+    libtool \
+    build-essential \
+    libcppunit-dev \
+    swig \
+    doxygen \
+    liblog4cpp5-dev \
+    python-scipy \
+    gnuradio-dev \
+    gr-osmosdr \
+    libosmocore-dev
+
+COPY ./ /src/
+RUN ls /src
+
+RUN mkdir /src/build && \
+    cd /src/build && \
+    cmake .. && \
+    make && \
+    make install && \
+    ldconfig
