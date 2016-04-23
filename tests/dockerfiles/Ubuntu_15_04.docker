@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y uhd-host || \
      sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
 
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
     git \
     python \
     python-scipy \

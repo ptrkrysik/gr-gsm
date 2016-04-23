@@ -196,3 +196,14 @@ add_subdirectory(docs)
 install(FILES cmake/Modules/gr-gsmConfig.cmake
     DESTINATION lib${LIB_SUFFIX}/cmake/grgsm
 )
+
+########################################################################
+# Cpack stuff
+########################################################################
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "gnuradio (>> 3.7.9), gr-osmosdr, libosmogsm5")
+set(CPACK_PACKAGE_NAME gr-gsm)
+set(CPACK_PACKAGE_VERSION 0.9.0)
+set(CPACK_PACKAGE_MAINTAINER ptrkrysik@gmail.com)
+set(CPACK_PACKAGE_DESCRIPTION "GSM functionality for Gnuradio")
+set(CPACK_PACKAGE_CONTACT ptrkrysik@gmail.com)
+include(CPack)

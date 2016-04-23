@@ -1,0 +1,33 @@
+FROM debian:testing
+
+# We know it's going to foul up, so we run this install separately and then ...fix... dpkg status
+RUN apt-get update && apt-get install -y uhd-host || \
+     sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
+
+RUN apt-get install -y \
+    git \
+    vim \
+    cmake \
+    autoconf \
+    libtool \
+    build-essential \
+    libboost-all-dev \
+    libcppunit-dev swig \
+    doxygen \
+    liblog4cpp5-dev \
+    python-scipy \
+    gnuradio \
+    gnuradio-dev \
+    gr-osmosdr \
+    libosmogsm5
+
+COPY ./ /src/
+RUN ls /src
+
+RUN mkdir /src/build && \
+    cd /src/build && \
+    cmake .. && \
+    make && \
+    make test && \
+    make install && \
+    ldconfig
