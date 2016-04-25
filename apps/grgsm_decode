@@ -277,7 +277,7 @@ if __name__ == '__main__':
                                   + ", ".join(grgsm.arfcn.get_bands()) + "."
                                   + "If no band is specified, it will be determined automatically, defaulting to 0.")
     cfile_options.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float",
-                             default=eng_notation.num_to_str(2e6),
+                             default=eng_notation.num_to_str(1e6),
                              help="Sample rate of cfile capture [default=%default]")
     parser.add_option_group(cfile_options)
 

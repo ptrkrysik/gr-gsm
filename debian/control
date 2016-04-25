@@ -1,0 +1,13 @@
+Source: gr-gsm
+Section: devel
+Priority: optional
+Maintainer: Your Name <your.email@some.where>
+Build-Depends: cmake, build-essential, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev
+
+Homepage: http://www.yourhomepage.org
+Package: gr-gsm
+Architecture: any
+Depends:  ${shlibs:Depends}, ${misc:Depends}, gnuradio, gr-osmosdr, python-scipy
+Description: First test-package
+ Long description of greet-the-world.
+ It can span multiple lines!
