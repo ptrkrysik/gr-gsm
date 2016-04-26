@@ -2,12 +2,12 @@ Source: gr-gsm
 Section: devel
 Priority: optional
 Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
-Build-Depends: cmake, build-essential, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev
+Build-Depends: cmake, build-essential, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev, swig
 
 Homepage: http://github.com/ptrkrysik/gr-gsm.git
 Package: gr-gsm
 Architecture: any
 Depends: gnuradio, gr-osmosdr, python-scipy, ${shlibs:Depends}, ${misc:Depends}
-Description: First test-package
+Description: Gnuradio blocks and tools for receiving GSM transmissions
  Long description of greet-the-world.
  It can span multiple lines!
