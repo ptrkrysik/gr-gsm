@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y uhd-host || \
      sed -i "s/Status: install ok half-configured/Status: install ok installed/g" /var/lib/dpkg/status
 
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     git \
     python \
     python-scipy \
@@ -55,9 +55,9 @@ RUN apt-get install -y \
     unzip
 
 # Build libosmosdr
- RUN git clone $OSMOSDR_GIT && \
-    cd libosmocore && \
-    git checkout tags/$OSMOCORE_TAG && \
+RUN git clone $OSMOSDR_GIT
+WORKDIR libosmocore
+RUN git checkout tags/$OSMOCORE_TAG && \
     autoreconf -i && \
     ./configure && \
     make && \
@@ -70,10 +70,10 @@ RUN mkdir /root/.gnuradio/
 RUN echo "[grc]\nlocal_blocks_path=/usr/local/share/gnuradio/grc/blocks" > \
     /root/.gnuradio/config.conf
 
-RUN mkdir /src/build && \
-    cd /src/build && \
-    cmake .. && \
+RUN mkdir /src/build
+WORKDIR /src/build
+RUN cmake .. && \
     make && \
-    # make test && \
+    make test && \
     make install && \
     ldconfig

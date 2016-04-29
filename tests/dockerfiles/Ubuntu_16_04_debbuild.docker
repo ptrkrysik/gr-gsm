@@ -2,7 +2,6 @@ FROM ubuntu:16.04
 MAINTAINER Ash Wilson
 
 RUN apt-get update && apt-get install -y \
-    uhd-host \
     cmake \
     autoconf \
     libtool \
@@ -19,9 +18,9 @@ RUN apt-get update && apt-get install -y \
 COPY ./ /src/
 RUN ls /src
 
-RUN mkdir /src/build && \
-    cd /src/build && \
-    cmake .. && \
+RUN mkdir /src/build
+WORKDIR /src/build
+RUN cmake .. && \
     make package && \
     cpack -G DEB && \
     ls

@@ -1,7 +1,7 @@
 FROM debian:testing
+MAINTAINER Ash Wilson
 
 RUN apt-get update && apt-get install -y \
-    uhd-host \
     cmake \
     autoconf \
     libtool \
@@ -18,9 +18,9 @@ RUN apt-get update && apt-get install -y \
 COPY ./ /src/
 RUN ls /src
 
-RUN mkdir /src/build && \
-    cd /src/build && \
-    cmake .. && \
+RUN mkdir /src/build
+WORKDIR /src/build
+RUN cmake .. && \
     make && \
     make install && \
     ldconfig
