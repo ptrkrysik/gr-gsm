@@ -39,7 +39,8 @@ class grgsm_decoder(gr.top_block):
                  cfile=None, fc=939.4e6, samp_rate=2e6, 
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
-                 verbose=False):
+                 verbose=False,
+                 print_bursts=False):
 
         gr.top_block.__init__(self, "Gr-gsm Decode")
 
@@ -60,6 +61,7 @@ class grgsm_decoder(gr.top_block):
         self.speech_file = speech_file
         self.speech_codec = speech_codec
         self.verbose = verbose
+        self.print_bursts = print_bursts
 
         ##################################################
         # Blocks
@@ -113,6 +115,10 @@ class grgsm_decoder(gr.top_block):
         if self.verbose:
             self.message_printer = grgsm.message_printer(pmt.intern(""), True, True, False)
 
+        if self.print_bursts:
+            self.bursts_printer = grgsm.bursts_printer(pmt.intern(""), True, True, False, True)
+
+
 
         ##################################################
         # Asynch Message Connections
@@ -129,6 +135,8 @@ class grgsm_decoder(gr.top_block):
             self.msg_connect(self.receiver, "C0", self.dummy_burst_filter, "in")
 
         self.msg_connect(self.dummy_burst_filter, "out", self.timeslot_filter, "in")
+        if self.print_bursts:
+            self.msg_connect(self.timeslot_filter, "out", self.bursts_printer, 'bursts')
 
         if (self.chan_mode == 'BCCH_SDCCH4' or self.chan_mode == 'SDCCH8') and self.subslot_filter is not None:
             self.msg_connect(self.timeslot_filter, "out", self.subslot_filter, "in")
@@ -262,6 +270,8 @@ if __name__ == '__main__':
     parser.add_option("-c", "--cfile", dest="cfile", help="Input file (cfile)")
     parser.add_option("-v", "--verbose", action="store_true",
                       help="If set, the decoded messages (with frame number and count) are printed to stdout")
+    parser.add_option("-p", "--print-bursts", action="store_true",
+                      help="If set, the raw bursts (with frame number and count) are printed to stdout")
 
     # group cfile options together
     cfile_options = OptionGroup(
@@ -367,7 +377,8 @@ if __name__ == '__main__':
                           cfile=options.cfile, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
-                          verbose=options.verbose)
+                          verbose=options.verbose,
+                          print_bursts=options.print_bursts)
 
     # run
     tb.start()
