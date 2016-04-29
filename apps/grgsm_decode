@@ -116,7 +116,7 @@ class grgsm_decoder(gr.top_block):
             self.message_printer = grgsm.message_printer(pmt.intern(""), True, True, False)
 
         if self.print_bursts:
-            self.bursts_printer = grgsm.bursts_printer(pmt.intern(""), True, True, False, True)
+            self.bursts_printer = grgsm.bursts_printer(pmt.intern(""), True, True, True, True)
 
 
 
