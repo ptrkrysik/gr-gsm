@@ -3,7 +3,7 @@
   <name>SDCCH/8 demapper</name>
   <key>gsm_sdcch8_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $starts_fn_mod51, $channel_types)</make>
+  <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $downlink_starts_fn_mod51, $downlink_channel_types, $uplink_starts_fn_mod51, $uplink_channel_types)</make>
 
   <param>
     <name>Timeslot</name>
@@ -14,16 +14,32 @@
   </param>
 
   <param>
-    <name>starts_fn_mod51</name>
-    <key>starts_fn_mod51</key>
+    <name>downlink_starts_fn_mod51</name>
+    <key>downlink_starts_fn_mod51</key>
     <value>[0,4,8,12,16,20,24,28,32,36,40,44]</value>
     <type>int_vector</type>
     <hide>all</hide>
   </param>
 
   <param>
-    <name>channel_types</name>
-    <key>channel_types</key>
+    <name>downlink_channel_types</name>
+    <key>downlink_channel_types</key>
+    <value>[8,8,8,8,8,8,8,8,136,136,136,136]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <param>
+    <name>uplink_starts_fn_mod51</name>
+    <key>uplink_starts_fn_mod51</key>
+    <value>[15,19,23,27,31,35,39,43,47,0,4,8]</value>
+    <type>int_vector</type>
+    <hide>all</hide>
+  </param>
+
+  <param>
+    <name>uplink_channel_types</name>
+    <key>uplink_channel_types</key>
     <value>[8,8,8,8,8,8,8,8,136,136,136,136]</value>
     <type>int_vector</type>
     <hide>all</hide>

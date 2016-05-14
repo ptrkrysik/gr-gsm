@@ -39,6 +39,7 @@ namespace gr {
         /**@name Configuration of the receiver */
         //@{
         const int d_OSR; ///< oversampling ratio
+        bool d_process_uplink;
         const int d_chan_imp_length; ///< channel impulse length
         float d_signal_dbm;
         std::vector<int> d_tseq_nums; ///< stores training sequence numbers for channels different than C0
@@ -203,7 +204,7 @@ namespace gr {
 
         
      public:
-       receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums);
+       receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
       ~receiver_impl();
       
       int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);

@@ -21,6 +21,7 @@ install(FILES
     gsm_input.xml
     gsm_wideband_input.xml
     gsm_receiver.xml
+    gsm_receiver_with_uplink.xml
     gsm_fcch_burst_tagger.xml
     gsm_sch_detector.xml
     gsm_fcch_detector.xml
