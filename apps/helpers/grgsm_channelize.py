@@ -43,10 +43,10 @@ import os
 
 EXTRA_HELP = """
 Example usage:
-grgsm_channelize.py -f my_wideband_capture.cfile -c 925.2e6 990 991 992 993 994 995 1019 1020 1021 1022 1023
+grgsm_channelize.py -c my_wideband_capture.cfile -f 925.2e6 990 991 992 993 994 995 1019 1020 1021 1022 1023
 
 The above example will channelize my_wideband_capture.cfile, in this case a cfile captured at
-925.2 MHz centered (ARFCN 975) and 20 Msps. As a result, 12 files will be generated for
+925.2 MHz centered (ARFCN 975) and 2 Msps. As a result, 12 files will be generated for
 ARFCNs 975 - 1023 at 1 Msps each.
 """
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter, description='Split wideband a GSM capture into seperate files per ARFCN.', add_help=True, epilog=EXTRA_HELP)
     parser.add_argument(dest="channel", type=int, nargs='+',
         help="List of ARFCNs")
-    parser.add_argument("-s", "--samp-rate", dest="samp_rate", type=eng_float, default=eng_notation.num_to_str(2e7),
+    parser.add_argument("-s", "--samp-rate", dest="samp_rate", type=eng_float, default=eng_notation.num_to_str(2e6),
         help="Sample rate of the wideband capture file [default=%(default)s]")
     parser.add_argument("-f", "--fc", dest="fc", type=eng_float, default=eng_notation.num_to_str(935e6), required=True,
         help="Carrier frequency in Hz [default=%(default)s]")

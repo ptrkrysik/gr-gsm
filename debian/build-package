@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ../..
+
+tar -acf gr-gsm_0.3.orig.tar.gz gr-gsm
+cd gr-gsm
+debuild -S -sa
+cd ..
+dput ppa:ptrkrysik/gr-gsm gr-gsm_0.3-0ppa0_source.changes

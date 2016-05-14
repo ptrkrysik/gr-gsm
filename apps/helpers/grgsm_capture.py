@@ -193,7 +193,7 @@ if __name__ == '__main__':
                       help="Set gain [default=%default]")
     
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float", 
-                      default=eng_notation.num_to_str(2000000.052982),
+                      default=eng_notation.num_to_str(2000000),
                       help="Set samp_rate [default=%default]")
     
     parser.add_option("-p", "--ppm", dest="ppm", type="intx", default=0,
