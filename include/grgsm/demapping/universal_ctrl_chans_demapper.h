@@ -49,7 +49,7 @@ namespace gr {
        * class. gsm::universal_ctrl_chans_demapper::make is the public interface for
        * creating new instances.
        */
-      static sptr make(unsigned int timeslot_nr, const std::vector<int> &downlink_starts_fn_mod51, const std::vector<int> &downlink_channel_types, const std::vector<int> &uplink_starts_fn_mod51, const std::vector<int> &uplink_channel_types);
+      static sptr make(unsigned int timeslot_nr, const std::vector<int> &downlink_starts_fn_mod51, const std::vector<int> &downlink_channel_types, const std::vector<int> &uplink_starts_fn_mod51=std::vector<int>(), const std::vector<int> &uplink_channel_types=std::vector<int>());
     };
 
   } // namespace gsm
