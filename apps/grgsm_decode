@@ -88,17 +88,11 @@ class grgsm_decoder(gr.top_block):
             self.subslot_filter = grgsm.burst_sdcch_subslot_filter(grgsm.SS_FILTER_SDCCH8, self.subslot)
 
         if self.chan_mode == 'BCCH':
-            self.bcch_demapper = grgsm.universal_ctrl_chans_demapper(self.timeslot,
-                                                                     ([2, 6, 12, 16, 22, 26, 32, 36, 42, 46]),
-                                                                     ([1, 2, 2, 2, 2, 2, 2, 2, 2, 2]))
+            self.bcch_demapper = grgsm.gsm_bcch_ccch_demapper(self.timeslot)
         elif self.chan_mode == 'BCCH_SDCCH4':
-            self.bcch_sdcch4_demapper = grgsm.universal_ctrl_chans_demapper(self.timeslot,
-                                                                            ([2, 6, 12, 16, 22, 26, 32, 36, 42, 46]),
-                                                                            ([1, 2, 2, 2, 7, 7, 7, 7, 135, 135]))
+            self.bcch_sdcch4_demapper = grgsm.gsm_bcch_ccch_sdcch4_demapper(self.timeslot)
         elif self.chan_mode == 'SDCCH8':
-            self.sdcch8_demapper = grgsm.universal_ctrl_chans_demapper(self.timeslot,
-                                                                       ([0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44]),
-                                                                       ([8, 8, 8, 8, 8, 8, 8, 8, 136, 136, 136, 136]))
+            self.sdcch8_demapper = grgsm.gsm_sdcch8_demapper(self.timeslot)
         elif self.chan_mode == 'TCHF':
             self.tch_f_demapper = grgsm.tch_f_chans_demapper(self.timeslot)
             self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, speech_file)

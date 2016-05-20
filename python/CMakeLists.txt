@@ -31,6 +31,9 @@ endif()
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
+    demapping/gsm_bcch_ccch_demapper.py
+    demapping/gsm_bcch_ccch_sdcch4_demapper.py
+    demapping/gsm_sdcch8_demapper.py
     receiver/gsm_input.py
     receiver/gsm_wideband_input.py
     receiver/fcch_burst_tagger.py

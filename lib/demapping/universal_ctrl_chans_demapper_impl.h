@@ -29,23 +29,28 @@
 namespace gr {
   namespace gsm {
 
+    typedef enum {downlink=0,uplink=1} um_radio_link_direction;
     class universal_ctrl_chans_demapper_impl : public universal_ctrl_chans_demapper
     {
      private:
-      unsigned int d_downlink_starts_fn_mod51[51];
-      unsigned int d_uplink_starts_fn_mod51[51];
-      unsigned int d_downlink_channel_types[51];
-      unsigned int d_uplink_channel_types[51];
-      unsigned int d_downlink_subslots[102];
-      unsigned int d_uplink_subslots[102];
-      unsigned int d_timeslot;
-      uint32_t d_downlink_frame_numbers[4];
-      uint32_t d_uplink_frame_numbers[4];
-      pmt::pmt_t d_downlink_bursts[4];
-      pmt::pmt_t d_uplink_bursts[4];
+        //configuration of the block
+        unsigned int d_timeslot_nr;
+        std::vector<int> d_downlink_starts_fn_mod51;
+        std::vector<int> d_downlink_channel_types;
+        std::vector<int> d_downlink_subslots;
+
+        std::vector<int> d_uplink_starts_fn_mod51;
+        std::vector<int> d_uplink_channel_types;
+        std::vector<int> d_uplink_subslots;
+
+        //history of the downlink and uplink bursts
+        uint32_t d_downlink_frame_numbers[4];
+        pmt::pmt_t d_downlink_bursts[4];
+        uint32_t d_uplink_frame_numbers[4];
+        pmt::pmt_t d_uplink_bursts[4];
      public:
-      universal_ctrl_chans_demapper_impl(unsigned int timeslot_nr, const std::vector<int> &downlink_starts_fn_mod51, const std::vector<int> &downlink_channel_types, const std::vector<int> &uplink_starts_fn_mod51, const std::vector<int> &uplink_channel_types);
-      ~universal_ctrl_chans_demapper_impl();
+        universal_ctrl_chans_demapper_impl(unsigned int timeslot_nr, const std::vector<int> &downlink_starts_fn_mod51, const std::vector<int> &downlink_channel_types, const std::vector<int> &downlink_subslots, const std::vector<int> &uplink_starts_fn_mod51, const std::vector<int> &uplink_channel_types, const std::vector<int> &uplink_subslots);
+        ~universal_ctrl_chans_demapper_impl();
 
       void filter_ctrl_chans(pmt::pmt_t msg);
     };
