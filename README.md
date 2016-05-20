@@ -1,4 +1,4 @@
-The gr-gsm project
+The gr-gsm project 
 ==================
 The *gr-gsm* project is based on the *gsm-receiver* written by Piotr Krysik (also the main author of *gr-gsm*) for the *Airprobe* project.
 
