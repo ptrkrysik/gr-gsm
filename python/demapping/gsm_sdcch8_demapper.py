@@ -4,7 +4,7 @@
 # Title: SDCCH/8 demapper
 # Author: Piotr Krysik
 # Description: Demapper for SDCCH/8 + SACCH/C8 control channels. This corresponds to channel combination vii specified in GSM 05.02, section 6.4
-# Generated: Sat May 21 08:57:03 2016
+# Generated: Sat May 21 09:22:53 2016
 ##################################################
 
 from gnuradio import gr

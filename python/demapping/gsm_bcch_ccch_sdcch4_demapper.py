@@ -4,7 +4,7 @@
 # Title: BCCH + CCCH + SDCCH/4 demapper
 # Author: Piotr Krysik
 # Description: Demapper for BCCH + CCCH + SDCCH/4 + SACCH/C4 control channels. This corresponds to channel combination v specified in GSM 05.02, section 6.4
-# Generated: Fri May 20 12:12:01 2016
+# Generated: Sat May 21 09:22:50 2016
 ##################################################
 
 from gnuradio import gr
