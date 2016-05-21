@@ -57,6 +57,16 @@ namespace gr {
         d_uplink_channel_types(51, 0),
         d_uplink_subslots(102, 0)
     {
+        if(downlink_starts_fn_mod51.size() != 51  ||
+           downlink_channel_types.size()   != 51  ||
+           downlink_subslots.size()        != 102 ||
+           uplink_starts_fn_mod51.size()   != 51  ||
+           uplink_channel_types.size()     != 51  ||
+           uplink_subslots.size()          != 102 )
+        {
+            std::cout << "Check lengths of the vectors passed to the universal demapper - _starts_fn_mod15 and _sublots should have 51 elements, _subslots should have 102 elements" << std::endl;
+            std::runtime_error("Check lengths of the vectors passed to the universal demapper - _starts_fn_mod15 and _sublots should have 51 elements, _subslots should have 102 elements");
+        }
         std::copy(downlink_starts_fn_mod51.begin(), downlink_starts_fn_mod51.end(), d_downlink_starts_fn_mod51.begin());
         std::copy(downlink_channel_types.begin(), downlink_channel_types.end(), d_downlink_channel_types.begin());
         std::copy(downlink_subslots.begin(), downlink_subslots.end(), d_downlink_subslots.begin());
