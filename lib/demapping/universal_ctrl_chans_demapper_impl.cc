@@ -73,7 +73,7 @@ namespace gr {
         std::copy(uplink_starts_fn_mod51.begin(), uplink_starts_fn_mod51.end(), d_uplink_starts_fn_mod51.begin());
         std::copy(uplink_channel_types.begin(), uplink_channel_types.end(), d_uplink_channel_types.begin());
         std::copy(uplink_subslots.begin(), uplink_subslots.end(), d_uplink_subslots.begin());
-       
+        
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&universal_ctrl_chans_demapper_impl::filter_ctrl_chans, this, _1));
         message_port_register_out(pmt::mp("bursts"));
@@ -86,10 +86,11 @@ namespace gr {
     {
     }
     
-    void universal_ctrl_chans_demapper_impl::filter_ctrl_chans(pmt::pmt_t msg)
+    void universal_ctrl_chans_demapper_impl::filter_ctrl_chans(pmt::pmt_t burst_in)
     {
-        pmt::pmt_t header_plus_burst = pmt::cdr(msg);
-        gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
+        pmt::pmt_t header_plus_burst = pmt::cdr(burst_in);
+        int8_t * burst_in_int8 = (int8_t *)pmt::blob_data(header_plus_burst);        
+        gsmtap_hdr * header = (gsmtap_hdr *)(burst_in_int8);
 
         if(header->timeslot==d_timeslot_nr)
         {
@@ -101,14 +102,15 @@ namespace gr {
             
             uint32_t frame_nr = be32toh(header->frame_number); //get frame number
             uint32_t fn_mod51 = frame_nr % 51; //frame number modulo 51
+            uint32_t fn_mod102 = frame_nr % 102; //frame number modulo 102
             
-            //crate new message
-            int8_t new_msg[sizeof(gsmtap_hdr)+BURST_SIZE];
-            gsmtap_hdr * new_hdr = (gsmtap_hdr*)new_msg;
-            memcpy(new_msg, header, sizeof(gsmtap_hdr)+BURST_SIZE);
-            pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
-            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
-
+            //create new burst
+            int8_t burst_tmp[sizeof(gsmtap_hdr)+BURST_SIZE];
+            memcpy(burst_tmp, burst_in_int8, sizeof(gsmtap_hdr)+BURST_SIZE);
+            pmt::pmt_t msg_binary_blob = pmt::make_blob(burst_tmp,sizeof(gsmtap_hdr)+BURST_SIZE);
+            pmt::pmt_t burst_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
+            gsmtap_hdr * new_header = (gsmtap_hdr *)pmt::blob_data(msg_binary_blob);
+                        
             //get information if burst is from uplink or downlink            
             bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
 
@@ -129,19 +131,22 @@ namespace gr {
                       
             uint32_t fn51_start = starts_fn_mod51[fn_mod51];
             uint32_t fn51_stop = fn51_start + 3;
-            uint32_t ch_type = channel_types[fn_mod51];
 
+            //set type
+            new_header->type = GSMTAP_TYPE_UM;
+            //set type of the channel
+            uint32_t ch_type = channel_types[fn_mod51];
             if(ch_type != 0)
             {
-                new_hdr->sub_type = ch_type;
+                new_header->sub_type = ch_type;
             }
-            new_hdr->sub_slot = subslots[fn_mod51 + (51 * (frame_nr % 2))];
+            new_header->sub_slot = subslots[fn_mod51 + (51 * (frame_nr % 2))];
             
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
                 uint32_t ii = fn_mod51 - fn51_start;
                 frame_numbers[ii] = frame_nr;
-                bursts[ii] = msg_out;
+                bursts[ii] = burst_out;
             }
             
             if(fn_mod51==fn51_stop)
@@ -163,7 +168,7 @@ namespace gr {
                     {
                         message_port_pub(pmt::mp("bursts"), bursts[jj]);
                     }
-                } 
+                }
             }
         }
     }
