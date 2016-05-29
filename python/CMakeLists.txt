@@ -62,3 +62,4 @@ GR_ADD_TEST(qa_burst_sdcch_subslot_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_S
 GR_ADD_TEST(qa_burst_fnr_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_fnr_filter.py)
 GR_ADD_TEST(qa_dummy_burst_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_dummy_burst_filter.py)
 GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
+GR_ADD_TEST(qa_msg_to_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_tag.py)
