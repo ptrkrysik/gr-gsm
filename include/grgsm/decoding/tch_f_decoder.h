@@ -49,7 +49,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API tch_f_decoder : virtual public gr::block
+    class GRGSM_API tch_f_decoder : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<tch_f_decoder> sptr;

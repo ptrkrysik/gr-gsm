@@ -36,7 +36,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API cx_channel_hopper : virtual public gr::block
+    class GRGSM_API cx_channel_hopper : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<cx_channel_hopper> sptr;

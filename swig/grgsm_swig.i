@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 
-#define GSM_API
+#define GRGSM_API
 
 %include "gnuradio.i"			// the common stuff
 

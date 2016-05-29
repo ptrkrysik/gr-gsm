@@ -40,7 +40,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API burst_sdcch_subslot_filter : virtual public gr::block
+    class GRGSM_API burst_sdcch_subslot_filter : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<burst_sdcch_subslot_filter> sptr;

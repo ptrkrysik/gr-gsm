@@ -20,15 +20,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_GSM_API_H
-#define INCLUDED_GSM_API_H
+#ifndef INCLUDED_GRGSM_API_H
+#define INCLUDED_GRGSM_API_H
 
 #include <gnuradio/attributes.h>
 
 #ifdef gnuradio_gsm_EXPORTS
-#  define GSM_API __GR_ATTR_EXPORT
+#  define GRGSM_API __GR_ATTR_EXPORT
 #else
-#  define GSM_API __GR_ATTR_IMPORT
+#  define GRGSM_API __GR_ATTR_IMPORT
 #endif
 
-#endif /* INCLUDED_GSM_API_H */
+#endif /* INCLUDED_GRGSM_API_H */

@@ -34,7 +34,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API dummy_burst_filter : virtual public gr::block
+    class GRGSM_API dummy_burst_filter : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<dummy_burst_filter> sptr;

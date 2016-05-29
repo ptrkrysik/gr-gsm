@@ -36,7 +36,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API extract_system_info : virtual public gr::block
+    class GRGSM_API extract_system_info : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<extract_system_info> sptr;

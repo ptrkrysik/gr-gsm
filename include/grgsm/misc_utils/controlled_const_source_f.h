@@ -34,7 +34,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API controlled_const_source_f : virtual public gr::sync_block
+    class GRGSM_API controlled_const_source_f : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<controlled_const_source_f> sptr;

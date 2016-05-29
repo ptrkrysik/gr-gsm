@@ -36,7 +36,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API clock_offset_control : virtual public gr::block
+    class GRGSM_API clock_offset_control : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<clock_offset_control> sptr;

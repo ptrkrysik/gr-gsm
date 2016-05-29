@@ -37,7 +37,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API decryption : virtual public gr::block
+    class GRGSM_API decryption : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<decryption> sptr;

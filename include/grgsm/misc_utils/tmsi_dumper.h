@@ -35,7 +35,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API tmsi_dumper : virtual public gr::block
+    class GRGSM_API tmsi_dumper : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<tmsi_dumper> sptr;

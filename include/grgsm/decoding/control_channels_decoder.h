@@ -35,7 +35,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API control_channels_decoder : virtual public gr::block
+    class GRGSM_API control_channels_decoder : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<control_channels_decoder> sptr;

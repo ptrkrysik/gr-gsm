@@ -37,7 +37,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API bursts_printer : virtual public gr::block
+    class GRGSM_API bursts_printer : virtual public gr::block
     {
      public:
       typedef boost::shared_ptr<bursts_printer> sptr;

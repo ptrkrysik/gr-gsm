@@ -38,7 +38,7 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GSM_API receiver : virtual public sync_block
+    class GRGSM_API receiver : virtual public sync_block
     {
      public:
       typedef boost::shared_ptr<receiver> sptr;
