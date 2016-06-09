@@ -106,6 +106,8 @@ class grgsm_decoder(gr.top_block):
         self.cch_decoder = grgsm.control_channels_decoder()
 
         self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.socket_pdu_server = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000) #added in order to avoid generating ICMP messages
+
         if self.verbose:
             self.message_printer = grgsm.message_printer(pmt.intern(""), True, True, False)
 
