@@ -364,8 +364,8 @@ if __name__ == '__main__':
                     break
 
     # open udp port 4729 to avoid icmp messages
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.bind(("localhost", 4729))
+    #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    #sock.bind(("localhost", 4729))
 
     # instanciate decoder
     tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
@@ -381,4 +381,4 @@ if __name__ == '__main__':
     tb.wait()
 
     # we are done, close socket
-    sock.close()
+    #sock.close()
