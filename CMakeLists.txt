@@ -72,6 +72,8 @@ if(SWIG_FOUND)
     if("${SWIG_VERSION}" VERSION_GREATER "1.3.30")
         set(SWIG_VERSION_CHECK TRUE)
     endif()
+else()
+    message(FATAL_ERROR "SWIG required to compile gr-gsm")
 endif(SWIG_FOUND)
 
 
