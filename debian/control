@@ -2,7 +2,7 @@ Source: gr-gsm
 Section: devel
 Priority: optional
 Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
-Build-Depends: cmake, build-essential, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev, swig
+Build-Depends: cmake, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev, swig
 
 Homepage: http://github.com/ptrkrysik/gr-gsm.git
 Package: gr-gsm
