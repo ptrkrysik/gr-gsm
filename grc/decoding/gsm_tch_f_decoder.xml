@@ -51,12 +51,6 @@
     </option>
   </param>
   <param>
-    <name>destination file</name>
-    <key>file</key>
-    <value>/tmp/speech.gsm</value>
-    <type>file_open</type>
-  </param>
-  <param>
     <name>Voice boundary detection</name>
     <key>boundary_check</key>
     <value>False</value>
@@ -80,7 +74,12 @@
     <type>message</type>
     <optional>1</optional>
   </source>
-  
+  <source>
+    <name>voice</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+    
   <doc>
 If "Voice boundary detection" is enabled, then only bursts are decoded as voice where
 
