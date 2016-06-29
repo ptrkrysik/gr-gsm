@@ -35,16 +35,16 @@ namespace gr {
   namespace gsm {
 
     tch_f_decoder::sptr
-    tch_f_decoder::make(tch_mode mode, const std::string &file, bool boundary_check)
+    tch_f_decoder::make(tch_mode mode, bool boundary_check)
     {
       return gnuradio::get_initial_sptr
-        (new tch_f_decoder_impl(mode, file, boundary_check));
+        (new tch_f_decoder_impl(mode, boundary_check));
     }
 
     /*
      * Constructor
      */
-    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, const std::string &file, bool boundary_check)
+    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, bool boundary_check)
       : gr::block("tch_f_decoder",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
@@ -249,7 +249,7 @@ namespace gr {
                 return;
             }
 
-            // Decode voice frames and write to file
+            // Decode voice frames and send to the output
             if (d_tch_mode == TCH_FS || d_tch_mode == TCH_EFR)
             {
                 mVR204Coder.decode(mClass1_c, mTCHU);

@@ -89,7 +89,7 @@ namespace gr {
                 void decode(pmt::pmt_t msg);
                 void setCodingMode(tch_mode mode);
             public:
-                tch_f_decoder_impl(tch_mode mode, const std::string &file, bool boundary_check=false);
+                tch_f_decoder_impl(tch_mode mode, bool boundary_check=false);
                 ~tch_f_decoder_impl();
         };
 

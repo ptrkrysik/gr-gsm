@@ -3,7 +3,7 @@
   <name>TCH/F decoder</name>
   <key>gsm_tch_f_decoder</key>
   <import>import grgsm</import>
-  <make>grgsm.tch_f_decoder($mode, $file, $boundary_check)</make>
+  <make>grgsm.tch_f_decoder($mode, $boundary_check)</make>
 
   <param>
     <name>TCH coding mode</name>
