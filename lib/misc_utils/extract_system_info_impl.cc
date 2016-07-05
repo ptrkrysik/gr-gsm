@@ -69,13 +69,15 @@ namespace gr {
         struct gsm_sysinfo_freq freq[1024];
 
         if(msg_elements[2]==0x1b){
+            uint8_t * plmn = (uint8_t *)(msg_elements+5);
+
             chan_info info;
             info.id = be16toh(header->arfcn);                            //take arfcn
             info.pwr_db = header->signal_dbm;
             info.cell_id = (msg_elements[3]<<8)+msg_elements[4];         //take cell id
             info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
-            info.mcc =  ((msg_elements[5] & 0xF)  * 100) + (((msg_elements[5] & 0xF0) >> 4) * 10) + ((msg_elements[6] & 0xF)); // take mcc
-            info.mnc = ((msg_elements[7] & 0xF) * 100) + (((msg_elements[7] & 0xF0) >>4) * 10) + ((msg_elements[6] & 0xF0) >> 4); //take mnc
+            info.mcc = extract_system_info_impl::extract_mcc_from_plmn(plmn);
+            info.mnc = extract_system_info_impl::extract_mnc_from_plmn(plmn);
             info.ccch_conf = (msg_elements[10] & 0x7); // ccch_conf
             
             boost::mutex::scoped_lock lock(extract_mutex);
@@ -86,13 +88,15 @@ namespace gr {
             }
         }
         else if(msg_elements[2]==0x1c){
+            uint8_t * plmn = (uint8_t *)(msg_elements+3);
+
             chan_info info;
             info.id = be16toh(header->arfcn);                            //take arfcn
             info.pwr_db = header->signal_dbm;
             info.lac = (msg_elements[6]<<8)+msg_elements[7];            //take lac
-            info.mcc =  ((msg_elements[3] & 0xF) * 100) + (((msg_elements[3] & 0xF0) >> 4) * 10) + ((msg_elements[4] & 0xF)); // take mcc
-            info.mnc = ((msg_elements[5] & 0xF) * 100) + (((msg_elements[5] & 0xF0) >>4) * 10) + ((msg_elements[4] & 0xF0) >> 4); //take mnc
-            
+            info.mcc = extract_system_info_impl::extract_mcc_from_plmn(plmn);
+            info.mnc = extract_system_info_impl::extract_mnc_from_plmn(plmn);
+
             boost::mutex::scoped_lock lock(extract_mutex);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
@@ -183,6 +187,40 @@ namespace gr {
             }
         }
     }
+
+    std::string extract_system_info_impl::extract_mcc_from_plmn(uint8_t * plmn)
+    {
+        std::ostringstream output;
+
+        if((plmn[0] & 0xF) != 0xF) {
+            output << (plmn[0] & 0xF);
+        }
+        if((plmn[0] & 0xF0 >> 4) != 0xF) {
+            output << ((plmn[0] & 0xF0) >> 4);
+        }
+        if((plmn[1] & 0xF) != 0xF) {
+            output << (plmn[1] & 0xF);
+        }
+
+        return output.str();
+    }
+
+    std::string extract_system_info_impl::extract_mnc_from_plmn(uint8_t * plmn)
+    {
+        std::ostringstream output;
+
+        if((plmn[2] & 0xF) != 0xF) {
+            output << (plmn[2] & 0xF);
+        }
+        if((plmn[2] & 0xF0 >> 4) != 0xF) {
+            output << ((plmn[2] & 0xF0) >> 4);
+        }
+        if((plmn[1] & 0xF0 >> 4) != 0xF) {
+            output << ((plmn[1] & 0xF0) >> 4);
+        }
+
+        return output.str();
+    }
     
     std::vector<int> extract_system_info_impl::get_chans()
     {
@@ -202,18 +240,18 @@ namespace gr {
         return lacs;
     }
     
-    std::vector<int> extract_system_info_impl::get_mcc()
+    std::vector<std::string> extract_system_info_impl::get_mcc()
     {
-        std::vector<int> mccs;
+        std::vector<std::string> mccs;
         BOOST_FOREACH(chan_info_map::value_type &i, d_c0_channels){
             mccs.push_back(i.second.mcc);
         }
         return mccs;
     }
     
-    std::vector<int> extract_system_info_impl::get_mnc()
+    std::vector<std::string> extract_system_info_impl::get_mnc()
     {
-        std::vector<int> mncs;
+        std::vector<std::string> mncs;
         BOOST_FOREACH(chan_info_map::value_type &i, d_c0_channels){
             mncs.push_back(i.second.mnc);
         }

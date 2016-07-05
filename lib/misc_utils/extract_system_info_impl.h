@@ -37,8 +37,8 @@ namespace gr {
         unsigned int arfcn;
         unsigned int lac;
         unsigned int cell_id;
-        unsigned int mcc;
-        unsigned int mnc;
+        std::string mcc;
+        std::string mnc;
         unsigned int ccch_conf;
         std::set<int> neighbour_cells;
         std::set<int> cell_arfcns;
@@ -52,8 +52,8 @@ namespace gr {
             arfcn = info.arfcn;
             lac = (info.lac!=0) ? info.lac : lac;
             cell_id = (info.cell_id!=0) ? info.cell_id : cell_id;
-            mcc = (info.mcc!=0) ? info.mcc : mcc;
-            mnc = (info.mnc!=0) ? info.mnc : mnc;
+            mcc = (info.mcc!="") ? info.mcc : mcc;
+            mnc = (info.mnc!="") ? info.mnc : mnc;
             ccch_conf = (info.ccch_conf!=-1) ? info.ccch_conf : ccch_conf;
         }
     };
@@ -77,6 +77,8 @@ namespace gr {
     {
      private:
       void process_bursts(pmt::pmt_t burst);
+      std::string extract_mcc_from_plmn(uint8_t *);
+      std::string extract_mnc_from_plmn(uint8_t *);
       void process_sysinfo(pmt::pmt_t msg);
       chan_info_map d_c0_channels;
       bool after_reset;
@@ -87,8 +89,8 @@ namespace gr {
       virtual std::vector<int> get_pwrs();
       virtual std::vector<int> get_lac();
       virtual std::vector<int> get_cell_id();
-      virtual std::vector<int> get_mcc();
-      virtual std::vector<int> get_mnc();
+      virtual std::vector<std::string> get_mcc();
+      virtual std::vector<std::string> get_mnc();
       virtual std::vector<int> get_ccch_conf();
       virtual std::vector<int> get_cell_arfcns(int chan_id);
       virtual std::vector<int> get_neighbours(int chan_id);
