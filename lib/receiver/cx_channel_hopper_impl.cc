@@ -141,9 +141,21 @@ namespace gr {
     {
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
         gsmtap_hdr *header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
+        bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
 
         uint32_t frame_nr = be32toh(header->frame_number);
-        uint16_t frame_ca = be16toh(header->arfcn);
+        uint16_t frame_ca;
+
+        // FIXED for uplink
+        if (uplink_burst)
+        {
+            frame_ca = be16toh(header->arfcn)-16384;    //16384 = 0x4000
+        }
+        else
+        {
+            frame_ca = be16toh(header->arfcn);
+        }
+
         int mai = calculate_ma_sfh(d_maio, d_hsn, d_narfcn, frame_nr);
 
         if(d_ma[mai] == (int)frame_ca) {
