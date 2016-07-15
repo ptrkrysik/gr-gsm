@@ -1,13 +1,23 @@
 Source: gr-gsm
-Section: devel
+Section: libdevel
 Priority: optional
 Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
-Build-Depends: cmake, python-scipy, gnuradio-dev, gr-osmosdr, libosmocore-dev, swig
+Build-Depends: cmake,
+               debhelper (>= 9.0.0~),
+               pkg-config,
+               python-scipy,
+               gnuradio-dev,
+               libosmocore-dev,
+               python-dev,
+               swig
+X-Python-Version: >= 2.7, << 2.8
+Standards-Version: 3.9.7
+Homepage: http://github.com/ptrkrysik/gr-gsm/
+Vcs-Git: git://github.com/ptrkrysik/gr-gsm.git
+Vcs-Browser: https://github.com/ptrkrysik/gr-gsm/
 
-Homepage: http://github.com/ptrkrysik/gr-gsm.git
 Package: gr-gsm
 Architecture: any
-Depends: gnuradio, gr-osmosdr, python-scipy, ${shlibs:Depends}, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Depends: gnuradio, gr-osmosdr, ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
 Description: Gnuradio blocks and tools for receiving GSM transmissions
- Long description of greet-the-world.
- It can span multiple lines!
