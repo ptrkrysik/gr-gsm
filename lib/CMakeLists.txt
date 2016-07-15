@@ -71,7 +71,7 @@ list(APPEND grgsm_sources
 
 
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}
+target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
