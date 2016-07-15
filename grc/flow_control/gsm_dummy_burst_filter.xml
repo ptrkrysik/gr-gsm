@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Dummy burst filter</name>
+  <name>Dummy Burst Filter</name>
   <key>gsm_dummy_burst_filter</key>
   <import>import grgsm</import>
   <make>grgsm.dummy_burst_filter()</make>

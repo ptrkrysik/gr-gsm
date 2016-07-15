@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Universal ctrl chans demapper</name>
+  <name>Universal Control Channels Demapper</name>
   <key>gsm_universal_ctrl_chans_demapper</key>
   <import>import grgsm</import>
   <make>grgsm.universal_ctrl_chans_demapper($timeslot_nr, $downlink_starts_fn_mod51, $downlink_channel_types, $downlink_subslots, $uplink_starts_fn_mod51, $uplink_channel_types, $uplink_subslots)</make>

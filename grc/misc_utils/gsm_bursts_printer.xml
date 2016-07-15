@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Bursts printer</name>
+  <name>Bursts Printer</name>
   <key>gsm_bursts_printer</key>
   <import>import grgsm</import>
   <import>import pmt</import>

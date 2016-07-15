@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst framenumber filter</name>
+  <name>Burst Framenumber Filter</name>
   <key>gsm_burst_fnr_filter</key>
   <import>import grgsm</import>
   <make>grgsm.burst_fnr_filter($mode, $fnr)</make>

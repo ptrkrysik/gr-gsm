@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Extract system info</name>
+  <name>Extract System Info</name>
   <key>gsm_extract_system_info</key>
   <import>import grgsm</import>
   <make>grgsm.extract_system_info()</make>

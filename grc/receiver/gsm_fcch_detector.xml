@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>FCCH bursts detector</name>
+  <name>FCCH Bursts Detector</name>
   <key>gsm_fcch_detector</key>
   <import>import grgsm</import>
   <make>grgsm.fcch_detector($OSR)</make>

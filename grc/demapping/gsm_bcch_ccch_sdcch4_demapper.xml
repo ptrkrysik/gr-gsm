@@ -1,5 +1,5 @@
 <block>
-  <name>BCCH + CCCH + SDCCH/4 demapper</name>
+  <name>BCCH + CCCH + SDCCH/4 Demapper</name>
   <key>gsm_bcch_ccch_sdcch4_demapper</key>
   <category></category>
   <import>import grgsm</import>

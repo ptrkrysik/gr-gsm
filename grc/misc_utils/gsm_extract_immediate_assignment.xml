@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Extract immediate assignment</name>
+  <name>Extract Immediate Assignment</name>
   <key>gsm_extract_immediate_assignment</key>
   <import>import grgsm</import>
   <make>grgsm.extract_immediate_assignment($print_immediate_assignments, $ignore_gprs, $unique_references)</make>

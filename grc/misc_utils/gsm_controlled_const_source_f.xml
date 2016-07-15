@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Controlled const source</name>
+  <name>Controlled Const Source</name>
   <key>gsm_controlled_const_source_f</key>
   <import>import grgsm</import>
   <make>grgsm.controlled_const_source_f($constant)</make>

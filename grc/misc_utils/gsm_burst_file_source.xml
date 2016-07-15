@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst file source</name>
+  <name>Burst File Source</name>
   <key>gsm_burst_file_source</key>
   <import>import grgsm</import>
   <make>grgsm.burst_file_source($filename)</make>

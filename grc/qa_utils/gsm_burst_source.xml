@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst source</name>
+  <name>Burst Source</name>
   <key>gsm_burst_source</key>
   <import>import grgsm</import>
   <make>grgsm.burst_source($framenumbers, $timeslots, $bursts)</make>

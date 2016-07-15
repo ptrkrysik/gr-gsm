@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>GSM clock offset control</name>
+  <name>GSM Clock Offset Control</name>
   <key>gsm_clock_offset_control</key>
   <import>import grgsm</import>
   <make>grgsm.clock_offset_control($fc)</make>
