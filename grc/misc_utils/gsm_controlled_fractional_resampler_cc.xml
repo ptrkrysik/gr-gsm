@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <block>
-  <name>controlled_fractional_resampler_cc</name>
-  <key>grgsm_controlled_fractional_resampler_cc</key>
-  <category>grgsm</category>
+  <name>Controlled Fractional Resampler</name>
+  <key>gsm_controlled_fractional_resampler_cc</key>
   <import>import grgsm</import>
   <make>grgsm.controlled_fractional_resampler_cc($phase_shift, $resamp_ratio)</make>
 	<callback>set_resamp_ratio($resamp_ratio)</callback>

@@ -106,3 +106,4 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 %include "grgsm/msg_to_tag.h"
 GR_SWIG_BLOCK_MAGIC2(grgsm, msg_to_tag);
+GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
