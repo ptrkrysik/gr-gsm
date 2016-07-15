@@ -59,6 +59,7 @@
       <block>gsm_extract_immediate_assignment</block>
       <block>gsm_controlled_rotator_cc</block>
       <block>gsm_controlled_const_source_f</block>
+      <block>gsm_controlled_fractional_resampler_cc</block>
       <block>gsm_message_printer</block>
       <block>gsm_clock_offset_corrector</block>
       <block>gsm_tmsi_dumper</block>

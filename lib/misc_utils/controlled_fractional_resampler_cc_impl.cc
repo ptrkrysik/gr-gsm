@@ -87,32 +87,65 @@ namespace gr {
       std::vector<tag_t> set_resamp_ratio_tags;
 
       pmt::pmt_t key = pmt::string_to_symbol("set_resamp_ratio");
-      get_tags_in_window(set_resamp_ratio_tags, 0, 0, noutput_items, key);
+      get_tags_in_window(set_resamp_ratio_tags, 0, 0, ninput_items[0]);
 
-      std::cout << "-----------------------------" << std::endl;        
+//      std::cout << "-----------------------------" << std::endl;
+//      std::cout << "ninput_items[0] " << ninput_items[0] << std::endl;
+//      std::cout << "noutput_items " << noutput_items << std::endl;
       
+      bool all_output_samples_produced = false;
       for(std::vector<tag_t>::iterator i_tag = set_resamp_ratio_tags.begin(); i_tag < set_resamp_ratio_tags.end(); i_tag++)
       {
-        uint64_t tag_offset_rel = i_tag->offset-nitems_read(0);
-        uint64_t samples_to_produce = (tag_offset_rel-processed_in_sum)/d_mu_inc; //tu może być problem
-        std::cout << "samples_to_produce = (tag_offset_rel-processed_in_sum)/d_mu_inc: " << samples_to_produce << " = " << tag_offset_rel << " - " << processed_in_sum << std::endl;
-        processed_in = resample(in, processed_in_sum, out, produced_out_sum, samples_to_produce);
-        processed_in_sum = processed_in_sum + processed_in;
-        produced_out_sum = produced_out_sum + samples_to_produce;
-        std::cout << "processed_in: " << processed_in <<   " tag_offset_rel: " << tag_offset_rel << " produced_out_sum: " << produced_out_sum << std::endl;        
-        set_resamp_ratio(pmt::to_double(i_tag->value));
+        uint64_t tag_offset_rel = i_tag->offset - nitems_read(0);
+        
+        if(pmt::symbol_to_string(i_tag->key) == "set_resamp_ratio")
+        {
+          uint64_t samples_to_produce = static_cast<uint64_t>(round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc)); //tu może być problem - bo to jest głupota przy d_mu_inc różnym od 1.0
+          
+          if( (samples_to_produce + produced_out_sum) > noutput_items)
+          {
+            samples_to_produce = noutput_items - produced_out_sum;
+            all_output_samples_produced = true;
+          }
+          
+  //        std::cout << "samples_to_produce = (tag_offset_rel-processed_in_sum)/d_mu_inc: " << samples_to_produce << " = " << tag_offset_rel << " - " << processed_in_sum << std::endl;
+          processed_in = resample(in, processed_in_sum, out, produced_out_sum, samples_to_produce);
+          processed_in_sum = processed_in_sum + processed_in;
+          produced_out_sum = produced_out_sum + samples_to_produce;
+
+  //        std::cout << "d_ii " << d_ii << std::endl;        
+  //        std::cout << "produced_out_sum + nitems_written(0) " << produced_out_sum + nitems_written(0) << std::endl;
+          if(all_output_samples_produced)
+          {
+            break;
+          } else {
+              add_item_tag(0, produced_out_sum + nitems_written(0), i_tag->key, i_tag->value);                       
+              set_resamp_ratio(pmt::to_double(i_tag->value));
+          }
+        } else {
+          uint64_t out_samples_to_tag = round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc);
+          if( (out_samples_to_tag + produced_out_sum) <= noutput_items)
+          {
+            add_item_tag(0, produced_out_sum + out_samples_to_tag + nitems_written(0), i_tag->key, i_tag->value);
+          }
+        }
+//        std::cout << "processed_in: " << processed_in <<   " tag_offset_rel: " << tag_offset_rel << " produced_out_sum: " << produced_out_sum << std::endl;        
 //        std::cout << "Setting resamp ratio: " << d_mu_inc << std::endl;
       }
 
-      std::cout << "noutput_items: " << noutput_items << " produced_out_sum: " << produced_out_sum << std::endl;
-      std::cout << "last_resample_outputs: " << (noutput_items-produced_out_sum) << std::endl;
+//      std::cout << "noutput_items: " << noutput_items << " produced_out_sum: " << produced_out_sum << std::endl;
+//      std::cout << "last_resample_outputs: " << (noutput_items-produced_out_sum) << std::endl;
 //      processed_in = resample(in, processed_in_sum, out, produced_out_sum, samples_to_produce);
 //      processed_in_sum = processed_in_sum + processed_in;
 //      produced_out_sum = produced_out_sum + samples_to_produce;
-
-      processed_in = resample(in, processed_in_sum, out, produced_out_sum, (noutput_items-produced_out_sum));
 //      processed_in = resample(in, 0, out, 0, noutput_items);
-      processed_in_sum = processed_in_sum + processed_in;
+
+      if(!all_output_samples_produced)
+      {
+        processed_in = resample(in, processed_in_sum, out, produced_out_sum, (noutput_items-produced_out_sum));
+        processed_in_sum = processed_in_sum + processed_in;
+      }
+      
       consume_each(processed_in_sum);
       return noutput_items;
     }

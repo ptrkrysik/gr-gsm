@@ -38,6 +38,7 @@
 #include "grgsm/misc_utils/message_file_sink.h"
 #include "grgsm/misc_utils/message_file_source.h"
 #include "grgsm/msg_to_tag.h"
+#include "grgsm/controlled_fractional_resampler_cc.h"
 %}
 
 %include "grgsm/receiver/receiver.h"
@@ -105,5 +106,6 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 %include "grgsm/msg_to_tag.h"
-GR_SWIG_BLOCK_MAGIC2(grgsm, msg_to_tag);
+GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
+%include "grgsm/controlled_fractional_resampler_cc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);

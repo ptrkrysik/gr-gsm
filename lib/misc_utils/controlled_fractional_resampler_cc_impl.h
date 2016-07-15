@@ -38,7 +38,7 @@ namespace gr {
       float d_mu;
       float d_mu_inc;
       mmse_fir_interpolator_cc *d_resamp;
-
+      
       inline uint64_t resample(const gr_complex *in, 
            uint64_t first_in_sample, 
            gr_complex *out, 

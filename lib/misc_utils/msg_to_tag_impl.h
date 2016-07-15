@@ -26,16 +26,17 @@
 #include <grgsm/msg_to_tag.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     class msg_to_tag_impl : public msg_to_tag
     {
      private:
-      // Nothing to declare in this block.
+        std::deque<pmt::pmt_t> d_msg_queue;
 
      public:
       msg_to_tag_impl();
       ~msg_to_tag_impl();
+      void queue_msg(pmt::pmt_t msg);
 
       // Where all the action really happens
       int work(int noutput_items,

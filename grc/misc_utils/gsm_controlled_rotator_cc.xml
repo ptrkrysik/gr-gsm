@@ -27,6 +27,7 @@
   <sink>
     <name>phase_inc</name>
     <type>float</type>
+    <optional>1</optional>
   </sink>
   
   <source>

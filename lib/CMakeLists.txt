@@ -31,9 +31,6 @@ list(APPEND grgsm_sources
     receiver/sch.c
     receiver/clock_offset_control_impl.cc
     receiver/cx_channel_hopper_impl.cc
-    misc_utils/bursts_printer_impl.cc
-    misc_utils/extract_system_info_impl.cc
-    misc_utils/extract_immediate_assignment_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
     demapping/tch_f_chans_demapper_impl.cc
     decoding/control_channels_decoder_impl.cc
@@ -54,18 +51,22 @@ list(APPEND grgsm_sources
     flow_control/dummy_burst_filter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_const_source_f_impl.cc
+    misc_utils/controlled_fractional_resampler_cc_impl.cc
+    misc_utils/msg_to_tag_impl.cc
     misc_utils/message_printer_impl.cc
     misc_utils/tmsi_dumper_impl.cc
     misc_utils/burst_file_sink_impl.cc
     misc_utils/burst_file_source_impl.cc
     misc_utils/message_file_sink_impl.cc
-    misc_utils/message_file_source_impl.cc   
+    misc_utils/message_file_source_impl.cc
+    misc_utils/bursts_printer_impl.cc
+    misc_utils/extract_system_info_impl.cc
+    misc_utils/extract_immediate_assignment_impl.cc
     qa_utils/burst_sink_impl.cc
     qa_utils/burst_source_impl.cc
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
-    msg_to_tag_impl.cc
 )
 
 
