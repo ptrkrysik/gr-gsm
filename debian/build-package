@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION=0.36
+VERSION=0.40
 
 cd ../..
 
@@ -8,4 +8,4 @@ cd gr-gsm
 debuild -S -sa
 #pdebuild
 cd ..
-#dput ppa:ptrkrysik/gr-gsm gr-gsm_${VERSION}-0ppa0_source.changes
+dput ppa:ptrkrysik/gr-gsm gr-gsm_${VERSION}-0ppa0_source.changes

@@ -19,6 +19,5 @@ Vcs-Browser: https://github.com/ptrkrysik/gr-gsm/
 Package: gr-gsm
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
+Depends: gnuradio, gr-osmosdr, ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
 Description: Gnuradio blocks and tools for receiving GSM transmissions
-
