@@ -41,7 +41,8 @@ GR_PYTHON_INSTALL(
     receiver/fcch_detector.py
     receiver/chirpz.py
     misc_utils/arfcn.py
-    misc_utils/clock_offset_corrector.py 
+    misc_utils/clock_offset_corrector.py
+    misc_utils/clock_offset_corrector_tagged.py
     misc_utils/hier_block.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )
 
@@ -63,3 +64,4 @@ GR_ADD_TEST(qa_burst_fnr_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}
 GR_ADD_TEST(qa_dummy_burst_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_dummy_burst_filter.py)
 GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
 GR_ADD_TEST(qa_msg_to_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_tag.py)
+GR_ADD_TEST(qa_controlled_fractional_resampler_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_controlled_fractional_resampler_cc.py)

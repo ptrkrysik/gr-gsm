@@ -3,12 +3,19 @@
   <name>GSM Clock Offset Control</name>
   <key>gsm_clock_offset_control</key>
   <import>import grgsm</import>
-  <make>grgsm.clock_offset_control($fc)</make>
+  <make>grgsm.clock_offset_control($fc, $samp_rate)</make>
   <callback></callback>
   <param>
     <name>fc</name>
     <key>fc</key>
     <value>fc</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>samp_rate</name>
+    <key>samp_rate</key>
+    <value>samp_rate</value>
     <type>float</type>
   </param>
 
@@ -18,7 +25,7 @@
   </sink>
 
   <source>
-    <name>ppm</name>
+    <name>ctrl</name>
     <type>message</type>
     <optional>1</optional>
   </source>
