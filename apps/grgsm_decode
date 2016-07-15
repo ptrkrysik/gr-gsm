@@ -74,7 +74,7 @@ class grgsm_decoder(gr.top_block):
             self.receiver = grgsm.receiver(4, ([0]), ([]))
             if self.fc is not None:
                 self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, fc=self.fc, samp_rate_in=samp_rate)
-                self.offset_control = grgsm.clock_offset_control(self.fc)
+                self.offset_control = grgsm.clock_offset_control(self.fc, self.samp_rate)
             else:
                 self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, samp_rate_in=samp_rate)
 
