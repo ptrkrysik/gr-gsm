@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>TCH/F chans demapper</name>
+  <name>TCH/F Demapper</name>
   <key>gsm_tch_f_chans_demapper</key>
   <import>import grgsm</import>
   <make>grgsm.tch_f_chans_demapper($timeslot_nr)</make>

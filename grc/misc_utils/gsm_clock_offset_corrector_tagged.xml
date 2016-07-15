@@ -1,0 +1,50 @@
+<block>
+  <name>Clock Offset Corrector Tagged</name>
+  <key>gsm_clock_offset_corrector_tagged</key>
+  <import>from clock_offset_corrector_tagged import clock_offset_corrector_tagged  # grc-generated hier_block</import>
+  <make>grgsm.clock_offset_corrector_tagged(
+    fc=$fc,
+    ppm=$ppm,
+    samp_rate_in=$samp_rate_in,
+)</make>
+  <callback>set_fc($fc)</callback>
+  <callback>set_ppm($ppm)</callback>
+  <callback>set_samp_rate_in($samp_rate_in)</callback>
+  <param>
+    <name>fc</name>
+    <key>fc</key>
+    <value>fc</value>
+    <type>float</type>
+  </param>
+  <param>
+    <name>ppm</name>
+    <key>ppm</key>
+    <value>ppm</value>
+    <type>float</type>
+  </param>
+  <param>
+    <name>samp_rate_in</name>
+    <key>samp_rate_in</key>
+    <value>samp_rate_in</value>
+    <type>float</type>
+  </param>
+  <sink>
+    <name>ctrl</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>complex</type>
+    <vlen>1</vlen>
+  </source>
+  <doc>Piotr Krysik
+Clock offset corrector with blocks that use tags to switch offsets
+</doc>
+  <grc_source>gr-gsm/hier_blocks/misc_utils/gsm_clock_offset_corrector_tagged.grc</grc_source>
+</block>

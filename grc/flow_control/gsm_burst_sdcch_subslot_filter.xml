@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst SDCCH subslot filter</name>
+  <name>Burst SDCCH Subslot Filter</name>
   <key>gsm_burst_sdcch_subslot_filter</key>
   <import>import grgsm</import>
   <make>grgsm.burst_sdcch_subslot_filter($mode, $subslot)</make>

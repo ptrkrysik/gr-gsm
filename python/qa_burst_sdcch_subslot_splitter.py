@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr, gr_unittest, blocks
-import grgsm
+import grgsm_swig as grgsm
 import pmt
 
 class qa_burst_sdcch_subslot_splitter (gr_unittest.TestCase):

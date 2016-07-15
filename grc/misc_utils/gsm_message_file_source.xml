@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Message file source</name>
+  <name>Message File Source</name>
   <key>gsm_message_file_source</key>
   <import>import grgsm</import>
   <make>grgsm.message_file_source($filename)</make>

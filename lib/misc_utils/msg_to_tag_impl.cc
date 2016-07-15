@@ -25,11 +25,10 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-//#include <gnuradio/msg_queue.h>
 #include "msg_to_tag_impl.h"
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     msg_to_tag::sptr
     msg_to_tag::make()
@@ -38,9 +37,16 @@ namespace gr {
         (new msg_to_tag_impl());
     }
 
-//    void msg_to_tag_impl::queue_msg(pmt::pmt_t msg){
-//        
-//    }
+    void msg_to_tag_impl::queue_msg(pmt::pmt_t msg){
+      if(pmt::is_dict(msg)){
+        try {
+          pmt::pmt_t keys = pmt::dict_keys(msg);
+        } catch (const pmt::wrong_type &e) {
+          msg = pmt::dict_add(pmt::make_dict(), pmt::car(msg), pmt::cdr(msg));
+        }
+      }
+      d_msg_queue.push_back(msg);
+    }
 
     /*
      * The private constructor
@@ -48,10 +54,10 @@ namespace gr {
     msg_to_tag_impl::msg_to_tag_impl()
       : gr::sync_block("msg_to_tag",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
-              gr::io_signature::make(1, 1, sizeof(gr_complex)))
+              gr::io_signature::make(1, 1, sizeof(gr_complex)))              
     {
-        message_port_register_in(pmt::mp("msg"));
-//        set_msg_handler(pmt::mp("msg"), boost::bind(&msg_to_tag::queue_msg, this, _1));
+      message_port_register_in(pmt::mp("msg"));
+      set_msg_handler(pmt::mp("msg"), boost::bind(&msg_to_tag_impl::queue_msg, this, _1));
     }
 
     /*
@@ -66,11 +72,24 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-      const gr_complex *in = (const gr_complex *) input_items[0];
-      gr_complex *out = (gr_complex *) output_items[0];
+      while(!d_msg_queue.empty()){
+        pmt::pmt_t msg(d_msg_queue.front());
+        d_msg_queue.pop_front();
+        if(pmt::is_dict(msg)){
+          pmt::pmt_t klist(pmt::dict_keys(msg));
+          for (size_t i = 0; i < pmt::length(klist); i++) {
+            pmt::pmt_t k(pmt::nth(i, klist));
+            pmt::pmt_t v(pmt::dict_ref(msg, k, pmt::PMT_NIL));
+            add_item_tag(0, nitems_written(0), k, v, alias_pmt());
+          }
+        } else if(pmt::is_number(msg)) {
+          add_item_tag(0, nitems_written(0), pmt::intern(""), msg, alias_pmt());
+        } else if(pmt::is_symbol(msg)) {
+          add_item_tag(0, nitems_written(0), msg, pmt::intern(""), alias_pmt());
+        }        
+      }
 
-      // Do <+signal processing+>
-      memcpy(out, in, sizeof(gr_complex)*noutput_items);
+      memcpy(output_items[0], input_items[0], sizeof(gr_complex)*noutput_items);
       // Tell runtime system how many output items we produced.
       return noutput_items;
     }

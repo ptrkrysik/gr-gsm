@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>FCCH burst tagger</name>
+  <name>FCCH Burst Tagger</name>
   <key>gsm_fcch_burst_tagger</key>
   <import>import grgsm</import>
   <make>grgsm.fcch_burst_tagger($OSR)</make>

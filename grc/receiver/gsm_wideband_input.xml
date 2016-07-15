@@ -1,5 +1,5 @@
 <block>
-  <name>GSM wideband input adaptor</name>
+  <name>GSM Wideband Input Adaptor</name>
   <key>gsm_wideband_input</key>
   <category></category>
   <import>import grgsm</import>

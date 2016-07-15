@@ -33,17 +33,17 @@ namespace gr
 namespace gsm
 {
 clock_offset_control::sptr
-clock_offset_control::make(float fc)
+clock_offset_control::make(float fc, float samp_rate)
 {
     return gnuradio::get_initial_sptr
-           (new clock_offset_control_impl(fc));
+           (new clock_offset_control_impl(fc, samp_rate));
 }
 
 
 /*
  * The private constructor
  */
-clock_offset_control_impl::clock_offset_control_impl(float fc)
+clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate)
     : gr::block("clock_offset_control",
                 gr::io_signature::make(0, 0, 0),
                 gr::io_signature::make(0, 0, 0))
@@ -51,9 +51,10 @@ clock_offset_control_impl::clock_offset_control_impl(float fc)
 {
     message_port_register_in(pmt::mp("measurements"));
     set_msg_handler(pmt::mp("measurements"), boost::bind(&clock_offset_control_impl::process_measurement, this, _1));    
-    message_port_register_out(pmt::mp("ppm"));
+    message_port_register_out(pmt::mp("ctrl"));
     
     set_fc(fc);
+    set_samp_rate(samp_rate);
     d_alfa = 0.3;
     d_ppm_estimate = -1e6;
     d_last_ppm_estimate = -1e6;    
@@ -75,6 +76,11 @@ clock_offset_control_impl::~clock_offset_control_impl()
 void clock_offset_control_impl::set_fc(float fc)
 {
     d_fc = fc;
+}
+
+void clock_offset_control_impl::set_samp_rate(float samp_rate)
+{
+    d_samp_rate = samp_rate;
 }
 
 void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
@@ -103,65 +109,75 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
             float ppm = -freq_offset/d_fc*1.0e6;
             std::string state = pmt::symbol_to_string(pmt::tuple_ref(msg,2));
             d_last_state = state;
-            if(std::abs(ppm) > 100.0) //safeguard against flawed measurements
+            if(std::abs(ppm) < 100.0) //safeguard against flawed measurements
             {
-                ppm=0;
-                reset();
-            }
 
-            if(state == "fcch_search")
-            {
-                pmt::pmt_t msg_ppm = pmt::from_double(ppm);
-                message_port_pub(pmt::intern("ppm"), msg_ppm);
-                d_last_fcch_time = d_current_time;
-            } 
-            else 
-            if (state == "synchronized")
-            {
-                d_last_fcch_time = d_current_time;
-                if(d_first_measurement)
+                if(state == "fcch_search")
                 {
-                    d_ppm_estimate = ppm;
-                    d_first_measurement = false; 
-                }
-                else
+                    send_ctrl_messages(ppm);
+                    d_last_fcch_time = d_current_time;
+                } 
+                else 
+                if (state == "synchronized")
                 {
-                    d_ppm_estimate = (1-d_alfa)*d_ppm_estimate+d_alfa*ppm;
-                }
-                
-                if(d_counter == 5)
-                {
-                    d_counter = 0;
-                    if(std::abs(d_last_ppm_estimate-d_ppm_estimate) > 0.1)
+                    d_last_fcch_time = d_current_time;
+                    if(d_first_measurement)
                     {
-                        pmt::pmt_t msg_ppm = pmt::from_double(ppm);
-                        message_port_pub(pmt::intern("ppm"), msg_ppm);
-                        d_last_ppm_estimate = d_ppm_estimate;
+                        d_ppm_estimate = ppm;
+                        d_first_measurement = false; 
+                    }
+                    else
+                    {
+                        d_ppm_estimate = (1-d_alfa)*d_ppm_estimate+d_alfa*ppm;
+                    }
+                    
+                    if(d_counter == 5)
+                    {
+                        d_counter = 0;
+                        if(std::abs(d_last_ppm_estimate-d_ppm_estimate) > 0.1)
+                        {
+//                            pmt::pmt_t msg_ppm = pmt::from_double(ppm);
+//                            message_port_pub(pmt::intern("ppm"), msg_ppm);
+                            send_ctrl_messages(ppm);
+                            d_last_ppm_estimate = d_ppm_estimate;
+                        }
+                    }
+                    else
+                    {
+                        d_counter=d_counter+1;
                     }
                 }
                 else
+                if(state == "sync_loss")
                 {
-                    d_counter=d_counter+1;
+                    reset();
+//                    pmt::pmt_t msg_ppm = pmt::from_double(0.0);
+//                    message_port_pub(pmt::intern("ppm"), msg_ppm);
+                    send_ctrl_messages(0);
                 }
-            } 
-            else
-            if(state == "sync_loss")
-            {
-                reset();
-                pmt::pmt_t msg_ppm = pmt::from_double(0.0);
-                message_port_pub(pmt::intern("ppm"), msg_ppm);
-            }            
+            }
         }
     }
+}
+
+void clock_offset_control_impl::send_ctrl_messages(float ppm)
+{
+//    pmt::pmt_t msg_ppm = pmt::from_double(ppm);
+//    message_port_pub(pmt::intern("ctrl"), msg_ppm);
+//    d_last_fcch_time = d_current_time;
+
+    pmt::pmt_t msg_set_phase_inc = pmt::cons(pmt::intern("set_phase_inc"), pmt::from_double(2*M_PI*d_fc/d_samp_rate*ppm/1.0e6));
+    message_port_pub(pmt::intern("ctrl"), msg_set_phase_inc);
+
+    pmt::pmt_t msg_set_resamp_ratio = pmt::cons(pmt::intern("set_resamp_ratio"), pmt::from_double(1+ppm/1.0e6));
+    message_port_pub(pmt::intern("ctrl"), msg_set_resamp_ratio);
 }
 
 void clock_offset_control_impl::timed_reset()
 {
     reset();
-    pmt::pmt_t msg_ppm = pmt::from_double(0.0);
-    message_port_pub(pmt::intern("ppm"), msg_ppm);
+    send_ctrl_messages(0);
 }
-
 
 void clock_offset_control_impl::reset()
 {

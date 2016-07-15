@@ -28,7 +28,7 @@
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     /*!
      * \brief <+description of block+>
@@ -39,7 +39,6 @@ namespace gr {
     {
      public:
       typedef boost::shared_ptr<msg_to_tag> sptr;
-
       /*!
        * \brief Return a shared_ptr to a new instance of grgsm::msg_to_tag.
        *

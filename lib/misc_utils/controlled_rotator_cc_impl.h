@@ -42,6 +42,7 @@ namespace gr {
 
       virtual void set_phase_inc(double phase_inc);
       virtual void set_samp_rate(double samp_rate);
+
       // Where all the action really happens
       int work(int noutput_items,
 	       gr_vector_const_void_star &input_items,

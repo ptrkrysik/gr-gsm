@@ -38,11 +38,11 @@ class gsm_input(grgsm.hier_block):
         ##################################################
         # Blocks
         ##################################################
-        self.message_port_register_hier_in("ppm_in")
+        self.message_port_register_hier_in("ctrl_in")
 
         self.low_pass_filter_0_0 = filter.fir_filter_ccf(1, firdes.low_pass(
         	1, samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
-        self.gsm_clock_offset_corrector_0 = grgsm.clock_offset_corrector(
+        self.gsm_clock_offset_corrector_tagged_0 = grgsm.clock_offset_corrector_tagged(
             fc=fc,
             ppm=ppm,
             samp_rate_in=samp_rate_in,
@@ -54,21 +54,17 @@ class gsm_input(grgsm.hier_block):
         ##################################################
         self.connect((self.low_pass_filter_0_0, 0), (self, 0))
         self.connect((self.fractional_resampler_xx_0, 0), (self.low_pass_filter_0_0, 0))
-        self.connect((self.gsm_clock_offset_corrector_0, 0), (self.fractional_resampler_xx_0, 0))
-        self.connect((self, 0), (self.gsm_clock_offset_corrector_0, 0))
+        self.connect((self.gsm_clock_offset_corrector_tagged_0, 0), (self.fractional_resampler_xx_0, 0))
+        self.connect((self, 0), (self.gsm_clock_offset_corrector_tagged_0, 0))
 
         ##################################################
         # Asynch Message Connections
         ##################################################
-        self.msg_connect(self, "ppm_in", self.gsm_clock_offset_corrector_0, "ppm_in")
+        self.msg_connect((self, 'ctrl_in'), (self.gsm_clock_offset_corrector_tagged_0, 'ctrl'))
 
-
-    def get_ppm(self):
-        return self.ppm
-
-    def set_ppm(self, ppm):
-        self.ppm = ppm
-        self.gsm_clock_offset_corrector_0.set_ppm(self.ppm)
+    def set_fc(self, fc):
+        self.fc = fc
+        self.gsm_clock_offset_corrector_tagged_0.set_fc(self.fc)
 
     def get_osr(self):
         return self.osr
@@ -77,26 +73,25 @@ class gsm_input(grgsm.hier_block):
         self.osr = osr
         self.set_samp_rate_out(1625000.0/6.0*self.osr)
 
-    def get_fc(self):
-        return self.fc
+    def get_ppm(self):
+        return self.ppm
 
-    def set_fc(self, fc):
-        self.fc = fc
-        self.gsm_clock_offset_corrector_0.set_fc(self.fc)
+    def set_ppm(self, ppm):
+        self.ppm = ppm
+        self.gsm_clock_offset_corrector_tagged_0.set_ppm(self.ppm)
 
     def get_samp_rate_in(self):
         return self.samp_rate_in
 
     def set_samp_rate_in(self, samp_rate_in):
         self.samp_rate_in = samp_rate_in
+        self.gsm_clock_offset_corrector_tagged_0.set_samp_rate_in(self.samp_rate_in)
         self.fractional_resampler_xx_0.set_resamp_ratio(self.samp_rate_in/self.samp_rate_out)
-        self.gsm_clock_offset_corrector_0.set_samp_rate_in(self.samp_rate_in)
 
     def get_samp_rate_out(self):
         return self.samp_rate_out
 
     def set_samp_rate_out(self, samp_rate_out):
         self.samp_rate_out = samp_rate_out
-        self.low_pass_filter_0_0.set_taps(firdes.low_pass(1, self.samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
         self.fractional_resampler_xx_0.set_resamp_ratio(self.samp_rate_in/self.samp_rate_out)
-
+        self.low_pass_filter_0_0.set_taps(firdes.low_pass(1, self.samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))

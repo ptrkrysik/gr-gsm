@@ -35,16 +35,16 @@ namespace gr {
   namespace gsm {
 
     tch_f_decoder::sptr
-    tch_f_decoder::make(tch_mode mode, const std::string &file, bool boundary_check)
+    tch_f_decoder::make(tch_mode mode, bool boundary_check)
     {
       return gnuradio::get_initial_sptr
-        (new tch_f_decoder_impl(mode, file, boundary_check));
+        (new tch_f_decoder_impl(mode, boundary_check));
     }
 
     /*
      * Constructor
      */
-    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, const std::string &file, bool boundary_check)
+    tch_f_decoder_impl::tch_f_decoder_impl(tch_mode mode, bool boundary_check)
       : gr::block("tch_f_decoder",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
@@ -52,6 +52,7 @@ namespace gr {
       d_collected_bursts_num(0),
       d_boundary_check(boundary_check),
       d_boundary_decode(!boundary_check),
+      d_header_sent(false),
       mBlockCoder(0x10004820009ULL, 40, 224),
       mU(228),
       mP(mU.segment(184,40)),
@@ -65,18 +66,11 @@ namespace gr {
       mClass1A_d(mTCHD.head(50)),
       mTCHParity(0x0b, 3, 50)
     {
-        d_speech_file = fopen( file.c_str(), "wb" );
-        if (d_speech_file == NULL)
-        {
-            throw std::runtime_error("TCH/F Decoder: can't open file\n");
-        }
-
-        const unsigned char amr_nb_magic[6] = { 0x23, 0x21, 0x41, 0x4d, 0x52, 0x0a };
-
-        if (d_tch_mode != TCH_FS)
-        {
-            fwrite(amr_nb_magic, 1, 6, d_speech_file);
-        }
+        //setup input/output ports
+        message_port_register_in(pmt::mp("bursts"));
+        set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_f_decoder_impl::decode, this, _1));
+        message_port_register_out(pmt::mp("msgs"));
+        message_port_register_out(pmt::mp("voice"));    
 
         int j, k, B;
         for (k = 0; k < CONV_SIZE; k++)
@@ -85,11 +79,6 @@ namespace gr {
             j = 2 * ((49 * k) % 57) + ((k % 8) / 4);
             interleave_trans[k] = B * 114 + j;
         }
-
-        //setup input/output ports
-        message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_f_decoder_impl::decode, this, _1));
-        message_port_register_out(pmt::mp("msgs"));
 
         setCodingMode(mode);
     }
@@ -100,9 +89,20 @@ namespace gr {
 
     void tch_f_decoder_impl::decode(pmt::pmt_t msg)
     {
+        if(!d_header_sent)
+        {
+            if (d_tch_mode != TCH_FS)
+            {
+                const unsigned char amr_nb_magic[7] = "#!AMR\n";
+                message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(amr_nb_magic,6)));
+            }
+            d_header_sent = true;
+        }
+
+
         d_bursts[d_collected_bursts_num] = msg;
         d_collected_bursts_num++;
-
+        
         bool stolen = false;
 
         if (d_collected_bursts_num == 8)
@@ -249,7 +249,7 @@ namespace gr {
                 return;
             }
 
-            // Decode voice frames and write to file
+            // Decode voice frames and send to the output
             if (d_tch_mode == TCH_FS || d_tch_mode == TCH_EFR)
             {
                 mVR204Coder.decode(mClass1_c, mTCHU);
@@ -329,7 +329,7 @@ namespace gr {
                         amrFrame.pack(frameBuffer);
 
                     }
-                    fwrite(frameBuffer, 1 , mTCHFrameLength, d_speech_file);
+                    message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(frameBuffer,mTCHFrameLength)));
                 }
             }
             else
@@ -378,7 +378,7 @@ namespace gr {
                     // mTCHD.unmap(mAMRBitOrder, payload.size(), payload);
                     mTCHD.copyTo(payload);
                     amrFrame.pack(frameBuffer);
-                    fwrite(frameBuffer, 1 , mAMRFrameLth, d_speech_file);
+                    message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(frameBuffer,mAMRFrameLth)));
                 }
             }
         }

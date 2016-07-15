@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr, gr_unittest, blocks
-import grgsm
+import grgsm_swig as grgsm
 
 class qa_burst_sdcch_subslot_filter (gr_unittest.TestCase):
     # 102 random bursts as test input

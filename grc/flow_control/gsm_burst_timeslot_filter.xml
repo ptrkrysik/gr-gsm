@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst timeslot filter</name>
+  <name>Burst Timeslot Filter</name>
   <key>gsm_burst_timeslot_filter</key>
   <import>import grgsm</import>
   <make>grgsm.burst_timeslot_filter($timeslot)</make>

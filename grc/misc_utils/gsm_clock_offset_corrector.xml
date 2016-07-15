@@ -1,5 +1,5 @@
 <block>
-  <name>Clock offset corrector</name>
+  <name>Clock Offset Corrector</name>
   <key>gsm_clock_offset_corrector</key>
   <import>import grgsm</import>
   <make>grgsm.clock_offset_corrector(

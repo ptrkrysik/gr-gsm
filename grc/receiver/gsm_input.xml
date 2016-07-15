@@ -1,5 +1,5 @@
 <block>
-  <name>GSM input adaptor</name>
+  <name>GSM Input Adaptor</name>
   <key>gsm_input</key>
   <category></category>
   <import>import grgsm</import>
@@ -47,7 +47,7 @@
     <vlen>1</vlen>
   </sink>
   <sink>
-    <name>ppm_in</name>
+    <name>ctrl_in</name>
     <type>message</type>
     <optional>True</optional>
   </sink>

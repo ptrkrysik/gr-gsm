@@ -74,10 +74,8 @@ namespace gr {
     controlled_rotator_cc_impl::work(int noutput_items,
 			  gr_vector_const_void_star &input_items,
 			  gr_vector_void_star &output_items)
-    {
-      const gr_complex *in = (const gr_complex *)input_items[0];
-      gr_complex *out = (gr_complex *)output_items[0];
-
+		{
+		  //process phase_inc input
       if(input_items.size() == 2) {
         int ii=0;
         const float *pp = (const float *)input_items[1];
@@ -101,10 +99,38 @@ namespace gr {
           ii++;
         }
       }
-      d_r.rotateN(out, const_cast<gr_complex *>(in), noutput_items); //const_cast<gr_complex *> is workaround old implementation of rotateN that is still present in ubuntu 14.04 packages
-      return noutput_items;
-    }
+      		
+      //get complex input and output
+      const gr_complex *in = (const gr_complex *)input_items[0];
+      gr_complex *out = (gr_complex *)output_items[0];
+		  //get tags
 
+      uint64_t processed_in = 0;
+      uint64_t produced_out = 0;
+
+      std::vector<tag_t> set_phase_inc_tags;
+
+      pmt::pmt_t key = pmt::string_to_symbol("set_phase_inc");
+      get_tags_in_window(set_phase_inc_tags, 0, 0, noutput_items, key);
+      
+      for(std::vector<tag_t>::iterator i_tag = set_phase_inc_tags.begin(); i_tag < set_phase_inc_tags.end(); i_tag++){
+        uint64_t tag_offset_rel = i_tag->offset-nitems_read(0);
+        set_phase_inc(pmt::to_double(i_tag->value));
+        uint64_t samples_to_process = tag_offset_rel-processed_in;
+        d_r.rotateN((out+produced_out), const_cast<gr_complex *>(in+processed_in), samples_to_process);
+        processed_in = processed_in + samples_to_process;
+        produced_out = produced_out + samples_to_process;
+//        std::cout << "Rotator, phase inc: " << pmt::to_double(i_tag->value) << std::endl;
+        
+        float freq_offset_setting = (pmt::to_double(i_tag->value) / (2*M_PI)) * d_samp_rate; //send stream tag with a new value of the frequency offset
+        pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
+        pmt::pmt_t value =  pmt::from_double(freq_offset_setting);
+        add_item_tag(0,i_tag->offset, key, value);
+      }
+      
+      d_r.rotateN((out+produced_out), const_cast<gr_complex *>(in+processed_in), (noutput_items-produced_out)); //const_cast<gr_complex *> is workaround old implementation of rotateN that is still present in ubuntu 14.04 packages
+      return noutput_items;
+		}
   } /* namespace gsm */
 } /* namespace gr */
 

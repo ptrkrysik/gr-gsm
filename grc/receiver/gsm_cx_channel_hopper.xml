@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>CX channel hopper</name>
+  <name>CX Channel Hopper</name>
   <key>gsm_cx_channel_hopper</key>
   <import>import grgsm</import>
   <make>grgsm.cx_channel_hopper($ma, $maio, $hsn)</make>

@@ -1,5 +1,5 @@
 <block>
-  <name>SDCCH/8 demapper</name>
+  <name>SDCCH/8 Demapper</name>
   <key>gsm_sdcch8_demapper</key>
   <category></category>
   <import>import grgsm</import>

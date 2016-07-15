@@ -72,6 +72,8 @@ if(SWIG_FOUND)
     if("${SWIG_VERSION}" VERSION_GREATER "1.3.30")
         set(SWIG_VERSION_CHECK TRUE)
     endif()
+else()
+    message(FATAL_ERROR "SWIG required to compile gr-gsm")
 endif(SWIG_FOUND)
 
 
@@ -99,7 +101,7 @@ set(GRC_BLOCKS_DIR      ${GR_PKG_DATA_DIR}/grc/blocks)
 ########################################################################
 # Find gnuradio build dependencies
 ########################################################################
-set(GR_REQUIRED_COMPONENTS RUNTIME PMT)
+set(GR_REQUIRED_COMPONENTS RUNTIME FILTER PMT)
 find_package(Gnuradio)
 find_package(Volk)
 find_package(CppUnit)
@@ -138,14 +140,14 @@ include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
-    ${GNURADIO_RUNTIME_INCLUDE_DIRS}
+    ${GNURADIO_ALL_INCLUDE_DIRS}
     ${LIBOSMOCORE_INCLUDE_DIR}
 )
 
 link_directories(
     ${Boost_LIBRARY_DIRS}
     ${CPPUNIT_LIBRARY_DIRS}
-    ${GNURADIO_RUNTIME_LIBRARY_DIRS}
+    ${GNURADIO_ALL_LIBRARY_DIRS}
 )
 
 # Set component parameters

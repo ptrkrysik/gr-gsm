@@ -1,8 +1,11 @@
 #!/bin/bash
+VERSION=0.40
+
 cd ../..
 
-tar -acf gr-gsm_0.3.orig.tar.gz gr-gsm
+tar -acf gr-gsm_${VERSION}.orig.tar.gz gr-gsm
 cd gr-gsm
 debuild -S -sa
+#pdebuild
 cd ..
-dput ppa:ptrkrysik/gr-gsm gr-gsm_0.3-0ppa0_source.changes
+dput ppa:ptrkrysik/gr-gsm gr-gsm_${VERSION}-0ppa0_source.changes

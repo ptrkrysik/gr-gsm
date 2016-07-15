@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Message file sink</name>
+  <name>Message File Sink</name>
   <key>gsm_message_file_sink</key>
   <import>import grgsm</import>
   <make>grgsm.message_file_sink($filename)</make>

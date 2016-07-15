@@ -76,7 +76,7 @@ class receiver_with_decoder(grgsm.hier_block):
             samp_rate_in=samp_rate,
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc)
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc, samp_rate)
         self.gsm_bcch_ccch_demapper_0 = grgsm.gsm_bcch_ccch_demapper(0)
 
         ##################################################
@@ -84,7 +84,7 @@ class receiver_with_decoder(grgsm.hier_block):
         ##################################################
         self.msg_connect(self.gsm_bcch_ccch_demapper_0, 'bursts', self, 'bursts')
         self.msg_connect(self.gsm_bcch_ccch_demapper_0, 'bursts', self.gsm_control_channels_decoder_0, 'bursts')
-        self.msg_connect(self.gsm_clock_offset_control_0, 'ppm', self.gsm_input_0, 'ppm_in')
+        self.msg_connect(self.gsm_clock_offset_control_0, 'ctrl', self.gsm_input_0, 'ctrl_in')
         self.msg_connect(self.gsm_control_channels_decoder_0, 'msgs', self, 'msgs')
         self.msg_connect(self.gsm_receiver_0, 'C0', self.gsm_bcch_ccch_demapper_0, 'bursts')
         self.msg_connect(self.gsm_receiver_0, 'measurements', self.gsm_clock_offset_control_0, 'measurements')

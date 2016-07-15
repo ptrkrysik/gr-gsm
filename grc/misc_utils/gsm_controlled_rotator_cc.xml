@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Controlled rotator</name>
+  <name>Controlled Rotator</name>
   <key>gsm_controlled_rotator_cc</key>
   <import>import grgsm</import>
   <make>grgsm.controlled_rotator_cc($phase_inc,$samp_rate)</make>
@@ -27,6 +27,7 @@
   <sink>
     <name>phase_inc</name>
     <type>float</type>
+    <optional>1</optional>
   </sink>
   
   <source>

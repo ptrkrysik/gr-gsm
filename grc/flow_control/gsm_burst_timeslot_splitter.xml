@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>Burst timeslot splitter</name>
+  <name>Burst Timeslot Splitter</name>
   <key>gsm_burst_timeslot_splitter</key>
   <import>import grgsm</import>
   <make>grgsm.burst_timeslot_splitter()</make>
