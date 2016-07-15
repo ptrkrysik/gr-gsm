@@ -143,7 +143,9 @@ namespace gr {
         gsmtap_hdr *header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
 
         uint32_t frame_nr = be32toh(header->frame_number);
-        uint16_t frame_ca = be16toh(header->arfcn);
+        uint16_t frame_ca = be16toh(header->arfcn) & 0x3FFF;    //change highest bits to '0'
+                                                                //in order to leave only ARFCN number
+
         int mai = calculate_ma_sfh(d_maio, d_hsn, d_narfcn, frame_nr);
 
         if(d_ma[mai] == (int)frame_ca) {

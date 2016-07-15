@@ -6,3 +6,5 @@ build
 *.pyo
 .unittests
 build/
+debian/tmp/
+debian/files

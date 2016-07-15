@@ -62,7 +62,7 @@ namespace gr {
        * class. gsm::tch_f_decoder::make is the public interface for
        * creating new instances.
        */
-      static sptr make(tch_mode mode, const std::string &file, bool boundary_check=true);
+      static sptr make(tch_mode mode, bool boundary_check=false);
 
     };
 

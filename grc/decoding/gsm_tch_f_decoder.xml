@@ -3,7 +3,7 @@
   <name>TCH/F decoder</name>
   <key>gsm_tch_f_decoder</key>
   <import>import grgsm</import>
-  <make>grgsm.tch_f_decoder($mode, $file, $boundary_check)</make>
+  <make>grgsm.tch_f_decoder($mode, $boundary_check)</make>
 
   <param>
     <name>TCH coding mode</name>
@@ -51,15 +51,9 @@
     </option>
   </param>
   <param>
-    <name>destination file</name>
-    <key>file</key>
-    <value>/tmp/speech.gsm</value>
-    <type>file_open</type>
-  </param>
-  <param>
     <name>Voice boundary detection</name>
     <key>boundary_check</key>
-    <value>True</value>
+    <value>False</value>
     <type>bool</type>
     <option>
       <name>False</name>
@@ -80,7 +74,12 @@
     <type>message</type>
     <optional>1</optional>
   </source>
-  
+  <source>
+    <name>voice</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+    
   <doc>
 If "Voice boundary detection" is enabled, then only bursts are decoded as voice where
 

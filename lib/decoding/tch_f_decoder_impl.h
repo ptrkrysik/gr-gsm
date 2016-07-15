@@ -52,10 +52,10 @@ namespace gr {
                 unsigned int d_collected_bursts_num;
                 unsigned short interleave_trans[CONV_SIZE];
                 pmt::pmt_t d_bursts[8];
-                FILE * d_speech_file;
                 enum tch_mode d_tch_mode;
                 bool d_boundary_check;
                 bool d_boundary_decode;
+                bool d_header_sent;
 
                 BitVector mU;
                 BitVector mP;
@@ -89,7 +89,7 @@ namespace gr {
                 void decode(pmt::pmt_t msg);
                 void setCodingMode(tch_mode mode);
             public:
-                tch_f_decoder_impl(tch_mode mode, const std::string &file, bool boundary_check=true);
+                tch_f_decoder_impl(tch_mode mode, bool boundary_check=false);
                 ~tch_f_decoder_impl();
         };
 
