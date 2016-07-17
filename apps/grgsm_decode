@@ -363,10 +363,6 @@ if __name__ == '__main__':
                     arfcn = grgsm.arfcn.downlink2arfcn(options.fc, band)
                     break
 
-    # open udp port 4729 to avoid icmp messages
-    #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #sock.bind(("localhost", 4729))
-
     # instanciate decoder
     tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
                           burst_file=options.burst_file,
@@ -374,11 +370,9 @@ if __name__ == '__main__':
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
                           verbose=options.verbose,
-                          print_bursts=options.print_bursts)
+                          print_bursts=options.print_bursts, ppm=options.ppm)
 
     # run
     tb.start()
     tb.wait()
 
-    # we are done, close socket
-    #sock.close()
