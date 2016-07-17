@@ -36,11 +36,11 @@ class grgsm_decoder(gr.top_block):
 
     def __init__(self, timeslot=0, subslot=None, chan_mode='BCCH',
                  burst_file=None,
-                 cfile=None, fc=939.4e6, samp_rate=2e6, 
+                 cfile=None, fc=None, samp_rate=2e6, 
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
                  verbose=False,
-                 print_bursts=False):
+                 print_bursts=False, ppm=0):
 
         gr.top_block.__init__(self, "Gr-gsm Decode")
 
@@ -73,10 +73,10 @@ class grgsm_decoder(gr.top_block):
             self.file_source = blocks.file_source(gr.sizeof_gr_complex*1, self.cfile, False)
             self.receiver = grgsm.receiver(4, ([0]), ([]))
             if self.fc is not None:
-                self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, fc=self.fc, samp_rate_in=samp_rate)
+                self.input_adapter = grgsm.gsm_input(ppm=ppm, osr=4, fc=self.fc, samp_rate_in=samp_rate)
                 self.offset_control = grgsm.clock_offset_control(self.fc, self.samp_rate)
             else:
-                self.input_adapter = grgsm.gsm_input(ppm=0, osr=4, samp_rate_in=samp_rate)
+                self.input_adapter = grgsm.gsm_input(ppm=ppm, osr=4, samp_rate_in=samp_rate)
 
         self.dummy_burst_filter = grgsm.dummy_burst_filter()
         self.timeslot_filter = grgsm.burst_timeslot_filter(self.timeslot)
@@ -274,7 +274,7 @@ if __name__ == '__main__':
         parser, 'Cfile Options', 'Options for decoding cfile input.',
     )
     cfile_options.add_option("-f", "--fc", dest="fc", type="eng_float",
-                             help="Frequency of cfile capture [default=eng_notation.num_to_str(939.4e6)]")
+                             help="Frequency of cfile capture")
     cfile_options.add_option("-a", "--arfcn", dest="arfcn", type="intx",
                              help="Set ARFCN instead of frequency. "
                                   "In some cases you may have to provide the GSM band also")
@@ -285,6 +285,9 @@ if __name__ == '__main__':
     cfile_options.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float",
                              default=eng_notation.num_to_str(1e6),
                              help="Sample rate of cfile capture [default=%default]")
+    cfile_options.add_option("--ppm", dest="ppm", type="float", default=0,
+                             help="Set frequency offset correction [default=%default]")
+
     parser.add_option_group(cfile_options)
 
     # group decryption options
@@ -327,12 +330,12 @@ if __name__ == '__main__':
     if options.a5 < 0 or options.a5 > 3:
         parser.error("Invalid A5 version\n")
 
-    if options.cfile and (options.fc is None and options.arfcn is None) or (options.fc is not None and options.arfcn is not None):
+    if options.cfile and (options.fc is None and options.arfcn is None):
         print("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n")
 
     # handle frequency / arfcn input
-    arfcn = 0
-    fc = 939.4e6
+    arfcn = None
+    fc = None
     if options.arfcn:
         if options.band:
             if options.band not in grgsm.arfcn.get_bands():
