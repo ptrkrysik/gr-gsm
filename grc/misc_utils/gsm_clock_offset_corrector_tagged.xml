@@ -1,7 +1,7 @@
 <block>
   <name>Clock Offset Corrector Tagged</name>
   <key>gsm_clock_offset_corrector_tagged</key>
-  <import>from clock_offset_corrector_tagged import clock_offset_corrector_tagged  # grc-generated hier_block</import>
+  <import>import grgsm</import>
   <make>grgsm.clock_offset_corrector_tagged(
     fc=$fc,
     ppm=$ppm,

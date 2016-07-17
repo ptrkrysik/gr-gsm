@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 ##################################################
 # GNU Radio Python Flow Graph
-# Title: Clock offset corrector
+# Title: Clock offset corrector tagged
 # Author: Piotr Krysik
 # Description: Clock offset corrector with blocks that use tags to switch offsets
-# Generated: Fri Jul 15 10:09:22 2016
+# Generated: Sun Jul 17 11:30:51 2016
 ##################################################
 
 from gnuradio import gr
@@ -38,18 +38,18 @@ class clock_offset_corrector_tagged(grgsm.hier_block):
         ##################################################
         # Blocks
         ##################################################
+        self.gsm_msg_to_tag_0 = grgsm.msg_to_tag()
         self.gsm_controlled_rotator_cc_0 = grgsm.controlled_rotator_cc(ppm/1.0e6*2*math.pi*fc/samp_rate_in,samp_rate_out)
-        self.grgsm_msg_to_tag_0 = grgsm.msg_to_tag()
-        self.grgsm_controlled_fractional_resampler_cc_0 = grgsm.controlled_fractional_resampler_cc(0, 1.0)
+        self.gsm_controlled_fractional_resampler_cc_0 = grgsm.controlled_fractional_resampler_cc(0, 1.0)
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self, 'ctrl'), (self.grgsm_msg_to_tag_0, 'msg'))    
-        self.connect((self.grgsm_controlled_fractional_resampler_cc_0, 0), (self.gsm_controlled_rotator_cc_0, 0))    
-        self.connect((self.grgsm_msg_to_tag_0, 0), (self.grgsm_controlled_fractional_resampler_cc_0, 0))    
+        self.msg_connect((self, 'ctrl'), (self.gsm_msg_to_tag_0, 'msg'))    
+        self.connect((self.gsm_controlled_fractional_resampler_cc_0, 0), (self.gsm_controlled_rotator_cc_0, 0))    
         self.connect((self.gsm_controlled_rotator_cc_0, 0), (self, 0))    
-        self.connect((self, 0), (self.grgsm_msg_to_tag_0, 0))    
+        self.connect((self.gsm_msg_to_tag_0, 0), (self.gsm_controlled_fractional_resampler_cc_0, 0))    
+        self.connect((self, 0), (self.gsm_msg_to_tag_0, 0))    
 
     def get_fc(self):
         return self.fc

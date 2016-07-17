@@ -195,7 +195,7 @@
     </param>
   </block>
   <block>
-    <key>grgsm_controlled_fractional_resampler_cc</key>
+    <key>gsm_controlled_fractional_resampler_cc</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -222,7 +222,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>grgsm_controlled_fractional_resampler_cc_0</value>
+      <value>gsm_controlled_fractional_resampler_cc_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -239,45 +239,6 @@
     <param>
       <key>resamp_ratio</key>
       <value>1.0</value>
-    </param>
-  </block>
-  <block>
-    <key>grgsm_msg_to_tag</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(192, 193)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>grgsm_msg_to_tag_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
     </param>
   </block>
   <block>
@@ -325,6 +286,45 @@
     <param>
       <key>samp_rate</key>
       <value>samp_rate_out</value>
+    </param>
+  </block>
+  <block>
+    <key>gsm_msg_to_tag</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(192, 193)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gsm_msg_to_tag_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
     </param>
   </block>
   <block>
@@ -575,19 +575,13 @@
   </block>
   <connection>
     <source_block_id>ctrl</source_block_id>
-    <sink_block_id>grgsm_msg_to_tag_0</sink_block_id>
+    <sink_block_id>gsm_msg_to_tag_0</sink_block_id>
     <source_key>out</source_key>
     <sink_key>msg</sink_key>
   </connection>
   <connection>
-    <source_block_id>grgsm_controlled_fractional_resampler_cc_0</source_block_id>
+    <source_block_id>gsm_controlled_fractional_resampler_cc_0</source_block_id>
     <sink_block_id>gsm_controlled_rotator_cc_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>grgsm_msg_to_tag_0</source_block_id>
-    <sink_block_id>grgsm_controlled_fractional_resampler_cc_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -598,8 +592,14 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>gsm_msg_to_tag_0</source_block_id>
+    <sink_block_id>gsm_controlled_fractional_resampler_cc_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>pad_source_0</source_block_id>
-    <sink_block_id>grgsm_msg_to_tag_0</sink_block_id>
+    <sink_block_id>gsm_msg_to_tag_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
