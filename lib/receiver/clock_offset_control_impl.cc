@@ -26,6 +26,7 @@
 #endif
 
 #include <sch.h>
+#include <gsm_constants.h>
 #include "clock_offset_control_impl.h"
 
 namespace gr
@@ -33,17 +34,17 @@ namespace gr
 namespace gsm
 {
 clock_offset_control::sptr
-clock_offset_control::make(float fc, float samp_rate)
+clock_offset_control::make(float fc, float samp_rate, unsigned int osr)
 {
     return gnuradio::get_initial_sptr
-           (new clock_offset_control_impl(fc, samp_rate));
+           (new clock_offset_control_impl(fc, samp_rate, osr));
 }
 
 
 /*
  * The private constructor
  */
-clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate)
+clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate, unsigned int osr)
     : gr::block("clock_offset_control",
                 gr::io_signature::make(0, 0, 0),
                 gr::io_signature::make(0, 0, 0))
@@ -55,6 +56,7 @@ clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate)
     
     set_fc(fc);
     set_samp_rate(samp_rate);
+    set_osr(osr);
     d_alfa = 0.3;
     d_ppm_estimate = -1e6;
     d_last_ppm_estimate = -1e6;    
@@ -71,6 +73,11 @@ clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate)
  */
 clock_offset_control_impl::~clock_offset_control_impl()
 {
+}
+
+void clock_offset_control_impl::set_osr(unsigned int osr)
+{
+    d_osr = osr;
 }
 
 void clock_offset_control_impl::set_fc(float fc)
@@ -114,7 +121,7 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
 
                 if(state == "fcch_search")
                 {
-                    send_ctrl_messages(ppm);
+                    send_ctrl_messages(freq_offset);
                     d_last_fcch_time = d_current_time;
                 } 
                 else 
@@ -138,7 +145,7 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
                         {
 //                            pmt::pmt_t msg_ppm = pmt::from_double(ppm);
 //                            message_port_pub(pmt::intern("ppm"), msg_ppm);
-                            send_ctrl_messages(ppm);
+                            send_ctrl_messages(freq_offset);
                             d_last_ppm_estimate = d_ppm_estimate;
                         }
                     }
@@ -160,17 +167,15 @@ void clock_offset_control_impl::process_measurement(pmt::pmt_t msg)
     }
 }
 
-void clock_offset_control_impl::send_ctrl_messages(float ppm)
+void clock_offset_control_impl::send_ctrl_messages(float freq_offset)
 {
-//    pmt::pmt_t msg_ppm = pmt::from_double(ppm);
-//    message_port_pub(pmt::intern("ctrl"), msg_ppm);
-//    d_last_fcch_time = d_current_time;
+    double samp_rate_ratio = d_samp_rate / (d_osr * GSM_SYMBOL_RATE);
 
-    pmt::pmt_t msg_set_phase_inc = pmt::cons(pmt::intern("set_phase_inc"), pmt::from_double(2*M_PI*d_fc/d_samp_rate*ppm/1.0e6));
-    message_port_pub(pmt::intern("ctrl"), msg_set_phase_inc);
-
-    pmt::pmt_t msg_set_resamp_ratio = pmt::cons(pmt::intern("set_resamp_ratio"), pmt::from_double(1+ppm/1.0e6));
-    message_port_pub(pmt::intern("ctrl"), msg_set_resamp_ratio);
+    pmt::pmt_t messages = pmt::make_dict();
+    messages = dict_add(messages, pmt::string_to_symbol("set_phase_inc"), pmt::from_double(-2*M_PI*freq_offset/(d_osr * GSM_SYMBOL_RATE)));
+    messages = dict_add(messages, pmt::string_to_symbol("set_resamp_ratio"), pmt::from_double((1-(freq_offset/d_fc))*samp_rate_ratio));
+    messages = dict_add(messages, pmt::string_to_symbol("setting_freq_offset"), pmt::from_double(-freq_offset));
+    message_port_pub(pmt::intern("ctrl"), messages);
 }
 
 void clock_offset_control_impl::timed_reset()

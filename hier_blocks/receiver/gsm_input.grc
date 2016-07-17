@@ -93,6 +93,33 @@
     </param>
     <param>
       <key>_coordinate</key>
+      <value>(752, 21)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gsm_symb_rate</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1625000.0/6.0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
       <value>(632, 19)</value>
     </param>
     <param>
@@ -105,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>1625000.0/6.0*osr</value>
+      <value>gsm_symb_rate*osr</value>
     </param>
   </block>
   <block>
@@ -210,11 +237,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(488, 217)</value>
+      <value>(488, 281)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -265,7 +292,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(224, 198)</value>
+      <value>(232, 199)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -282,6 +309,10 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>osr</value>
     </param>
     <param>
       <key>fc</key>
@@ -332,7 +363,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(712, 186)</value>
+      <value>(712, 178)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -426,7 +457,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(904, 228)</value>
+      <value>(904, 220)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -601,6 +632,12 @@
   <connection>
     <source_block_id>gsm_clock_offset_corrector_tagged_0</source_block_id>
     <sink_block_id>fractional_resampler_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gsm_clock_offset_corrector_tagged_0</source_block_id>
+    <sink_block_id>low_pass_filter_0_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

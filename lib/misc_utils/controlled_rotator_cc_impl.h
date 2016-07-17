@@ -33,15 +33,15 @@ namespace gr {
     {
      private:
       gr_complex d_phase_inc;
-      double d_samp_rate;
+//      double d_samp_rate;
       blocks::rotator d_r;
 
      public:
-      controlled_rotator_cc_impl(double phase_inc, double samp_rate);
+      controlled_rotator_cc_impl(double phase_inc);
       ~controlled_rotator_cc_impl();
 
       virtual void set_phase_inc(double phase_inc);
-      virtual void set_samp_rate(double samp_rate);
+//      virtual void set_samp_rate(double samp_rate);
 
       // Where all the action really happens
       int work(int noutput_items,

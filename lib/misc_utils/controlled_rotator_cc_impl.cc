@@ -32,22 +32,21 @@ namespace gr {
   namespace gsm {
 
     controlled_rotator_cc::sptr
-    controlled_rotator_cc::make(double phase_inc, double samp_rate)
+    controlled_rotator_cc::make(double phase_inc)
     {
       return gnuradio::get_initial_sptr
-        (new controlled_rotator_cc_impl(phase_inc, samp_rate));
+        (new controlled_rotator_cc_impl(phase_inc));
     }
 
     /*
      * The private constructor
      */
-    controlled_rotator_cc_impl::controlled_rotator_cc_impl(double phase_inc, double samp_rate)
+    controlled_rotator_cc_impl::controlled_rotator_cc_impl(double phase_inc)
       : gr::sync_block("controlled_rotator_cc",
               gr::io_signature::make2(1, 2, sizeof(gr_complex), sizeof(float)),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
     {
       set_phase_inc(phase_inc);
-      set_samp_rate(samp_rate);
     }
     
     /*
@@ -64,11 +63,11 @@ namespace gr {
       d_r.set_phase_incr( exp(gr_complex(0, (double)phase_inc)) );
     }
 
-    void
-    controlled_rotator_cc_impl::set_samp_rate(double samp_rate)
-    {
-      d_samp_rate = samp_rate;
-    }
+//    void
+//    controlled_rotator_cc_impl::set_samp_rate(double samp_rate)
+//    {
+//      d_samp_rate = samp_rate;
+//    }
 
     int
     controlled_rotator_cc_impl::work(int noutput_items,
@@ -76,7 +75,7 @@ namespace gr {
 			  gr_vector_void_star &output_items)
 		{
 		  //process phase_inc input
-      if(input_items.size() == 2) {
+      /*if(input_items.size() == 2) {
         int ii=0;
         const float *pp = (const float *)input_items[1];
         
@@ -99,7 +98,8 @@ namespace gr {
           ii++;
         }
       }
-      		
+      */
+      	
       //get complex input and output
       const gr_complex *in = (const gr_complex *)input_items[0];
       gr_complex *out = (gr_complex *)output_items[0];
@@ -121,11 +121,11 @@ namespace gr {
         processed_in = processed_in + samples_to_process;
         produced_out = produced_out + samples_to_process;
 //        std::cout << "Rotator, phase inc: " << pmt::to_double(i_tag->value) << std::endl;
-        
-        float freq_offset_setting = (pmt::to_double(i_tag->value) / (2*M_PI)) * d_samp_rate; //send stream tag with a new value of the frequency offset
-        pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
-        pmt::pmt_t value =  pmt::from_double(freq_offset_setting);
-        add_item_tag(0,i_tag->offset, key, value);
+//        
+//        float freq_offset_setting = (pmt::to_double(i_tag->value) / (2*M_PI)) * d_samp_rate; //send stream tag with a new value of the frequency offset
+//        pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
+//        pmt::pmt_t value =  pmt::from_double(freq_offset_setting);
+//        add_item_tag(0,i_tag->offset, key, value);
       }
       
       d_r.rotateN((out+produced_out), const_cast<gr_complex *>(in+processed_in), (noutput_items-produced_out)); //const_cast<gr_complex *> is workaround old implementation of rotateN that is still present in ubuntu 14.04 packages

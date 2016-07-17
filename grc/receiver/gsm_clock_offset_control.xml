@@ -3,13 +3,19 @@
   <name>GSM Clock Offset Control</name>
   <key>gsm_clock_offset_control</key>
   <import>import grgsm</import>
-  <make>grgsm.clock_offset_control($fc, $samp_rate)</make>
+  <make>grgsm.clock_offset_control($fc, $samp_rate, $osr)</make>
   <callback></callback>
   <param>
     <name>fc</name>
     <key>fc</key>
     <value>fc</value>
     <type>float</type>
+  </param>
+  <param>
+    <name>OSR</name>
+    <key>osr</key>
+    <value>osr</value>
+    <type>int</type>
   </param>
 
   <param>

@@ -78,7 +78,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>Clock offset corrector tagged</value>
+      <value>Clock Offset Corrector Tagged</value>
     </param>
   </block>
   <block>
@@ -93,7 +93,34 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(736, 19)</value>
+      <value>(688, 21)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gsm_symb_rate</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1625000.0/6.0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(808, 21)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -105,7 +132,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>samp_rate_in</value>
+      <value>osr*gsm_symb_rate</value>
     </param>
   </block>
   <block>
@@ -214,7 +241,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(328, 197)</value>
+      <value>(344, 197)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -238,7 +265,7 @@
     </param>
     <param>
       <key>resamp_ratio</key>
-      <value>1.0</value>
+      <value>samp_rate_in/samp_rate_out</value>
     </param>
   </block>
   <block>
@@ -261,7 +288,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(608, 209)</value>
+      <value>(600, 204)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -281,11 +308,7 @@
     </param>
     <param>
       <key>phase_inc</key>
-      <value>ppm/1.0e6*2*math.pi*fc/samp_rate_in</value>
-    </param>
-    <param>
-      <key>samp_rate</key>
-      <value>samp_rate_out</value>
+      <value>ppm/1.0e6*2*math.pi*fc/samp_rate_out</value>
     </param>
   </block>
   <block>
@@ -359,6 +382,49 @@
     </param>
   </block>
   <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(584, 23)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>osr</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>OSR</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>4</value>
+    </param>
+  </block>
+  <block>
     <key>pad_sink</key>
     <param>
       <key>comment</key>
@@ -370,7 +436,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(784, 220)</value>
+      <value>(776, 204)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -516,49 +582,6 @@
     <param>
       <key>label</key>
       <value>samp_rate_in</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1625000.0/6.0*4.0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(592, 20)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>samp_rate_out</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>samp_rate_out</value>
     </param>
     <param>
       <key>short_id</key>

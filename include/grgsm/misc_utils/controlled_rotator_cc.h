@@ -48,10 +48,10 @@ namespace gr {
        * class. gsm::controlled_rotator_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(double phase_inc, double samp_rate);
+      static sptr make(double phase_inc);
       
       virtual void set_phase_inc(double phase_inc) = 0;
-      virtual void set_samp_rate(double samp_rate) = 0;
+//      virtual void set_samp_rate(double samp_rate) = 0;
     };
 
   } // namespace gsm

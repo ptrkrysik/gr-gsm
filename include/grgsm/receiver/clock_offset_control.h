@@ -49,9 +49,10 @@ namespace gr {
        * class. gsm::clock_offset_control::make is the public interface for
        * creating new instances.
        */
-      static sptr make(float fc, float samp_rate);
+      static sptr make(float fc, float samp_rate, unsigned int osr);
       virtual void set_fc(float fc) = 0;  
-      virtual void set_samp_rate(float samp_rate) = 0;    
+      virtual void set_samp_rate(float samp_rate) = 0;
+      virtual void set_osr(unsigned int osr) = 0; 
     };
    
   } // namespace gsm

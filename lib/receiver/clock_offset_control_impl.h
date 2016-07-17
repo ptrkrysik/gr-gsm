@@ -33,6 +33,7 @@ namespace gr {
      private:
         float d_fc;
         float d_samp_rate;
+        unsigned int d_osr;
         float d_alfa;
         float d_ppm_estimate;
         float d_last_ppm_estimate;    
@@ -44,15 +45,16 @@ namespace gr {
         bool  d_first_time;
                         
         void process_measurement(pmt::pmt_t msg);
-        void send_ctrl_messages(float ppm);
+        void send_ctrl_messages(float freq_offset);
         void timed_reset();
         void reset();
      public:
-       clock_offset_control_impl(float fc, float samp_rate);
+       clock_offset_control_impl(float fc, float samp_rate, unsigned int osr);
       ~clock_offset_control_impl();
 
       virtual void set_fc(float fc);
       virtual void set_samp_rate(float samp_rate);
+      virtual void set_osr(unsigned int osr);
     };
   } // namespace gsm
 } // namespace gr
