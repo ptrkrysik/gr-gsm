@@ -21,10 +21,8 @@ install(FILES
     gsm_extract_system_info.xml
     gsm_extract_immediate_assignment.xml
     gsm_controlled_rotator_cc.xml
-    gsm_controlled_const_source_f.xml
     gsm_message_printer.xml
     gsm_bursts_printer.xml
-    gsm_clock_offset_corrector.xml
     gsm_clock_offset_corrector_tagged.xml
     gsm_tmsi_dumper.xml
     gsm_burst_file_sink.xml

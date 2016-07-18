@@ -23,7 +23,6 @@
 #include "grgsm/flow_control/burst_fnr_filter.h"
 #include "grgsm/flow_control/dummy_burst_filter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
-#include "grgsm/misc_utils/controlled_const_source_f.h"
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
 #include "grgsm/misc_utils/extract_system_info.h"
 #include "grgsm/misc_utils/extract_immediate_assignment.h"
@@ -86,8 +85,6 @@ GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_immediate_assignment);
 %include "grgsm/misc_utils/controlled_rotator_cc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_rotator_cc);
-%include "grgsm/misc_utils/controlled_const_source_f.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, controlled_const_source_f);
 %include "grgsm/misc_utils/message_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_printer);
 %include "grgsm/misc_utils/tmsi_dumper.h"

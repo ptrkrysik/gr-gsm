@@ -50,7 +50,6 @@ from hier_block import hier_block
 from fcch_burst_tagger import fcch_burst_tagger
 from sch_detector import sch_detector
 from fcch_detector import fcch_detector
-from clock_offset_corrector import clock_offset_corrector
 from clock_offset_corrector_tagged import clock_offset_corrector_tagged
 from gsm_input import gsm_input
 from gsm_wideband_input import gsm_wideband_input

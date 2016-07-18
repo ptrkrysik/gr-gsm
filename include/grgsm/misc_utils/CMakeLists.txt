@@ -29,7 +29,8 @@ install(FILES
     extract_system_info.h
     extract_immediate_assignment.h
     controlled_rotator_cc.h
-    controlled_const_source_f.h
     message_printer.h
-    tmsi_dumper.h DESTINATION include/grgsm/misc_utils
+    tmsi_dumper.h
+    msg_to_tag.h
+    controlled_fractional_resampler_cc.h DESTINATION include/grgsm/misc_utils
 )

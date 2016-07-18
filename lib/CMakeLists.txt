@@ -50,7 +50,6 @@ list(APPEND grgsm_sources
     flow_control/burst_fnr_filter_impl.cc
     flow_control/dummy_burst_filter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
-    misc_utils/controlled_const_source_f_impl.cc
     misc_utils/controlled_fractional_resampler_cc_impl.cc
     misc_utils/msg_to_tag_impl.cc
     misc_utils/message_printer_impl.cc
