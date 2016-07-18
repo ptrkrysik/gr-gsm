@@ -23,8 +23,7 @@
 #ifndef INCLUDED_GRGSM_CONTROLLED_FRACTIONAL_RESAMPLER_CC_IMPL_H
 #define INCLUDED_GRGSM_CONTROLLED_FRACTIONAL_RESAMPLER_CC_IMPL_H
 
-#include <grgsm/controlled_fractional_resampler_cc.h>
-//#include <gnuradio/filter/fractional_resampler_cc.h>
+#include <grgsm/misc_utils/controlled_fractional_resampler_cc.h>
 #include <gnuradio/filter/mmse_fir_interpolator_cc.h>
 
 using namespace gr::filter;

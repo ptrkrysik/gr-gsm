@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H
 #define INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H
 
-#include <grgsm/msg_to_tag.h>
+#include <grgsm/misc_utils/msg_to_tag.h>
 
 namespace gr {
   namespace gsm {
