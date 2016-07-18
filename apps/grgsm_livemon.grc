@@ -333,7 +333,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(256, 299)</value>
+      <value>(256, 300)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -640,6 +640,10 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>osr</key>
+      <value>osr</value>
     </param>
     <param>
       <key>fc</key>
@@ -1004,6 +1008,49 @@
     <param>
       <key>import</key>
       <value>from math import pi</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1088, 7)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>osr</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>OSR</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>4</value>
     </param>
   </block>
   <block>
@@ -2640,7 +2687,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 227)</value>
+      <value>(8, 237)</value>
     </param>
     <param>
       <key>_rotation</key>

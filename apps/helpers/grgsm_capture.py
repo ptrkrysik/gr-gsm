@@ -86,7 +86,7 @@ class grgsm_capture(gr.top_block):
                 fc=fc,
                 samp_rate_in=samp_rate,
             )
-            self.gsm_clock_offset_control = grgsm.clock_offset_control(fc-shiftoff, osr=4)
+            self.gsm_clock_offset_control = grgsm.clock_offset_control(fc-shiftoff, sample_rate, osr=4)
 
         if self.burst_file:
             self.gsm_burst_file_sink = grgsm.burst_file_sink(self.burst_file)

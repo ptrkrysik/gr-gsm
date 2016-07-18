@@ -5,7 +5,7 @@
 # Title: Gr-gsm Livemon
 # Author: Piotr Krysik
 # Description: Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)
-# Generated: Fri Jul 15 13:18:50 2016
+# Generated: Mon Jul 18 18:08:34 2016
 ##################################################
 
 if __name__ == '__main__':
@@ -38,7 +38,7 @@ import time
 
 class grgsm_livemon(gr.top_block, Qt.QWidget):
 
-    def __init__(self, args="", fc=939.4e6, gain=30, ppm=0, samp_rate=2000000.052982, shiftoff=400e3):
+    def __init__(self, args="", fc=939.4e6, gain=30, ppm=0, samp_rate=2000000.052982, shiftoff=400e3, osr=4):
         gr.top_block.__init__(self, "Gr-gsm Livemon")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Gr-gsm Livemon")
@@ -70,6 +70,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.ppm = ppm
         self.samp_rate = samp_rate
         self.shiftoff = shiftoff
+        self.osr = osr
 
         ##################################################
         # Variables
@@ -159,7 +160,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.gsm_decryption_0 = grgsm.decryption(([]), 1)
         self.gsm_control_channels_decoder_0_0 = grgsm.control_channels_decoder()
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc-shiftoff, samp_rate)
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc-shiftoff, samp_rate, osr)
         self.gsm_bcch_ccch_demapper_0 = grgsm.gsm_bcch_ccch_demapper(
             timeslot_nr=0,
         )
@@ -225,19 +226,25 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.blocks_rotator_cc_0.set_phase_inc(-2*pi*self.shiftoff/self.samp_rate)
+        self.gsm_input_0.set_samp_rate_in(self.samp_rate)
         self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
-        self.gsm_input_0.set_samp_rate_in(self.samp_rate)
+        self.blocks_rotator_cc_0.set_phase_inc(-2*pi*self.shiftoff/self.samp_rate)
 
     def get_shiftoff(self):
         return self.shiftoff
 
     def set_shiftoff(self, shiftoff):
         self.shiftoff = shiftoff
-        self.blocks_rotator_cc_0.set_phase_inc(-2*pi*self.shiftoff/self.samp_rate)
         self.rtlsdr_source_0.set_center_freq(self.fc_slider-self.shiftoff, 0)
         self.rtlsdr_source_0.set_bandwidth(250e3+abs(self.shiftoff), 0)
+        self.blocks_rotator_cc_0.set_phase_inc(-2*pi*self.shiftoff/self.samp_rate)
+
+    def get_osr(self):
+        return self.osr
+
+    def set_osr(self, osr):
+        self.osr = osr
 
     def get_ppm_slider(self):
         return self.ppm_slider
@@ -282,6 +289,9 @@ def argument_parser():
     parser.add_option(
         "-o", "--shiftoff", dest="shiftoff", type="eng_float", default=eng_notation.num_to_str(400e3),
         help="Set shiftoff [default=%default]")
+    parser.add_option(
+        "", "--osr", dest="osr", type="intx", default=4,
+        help="Set OSR [default=%default]")
     return parser
 
 
@@ -295,7 +305,7 @@ def main(top_block_cls=grgsm_livemon, options=None):
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
 
-    tb = top_block_cls(args=options.args, fc=options.fc, gain=options.gain, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff)
+    tb = top_block_cls(args=options.args, fc=options.fc, gain=options.gain, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff, osr=options.osr)
     tb.start()
     tb.show()
 

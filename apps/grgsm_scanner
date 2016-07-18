@@ -76,7 +76,7 @@ class receiver_with_decoder(grgsm.hier_block):
             samp_rate_in=samp_rate,
         )
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc, samp_rate)
+        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc, samp_rate, osr=4)
         self.gsm_bcch_ccch_demapper_0 = grgsm.gsm_bcch_ccch_demapper(0)
 
         ##################################################
