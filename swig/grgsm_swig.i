@@ -36,8 +36,8 @@
 #include "grgsm/qa_utils/message_sink.h"
 #include "grgsm/misc_utils/message_file_sink.h"
 #include "grgsm/misc_utils/message_file_source.h"
-#include "grgsm/msg_to_tag.h"
-#include "grgsm/controlled_fractional_resampler_cc.h"
+#include "grgsm/misc_utils/msg_to_tag.h"
+#include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
 %}
 
 %include "grgsm/receiver/receiver.h"
@@ -93,6 +93,11 @@ GR_SWIG_BLOCK_MAGIC2(gsm, tmsi_dumper);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_file_sink);
 %include "grgsm/misc_utils/message_file_source.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_file_source);
+%include "grgsm/misc_utils/msg_to_tag.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
+%include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
+
 
 %include "grgsm/qa_utils/burst_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_sink);
@@ -102,7 +107,3 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
-%include "grgsm/msg_to_tag.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
-%include "grgsm/controlled_fractional_resampler_cc.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);

@@ -61,6 +61,7 @@
       <block>gsm_controlled_fractional_resampler_cc</block>
       <block>gsm_message_printer</block>
       <block>gsm_clock_offset_corrector_tagged</block>
+      <block>gsm_msg_to_tag.xml</block>
       <block>gsm_tmsi_dumper</block>
     </cat>
   </cat>
