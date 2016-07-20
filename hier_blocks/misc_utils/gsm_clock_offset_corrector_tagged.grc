@@ -265,7 +265,7 @@
     </param>
     <param>
       <key>resamp_ratio</key>
-      <value>samp_rate_in/samp_rate_out</value>
+      <value>(1-ppm/1.0e6)*(samp_rate_in/samp_rate_out)</value>
     </param>
   </block>
   <block>
