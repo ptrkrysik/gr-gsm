@@ -4,7 +4,7 @@
 # Title: Clock Offset Corrector Tagged
 # Author: Piotr Krysik
 # Description: Clock offset corrector with blocks that use tags to switch offsets
-# Generated: Sun Jul 17 22:03:13 2016
+# Generated: Wed Jul 20 20:07:11 2016
 ##################################################
 
 from gnuradio import gr
@@ -42,7 +42,7 @@ class clock_offset_corrector_tagged(grgsm.hier_block):
         ##################################################
         self.gsm_msg_to_tag_0 = grgsm.msg_to_tag()
         self.gsm_controlled_rotator_cc_0 = grgsm.controlled_rotator_cc(ppm/1.0e6*2*math.pi*fc/samp_rate_out)
-        self.gsm_controlled_fractional_resampler_cc_0 = grgsm.controlled_fractional_resampler_cc(0, samp_rate_in/samp_rate_out)
+        self.gsm_controlled_fractional_resampler_cc_0 = grgsm.controlled_fractional_resampler_cc(0, (1-ppm/1.0e6)*(samp_rate_in/samp_rate_out))
 
         ##################################################
         # Connections
@@ -73,13 +73,14 @@ class clock_offset_corrector_tagged(grgsm.hier_block):
     def set_ppm(self, ppm):
         self.ppm = ppm
         self.gsm_controlled_rotator_cc_0.set_phase_inc(self.ppm/1.0e6*2*math.pi*self.fc/self.samp_rate_out)
+        self.gsm_controlled_fractional_resampler_cc_0.set_resamp_ratio((1-self.ppm/1.0e6)*(self.samp_rate_in/self.samp_rate_out))
 
     def get_samp_rate_in(self):
         return self.samp_rate_in
 
     def set_samp_rate_in(self, samp_rate_in):
         self.samp_rate_in = samp_rate_in
-        self.gsm_controlled_fractional_resampler_cc_0.set_resamp_ratio(self.samp_rate_in/self.samp_rate_out)
+        self.gsm_controlled_fractional_resampler_cc_0.set_resamp_ratio((1-self.ppm/1.0e6)*(self.samp_rate_in/self.samp_rate_out))
 
     def get_gsm_symb_rate(self):
         return self.gsm_symb_rate
@@ -93,5 +94,5 @@ class clock_offset_corrector_tagged(grgsm.hier_block):
 
     def set_samp_rate_out(self, samp_rate_out):
         self.samp_rate_out = samp_rate_out
-        self.gsm_controlled_fractional_resampler_cc_0.set_resamp_ratio(self.samp_rate_in/self.samp_rate_out)
         self.gsm_controlled_rotator_cc_0.set_phase_inc(self.ppm/1.0e6*2*math.pi*self.fc/self.samp_rate_out)
+        self.gsm_controlled_fractional_resampler_cc_0.set_resamp_ratio((1-self.ppm/1.0e6)*(self.samp_rate_in/self.samp_rate_out))
