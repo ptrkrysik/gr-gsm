@@ -37,7 +37,6 @@ class gsm_input(grgsm.hier_block):
         self.gsm_symb_rate = gsm_symb_rate = 1625000.0/6.0
         self.samp_rate_out = samp_rate_out = gsm_symb_rate*osr
 
-        print "samp_rate_in ",samp_rate_in," samp_rate_out",samp_rate_out
         ##################################################
         # Blocks
         ##################################################
