@@ -95,7 +95,9 @@ class grgsm_decoder(gr.top_block):
             self.sdcch8_demapper = grgsm.gsm_sdcch8_demapper(self.timeslot)
         elif self.chan_mode == 'TCHF':
             self.tch_f_demapper = grgsm.tch_f_chans_demapper(self.timeslot)
-            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, speech_file)
+            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec)
+            self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
         if self.kc != [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]:
             self.decryption = grgsm.decryption(self.kc, self.a5)
@@ -198,6 +200,10 @@ class grgsm_decoder(gr.top_block):
 
             self.msg_connect(self.tch_f_decoder, "msgs", self.socket_pdu, "pdus")
             self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            self.msg_connect(self.tch_f_decoder, "voice", self.tch_f_pdu_to_tagged_stream, "pdus")
+            self.connect((self.tch_f_pdu_to_tagged_stream, 0), (self.tch_f_file_sink, 0))    
+            
+
             if self.verbose:
                 self.msg_connect(self.tch_f_decoder, "msgs", self.message_printer, "msgs")
                 self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
