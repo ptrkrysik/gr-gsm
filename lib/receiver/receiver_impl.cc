@@ -124,11 +124,10 @@ receiver_impl::work(int noutput_items,
     pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
     get_tags_in_range(freq_offset_tags, 0, start, stop, key);
     bool freq_offset_tag_in_fcch = false;
-    uint64_t tag_offset=-1; //-1 - just some clearly invalid value
     
     if(!freq_offset_tags.empty()){
         tag_t freq_offset_tag = freq_offset_tags[0];
-        tag_offset = freq_offset_tag.offset - start;
+        uint64_t tag_offset = freq_offset_tag.offset - start;
         
         burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr);
         if(d_state == synchronized && b_type == fcch_burst){
@@ -136,10 +135,8 @@ receiver_impl::work(int noutput_items,
             if(tag_offset < last_sample_nr){
                 freq_offset_tag_in_fcch = true;
             }
-            d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
-        } else {
-            d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
         }
+        d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
     }
     
     switch (d_state)
@@ -235,14 +232,17 @@ receiver_impl::work(int noutput_items,
             {
             case fcch_burst:                                                                      //if it's FCCH  burst
             {
-                const unsigned first_sample = ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
-                const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
-                double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
+                if(freq_offset_tag_in_fcch==false)
+                {
+                    const unsigned first_sample = ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
+                    const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
+                    double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);       //extract frequency offset from it
 
-                send_burst(d_burst_nr, fc_fb, GSMTAP_BURST_FCCH, input_nr);
+                    send_burst(d_burst_nr, fc_fb, GSMTAP_BURST_FCCH, input_nr);
 
-                pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("synchronized"));
-                message_port_pub(pmt::mp("measurements"), msg);
+                    pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),pmt::from_double(freq_offset_tmp-d_freq_offset_setting),pmt::mp("synchronized"));
+                    message_port_pub(pmt::mp("measurements"), msg);
+                }
                 break;
             }
             case sch_burst:                                                                      //if it's SCH burst
