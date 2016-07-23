@@ -52,10 +52,10 @@ namespace gr {
        d_timeslot(timeslot_nr)
 
     {
-        for (int ii=0; ii<3; ii++)
-        {
-            d_bursts_stolen[ii] = false;
-        }
+//        for (int ii=0; ii<3; ii++)
+//        {
+        //            d_bursts_stolen[ii] = false;
+        //        }
 
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_f_chans_demapper_impl::filter_tch_chans, this, _1));
@@ -78,7 +78,6 @@ namespace gr {
         uint32_t frame_nr = be32toh(header->frame_number);
         uint32_t fn_mod26 = frame_nr % 26;
         uint32_t fn_mod13 = frame_nr % 13;
-        bool frames_are_consecutive = true;
         int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
 
         if(header->timeslot == d_timeslot){
@@ -93,127 +92,149 @@ namespace gr {
             pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
             pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
 
+            //distinguishing uplink and downlink bursts
+            bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
 
-            if (fn_mod13 == 12)
+            if(uplink_burst)
             {
-                // position of SACCH burst based on timeslot
-                // see specification gsm 05.02
-                uint32_t index;
-                bool is_sacch = false;
+                sacch_tch_demapper(fn_mod13, fn_mod26, frame_nr,d_bursts_sacch_ul,
+                                   d_frame_numbers_sacch_ul, d_bursts_ul, d_frame_numbers_ul, msg_out);
+            }
+            else
+            {
+                sacch_tch_demapper(fn_mod13, fn_mod26, frame_nr,d_bursts_sacch_dl,
+                                   d_frame_numbers_sacch_dl, d_bursts_dl, d_frame_numbers_dl, msg_out);
+            }
 
-                if (d_timeslot % 2 == 0 && fn_mod26 == 12)
-                {
-                    index = (((frame_nr - 12) / 26) - (d_timeslot / 2)) % 4;
-                    is_sacch = true;
-                }
-                else if (d_timeslot % 2 == 1 && fn_mod26 == 25)
-                {
-                    index = (((frame_nr - 25) / 26) - ((d_timeslot - 1) / 2)) % 4;
-                    is_sacch = true;
-                }
+        }
+    }
 
-                if (is_sacch)
-                {
-                    d_bursts_sacch[index] = msg_out;
-                    d_frame_numbers_sacch[index] = frame_nr;
+    void tch_f_chans_demapper_impl::sacch_tch_demapper(uint32_t fn_mod13, u_int32_t fn_mod26, uint32_t frame_nr,
+                                                       pmt::pmt_t *d_bursts_sacch,
+                                                       uint32_t *d_frame_numbers_sacch, pmt::pmt_t d_bursts[3][8],
+                                                       uint32_t d_frame_numbers[3][8], pmt::pmt_t msg_out)
+    {
+        bool frames_are_consecutive = true;
+        if (fn_mod13 == 12)
+        {
+            // position of SACCH burst based on timeslot
+            // see specification gsm 05.02
+            uint32_t index;
+            bool is_sacch = false;
 
-                    if (index == 3)
+            if (d_timeslot % 2 == 0 && fn_mod26 == 12)
+            {
+                index = (((frame_nr - 12) / 26) - (d_timeslot / 2)) % 4;
+                is_sacch = true;
+            }
+            else if (d_timeslot % 2 == 1 && fn_mod26 == 25)
+            {
+                index = (((frame_nr - 25) / 26) - ((d_timeslot - 1) / 2)) % 4;
+                is_sacch = true;
+            }
+
+            if (is_sacch)
+            {
+                d_bursts_sacch[index] = msg_out;
+                d_frame_numbers_sacch[index] = frame_nr;
+
+                if (index == 3)
+                {
+                    //check for a situation where some bursts were lost
+                    //in this situation frame numbers won't be consecutive
+                    frames_are_consecutive = true;
+                    for(int jj=1; jj<4; jj++)
                     {
-                        //check for a situation where some bursts were lost
-                        //in this situation frame numbers won't be consecutive
-                        frames_are_consecutive = true;
-                        for(int jj=1; jj<4; jj++)
+                        if((d_frame_numbers_sacch[jj]-d_frame_numbers_sacch[jj-1]) != 26)
                         {
-                            if((d_frame_numbers_sacch[jj]-d_frame_numbers_sacch[jj-1]) != 26)
-                            {
-                                frames_are_consecutive = false;
-                            }
+                            frames_are_consecutive = false;
                         }
-                        if(frames_are_consecutive)
+                    }
+                    if(frames_are_consecutive)
+                    {
+                        //send bursts to the output
+                        for(int jj=0; jj<4; jj++)
                         {
-                            //send bursts to the output
-                            for(int jj=0; jj<4; jj++)
-                            {
-                                message_port_pub(pmt::mp("acch_bursts"), d_bursts_sacch[jj]);
-                            }
+                            message_port_pub(pmt::mp("acch_bursts"), d_bursts_sacch[jj]);
                         }
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            if (fn_mod13 <= 3)
             {
-                if (fn_mod13 <= 3)
-                {
-                    // add to b1 and b3
-                    d_bursts[0][fn_mod13] = msg_out;
-                    d_bursts[2][fn_mod13 + 4] = msg_out;
+                // add to b1 and b3
+                d_bursts[0][fn_mod13] = msg_out;
+                d_bursts[2][fn_mod13 + 4] = msg_out;
 
-                    // set framenumber
-                    d_frame_numbers[0][fn_mod13] = frame_nr;
-                    d_frame_numbers[2][fn_mod13 + 4] = frame_nr;
+                // set framenumber for later checking of continuity
+                d_frame_numbers[0][fn_mod13] = frame_nr;
+                d_frame_numbers[2][fn_mod13 + 4] = frame_nr;
+            }
+            else if (fn_mod13 >= 4 && fn_mod13 <= 7)
+            {
+                // add to b1 and b2
+                d_bursts[0][fn_mod13] = msg_out;
+                d_bursts[1][fn_mod13 - 4] = msg_out;
+
+                // set framenumber for later checking of continuity
+                d_frame_numbers[0][fn_mod13] = frame_nr;
+                d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
+            }
+            else if (fn_mod13 >= 8 && fn_mod13 <= 11)
+            {
+                // add to b2 and b3
+                d_bursts[1][fn_mod13 - 4] = msg_out;
+                d_bursts[2][fn_mod13 - 8] = msg_out;
+
+                // set framenumber for later checking of continuity
+                d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
+                d_frame_numbers[2][fn_mod13 - 8] = frame_nr;
+            }
+
+            // send burst 1 or burst 2 to output
+            if (fn_mod13 == 3 || fn_mod13 == 7 || fn_mod13 == 11)
+            {
+                int tch_burst_nr = 0;
+
+                if (fn_mod13 == 11)
+                {
+                    tch_burst_nr = 1;
                 }
-                else if (fn_mod13 >= 4 && fn_mod13 <= 7)
+                else if (fn_mod13 == 3)
                 {
-                    // add to b1 and b2
-                    d_bursts[0][fn_mod13] = msg_out;
-                    d_bursts[1][fn_mod13 - 4] = msg_out;
-
-                    // set framenumber
-                    d_frame_numbers[0][fn_mod13] = frame_nr;
-                    d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
-                }
-                else if (fn_mod13 >= 8 && fn_mod13 <= 11)
-                {
-                    // add to b2 and b3
-                    d_bursts[1][fn_mod13 - 4] = msg_out;
-                    d_bursts[2][fn_mod13 - 8] = msg_out;
-
-                    // set framenumber
-                    d_frame_numbers[1][fn_mod13 - 4] = frame_nr;
-                    d_frame_numbers[2][fn_mod13 - 8] = frame_nr;
+                    tch_burst_nr = 2;
                 }
 
-                // send burst 1 or burst 2 to output
-                if (fn_mod13 == 3 || fn_mod13 == 7 || fn_mod13 == 11)
+                //check for a situation where some bursts were lost
+                //in this situation frame numbers won't be consecutive
+                frames_are_consecutive = true;
+
+                for(int jj=1; jj<8; jj++)
                 {
-                    int tch_burst_nr = 0;
-
-                    if (fn_mod13 == 11)
+                    if (((d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj-1]) != 1) && frames_are_consecutive)
                     {
-                        tch_burst_nr = 1;
-                    }
-                    else if (fn_mod13 == 3)
-                    {
-                        tch_burst_nr = 2;
-                    }
-
-                    //check for a situation where some bursts were lost
-                    //in this situation frame numbers won't be consecutive
-                    frames_are_consecutive = true;
-
-                    for(int jj=1; jj<8; jj++)
-                    {
-                        if (((d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj-1]) != 1) && frames_are_consecutive)
+                        frames_are_consecutive = false;
+                        // burst 3 has 1 sacch burst in between
+                        if (tch_burst_nr == 2 && jj == 4
+                            && d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj - 1] == 2)
                         {
-                            frames_are_consecutive = false;
-                            // burst 3 has 1 sacch burst in between
-                            if (tch_burst_nr == 2 && jj == 4
-                                && d_frame_numbers[tch_burst_nr][jj] - d_frame_numbers[tch_burst_nr][jj - 1] == 2)
-                            {
-                                frames_are_consecutive = true;
-                            }
+                            frames_are_consecutive = true;
                         }
                     }
+                }
 
-                    if(frames_are_consecutive)
+                if(frames_are_consecutive)
+                {
+                    //send bursts to the output
+                    for(int jj=0; jj<8; jj++)
                     {
-                        //send bursts to the output
-                        for(int jj=0; jj<8; jj++)
-                        {
-                            message_port_pub(pmt::mp("tch_bursts"), d_bursts[tch_burst_nr][jj]);
-                        }
-                        d_bursts_stolen[tch_burst_nr] = false;
+                        message_port_pub(pmt::mp("tch_bursts"), d_bursts[tch_burst_nr][jj]);
                     }
+                    // useless
+//                        d_bursts_stolen[tch_burst_nr] = false;
                 }
             }
         }
