@@ -66,6 +66,7 @@ list(APPEND grgsm_sources
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
+    uplink_downlink_filter_impl.cc
 )
 
 

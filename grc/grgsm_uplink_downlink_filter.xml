@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<block>
+  <name>uplink_downlink_filter</name>
+  <key>grgsm_uplink_downlink_filter</key>
+  <category>GSM</category>
+  <import>import grgsm</import>
+  <make>grgsm.uplink_downlink_filter($direction)</make>
+  <sink>
+    <name>in</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+  <source>
+    <name>downlink</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>  
+  <source>
+    <name>uplink</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>  
+</block>
