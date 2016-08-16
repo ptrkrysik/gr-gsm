@@ -38,6 +38,7 @@
 #include "grgsm/misc_utils/message_file_sink.h"
 #include "grgsm/misc_utils/message_file_source.h"
 #include "grgsm/msg_to_tag.h"
+#include "grgsm/BER_calc.h"
 %}
 
 %include "grgsm/receiver/receiver.h"
@@ -106,3 +107,5 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 %include "grgsm/msg_to_tag.h"
 GR_SWIG_BLOCK_MAGIC2(grgsm, msg_to_tag);
+%include "grgsm/BER_calc.h"
+GR_SWIG_BLOCK_MAGIC2(grgsm, BER_calc);
