@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<block>
+  <name>GSM BER calculator</name>
+  <key>grgsm_BER_calc</key>
+  <category>[grgsm]</category>
+  <import>import grgsm</import>
+  <make>grgsm.BER_calc()</make>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>de</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+
+</block>

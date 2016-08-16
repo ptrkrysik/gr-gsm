@@ -65,6 +65,8 @@ namespace gr {
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&control_channels_decoder_impl::decode, this, _1));
         message_port_register_out(pmt::mp("msgs"));
+        message_port_register_out(pmt::mp("de"));
+
     }
 
     control_channels_decoder_impl::~control_channels_decoder_impl()
@@ -73,6 +75,7 @@ namespace gr {
 
     void control_channels_decoder_impl::decode(pmt::pmt_t msg)
     {
+        // iBLOCK.size() = 456 = 4 * 114
         unsigned char iBLOCK[BLOCKS*iBLOCK_SIZE], hl, hn, conv_data[CONV_SIZE], decoded_data[PARITY_OUTPUT_SIZE];
         d_bursts[d_collected_bursts_num] = msg;
         d_collected_bursts_num++;
@@ -93,6 +96,7 @@ namespace gr {
                     iBLOCK[ii*iBLOCK_SIZE+jj+57] = burst_bits[jj + 88]; //88 = 3+57+1+26+1
                 }
             }
+
             //deinterleave
             for (int k = 0; k < CONV_SIZE; k++)
             {
@@ -121,7 +125,7 @@ namespace gr {
                     errors = 0;
                 }
             } else {
-                //std::cout << "Everything correct" << std::endl;
+//                std::cout << "Everything correct" << std::endl;
             }
            //compress bits
            unsigned char outmsg[28];
@@ -135,17 +139,22 @@ namespace gr {
            }
 
            //send message with header of the first burst
-            pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
-            gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(first_header_plus_burst);
-            int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
-            memcpy(header_plus_data, header, sizeof(gsmtap_hdr));
-            memcpy(header_plus_data+sizeof(gsmtap_hdr), outmsg, DATA_BYTES);
-            ((gsmtap_hdr*)header_plus_data)->type = GSMTAP_TYPE_UM;
-            
-            pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr));
-            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
-            
-            message_port_pub(pmt::mp("msgs"), msg_out);
+           pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
+           gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(first_header_plus_burst);
+           int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
+           memcpy(header_plus_data, header, sizeof(gsmtap_hdr));
+           memcpy(header_plus_data+sizeof(gsmtap_hdr), outmsg, DATA_BYTES);
+           ((gsmtap_hdr*)header_plus_data)->type = GSMTAP_TYPE_UM;
+           pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr));
+           pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
+           message_port_pub(pmt::mp("msgs"), msg_out);
+
+           // sending demodulated bits and decoded bits to compute BER
+           pmt::pmt_t demod_blob = pmt::make_blob(iBLOCK, sizeof(unsigned char)*CONV_SIZE);
+           pmt::pmt_t decod_blob = pmt::make_blob(decoded_data, sizeof(unsigned char)*DATA_BLOCK_SIZE);
+           pmt::pmt_t demodcod_cons = pmt::cons(demod_blob, decod_blob);
+
+            message_port_pub(pmt::mp("de"), demodcod_cons);
         }
         return;
     }

@@ -24,7 +24,8 @@ install(FILES
     plotting.hpp
     api.h
     gsmtap.h
-    msg_to_tag.h DESTINATION include/grgsm
+    msg_to_tag.h
+    BER_calc.h DESTINATION include/grgsm
 )
 
 add_subdirectory(decoding)

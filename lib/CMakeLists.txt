@@ -66,6 +66,9 @@ list(APPEND grgsm_sources
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
     msg_to_tag_impl.cc
+    BER_calc_impl.cc
+    GSMFrameCoder.cpp
+    BitVector1.cpp
 )
 
 

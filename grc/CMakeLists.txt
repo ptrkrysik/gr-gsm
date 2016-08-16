@@ -25,5 +25,6 @@ add_subdirectory(flow_control)
 add_subdirectory(misc_utils)
 install(FILES
     gsm_block_tree.xml
-    grgsm_msg_to_tag.xml DESTINATION share/gnuradio/grc/blocks
+    grgsm_msg_to_tag.xml
+    grgsm_BER_calc.xml DESTINATION share/gnuradio/grc/blocks
 )
