@@ -43,11 +43,12 @@ namespace gr {
     BER_calc_impl::BER_calc_impl()
       : gr::block("BER_calc",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0)),
+              gr::io_signature::make(1, 1, sizeof(float))),
         BER(0),
         totalBits(0)
     {
-
+        set_max_output_buffer(1);
+        set_max_output_buffer(1);
         //setup input/output ports
         message_port_register_in(pmt::mp("de"));
         set_msg_handler(pmt::mp("de"), boost::bind(&BER_calc_impl::ber_calc, this, _1));
@@ -86,10 +87,23 @@ namespace gr {
                     errs++;
             }
         }
-        BER = (BER*totalBits+double(errs))/(CONV_SIZE+totalBits);
+        BER = (BER*totalBits+float(errs))/(CONV_SIZE+totalBits);
         totalBits += CONV_SIZE;
-        cout << "BER= \n" << BER << endl;
+//        cout << "BER= \n" << BER << endl;
+    }
 
+    int
+    BER_calc_impl::general_work(int noutput_items,
+                    gr_vector_int &ninput_items,
+                    gr_vector_const_void_star &input_items,
+                    gr_vector_void_star &output_items)
+    {
+        float * out = (float*) output_items[0];
+
+        memcpy(out,&BER, sizeof(float));
+//        cout << "BER= \n" << BER << endl;
+
+        return 1;
     }
   } /* namespace grgsm */
 } /* namespace gr */

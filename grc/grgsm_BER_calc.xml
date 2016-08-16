@@ -16,5 +16,8 @@
     <type>message</type>
     <optional>1</optional>
   </sink>
-
+ <source>
+    <name>BER</name>
+    <type>float</type>
+  </source>
 </block>

@@ -32,22 +32,25 @@ using namespace std;
 namespace gr {
   namespace grgsm {
 
-    class BER_calc_impl : public BER_calc
-    {
-     private:
+  class BER_calc_impl : public BER_calc
+  {
+  private:
       // Nothing to declare in this block.
 
-     public:
+  public:
       BER_calc_impl();
       ~BER_calc_impl();
-
-    private:
-//      char [CONV_SIZE+DATA_BLOCK_SIZE];
+      int general_work(int noutput_items,
+               gr_vector_int &ninput_items,
+               gr_vector_const_void_star &input_items,
+               gr_vector_void_star &output_items);
+  private:
+      //      char [CONV_SIZE+DATA_BLOCK_SIZE];
       pmt::pmt_t demod;
       pmt::pmt_t decod;
       void ber_calc(pmt::pmt_t msg);
 
-      double BER;
+      float BER;
       uint totalBits;
 
     };
