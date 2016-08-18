@@ -49,7 +49,6 @@ namespace gr {
         message_port_register_in(pmt::mp("in"));
         message_port_register_out(pmt::mp("uplink"));
         message_port_register_out(pmt::mp("downlink"));
-        
         set_msg_handler(pmt::mp("in"), boost::bind(&uplink_downlink_filter_impl::process_msg, this, _1));
     }
 
@@ -63,7 +62,6 @@ namespace gr {
         } else {
             message_port_pub(pmt::mp("downlink"), msg);
         }
-          
     }
 
     /*
