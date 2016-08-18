@@ -269,10 +269,10 @@ namespace gr {
     {
         d_c0_channels.clear();
         if(!empty_p(pmt::mp("bursts"))){
-            delete_head_blocking(pmt::mp("bursts"));
+//            delete_head_blocking(pmt::mp("bursts"));
         }
         if(!empty_p(pmt::mp("msgs"))){
-            delete_head_blocking(pmt::mp("msgs"));
+//            delete_head_blocking(pmt::mp("msgs"));
         }
     }
     
