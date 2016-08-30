@@ -20,24 +20,24 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_IMPL_H
-#define INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_IMPL_H
+#ifndef INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
+#define INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
 
-#include <grgsm/uplink_downlink_filter.h>
+#include <grgsm/flow_control/uplink_downlink_splitter.h>
 
 namespace gr {
   namespace grgsm {
 
-    class uplink_downlink_filter_impl : public uplink_downlink_filter
+    class uplink_downlink_splitter_impl : public uplink_downlink_splitter
     {
      public:
-      uplink_downlink_filter_impl();
-      ~uplink_downlink_filter_impl();
+      uplink_downlink_splitter_impl();
+      ~uplink_downlink_splitter_impl();
 
       void process_msg(pmt::pmt_t msg);
     };
   } // namespace grgsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_IMPL_H */
+#endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H */
 

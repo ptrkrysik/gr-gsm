@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>uplink_downlink_filter</name>
-  <key>grgsm_uplink_downlink_filter</key>
-  <category>GSM</category>
+  <name>Up/Down-link splitter</name>
+  <key>gsm_uplink_downlink_splitter</key>
   <import>import grgsm</import>
-  <make>grgsm.uplink_downlink_filter()</make>
+  <make>grgsm.uplink_downlink_splitter()</make>
   <sink>
     <name>in</name>
     <type>message</type>

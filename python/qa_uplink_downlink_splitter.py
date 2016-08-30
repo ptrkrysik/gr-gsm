@@ -25,7 +25,7 @@ from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 import grgsm_swig as grgsm
 
-class qa_uplink_downlink_filter (gr_unittest.TestCase):
+class qa_uplink_downlink_splitter (gr_unittest.TestCase):
 
     def setUp (self):
         self.tb = gr.top_block ()
@@ -40,4 +40,4 @@ class qa_uplink_downlink_filter (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_uplink_downlink_filter, "qa_uplink_downlink_filter.xml")
+    gr_unittest.run(qa_uplink_downlink_splitter, "qa_uplink_downlink_splitter.xml")

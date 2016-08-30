@@ -49,6 +49,7 @@ list(APPEND grgsm_sources
     flow_control/burst_sdcch_subslot_filter_impl.cc
     flow_control/burst_fnr_filter_impl.cc
     flow_control/dummy_burst_filter_impl.cc
+    flow_control/uplink_downlink_splitter_impl.cc
     misc_utils/controlled_rotator_cc_impl.cc
     misc_utils/controlled_fractional_resampler_cc_impl.cc
     misc_utils/msg_to_tag_impl.cc
@@ -66,7 +67,6 @@ list(APPEND grgsm_sources
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
-    uplink_downlink_filter_impl.cc
 )
 
 

@@ -25,34 +25,34 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "uplink_downlink_filter_impl.h"
+#include "uplink_downlink_splitter_impl.h"
 #include <grgsm/gsmtap.h>
 #define BURST_SIZE 148
 namespace gr {
   namespace grgsm {
 
-    uplink_downlink_filter::sptr
-    uplink_downlink_filter::make()
+    uplink_downlink_splitter::sptr
+    uplink_downlink_splitter::make()
     {
       return gnuradio::get_initial_sptr
-        (new uplink_downlink_filter_impl());
+        (new uplink_downlink_splitter_impl());
     }
 
     /*
      * The private constructor
      */
-    uplink_downlink_filter_impl::uplink_downlink_filter_impl()
-      : gr::block("uplink_downlink_filter",
+    uplink_downlink_splitter_impl::uplink_downlink_splitter_impl()
+      : gr::block("uplink_downlink_splitter",
               gr::io_signature::make(0,0,0),
               gr::io_signature::make(0,0,0))
     {
         message_port_register_in(pmt::mp("in"));
         message_port_register_out(pmt::mp("uplink"));
         message_port_register_out(pmt::mp("downlink"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&uplink_downlink_filter_impl::process_msg, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&uplink_downlink_splitter_impl::process_msg, this, _1));
     }
 
-    void uplink_downlink_filter_impl::process_msg(pmt::pmt_t msg)
+    void uplink_downlink_splitter_impl::process_msg(pmt::pmt_t msg)
     {
         gsmtap_hdr * header = (gsmtap_hdr *)(pmt::blob_data(pmt::cdr(msg)));
         bool uplink_burst = (be16toh(header->arfcn) & 0x4000) ? true : false;
@@ -67,7 +67,7 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    uplink_downlink_filter_impl::~uplink_downlink_filter_impl()
+    uplink_downlink_splitter_impl::~uplink_downlink_splitter_impl()
     {
     }
   } /* namespace grgsm */

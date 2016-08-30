@@ -21,8 +21,8 @@
  */
 
 
-#ifndef INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_H
-#define INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_H
+#ifndef INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_H
+#define INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -35,17 +35,17 @@ namespace gr {
      * \ingroup grgsm
      *
      */
-    class GRGSM_API uplink_downlink_filter : virtual public gr::block
+    class GRGSM_API uplink_downlink_splitter : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<uplink_downlink_filter> sptr;
+      typedef boost::shared_ptr<uplink_downlink_splitter> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of grgsm::uplink_downlink_filter.
+       * \brief Return a shared_ptr to a new instance of grgsm::uplink_downlink_splitter.
        *
-       * To avoid accidental use of raw pointers, grgsm::uplink_downlink_filter's
+       * To avoid accidental use of raw pointers, grgsm::uplink_downlink_splitter's
        * constructor is in a private implementation
-       * class. grgsm::uplink_downlink_filter::make is the public interface for
+       * class. grgsm::uplink_downlink_splitter::make is the public interface for
        * creating new instances.
        */
       static sptr make();
@@ -54,5 +54,5 @@ namespace gr {
   } // namespace grgsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_FILTER_H */
+#endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_H */
 
