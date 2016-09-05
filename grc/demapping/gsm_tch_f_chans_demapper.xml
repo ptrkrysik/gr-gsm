@@ -16,13 +16,16 @@
   <sink>
     <name>bursts</name>
     <type>message</type>
+    <optional>1</optional>
   </sink>
   <source>
     <name>tch_bursts</name>
     <type>message</type>
+    <optional>1</optional>
   </source>
   <source>
     <name>acch_bursts</name>
     <type>message</type>
+    <optional>1</optional>
   </source>
 </block>

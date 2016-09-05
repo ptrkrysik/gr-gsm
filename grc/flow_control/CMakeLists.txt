@@ -23,5 +23,6 @@ install(FILES
     gsm_burst_timeslot_filter.xml
     gsm_dummy_burst_filter.xml
     gsm_burst_sdcch_subslot_splitter.xml
-    gsm_burst_sdcch_subslot_filter.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_sdcch_subslot_filter.xml 
+    gsm_uplink_downlink_splitter.xml DESTINATION share/gnuradio/grc/blocks
 )

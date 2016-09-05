@@ -266,8 +266,8 @@ namespace gr {
                 // check parity of class 1A
                 unsigned sentParity = (~mTCHU.peekField(91, 3)) & 0x07;
                 unsigned calcParity = mClass1A_d.parity(mTCHParity) & 0x07;
-
-                bool good = (sentParity == calcParity);
+                unsigned tail = mTCHU.peekField(185, 4);
+                bool good = (sentParity == calcParity) && (tail == 0);
 
                 if (good)
                 {
