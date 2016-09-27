@@ -39,6 +39,7 @@ class grgsm_decoder(gr.top_block):
                  cfile=None, fc=None, samp_rate=2e6, 
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
+                 enable_voice_boundary_detection=False,
                  verbose=False,
                  print_bursts=False, ppm=0):
 
@@ -62,6 +63,7 @@ class grgsm_decoder(gr.top_block):
         self.speech_codec = speech_codec
         self.verbose = verbose
         self.print_bursts = print_bursts
+        self.enable_voice_boundary_detection = enable_voice_boundary_detection
 
         ##################################################
         # Blocks
@@ -95,7 +97,7 @@ class grgsm_decoder(gr.top_block):
             self.sdcch8_demapper = grgsm.gsm_sdcch8_demapper(self.timeslot)
         elif self.chan_mode == 'TCHF':
             self.tch_f_demapper = grgsm.tch_f_chans_demapper(self.timeslot)
-            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec)
+            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
             self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
@@ -317,6 +319,8 @@ if __name__ == '__main__':
                                 "Valid options are " + ", ".join(tch_codecs.keys()))
     tch_options.add_option("-o", "--output-tch", dest="speech_output_file", default="/tmp/speech.au.gsm",
                            help="TCH/F speech output file [default=%default].")
+    tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true",
+                           help="Enable voice boundary detection for traffic channels. This can help reduce noice in the output.")
     parser.add_option_group(tch_options)
 
     # parse
@@ -378,6 +382,7 @@ if __name__ == '__main__':
                           cfile=options.cfile, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
+                          enable_voice_boundary_detection=options.enable_voice_boundary_detection,
                           verbose=options.verbose,
                           print_bursts=options.print_bursts, ppm=options.ppm)
 
