@@ -107,6 +107,7 @@ find_package(Volk)
 find_package(CppUnit)
 find_package(Doxygen)
 find_package(Libosmocore)
+find_package(Libosmocoding)
 
 if(NOT GNURADIO_RUNTIME_FOUND)
     message(FATAL_ERROR "GnuRadio Runtime required to compile gr-gsm")
@@ -119,6 +120,9 @@ if(NOT CPPUNIT_FOUND)
 endif()
 if(NOT LIBOSMOCORE_FOUND)
     message(FATAL_ERROR "Libosmocore required to compile gr-gsm")
+endif()
+if(NOT LIBOSMOCODING_FOUND)
+    message(FATAL_ERROR "Libosmocoding required to compile gr-gsm")
 endif()
 
 ########################################################################
