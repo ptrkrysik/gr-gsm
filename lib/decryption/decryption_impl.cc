@@ -138,7 +138,7 @@ namespace gr {
             for (int i = 0; i < 3; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
-            //encrypt first part of the burst
+            //decrypt first part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+3] = keystream[i] ^ burst_binary[i+3];
             }
@@ -146,7 +146,7 @@ namespace gr {
             for (int i = 60; i < 88; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
-            //encrypt second part of the burst
+            //decrypt second part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+88] = keystream[i+57] ^ burst_binary[i+88];
             }
