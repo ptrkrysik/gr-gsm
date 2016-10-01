@@ -115,7 +115,7 @@ class grgsm_capture(gr.top_block):
         if self.verbose or self.burst_file:
             self.connect((self.gsm_input, 0), (self.gsm_receiver, 0))
             self.connect((self.blocks_rotator, 0), (self.gsm_input, 0))
-            self.msg_connect(self.gsm_clock_offset_control, "ppm", self.gsm_input, "ppm_in")
+            self.msg_connect(self.gsm_clock_offset_control, "ctrl", self.gsm_input, "ctrl_in")
             self.msg_connect(self.gsm_receiver, "measurements", self.gsm_clock_offset_control, "measurements")
 
             if self.burst_file:
