@@ -34,8 +34,6 @@ list(APPEND grgsm_sources
     demapping/universal_ctrl_chans_demapper_impl.cc
     demapping/tch_f_chans_demapper_impl.cc
     decoding/control_channels_decoder_impl.cc
-    decoding/cch.c
-    decoding/fire_crc.c
     decoding/tch_f_decoder_impl.cc
     decoding/AmrCoder.cpp
     decoding/BitVector.cpp

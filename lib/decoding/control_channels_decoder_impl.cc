@@ -82,42 +82,42 @@ namespace gr {
     {
         ubit_t bursts_u[116 * 4];
         sbit_t bursts_s[116 * 4];
-        uint8_t result[23];        
-		int n_errors, n_bits_total;
-    	
+        uint8_t result[23];
+        int n_errors, n_bits_total;
+        int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
+
         d_bursts[d_collected_bursts_num] = msg;
         d_collected_bursts_num++;
+
         //get convecutive bursts
-        
         if(d_collected_bursts_num==4)
         {
             d_collected_bursts_num=0;
-            //reorganize data
+            //reorganize data from input bursts
             for(int ii = 0; ii < 4; ii++)
             {
                 pmt::pmt_t header_plus_burst = pmt::cdr(d_bursts[ii]);
                 int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
-                
+
                 memcpy(&bursts_u[ii*116], &burst_bits[3],58);
-                memcpy(&bursts_u[ii*116+58], &burst_bits[3+57+1+26],58);                
+                memcpy(&bursts_u[ii*116+58], &burst_bits[3+57+1+26],58);
             }
             //convert to soft bits
             ubits2sbits(bursts_u, bursts_s, 116 * 4);
             //decode
             gsm0503_xcch_decode(result, bursts_s, &n_errors, &n_bits_total);
 
-            //send to the output
+            //extract header of the first burst of the four bursts
             pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
             gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(first_header_plus_burst);
-            int8_t header_plus_data[sizeof(gsmtap_hdr)+DATA_BYTES];
+            //copy header and data
             memcpy(header_plus_data, header, sizeof(gsmtap_hdr));
-            
             memcpy(header_plus_data+sizeof(gsmtap_hdr), result, DATA_BYTES);
+            //set data type in the header
             ((gsmtap_hdr*)header_plus_data)->type = GSMTAP_TYPE_UM;
-            
-            pmt::pmt_t msg_binary_blob = pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr));
-            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
-            
+            //prepare message
+            pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, pmt::make_blob(header_plus_data,DATA_BYTES+sizeof(gsmtap_hdr)));
+            //send message to the output
             message_port_pub(pmt::mp("msgs"), msg_out);
         }
         return;
