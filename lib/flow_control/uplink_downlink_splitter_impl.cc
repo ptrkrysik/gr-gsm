@@ -27,6 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include "uplink_downlink_splitter_impl.h"
 #include <grgsm/gsmtap.h>
+#include <grgsm/endian.h>
 #define BURST_SIZE 148
 namespace gr {
   namespace grgsm {
