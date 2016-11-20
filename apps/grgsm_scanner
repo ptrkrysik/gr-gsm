@@ -220,7 +220,7 @@ class wideband_scanner(gr.top_block):
         # correction of central frequency
         # if the receiver has large frequency offset
         # the value of this variable should be set close to that offset in ppm
-        self.rtlsdr_source.set_freq_corr(options.ppm, 0)
+        self.rtlsdr_source.set_freq_corr(ppm, 0)
 
         self.rtlsdr_source.set_dc_offset_mode(2, 0)
         self.rtlsdr_source.set_iq_balance_mode(0, 0)
@@ -230,7 +230,7 @@ class wideband_scanner(gr.top_block):
         self.head = blocks.head(gr.sizeof_gr_complex * 1, int(rec_len * sample_rate))
 
         # shift again by -0.1MHz in order to align channel center in 0Hz
-        self.blocks_rotator_cc = blocks.rotator_cc(-2 * pi * 0.1e6 / options.samp_rate)
+        self.blocks_rotator_cc = blocks.rotator_cc(-2 * pi * 0.1e6 / sample_rate)
 
         self.wideband_receiver = wideband_receiver(OSR=4, fc=carrier_frequency, samp_rate=sample_rate)
         self.gsm_extract_system_info = grgsm.extract_system_info()
