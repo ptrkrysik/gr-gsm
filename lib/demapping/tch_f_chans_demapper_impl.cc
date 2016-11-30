@@ -87,7 +87,7 @@ namespace gr {
 
             new_hdr->sub_type = GSMTAP_CHANNEL_TCH_F;
             if (fn_mod13 == 12)
-                header->sub_type = GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F;
+                new_hdr->sub_type = GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F;
 
             pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
             pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);
