@@ -62,6 +62,7 @@ list(APPEND grgsm_sources
     misc_utils/bursts_printer_impl.cc
     misc_utils/extract_system_info_impl.cc
     misc_utils/extract_immediate_assignment_impl.cc
+    misc_utils/extract_cmc_impl.cc
     qa_utils/burst_sink_impl.cc
     qa_utils/burst_source_impl.cc
     qa_utils/message_source_impl.cc

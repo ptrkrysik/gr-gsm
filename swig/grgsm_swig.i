@@ -31,6 +31,7 @@
 #include "grgsm/misc_utils/tmsi_dumper.h"
 #include "grgsm/misc_utils/burst_file_sink.h"
 #include "grgsm/misc_utils/burst_file_source.h"
+#include "grgsm/misc_utils/extract_cmc.h"
 #include "grgsm/qa_utils/burst_sink.h"
 #include "grgsm/qa_utils/burst_source.h"
 #include "grgsm/qa_utils/message_source.h"
@@ -101,6 +102,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_file_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
 %include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
+%include "grgsm/misc_utils/extract_cmc.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
 
 
 %include "grgsm/qa_utils/burst_sink.h"

@@ -28,6 +28,7 @@ install(FILES
     message_file_source.h
     extract_system_info.h
     extract_immediate_assignment.h
+    extract_cmc.h
     controlled_rotator_cc.h
     message_printer.h
     tmsi_dumper.h

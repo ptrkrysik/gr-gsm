@@ -58,6 +58,7 @@
       <block>gsm_message_file_source</block>
       <block>gsm_extract_system_info</block>
       <block>gsm_extract_immediate_assignment</block>
+      <block>gsm_extract_cmc</block>
       <block>gsm_controlled_rotator_cc</block>
       <block>gsm_controlled_fractional_resampler_cc</block>
       <block>gsm_message_printer</block>
