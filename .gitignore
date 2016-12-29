@@ -8,3 +8,4 @@ build
 build/
 debian/tmp/
 debian/files
+.directory
