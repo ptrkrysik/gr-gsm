@@ -28,7 +28,7 @@ list(APPEND grgsm_sources
     receiver/receiver_impl.cc
     receiver/receiver_config.cc
     receiver/viterbi_detector.cc
-    receiver/sch.c
+    decoding/sch.c
     receiver/clock_offset_control_impl.cc
     receiver/cx_channel_hopper_impl.cc
     demapping/universal_ctrl_chans_demapper_impl.cc
@@ -41,6 +41,12 @@ list(APPEND grgsm_sources
     decoding/GSM660Tables.cpp
     decoding/GSM503Tables.cpp
     decoding/ViterbiR204.cpp
+    decoding/osmocom/coding/gsm0503_conv.c
+    decoding/osmocom/coding/gsm0503_coding.c
+    decoding/osmocom/coding/gsm0503_interleaving.c
+    decoding/osmocom/coding/gsm0503_mapping.c
+    decoding/osmocom/coding/gsm0503_parity.c
+    decoding/osmocom/coding/gsm0503_tables.c
     flow_control/burst_timeslot_splitter_impl.cc
     flow_control/burst_sdcch_subslot_splitter_impl.cc
     flow_control/burst_timeslot_filter_impl.cc
@@ -69,7 +75,8 @@ list(APPEND grgsm_sources
 
 
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODING_LIBRARIES} 
+target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} 
+# ${LIBOSMOCODING_LIBRARIES} 
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system

@@ -25,7 +25,7 @@
 
 #include <grgsm/decoding/control_channels_decoder.h>
 extern "C" {
-    #include <osmocom/coding/gsm0503_coding.h>
+    #include "osmocom/coding/gsm0503_coding.h"
 }
 
 namespace gr {

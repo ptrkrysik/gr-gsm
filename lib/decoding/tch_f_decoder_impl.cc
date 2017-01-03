@@ -30,7 +30,7 @@
 #include "tch_f_decoder_impl.h"
 
 extern "C" {
-    #include <osmocom/coding/gsm0503_coding.h>
+    #include "osmocom/coding/gsm0503_coding.h"
 }
 
 #define DATA_BYTES 23
