@@ -108,8 +108,6 @@ namespace gr {
          * @return true if frequency offset was faound
          */
         double compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample);
-
-        double estim_freq_norm(const gr_complex * input, unsigned first_sample, unsigned last_sample); //normalized frequency estimator
         /** Computes angle between two complex numbers
          *
          * @param val1 first complex number

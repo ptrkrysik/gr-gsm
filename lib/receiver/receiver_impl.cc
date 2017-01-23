@@ -26,7 +26,6 @@
 
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
-#include <volk/volk.h>
 #include <math.h>
 #include <boost/circular_buffer.hpp>
 #include <algorithm>
@@ -35,7 +34,6 @@
 #include <viterbi_detector.h>
 #include <string.h>
 #include <iostream>
-#include <time.h> //!!!
 //#include <iomanip>
 #include <boost/scoped_ptr.hpp>
 
@@ -534,43 +532,21 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems, d
     return result;
 }
 
-double receiver_impl::estim_freq_norm(const gr_complex * input, unsigned first_sample, unsigned last_sample) //another frequency estimator
-{
-
-    unsigned ii;
-
-    double sum = 0;
-
-    for (ii = first_sample; ii < last_sample-1; ii++)
-    {
-        sum += fast_atan2f(input[ii+1] * conj(input[ii]));
-    }
-    int N = last_sample-1-first_sample;
-    return sum/(2*M_PI)/N * d_OSR;
-}
-
 double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample)
 {
-    float freq_norm = estim_freq_norm(input, first_sample, last_sample);
-    float freq_offset = (freq_norm - 0.25) * 1625000.0/6.0;
+    double phase_sum = 0;
+    unsigned ii;
+
+    for (ii = first_sample; ii < last_sample; ii++)
+    {
+        double phase_diff = compute_phase_diff(input[ii], input[ii-1]) - (M_PI / 2) / d_OSR;
+        phase_sum += phase_diff;
+    }
+
+    double phase_offset = phase_sum / (last_sample - first_sample);
+    double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
     return freq_offset;
 }
-
-//double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample)
-//{
-//    double phase_sum = 0;
-//    unsigned ii;
-
-//    for (ii = first_sample; ii < last_sample; ii++)
-//    {
-//        double phase_diff = compute_phase_diff(input[ii], input[ii-1]) - (M_PI / 2) / d_OSR;
-//        phase_sum += phase_diff;
-//    }
-
-//    double phase_offset = phase_sum / (last_sample - first_sample);
-//    double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
-//    return freq_offset;
-//}
 
 inline float receiver_impl::compute_phase_diff(gr_complex val1, gr_complex val2)
 {
