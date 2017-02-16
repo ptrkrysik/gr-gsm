@@ -37,9 +37,6 @@ namespace gr {
         unsigned int d_c0_burst_start;
         float d_c0_signal_dbm;
         
-        lv_32fc_t* d_freq_estim_vector;//  = (lv_32fc_t*)volk_malloc(sizeof(lv_32fc_t)*160, alignment);
-        lv_32fc_t* d_freq_estim_result;// = (lv_32fc_t*)volk_malloc(sizeof(lv_32fc_t)*1, alignment);
-        
         /**@name Configuration of the receiver */
         //@{
         const int d_OSR; ///< oversampling ratio
@@ -111,9 +108,6 @@ namespace gr {
          * @return true if frequency offset was faound
          */
         double compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample);
-
-        double estim_freq_norm(const gr_complex * input, unsigned first_sample, unsigned last_sample); //another frequency estimator
-        double estim_freq_norm2(const gr_complex * input, unsigned first_sample, unsigned last_sample); //another frequency estimator        
         /** Computes angle between two complex numbers
          *
          * @param val1 first complex number

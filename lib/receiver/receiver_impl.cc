@@ -26,7 +26,6 @@
 
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
-#include <volk/volk.h>
 #include <math.h>
 #include <boost/circular_buffer.hpp>
 #include <algorithm>
@@ -35,7 +34,6 @@
 #include <viterbi_detector.h>
 #include <string.h>
 #include <iostream>
-#include <time.h> //!!!
 //#include <iomanip>
 #include <boost/scoped_ptr.hpp>
 
@@ -82,10 +80,6 @@ receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, c
     d_last_time(0.0)
 {
     int i;
-
-    unsigned int alignment = volk_get_alignment();
-    d_freq_estim_vector = (lv_32fc_t*)volk_malloc(sizeof(lv_32fc_t)*160, alignment);
-    d_freq_estim_result = (lv_32fc_t*)volk_malloc(sizeof(lv_32fc_t)*1, alignment);
                                                                       //don't send samples to the receiver until there are at least samples for one
     set_output_multiple(floor((TS_BITS + 2 * GUARD_PERIOD) * d_OSR)); // burst and two gurad periods (one gurard period is an arbitrary overlap)
     gmsk_mapper(SYNC_BITS, N_SYNC_BITS, d_sch_training_seq, gr_complex(0.0, -1.0));
@@ -106,8 +100,6 @@ receiver_impl::receiver_impl(int osr, const std::vector<int> &cell_allocation, c
  */
 receiver_impl::~receiver_impl()
 {
-    volk_free(d_freq_estim_vector);
-    volk_free(d_freq_estim_result);
 }
 
 int
@@ -294,7 +286,7 @@ receiver_impl::work(int noutput_items,
 
                 dummy_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &dummy_corr_max, TS_DUMMY);
                 normal_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
-                            
+
                 if (normal_corr_max > dummy_corr_max)
                 {
                     d_c0_burst_start = normal_burst_start;
@@ -540,82 +532,21 @@ bool receiver_impl::find_fcch_burst(const gr_complex *input, const int nitems, d
     return result;
 }
 
-double receiver_impl::estim_freq_norm(const gr_complex * input, unsigned first_sample, unsigned last_sample) //another frequency estimator
-{
-
-    unsigned ii;
-
-    gr_complex sum = 0;
-
-    for (ii = first_sample; ii < last_sample-d_OSR; ii=ii+d_OSR)
-    {
-        sum += input[ii+d_OSR] * conj(input[ii]);
-    }
-
-    return fast_atan2f(imag(sum), real(sum))/(2*M_PI);
-}
-
-double receiver_impl::estim_freq_norm2(const gr_complex * input, unsigned first_sample, unsigned last_sample) //another frequency estimator - faster one
-{
-
-    unsigned ii;
-
-    int N = (last_sample-first_sample)/d_OSR;
-    
-    for (unsigned ii = 0; ii < N; ii++)
-    {
-        d_freq_estim_vector[ii] = input[first_sample+ii*d_OSR];
-    }
-
-    volk_32fc_x2_conjugate_dot_prod_32fc(d_freq_estim_result, d_freq_estim_vector+1, d_freq_estim_vector, N-1);
-    
-    return fast_atan2f(imag(d_freq_estim_result[0]), real(d_freq_estim_result[0]))/(2*M_PI);
-}
-
-
 double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample)
 {
-    float freq_norm = estim_freq_norm2(input, first_sample, last_sample);
+    double phase_sum = 0;
+    unsigned ii;
 
-//    using namespace std;
-//    clock_t begin = clock();
-//  
-//    for(int ii=0;ii<500;ii++){
-//        float dupa = estim_freq_norm2(input, first_sample, last_sample);
-//    }
-//    clock_t end = clock();
-//    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;  
-//    std::cout << "elapsed_secs " << elapsed_secs << std::endl;
+    for (ii = first_sample; ii < last_sample; ii++)
+    {
+        double phase_diff = compute_phase_diff(input[ii], input[ii-1]) - (M_PI / 2) / d_OSR;
+        phase_sum += phase_diff;
+    }
 
-//    begin = clock();
-//  
-//    for(int ii=0;ii<500;ii++){
-//        float dupa = estim_freq_norm(input, first_sample, last_sample);
-//    }
-//    end = clock();
-//    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;  
-//    std::cout << "elapsed_secs_old " << elapsed_secs << std::endl;
-  
-    float freq_offset = (freq_norm - 0.25) * 1625000.0/6.0;
-    
+    double phase_offset = phase_sum / (last_sample - first_sample);
+    double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
     return freq_offset;
 }
-
-//double receiver_impl::compute_freq_offset(const gr_complex * input, unsigned first_sample, unsigned last_sample)
-//{
-//    double phase_sum = 0;
-//    unsigned ii;
-
-//    for (ii = first_sample; ii < last_sample; ii++)
-//    {
-//        double phase_diff = compute_phase_diff(input[ii], input[ii-1]) - (M_PI / 2) / d_OSR;
-//        phase_sum += phase_diff;
-//    }
-
-//    double phase_offset = phase_sum / (last_sample - first_sample);
-//    double freq_offset = phase_offset * 1625000.0 / (12.0 * M_PI);
-//    return freq_offset;
-//}
 
 inline float receiver_impl::compute_phase_diff(gr_complex val1, gr_complex val2)
 {

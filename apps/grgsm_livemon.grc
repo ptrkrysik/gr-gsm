@@ -125,7 +125,7 @@
     </param>
     <param>
       <key>start</key>
-      <value>925e6</value>
+      <value>800e6</value>
     </param>
     <param>
       <key>step</key>
@@ -255,7 +255,7 @@
     </param>
     <param>
       <key>step</key>
-      <value>1</value>
+      <value>0.1</value>
     </param>
     <param>
       <key>stop</key>
@@ -580,7 +580,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 283)</value>
+      <value>(896, 284)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -756,7 +756,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1112, 331)</value>
+      <value>(1104, 333)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -827,7 +827,7 @@
     </param>
     <param>
       <key>ppm</key>
-      <value>0</value>
+      <value>ppm-int(ppm)</value>
     </param>
     <param>
       <key>samp_rate_in</key>
@@ -854,7 +854,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1496, 291)</value>
+      <value>(1512, 270)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -956,7 +956,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(912, 339)</value>
+      <value>(896, 340)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1089,7 +1089,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>intx</value>
+      <value>eng_float</value>
     </param>
     <param>
       <key>value</key>

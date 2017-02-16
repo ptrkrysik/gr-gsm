@@ -5,7 +5,7 @@
 # Title: Gr-gsm Livemon
 # Author: Piotr Krysik
 # Description: Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)
-# Generated: Mon Jul 18 18:08:34 2016
+# Generated: Mon Jan 23 21:28:25 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -82,13 +82,13 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._ppm_slider_range = Range(-150, 150, 1, ppm, 100)
+        self._ppm_slider_range = Range(-150, 150, 0.1, ppm, 100)
         self._ppm_slider_win = RangeWidget(self._ppm_slider_range, self.set_ppm_slider, "PPM Offset", "counter", float)
         self.top_layout.addWidget(self._ppm_slider_win)
         self._g_slider_range = Range(0, 50, 0.5, gain, 100)
         self._g_slider_win = RangeWidget(self._g_slider_range, self.set_g_slider, "Gain", "counter", float)
         self.top_layout.addWidget(self._g_slider_win)
-        self._fc_slider_range = Range(925e6, 1990e6, 2e5, fc, 100)
+        self._fc_slider_range = Range(800e6, 1990e6, 2e5, fc, 100)
         self._fc_slider_win = RangeWidget(self._fc_slider_range, self.set_fc_slider, "Frequency", "counter_slider", float)
         self.top_layout.addWidget(self._fc_slider_win)
         self.rtlsdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + args )
@@ -152,7 +152,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.gsm_message_printer_1 = grgsm.message_printer(pmt.intern(""), False,
             False, False)
         self.gsm_input_0 = grgsm.gsm_input(
-            ppm=0,
+            ppm=ppm-int(ppm),
             osr=4,
             fc=fc,
             samp_rate_in=samp_rate,
@@ -220,6 +220,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
     def set_ppm(self, ppm):
         self.ppm = ppm
         self.set_ppm_slider(self.ppm)
+        self.gsm_input_0.set_ppm(self.ppm-int(self.ppm))
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -281,7 +282,7 @@ def argument_parser():
         "-g", "--gain", dest="gain", type="eng_float", default=eng_notation.num_to_str(30),
         help="Set gain [default=%default]")
     parser.add_option(
-        "-p", "--ppm", dest="ppm", type="intx", default=0,
+        "-p", "--ppm", dest="ppm", type="eng_float", default=eng_notation.num_to_str(0),
         help="Set ppm [default=%default]")
     parser.add_option(
         "-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
