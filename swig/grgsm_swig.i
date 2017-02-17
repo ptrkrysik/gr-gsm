@@ -31,6 +31,7 @@
 #include "grgsm/misc_utils/tmsi_dumper.h"
 #include "grgsm/misc_utils/burst_file_sink.h"
 #include "grgsm/misc_utils/burst_file_source.h"
+#include "grgsm/misc_utils/collect_system_info.h"
 #include "grgsm/misc_utils/extract_cmc.h"
 #include "grgsm/qa_utils/burst_sink.h"
 #include "grgsm/qa_utils/burst_source.h"
@@ -84,6 +85,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_sink);
 %include "grgsm/misc_utils/burst_file_source.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_source);
+%include "grgsm/misc_utils/collect_system_info.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, collect_system_info);
 %include "grgsm/misc_utils/extract_system_info.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
 %include "grgsm/misc_utils/extract_immediate_assignment.h"

@@ -20,6 +20,7 @@
 install(FILES
     gsm_extract_system_info.xml
     gsm_extract_immediate_assignment.xml
+    gsm_collect_system_info.xml
     gsm_extract_cmc.xml
     gsm_controlled_rotator_cc.xml
     gsm_message_printer.xml
