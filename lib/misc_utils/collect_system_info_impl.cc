@@ -95,11 +95,11 @@ namespace gr {
                 d_sit_data.push_back(get_hex_string(msg_elements));
             }
         }
-        else if ((chan_type == GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH
-            || chan_type == GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH4
-            || chan_type == GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH8
-            || chan_type == GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F
-            || chan_type == GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_H)
+        else if ((chan_type == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH)
+            || chan_type == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH4)
+            || chan_type == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_SDCCH8)
+            || chan_type == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_F)
+            || chan_type == (GSMTAP_CHANNEL_ACCH|GSMTAP_CHANNEL_TCH_H))
             && msg_elements[5] == 0x06)
         {
             int frame_nr = be32toh(header->frame_number);
