@@ -1,3 +1,4 @@
+
 <block>
   <name>GSM Wideband Input Adaptor</name>
   <key>gsm_wideband_input</key>
@@ -104,7 +105,7 @@
     <vlen>1</vlen>
   </sink>
   <sink>
-    <name>ppm_in</name>
+    <name>ctrl_in</name>
     <type>message</type>
     <optional>True</optional>
   </sink>
