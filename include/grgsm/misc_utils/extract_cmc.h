@@ -52,6 +52,7 @@ namespace gr {
       static sptr make();
       virtual std::vector<int> get_framenumbers() = 0;
       virtual std::vector<int> get_a5_versions() = 0;
+      virtual std::vector<int> get_start_ciphering() = 0;
     };
 
   } // namespace gsm

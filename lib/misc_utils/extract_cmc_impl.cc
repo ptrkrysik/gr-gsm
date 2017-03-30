@@ -42,10 +42,11 @@ namespace gr {
 
         if((msg_elements[3] & 0xF) == 0x6 && msg_elements[4] == 0x35)
         {
-            
-            int frame_nr = be32toh(header->frame_number);
-            int a5_version = ((msg_elements[5] & 0xE) >> 1) + 1;
 
+            int frame_nr = be32toh(header->frame_number);
+            int a5_version = ((msg_elements[5] & 0xE) >> 1) + 1; //10.5.2.9 Cipher Mode Setting
+            int start_ciphering = ((msg_elements[5] & 0x1));
+            d_start_ciphering.push_back(start_ciphering);
             d_framenumbers.push_back(frame_nr);
             d_a5_versions.push_back(a5_version);
         }
@@ -59,6 +60,11 @@ namespace gr {
     std::vector<int> extract_cmc_impl::get_a5_versions()
     {
         return d_a5_versions;
+    }
+
+    std::vector<int> extract_cmc_impl::get_start_ciphering()
+    {
+        return d_start_ciphering;
     }
     
     extract_cmc::sptr
