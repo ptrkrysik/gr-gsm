@@ -326,7 +326,7 @@ if __name__ == '__main__':
         parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
 
     channels_num = int(options.samp_rate / 0.2e6)
-
+    print ""
     for arfcn_range in grgsm.arfcn.get_arfcn_ranges(options.band):
         first_arfcn = arfcn_range[0]
         last_arfcn = arfcn_range[1]
