@@ -53,6 +53,7 @@ namespace gr {
       virtual std::vector<int> get_framenumbers() = 0;
       virtual std::vector<int> get_a5_versions() = 0;
       virtual std::vector<int> get_start_ciphering() = 0;
+      virtual std::vector<int> get_assignment_commands() = 0;
     };
 
   } // namespace gsm
