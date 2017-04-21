@@ -44,14 +44,14 @@ class gsm_wideband_input(grgsm.hier_block):
         ##################################################
         # Blocks
         ##################################################
-        self.ppm_in = None
-        self.message_port_register_hier_in("ppm_in")
+        self.message_port_register_hier_in("ctrl_in")
         #self.lpf = firdes.low_pass(1, samp_rate_out, 125e3, 5e3, firdes.WIN_HAMMING, 6.76)
         self.lpf = firdes.low_pass(1, samp_rate_in, 125e3, 75e3, firdes.WIN_HAMMING, 6.76)
-        self.gsm_clock_offset_corrector_0 = grgsm.clock_offset_corrector(
+        self.gsm_clock_offset_corrector_0 = grgsm.clock_offset_corrector_tagged(
             fc=fc,
-            ppm=ppm,
             samp_rate_in=samp_rate_in,
+            ppm=ppm,
+            osr=osr
         )
 
         center_arfcn = arfcn.downlink2arfcn(fc, band)
@@ -81,7 +81,7 @@ class gsm_wideband_input(grgsm.hier_block):
         ##################################################
         # Asynch Message Connections
         ##################################################
-        self.msg_connect(self, "ppm_in", self.gsm_clock_offset_corrector_0, "ppm_in")
+        self.msg_connect(self, "ctrl_in", self.gsm_clock_offset_corrector_0, "ctrl")
 
     def get_ppm(self):
         return self.ppm
