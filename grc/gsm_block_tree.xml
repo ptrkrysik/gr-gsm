@@ -20,7 +20,6 @@
       <block>gsm_fcch_detector</block>
       <block>gsm_clock_offset_control</block>
       <block>gsm_input</block>
-      <block>gsm_wideband_input</block>
     </cat>
     <cat>
       <name>Logical channels demapping</name>
