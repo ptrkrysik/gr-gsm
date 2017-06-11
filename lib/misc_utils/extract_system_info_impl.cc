@@ -180,7 +180,7 @@ namespace gr {
             info.pwr_db = header->signal_dbm;
             boost::mutex::scoped_lock lock(extract_mutex);
             //read cell arfcn's
-            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8c, 0x01);
+            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8e, 0x01);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
             } else {
