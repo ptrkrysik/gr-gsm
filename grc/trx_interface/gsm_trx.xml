@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<block>
+  <name>TRX interface</name>
+  <key>grgsm_trx_interface</key>
+  <import>import grgsm</import>
+  <make>grgsm.trx($remote_addr, $base_port)</make>
+
+  <param>
+    <name>base_port</name>
+    <key>base_port</key>
+    <value>5700</value>
+    <type>string</type>
+  </param>
+
+  <param>
+    <name>remote_addr</name>
+    <key>remote_addr</key>
+    <value>127.0.0.1</value>
+    <type>string</type>
+  </param>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+  </sink>
+
+  <doc>
+      OsmoTRX like UDP interface for external applications.
+
+      There are three UDP sockets: CLCK, CTRL and DATA.
+      Give a base port B (5700 by default), the SCH clock
+      interface is at port P=B. The TRX-side control interface
+      is on port P=B+100+1 and the data interface is on an odd
+      numbered port P=B+100+2.
+
+      Indications on the SCH Clock Interface (CLCK)
+      The SCH clock interface is output only (from the radio).
+      CLOCK gives the current value of the BTS clock to
+      be used by external applications. The indications are
+      sent whenever a transmission packet arrives that is too
+      late or too early.
+
+      Commands on Control Interface (CTRL)
+      The control interface uses a command-response protocol.
+      Commands are NULL-terminated ASCII strings. Each command
+      has a corresponding response. This interface isn't handled
+      by this particular block, and should be implemented outside.
+
+      Messages on the Data Interface
+      Messages on the data interface carry one radio burst per
+      UDP message.
+
+      Received Data Burst:
+      1 byte timeslot index
+      4 bytes GSM frame number, big endian
+      1 byte RSSI in -dBm
+      2 bytes correlator timing offset in 1/256 symbol steps,
+          2's-comp, big endian
+      148 bytes soft symbol estimates, 0 -&gt; definite "0",
+          255 -&gt; definite "1"
+
+      Transmit Data Burst:
+      1 byte timeslot index
+      4 bytes GSM frame number, big endian
+      1 byte transmit level wrt ARFCN max, -dB (attenuation)
+      148 bytes output symbol values, 0 &amp; 1
+  </doc>
+</block>
