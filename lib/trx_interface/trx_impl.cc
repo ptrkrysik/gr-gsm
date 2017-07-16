@@ -135,19 +135,25 @@ namespace gr {
       // Convert to transceiver interface specific bits {255..0}
       for (int i = 0; i < 148; i++)
         buf[8 + i] = burst[i] ? 255 : 0;
+
+      // Fill two unused bytes
+      buf[156] = 0x00;
+      buf[157] = 0x00;
     }
 
     void
     trx_impl::handle_dl_burst(pmt::pmt_t msg)
     {
       // 8 bytes of header + 148 bytes of burst
-      uint8_t buf[156];
+      // + two unused, but required bytes
+      // otherwise bursts would be rejected
+      uint8_t buf[158];
 
       // Compose a new UDP payload with burst
       burst_pack(msg, buf);
 
       // Send a burst
-      d_data_sock->udp_send(buf, 156);
+      d_data_sock->udp_send(buf, 158);
     }
 
   } /* namespace grgsm */
