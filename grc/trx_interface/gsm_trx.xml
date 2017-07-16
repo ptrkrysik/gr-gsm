@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <block>
-  <name>TRX interface</name>
+  <name>TRX Interface</name>
   <key>grgsm_trx_interface</key>
   <import>import grgsm</import>
   <make>grgsm.trx($remote_addr, $base_port)</make>
