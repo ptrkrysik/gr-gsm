@@ -45,6 +45,7 @@ namespace gr {
       ~trx_impl();
 
       void handle_dl_burst(pmt::pmt_t msg);
+      void handle_ul_burst(uint8_t *payload, size_t len);
     };
 
   } // namespace grgsm

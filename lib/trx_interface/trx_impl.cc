@@ -30,6 +30,9 @@
 #include "udp_socket.h"
 #include "trx_impl.h"
 
+#define BURST_SIZE     148
+#define DATA_IF_MTU    160
+
 namespace gr {
   namespace grgsm {
 
@@ -53,6 +56,9 @@ namespace gr {
         gr::io_signature::make(0, 0, 0))
     {
         message_port_register_in(pmt::mp("bursts"));
+        message_port_register_out(pmt::mp("bursts"));
+
+        // Bind a port handler
         set_msg_handler(pmt::mp("bursts"),
           boost::bind(&trx_impl::handle_dl_burst, this, _1));
 
@@ -62,9 +68,15 @@ namespace gr {
         std::string data_src_port = boost::lexical_cast<std::string> (base_port + 2);
         std::string data_dst_port = boost::lexical_cast<std::string> (base_port + 102);
 
-        // Init DATA interface
-        d_data_sock = new udp_socket(remote_addr, data_src_port, data_dst_port);
-        d_clck_sock = new udp_socket(remote_addr, clck_src_port, clck_dst_port);
+        // Init DATA & CLCK interfaces
+        d_data_sock = new udp_socket(remote_addr,
+          data_src_port, data_dst_port, DATA_IF_MTU);
+        d_clck_sock = new udp_socket(remote_addr,
+          clck_src_port, clck_dst_port, DATA_IF_MTU);
+
+        // Bind DATA interface handler
+        d_data_sock->udp_rx_handler = boost::bind(
+          &trx_impl::handle_ul_burst, this, _1, _2);
     }
 
     /*
@@ -154,6 +166,57 @@ namespace gr {
 
       // Send a burst
       d_data_sock->udp_send(buf, 158);
+    }
+
+    void
+    trx_impl::handle_ul_burst(uint8_t *payload, size_t len)
+    {
+      // Check length according to the protocol
+      if (len != 154)
+        return;
+
+      /* Make sure TS index is correct */
+      if (payload[0] >= 8)
+        return;
+
+      /* Unpack and check frame number */
+      uint32_t fn = (payload[1] << 24)
+        | (payload[2] << 16)
+        | (payload[3] << 8)
+        | payload[4];
+
+      if (fn >= 2715648)
+        return;
+
+      // Prepare a buffer for GSMTAP header and burst
+      uint8_t buf[sizeof(gsmtap_hdr) + BURST_SIZE];
+
+      // Set up pointer to GSMTAP header structure
+      struct gsmtap_hdr *header = (struct gsmtap_hdr *) buf;
+      memset(header, 0x00, sizeof(struct gsmtap_hdr));
+
+      // Fill in basic info
+      header->version = GSMTAP_VERSION;
+      header->hdr_len = sizeof(gsmtap_hdr) / 4;
+      header->type = GSMTAP_TYPE_UM_BURST;
+
+      // Set timeslot index and frame number
+      header->timeslot = payload[0];
+      header->frame_number = htobe32(fn);
+
+      // HACK: use GSMTAP_BURST_NORMAL for now
+      // FIXME: We will need to distinguish between RACN and NORMAL
+      header->sub_type = GSMTAP_BURST_NORMAL;
+
+      // Copy burst bits (0 & 1) for source message
+      memcpy(buf + sizeof(gsmtap_hdr), payload + 6, BURST_SIZE);
+
+      // Create a pmt blob
+      pmt::pmt_t blob = pmt::make_blob(buf, sizeof(gsmtap_hdr) + BURST_SIZE);
+      pmt::pmt_t msg = pmt::cons(pmt::PMT_NIL, blob);
+
+      /* Send a message to the output */
+      message_port_pub(pmt::mp("bursts"), msg);
     }
 
   } /* namespace grgsm */

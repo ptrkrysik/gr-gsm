@@ -24,6 +24,11 @@
     <type>message</type>
   </sink>
 
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+  </source>
+
   <doc>
       OsmoTRX like UDP interface for external applications.
 

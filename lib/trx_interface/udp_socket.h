@@ -25,8 +25,10 @@
 
 #include <gnuradio/thread/thread.h>
 
+#include <boost/function.hpp>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
 #include <pmt/pmt.h>
 
 namespace gr {
@@ -53,10 +55,12 @@ namespace gr {
       udp_socket(
         const std::string &remote_addr,
         const std::string &src_port,
-        const std::string &dst_port);
+        const std::string &dst_port,
+        size_t mtu);
       ~udp_socket();
 
       void udp_send(uint8_t *data, size_t len);
+      boost::function<void (uint8_t *, size_t)> udp_rx_handler;
     };
 
   } /* namespace blocks */

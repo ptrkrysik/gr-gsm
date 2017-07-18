@@ -40,8 +40,12 @@ namespace gr {
     udp_socket::udp_socket(
       const std::string &remote_addr,
       const std::string &src_port,
-      const std::string &dst_port)
+      const std::string &dst_port,
+      size_t mtu)
     {
+      // Resize receive buffer according to MTU value
+      d_rxbuf.resize(mtu);
+
       // Resolve remote host address
       udp::resolver resolver(d_io_service);
 
@@ -100,11 +104,9 @@ namespace gr {
       if (error)
         return;
 
-      pmt::pmt_t vector = pmt::init_u8vector(bytes_transferred,
-        (const uint8_t *) &d_rxbuf[0]);
-      pmt::pmt_t pdu = pmt::cons(pmt::PMT_NIL, vector);
-
-      // TODO: call handler here
+      // Call incoming data handler
+      if (udp_rx_handler != NULL)
+        udp_rx_handler((uint8_t *) &d_rxbuf[0], bytes_transferred);
 
       d_udp_socket->async_receive_from(
         boost::asio::buffer(d_rxbuf), d_udp_endpoint_rx,
