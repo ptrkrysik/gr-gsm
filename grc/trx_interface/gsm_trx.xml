@@ -22,11 +22,13 @@
   <sink>
     <name>bursts</name>
     <type>message</type>
+    <optional>1</optional>
   </sink>
 
   <source>
     <name>bursts</name>
     <type>message</type>
+    <optional>1</optional>
   </source>
 
   <doc>
