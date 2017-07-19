@@ -143,8 +143,6 @@ class Application:
 			self.shutdown()
 			sys.exit(0)
 
-def main():
-	Application().run()
-
 if __name__ == '__main__':
-	main()
+	app = Application()
+	app.run()
