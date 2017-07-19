@@ -29,9 +29,6 @@ import osmosdr
 
 from math import pi
 
-from gnuradio.eng_option import eng_option
-from gnuradio import eng_notation
-from gnuradio.filter import firdes
 from gnuradio import blocks
 from gnuradio import gr
 
