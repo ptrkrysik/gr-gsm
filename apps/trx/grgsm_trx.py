@@ -25,7 +25,7 @@ import signal
 import getopt
 import sys
 
-from ctrl_if import CTRLInterface
+from ctrl_if_bb import CTRLInterfaceBB
 from radio_if import RadioInterface
 
 COPYRIGHT = \
@@ -61,7 +61,7 @@ class Application:
 			self.remote_addr, self.base_port)
 
 		# Init TRX CTRL interface
-		self.server = CTRLInterface(self.remote_addr,
+		self.server = CTRLInterfaceBB(self.remote_addr,
 			self.base_port + 101, self.base_port + 1, self.radio)
 
 		print("[i] Init complete")
