@@ -94,6 +94,28 @@ class CTRLInterfaceBB(CTRLInterface):
 			# TODO: is not implemented yet
 			return 0
 
+		# Timeslot management
+		elif self.verify_cmd(request, "SETSLOT", 2):
+			print("[i] Recv SETSLOT cmd")
+
+			# Obtain TS index
+			tn = int(request[1])
+			if tn not in range(0, 8):
+				print("[!] TS index should be in range: 0..7")
+				return -1
+
+			# Ignore timeslot type for now
+			# Value 0 means 'drop all'
+			config = -1 if int(request[2]) == 0 else tn
+
+			print("[i] Configure timeslot filter to: %s"
+				% ("drop all" if config == -1 else "TS %d" % tn))
+
+			# HACK: configure built-in timeslot filter
+			self.tb.gsm_trx_if.ts_filter_set_tn(config)
+
+			return 0
+
 		# Misc
 		elif self.verify_cmd(request, "ECHO", 0):
 			print("[i] Recv ECHO cmd")
