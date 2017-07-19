@@ -27,6 +27,7 @@ import sys
 
 from ctrl_if_bb import CTRLInterfaceBB
 from radio_if import RadioInterface
+from fake_pm import FakePM
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2017 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
@@ -60,9 +61,15 @@ class Application:
 			self.phy_sample_rate, self.phy_gain, self.phy_ppm,
 			self.remote_addr, self.base_port)
 
+		# Power measurement emulation
+		# Noise: -120 .. -105
+		# BTS: -75 .. -50
+		self.pm = FakePM(-120, -105, -75, -50)
+
 		# Init TRX CTRL interface
 		self.server = CTRLInterfaceBB(self.remote_addr,
-			self.base_port + 101, self.base_port + 1, self.radio)
+			self.base_port + 101, self.base_port + 1,
+			self.radio, self.pm)
 
 		print("[i] Init complete")
 

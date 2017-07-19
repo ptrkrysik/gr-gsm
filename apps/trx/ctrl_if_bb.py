@@ -25,12 +25,14 @@
 from ctrl_if import CTRLInterface
 
 class CTRLInterfaceBB(CTRLInterface):
-	def __init__(self, remote_addr, remote_port, bind_port, tb):
+	def __init__(self, remote_addr, remote_port, bind_port, tb, pm):
 		print("[i] Init CTRL interface")
 		CTRLInterface.__init__(self, remote_addr, remote_port, bind_port)
 
 		# Set link to the follow graph (top block)
 		self.tb = tb
+		# Power measurement
+		self.pm = pm
 
 	def shutdown(self):
 		print("[i] Shutdown CTRL interface")
@@ -115,6 +117,19 @@ class CTRLInterfaceBB(CTRLInterface):
 			self.tb.gsm_trx_if.ts_filter_set_tn(config)
 
 			return 0
+
+		# Power measurement
+		elif self.verify_cmd(request, "MEASURE", 1):
+			print("[i] Recv MEASURE cmd")
+
+			# TODO: check freq range
+			meas_freq = int(request[1]) * 1000
+
+			# HACK: send fake low power values
+			# until actual power measurement is implemented
+			meas_dbm = str(self.pm.measure(meas_freq))
+
+			return (0, [meas_dbm])
 
 		# Misc
 		elif self.verify_cmd(request, "ECHO", 0):
