@@ -87,6 +87,9 @@ namespace gr {
         // Bind DATA interface handler
         d_data_sock->udp_rx_handler = boost::bind(
           &trx_impl::handle_ul_burst, this, _1, _2);
+
+        // Init timeslot filter
+        d_ts_filter_tn = -1;
     }
 
     /*
@@ -97,6 +100,21 @@ namespace gr {
         // Release all UDP sockets and free memory
         delete d_data_sock;
         delete d_clck_sock;
+    }
+
+    /*
+     * Timeslot filter API (getter and setter)
+     */
+    void
+    trx_impl::ts_filter_set_tn(int tn)
+    {
+      d_ts_filter_tn = (tn >= 0 && tn <= 7) ? tn : -1;
+    }
+
+    int
+    trx_impl::ts_filter_get_tn(void)
+    {
+      return d_ts_filter_tn;
     }
 
     /*
@@ -191,6 +209,10 @@ namespace gr {
 
       // Compose a new UDP payload with burst
       burst_pack(msg, buf);
+
+      // Timeslot filter
+      if (d_ts_filter_tn != -1 && buf[0] != d_ts_filter_tn)
+        return;
 
       // Send a burst
       d_data_sock->udp_send(buf, 158);

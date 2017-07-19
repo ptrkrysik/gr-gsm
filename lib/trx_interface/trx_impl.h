@@ -36,6 +36,7 @@ namespace gr {
      private:
       udp_socket *d_data_sock;
       udp_socket *d_clck_sock;
+      int d_ts_filter_tn;
 
       bool detect_rach(uint8_t *burst);
       void clck_ind_send(uint32_t frame_nr);
@@ -44,6 +45,10 @@ namespace gr {
      public:
       trx_impl(const std::string &remote_addr, int base_port);
       ~trx_impl();
+
+      /* Timeslot filter API */
+      void ts_filter_set_tn(int tn);
+      int ts_filter_get_tn(void);
 
       void handle_dl_burst(pmt::pmt_t msg);
       void handle_ul_burst(uint8_t *payload, size_t len);

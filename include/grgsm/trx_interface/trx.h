@@ -50,6 +50,10 @@ namespace gr {
       static sptr make(
         const std::string &remote_addr,
         const std::string &base_port);
+
+      /* Expose internal timeslot filter API */
+      virtual void ts_filter_set_tn(int tn) = 0;
+      virtual int ts_filter_get_tn(void) = 0;
     };
 
   } // namespace grgsm
