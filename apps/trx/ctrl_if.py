@@ -25,42 +25,17 @@
 import socket
 import select
 
-class UDPServer:
-	def __init__(self, remote_addr, remote_port, bind_port):
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		self.sock.bind(('0.0.0.0', bind_port))
-		self.sock.setblocking(0)
+from udp_link import UDPLink
 
-		# Save remote info
-		self.remote_addr = remote_addr
-		self.remote_port = remote_port
-
-	def loop(self):
-		r_event, w_event, x_event = select.select([self.sock], [], [])
-
-		# Check for incoming data
-		if self.sock in r_event:
-			data, addr = self.sock.recvfrom(128)
-			self.handle_rx(data)
-
-	def shutdown(self):
-		self.sock.close();
-
-	def send(self, data):
-		self.sock.sendto(data, (self.remote_addr, self.remote_port))
-
-	def handle_rx(self, data):
-		raise NotImplementedError
-
-class CTRLInterface(UDPServer):
+class CTRLInterface(UDPLink):
 	def __init__(self, remote_addr, remote_port, bind_port, radio_if):
 		print("[i] Init TRX CTRL interface")
-		UDPServer.__init__(self, remote_addr, remote_port, bind_port)
+		UDPLink.__init__(self, remote_addr, remote_port, bind_port)
 		self.tb = radio_if
 
 	def shutdown(self):
 		print("[i] Shutdown TRX CTRL interface")
-		UDPServer.shutdown(self)
+		UDPLink.shutdown(self)
 
 	def handle_rx(self, data):
 		if self.verify_req(data):
