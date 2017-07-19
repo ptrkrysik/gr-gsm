@@ -65,6 +65,7 @@ class CTRLInterfaceBB(CTRLInterface):
 				print("[i] Stopping transceiver...")
 				self.tb.trx_started = False
 				self.tb.stop()
+				self.tb.wait()
 
 			return 0
 
