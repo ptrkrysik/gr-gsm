@@ -33,6 +33,16 @@
 #define BURST_SIZE     148
 #define DATA_IF_MTU    160
 
+/**
+ * 41-bit RACH synchronization sequence
+ * GSM 05.02 Chapter 5.2.7 Access burst (AB)
+ */
+static uint8_t rach_synch_seq[] = {
+  0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1,
+  1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0,
+  1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
+};
+
 namespace gr {
   namespace grgsm {
 
@@ -87,6 +97,24 @@ namespace gr {
         // Release all UDP sockets and free memory
         delete d_data_sock;
         delete d_clck_sock;
+    }
+
+    /*
+     * Check if burst is a RACH burst
+     */
+    bool trx_impl::detect_rach(uint8_t *burst)
+    {
+      // Compare synchronization sequence
+      for (int i = 0; i < 41; i++)
+        if (burst[i + 8] != rach_synch_seq[i])
+          return false;
+
+      // Make sure TB and GP are filled by 0x00
+      for (int i = 0; i < 63; i++)
+        if (burst[i + 85] != 0x00)
+          return false;
+
+      return true;
     }
 
     /*
@@ -204,9 +232,9 @@ namespace gr {
       header->timeslot = payload[0];
       header->frame_number = htobe32(fn);
 
-      // HACK: use GSMTAP_BURST_NORMAL for now
-      // FIXME: We will need to distinguish between RACN and NORMAL
-      header->sub_type = GSMTAP_BURST_NORMAL;
+      // Check if one is a RACH burst
+      header->sub_type = detect_rach(payload + 6) ?
+        GSMTAP_BURST_ACCESS : GSMTAP_BURST_NORMAL;
 
       // Copy burst bits (0 & 1) for source message
       memcpy(buf + sizeof(gsmtap_hdr), payload + 6, BURST_SIZE);
