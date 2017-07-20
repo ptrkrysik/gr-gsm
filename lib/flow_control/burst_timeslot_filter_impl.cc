@@ -73,5 +73,24 @@ namespace gr {
             message_port_pub(pmt::mp("out"), msg);
         }
     }
+
+    /*
+     * External API
+     */
+    unsigned int
+    burst_timeslot_filter_impl::get_tn(void)
+    {
+      return d_timeslot;
+    }
+
+    unsigned int
+    burst_timeslot_filter_impl::set_tn(unsigned int tn)
+    {
+      if (tn < 8)
+        d_timeslot = tn;
+
+      return d_timeslot;
+    }
+
   } /* namespace gsm */
 } /* namespace gr */

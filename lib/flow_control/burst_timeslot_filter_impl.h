@@ -36,6 +36,10 @@ namespace gr {
       burst_timeslot_filter_impl(unsigned int timeslot);
       ~burst_timeslot_filter_impl();
       void process_burst(pmt::pmt_t msg);
+
+      /* External API */
+      unsigned int get_tn(void);
+      unsigned int set_tn(unsigned int tn);
     };
 
   } // namespace gsm

@@ -48,6 +48,10 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(unsigned int timeslot);
+
+      /* External API */
+      virtual unsigned int get_tn(void) = 0;
+      virtual unsigned int set_tn(unsigned int tn) = 0;
     };
   } // namespace gsm
 } // namespace gr
