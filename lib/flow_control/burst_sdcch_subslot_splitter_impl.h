@@ -36,6 +36,10 @@ namespace gr {
       burst_sdcch_subslot_splitter_impl(splitter_mode mode);
       ~burst_sdcch_subslot_splitter_impl();
       void process_burst(pmt::pmt_t msg);
+
+      /* External API */
+      splitter_mode get_mode(void);
+      splitter_mode set_mode(splitter_mode mode);
     };
 
   } // namespace gsm
