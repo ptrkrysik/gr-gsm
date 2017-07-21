@@ -101,5 +101,37 @@ namespace gr {
             message_port_pub(pmt::mp("out"), msg);
         }
     }
+
+    /* External API */
+    unsigned int
+    burst_sdcch_subslot_filter_impl::get_ss(void)
+    {
+      return d_subslot;
+    }
+
+    unsigned int
+    burst_sdcch_subslot_filter_impl::set_ss(unsigned int ss)
+    {
+      if ((d_mode == SS_FILTER_SDCCH8 && ss < 8)
+      || (d_mode == SS_FILTER_SDCCH4 && ss < 4))
+        d_subslot = ss;
+
+      return d_subslot;
+    }
+
+
+    subslot_filter_mode
+    burst_sdcch_subslot_filter_impl::get_mode(void)
+    {
+      return d_mode;
+    }
+
+    subslot_filter_mode
+    burst_sdcch_subslot_filter_impl::set_mode(subslot_filter_mode mode)
+    {
+      d_mode = mode;
+      return d_mode;
+    }
+
   } /* namespace gsm */
 } /* namespace gr */

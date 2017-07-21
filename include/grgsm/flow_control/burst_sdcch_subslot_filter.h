@@ -54,6 +54,13 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(subslot_filter_mode mode, unsigned int subslot);
+
+      /* External API */
+      virtual unsigned int get_ss(void) = 0;
+      virtual unsigned int set_ss(unsigned int ss) = 0;
+
+      virtual subslot_filter_mode get_mode(void) = 0;
+      virtual subslot_filter_mode set_mode(subslot_filter_mode mode) = 0;
     };
   } // namespace gsm
 } // namespace gr
