@@ -25,6 +25,9 @@
 
 #include <grgsm/flow_control/burst_fnr_filter.h>
 
+#define GSM_SUPERFRAME    (26 * 51)
+#define GSM_HYPERFRAME    (2048 * GSM_SUPERFRAME)
+
 namespace gr {
   namespace gsm {
 
@@ -37,6 +40,13 @@ namespace gr {
       burst_fnr_filter_impl(filter_mode mode, unsigned int fnr);
       ~burst_fnr_filter_impl();
       void process_burst(pmt::pmt_t msg);
+
+      /* External API */
+      unsigned int get_fn(void);
+      unsigned int set_fn(unsigned int fn);
+
+      filter_mode get_mode(void);
+      filter_mode set_mode(filter_mode mode);
     };
 
   } // namespace gsm

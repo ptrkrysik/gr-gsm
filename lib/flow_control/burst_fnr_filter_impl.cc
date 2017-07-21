@@ -75,5 +75,36 @@ namespace gr {
             message_port_pub(pmt::mp("out"), msg);
         }
     }
+
+    /* External API */
+    unsigned int
+    burst_fnr_filter_impl::get_fn(void)
+    {
+      return d_framenr;
+    }
+
+    unsigned int
+    burst_fnr_filter_impl::set_fn(unsigned int fn)
+    {
+      if (fn <= GSM_HYPERFRAME)
+        d_framenr = fn;
+
+      return d_framenr;
+    }
+
+
+    filter_mode
+    burst_fnr_filter_impl::get_mode(void)
+    {
+      return d_mode;
+    }
+
+    filter_mode
+    burst_fnr_filter_impl::set_mode(filter_mode mode)
+    {
+      d_mode = mode;
+      return d_mode;
+    }
+
   } /* namespace gsm */
 } /* namespace gr */

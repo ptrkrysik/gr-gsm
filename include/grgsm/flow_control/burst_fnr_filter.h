@@ -56,6 +56,12 @@ namespace gr {
        */
       static sptr make(filter_mode mode, unsigned int fnr);
 
+      /* External API */
+      virtual unsigned int get_fn(void) = 0;
+      virtual unsigned int set_fn(unsigned int fn) = 0;
+
+      virtual filter_mode get_mode(void) = 0;
+      virtual filter_mode set_mode(filter_mode mode) = 0;
     };
 
   } // namespace gsm
