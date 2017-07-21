@@ -49,7 +49,8 @@ namespace gr {
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
       d_mode(mode),
-      d_framenr(fnr)
+      d_framenr(fnr),
+      d_filter_policy(FILTER_POLICY_DEFAULT)
     {
         message_port_register_in(pmt::mp("in"));       
         message_port_register_out(pmt::mp("out"));
@@ -64,6 +65,14 @@ namespace gr {
 
     void burst_fnr_filter_impl::process_burst(pmt::pmt_t msg)
     {
+        if (d_filter_policy == FILTER_POLICY_DROP_ALL)
+          return;
+
+        if (d_filter_policy == FILTER_POLICY_PASS_ALL) {
+          message_port_pub(pmt::mp("out"), msg);
+          return;
+        }
+
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
         
@@ -104,6 +113,20 @@ namespace gr {
     {
       d_mode = mode;
       return d_mode;
+    }
+
+    /* Filtering policy */
+    filter_policy
+    burst_fnr_filter_impl::get_policy(void)
+    {
+      return d_filter_policy;
+    }
+
+    filter_policy
+    burst_fnr_filter_impl::set_policy(filter_policy policy)
+    {
+      d_filter_policy = policy;
+      return d_filter_policy;
     }
 
   } /* namespace gsm */

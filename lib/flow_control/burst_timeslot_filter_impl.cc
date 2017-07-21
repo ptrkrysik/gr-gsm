@@ -48,7 +48,8 @@ namespace gr {
       : gr::block("burst_timeslot_filter",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
-       d_timeslot(timeslot)
+       d_timeslot(timeslot),
+       d_filter_policy(FILTER_POLICY_DEFAULT)
     {
         message_port_register_in(pmt::mp("in"));        
         message_port_register_out(pmt::mp("out"));
@@ -63,6 +64,14 @@ namespace gr {
 
     void burst_timeslot_filter_impl::process_burst(pmt::pmt_t msg)
     {
+        if (d_filter_policy == FILTER_POLICY_DROP_ALL)
+          return;
+
+        if (d_filter_policy == FILTER_POLICY_PASS_ALL) {
+          message_port_pub(pmt::mp("out"), msg);
+          return;
+        }
+
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
         
@@ -90,6 +99,20 @@ namespace gr {
         d_timeslot = tn;
 
       return d_timeslot;
+    }
+
+    /* Filtering policy */
+    filter_policy
+    burst_timeslot_filter_impl::get_policy(void)
+    {
+      return d_filter_policy;
+    }
+
+    filter_policy
+    burst_timeslot_filter_impl::set_policy(filter_policy policy)
+    {
+      d_filter_policy = policy;
+      return d_filter_policy;
     }
 
   } /* namespace gsm */

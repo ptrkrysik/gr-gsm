@@ -25,6 +25,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <grgsm/flow_control/common.h>
 
 namespace gr {
   namespace gsm {
@@ -61,6 +62,10 @@ namespace gr {
 
       virtual subslot_filter_mode get_mode(void) = 0;
       virtual subslot_filter_mode set_mode(subslot_filter_mode mode) = 0;
+
+      /* Filtering policy */
+      virtual filter_policy get_policy(void) = 0;
+      virtual filter_policy set_policy(filter_policy policy) = 0;
     };
   } // namespace gsm
 } // namespace gr

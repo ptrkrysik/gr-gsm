@@ -31,6 +31,7 @@ namespace gr {
     class burst_sdcch_subslot_filter_impl : public burst_sdcch_subslot_filter
     {
      private:
+      filter_policy d_filter_policy;
       subslot_filter_mode d_mode;
       unsigned int d_subslot;
      public:
@@ -44,6 +45,10 @@ namespace gr {
 
       subslot_filter_mode get_mode(void);
       subslot_filter_mode set_mode(subslot_filter_mode mode);
+
+      /* Filtering policy */
+      filter_policy get_policy(void);
+      filter_policy set_policy(filter_policy policy);
     };
 
   } // namespace gsm

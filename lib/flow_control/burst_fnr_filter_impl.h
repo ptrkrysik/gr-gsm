@@ -34,6 +34,7 @@ namespace gr {
     class burst_fnr_filter_impl : public burst_fnr_filter
     {
      private:
+      filter_policy d_filter_policy;
       unsigned int d_framenr;
       filter_mode d_mode;
      public:
@@ -47,6 +48,10 @@ namespace gr {
 
       filter_mode get_mode(void);
       filter_mode set_mode(filter_mode mode);
+
+      /* Filtering policy */
+      filter_policy get_policy(void);
+      filter_policy set_policy(filter_policy policy);
     };
 
   } // namespace gsm

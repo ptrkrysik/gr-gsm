@@ -21,6 +21,7 @@
 # Install public header files
 ########################################################################
 install(FILES
+    common.h
     burst_timeslot_splitter.h
     burst_sdcch_subslot_splitter.h
     burst_timeslot_filter.h
