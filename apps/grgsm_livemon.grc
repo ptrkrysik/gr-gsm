@@ -502,7 +502,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>fc</value>
+      <value>GSM channel's central frequency</value>
     </param>
     <param>
       <key>short_id</key>
@@ -514,7 +514,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>939.4e6</value>
+      <value>941.8e6</value>
     </param>
   </block>
   <block>
@@ -561,7 +561,7 @@
     </param>
   </block>
   <block>
-    <key>gsm_bcch_ccch_demapper</key>
+    <key>gsm_bcch_ccch_sdcch4_demapper</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -580,7 +580,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 284)</value>
+      <value>(920, 284)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -588,7 +588,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>gsm_bcch_ccch_demapper_0</value>
+      <value>gsm_bcch_ccch_sdcch4_demapper_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1038,7 +1038,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>OSR</value>
+      <value>OverSampling Ratio</value>
     </param>
     <param>
       <key>short_id</key>
@@ -2861,7 +2861,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>shiftoff</value>
+      <value>Frequency Shiftoff</value>
     </param>
     <param>
       <key>short_id</key>
@@ -2889,7 +2889,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_bcch_ccch_demapper_0</source_block_id>
+    <source_block_id>gsm_bcch_ccch_sdcch4_demapper_0</source_block_id>
     <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
     <source_key>bursts</source_key>
     <sink_key>bursts</sink_key>
@@ -2938,7 +2938,7 @@
   </connection>
   <connection>
     <source_block_id>gsm_receiver_0</source_block_id>
-    <sink_block_id>gsm_bcch_ccch_demapper_0</sink_block_id>
+    <sink_block_id>gsm_bcch_ccch_sdcch4_demapper_0</sink_block_id>
     <source_key>C0</source_key>
     <sink_key>bursts</sink_key>
   </connection>
