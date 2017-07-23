@@ -319,7 +319,7 @@ if __name__ == '__main__':
                                 "Valid options are " + ", ".join(tch_codecs.keys()))
     tch_options.add_option("-o", "--output-tch", dest="speech_output_file", default="/tmp/speech.au.gsm",
                            help="TCH/F speech output file [default=%default].")
-    tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true",
+    tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true", default=False,
                            help="Enable voice boundary detection for traffic channels. This can help reduce noice in the output.")
     parser.add_option_group(tch_options)
 
