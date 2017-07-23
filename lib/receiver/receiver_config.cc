@@ -53,8 +53,8 @@ burst_counter burst_counter::subtract_timeslots(unsigned int number_of_timeslots
   if (timeslot_nr < 0) {
     timeslot_nr = timeslot_nr + 8;
 
-    t2 = (d_t2 - 1) % 26;
-    t3 = (d_t3 - 1) % 51;
+    t2 = (d_t2+26 - 1) % 26;
+    t3 = (d_t3+51 - 1) % 51;
 
     if ((d_t2 == 0) && (d_t3 == 0)) {
       t1 = (d_t1 - 1) % (1 << 11);
