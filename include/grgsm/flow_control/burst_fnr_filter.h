@@ -26,6 +26,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <grgsm/flow_control/common.h>
 
 namespace gr {
   namespace gsm {
@@ -56,6 +57,16 @@ namespace gr {
        */
       static sptr make(filter_mode mode, unsigned int fnr);
 
+      /* External API */
+      virtual unsigned int get_fn(void) = 0;
+      virtual unsigned int set_fn(unsigned int fn) = 0;
+
+      virtual filter_mode get_mode(void) = 0;
+      virtual filter_mode set_mode(filter_mode mode) = 0;
+
+      /* Filtering policy */
+      virtual filter_policy get_policy(void) = 0;
+      virtual filter_policy set_policy(filter_policy policy) = 0;
     };
 
   } // namespace gsm

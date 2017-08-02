@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
-/* @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+/*
+ * @file
+ * @author Vadim Yanitskiy <axilirator@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -17,32 +18,21 @@
  * along with gr-gsm; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
- *
  */
 
-#ifndef INCLUDED_GSM_BURST_SDCCH_SUBSLOT_SPLITTER_IMPL_H
-#define INCLUDED_GSM_BURST_SDCCH_SUBSLOT_SPLITTER_IMPL_H
-
-#include <grgsm/flow_control/burst_sdcch_subslot_splitter.h>
+#ifndef INCLUDED_GSM_FLOW_CONTROL_COMMON_H
+#define INCLUDED_GSM_FLOW_CONTROL_COMMON_H
 
 namespace gr {
   namespace gsm {
 
-    class burst_sdcch_subslot_splitter_impl : public burst_sdcch_subslot_splitter
-    {
-     private:
-      splitter_mode d_mode;
-     public:
-      burst_sdcch_subslot_splitter_impl(splitter_mode mode);
-      ~burst_sdcch_subslot_splitter_impl();
-      void process_burst(pmt::pmt_t msg);
-
-      /* External API */
-      splitter_mode get_mode(void);
-      splitter_mode set_mode(splitter_mode mode);
+    enum filter_policy {
+      FILTER_POLICY_DEFAULT,
+      FILTER_POLICY_PASS_ALL,
+      FILTER_POLICY_DROP_ALL,
     };
 
-  } // namespace gsm
-} // namespace gr
+  } /* namespace gsm */
+} /* namespace gr */
 
-#endif /* INCLUDED_GSM_BURST_SDCCH_SUBSLOT_SPLITTER_IMPL_H */
+#endif

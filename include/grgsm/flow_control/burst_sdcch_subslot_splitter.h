@@ -54,6 +54,10 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(splitter_mode mode);
+
+      /* External API */
+      virtual splitter_mode get_mode(void) = 0;
+      virtual splitter_mode set_mode(splitter_mode mode) = 0;
     };
   } // namespace gsm
 } // namespace gr
