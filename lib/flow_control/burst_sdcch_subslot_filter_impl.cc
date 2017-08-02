@@ -48,7 +48,8 @@ namespace gr {
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
       d_mode(mode),
-      d_subslot(subslot)
+      d_subslot(subslot),
+      d_filter_policy(FILTER_POLICY_DEFAULT)
     {     
         message_port_register_in(pmt::mp("in"));
         message_port_register_out(pmt::mp("out"));
@@ -73,6 +74,14 @@ namespace gr {
           0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3,-1,-1,-1,
           0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,-1,-1,-1
         };
+
+        if (d_filter_policy == FILTER_POLICY_DROP_ALL)
+          return;
+
+        if (d_filter_policy == FILTER_POLICY_PASS_ALL) {
+          message_port_pub(pmt::mp("out"), msg);
+          return;
+        }
     
         pmt::pmt_t header_plus_burst = pmt::cdr(msg);
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
@@ -101,5 +110,51 @@ namespace gr {
             message_port_pub(pmt::mp("out"), msg);
         }
     }
+
+    /* External API */
+    unsigned int
+    burst_sdcch_subslot_filter_impl::get_ss(void)
+    {
+      return d_subslot;
+    }
+
+    unsigned int
+    burst_sdcch_subslot_filter_impl::set_ss(unsigned int ss)
+    {
+      if ((d_mode == SS_FILTER_SDCCH8 && ss < 8)
+      || (d_mode == SS_FILTER_SDCCH4 && ss < 4))
+        d_subslot = ss;
+
+      return d_subslot;
+    }
+
+
+    subslot_filter_mode
+    burst_sdcch_subslot_filter_impl::get_mode(void)
+    {
+      return d_mode;
+    }
+
+    subslot_filter_mode
+    burst_sdcch_subslot_filter_impl::set_mode(subslot_filter_mode mode)
+    {
+      d_mode = mode;
+      return d_mode;
+    }
+
+    /* Filtering policy */
+    filter_policy
+    burst_sdcch_subslot_filter_impl::get_policy(void)
+    {
+      return d_filter_policy;
+    }
+
+    filter_policy
+    burst_sdcch_subslot_filter_impl::set_policy(filter_policy policy)
+    {
+      d_filter_policy = policy;
+      return d_filter_policy;
+    }
+
   } /* namespace gsm */
 } /* namespace gr */

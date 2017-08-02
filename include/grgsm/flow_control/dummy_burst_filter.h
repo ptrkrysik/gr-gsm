@@ -25,6 +25,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <grgsm/flow_control/common.h>
 
 namespace gr {
   namespace gsm {
@@ -48,6 +49,11 @@ namespace gr {
        * creating new instances.
        */
       static sptr make();
+
+      /* External API */
+      /* Filtering policy */
+      virtual filter_policy get_policy(void) = 0;
+      virtual filter_policy set_policy(filter_policy policy) = 0;
     };
   } // namespace gsm
 } // namespace gr
