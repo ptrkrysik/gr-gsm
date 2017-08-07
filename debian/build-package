@@ -1,11 +1,12 @@
 #!/bin/bash
-VERSION=0.40
+BASEVERSION=$(dpkg-parsechangelog --show-field Version | cut -d- -f1)
+DEBVERSION=$(dpkg-parsechangelog --show-field Version)
 
 cd ../..
 
-tar -acf gr-gsm_${VERSION}.orig.tar.gz gr-gsm
+tar -acf gr-gsm_${BASEVERSION}.orig.tar.gz gr-gsm
 cd gr-gsm
 debuild -S -sa
 #pdebuild
 cd ..
-dput ppa:ptrkrysik/gr-gsm gr-gsm_${VERSION}-0ppa0_source.changes
+dput ppa:ptrkrysik/gr-gsm gr-gsm_${DEBVERSION}_source.changes
