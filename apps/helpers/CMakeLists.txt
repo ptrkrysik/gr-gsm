@@ -22,12 +22,12 @@ include(CreateSymlink)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    grgsm_capture.py
-    grgsm_channelize.py
+    grgsm_capture
+    grgsm_channelize
     DESTINATION bin
 )
 
-CREATE_SYMLINK(grgsm_capture.py airprobe_rtlsdr_capture.py)
+CREATE_SYMLINK(grgsm_capture airprobe_rtlsdr_capture.py)
 
 add_custom_target(helpers_symlinks ALL DEPENDS ${symlinks})
 
