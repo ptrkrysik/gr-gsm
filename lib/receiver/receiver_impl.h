@@ -63,6 +63,7 @@ namespace gr {
 
         /**@name Variables used to store result of the find_fcch_burst fuction */
         //@{
+        bool d_freq_offset_tag_in_fcch; ///< frequency offset tag presence
         unsigned d_fcch_start_pos; ///< position of the first sample of the fcch burst
         float d_freq_offset_setting; ///< frequency offset set in frequency shifter located upstream
         //@}
@@ -200,9 +201,13 @@ namespace gr {
          * Configures burst types in different channels
          */
         void configure_receiver();
-        
 
-        
+        /* State machine handlers */
+        void fcch_search_handler(gr_complex *input, int noutput_items);
+        void sch_search_handler(gr_complex *input, int noutput_items);
+        void synchronized_handler(gr_complex *input,
+            gr_vector_const_void_star &input_items, int noutput_items);
+
      public:
        receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
       ~receiver_impl();
