@@ -1,5 +1,7 @@
-find_package(PkgConfig)
+#find_package(PkgConfig)
+INCLUDE(FindPkgConfig)
 pkg_check_modules(PC_libosmocore libosmocore)
+pkg_check_modules(PC_libosmogsm libosmogsm)
 set(LIBOSMOCORE_DEFINITIONS ${PC_LIBOSMOCORE_CFLAGS_OTHER})
 
 find_path(
