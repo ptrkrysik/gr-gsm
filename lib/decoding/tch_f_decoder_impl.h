@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -23,12 +23,12 @@
 #ifndef INCLUDED_GSM_TCH_F_DECODER_IMPL_H
 #define INCLUDED_GSM_TCH_F_DECODER_IMPL_H
 
-#include "AmrCoder.h"
-#include "BitVector.h"
-#include "GSM503Tables.h"
-#include "GSM610Tables.h"
-#include "GSM660Tables.h"
-#include "ViterbiR204.h"
+#include "openbts/AmrCoder.h"
+#include "openbts/BitVector.h"
+#include "openbts/GSM503Tables.h"
+#include "openbts/GSM610Tables.h"
+#include "openbts/GSM660Tables.h"
+#include "openbts/ViterbiR204.h"
 #include <grgsm/decoding/tch_f_decoder.h>
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # @file
-# @author Piotr Krysik <ptrkrysik@gmail.com>
+# @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
 # @section LICENSE
 #
 # Gr-gsm is free software; you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
+
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: FCCH Bursts Detector

@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2017 by Roman Khassraf <rkhassraf@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify

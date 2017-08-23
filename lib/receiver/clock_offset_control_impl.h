@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2015-2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify

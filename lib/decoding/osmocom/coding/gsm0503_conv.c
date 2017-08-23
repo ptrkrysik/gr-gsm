@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2011-2016 Sylvain Munaut <tnt@246tNt.com>
  * Copyright (C) 2016 sysmocom s.f.m.c. GmbH

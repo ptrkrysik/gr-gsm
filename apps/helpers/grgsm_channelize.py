@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # @file
-# @author Pieter Robyns <pieter.robyns@uhasselt.be>
+# @author (C) 2015 by Pieter Robyns <pieter.robyns@uhasselt.be>
 # @section LICENSE
 #
 # Gr-gsm is free software; you can redistribute it and/or modify

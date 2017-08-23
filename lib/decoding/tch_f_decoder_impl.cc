@@ -1,7 +1,8 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
+ *         (C) 2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -296,26 +297,60 @@ namespace gr {
                 unsigned tail = mTCHU.peekField(185, 4);
                 bool good = (sentParity == calcParity) && (tail == 0);
 
-                
                 if (good)
                 {
                     uint8_t frameBuffer[33];
-                	sbit_t bursts_s[116 * 8];
-	                int n_errors, n_bits_total;
+                    sbit_t bursts_s[116 * 8];
+                    int n_errors, n_bits_total;
                     unsigned int  mTCHFrameLength;
-
-                	ubits2sbits(bursts_u, bursts_s, 116 * 8);                    
+                    ubits2sbits(bursts_u, bursts_s, 116 * 8);                    
 
                     if (d_tch_mode == TCH_FS) // GSM-FR
                     {
                         mTCHFrameLength = 33;
                         gsm0503_tch_fr_decode(frameBuffer, bursts_s, 1, 0, &n_errors, &n_bits_total);
-                        std::cout << "Errors: " << n_errors << std::endl;
+                        //std::cout << "Errors: " << n_errors << std::endl;
                     }
                     else if (d_tch_mode == TCH_EFR) // GSM-EFR
                     {
+                        unsigned char mFrameHeader = 0x3c;
+
+                        // AMR Frame, consisting of a 8 bit frame header, plus the payload from decoding
+                        BitVector amrFrame(244 + 8); // Same output length as AMR 12.2
+                        BitVector payload = amrFrame.tail(8);
+
+                        BitVector TCHW(260), EFRBits(244);
+
+                        // write frame header
+                        amrFrame.fillField(0, mFrameHeader, 8);
+
+                        // Undo Um's EFR bit ordering.
+                        mTCHD.unmap(GSM::g660BitOrder, 260, TCHW);
+
+                        // Remove repeating bits and CRC to get raw EFR frame (244 bits)
+                        for (unsigned k=0; k<71; k++)
+                          EFRBits[k] = TCHW[k] & 1;
+
+                        for (unsigned k=73; k<123; k++)
+                          EFRBits[k-2] = TCHW[k] & 1;
+
+                        for (unsigned k=125; k<178; k++)
+                          EFRBits[k-4] = TCHW[k] & 1;
+
+                        for (unsigned k=180; k<230; k++)
+                          EFRBits[k-6] = TCHW[k] & 1;
+
+                        for (unsigned k=232; k<252; k++)
+                          EFRBits[k-8] = TCHW[k] & 1;
+
+                        // Map bits as AMR 12.2k
+                        EFRBits.map(GSM::gAMRBitOrderTCH_AFS12_2, 244, payload);
+
+                        // Put the whole frame (hdr + payload)
                         mTCHFrameLength = 32;
-                        gsm0503_tch_fr_decode(frameBuffer, bursts_s, 1, 1, &n_errors, &n_bits_total);
+                        amrFrame.pack(frameBuffer);
+                        //when itegrating with libosmocore lines above can be removed and line below uncommented, efr decoding with libosmocore need to be tested however
+                        //gsm0503_tch_fr_decode(frameBuffer, bursts_s, 1, 1, &n_errors, &n_bits_total);
                     }
                     message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(frameBuffer,mTCHFrameLength)));
                 }

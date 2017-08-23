@@ -44,8 +44,6 @@ Credits
 
 *Pieter Robyns* \<pieter.robyns (at) uhasselt.be\> - block reversing channel hopping
 
-*Steve* \<steve (at) segfault.net\>  - functions for decoding control channels
-
 
 Thanks
 ======
