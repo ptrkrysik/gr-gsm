@@ -35,12 +35,12 @@ list(APPEND grgsm_sources
     demapping/tch_f_chans_demapper_impl.cc
     decoding/control_channels_decoder_impl.cc
     decoding/tch_f_decoder_impl.cc
-    decoding/AmrCoder.cpp
-    decoding/BitVector.cpp
-    decoding/GSM610Tables.cpp
-    decoding/GSM660Tables.cpp
-    decoding/GSM503Tables.cpp
-    decoding/ViterbiR204.cpp
+    decoding/openbts/AmrCoder.cpp
+    decoding/openbts/BitVector.cpp
+    decoding/openbts/GSM610Tables.cpp
+    decoding/openbts/GSM660Tables.cpp
+    decoding/openbts/GSM503Tables.cpp
+    decoding/openbts/ViterbiR204.cpp
     decoding/osmocom/coding/gsm0503_conv.c
     decoding/osmocom/coding/gsm0503_coding.c
     decoding/osmocom/coding/gsm0503_interleaving.c
