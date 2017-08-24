@@ -29,6 +29,7 @@
 %include "grgsm_swig_doc.i"
 
 %{
+#include "grgsm/constants.h"
 #include "grgsm/receiver/receiver.h"
 #include "grgsm/receiver/clock_offset_control.h"
 #include "grgsm/receiver/cx_channel_hopper.h"
@@ -64,6 +65,8 @@
 #include "grgsm/misc_utils/msg_to_tag.h"
 #include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
 %}
+
+%include "constants.i"
 
 %include "grgsm/receiver/receiver.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, receiver);
@@ -140,3 +143,4 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
+

@@ -21,6 +21,29 @@
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
+include(GrMiscUtils)
+
+########################################################################
+# Handle the generated constants
+########################################################################
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+    "import time;print time.strftime('%a, %d %b %Y %H:%M:%S', time.gmtime())"
+    OUTPUT_VARIABLE BUILD_DATE OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "Loading build date ${BUILD_DATE} into constants...")
+message(STATUS "Loading version ${VERSION} into constants...")
+
+#double escape for windows backslash path separators
+string(REPLACE "\\" "\\\\" prefix "${prefix}")
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/constants.cc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/constants.cc
+    ESCAPE_QUOTES
+@ONLY)
+
+list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
+#########################################################################
 
 include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
@@ -85,6 +108,7 @@ target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_
 #    boost_filesystem
 )
 set_target_properties(grgsm PROPERTIES DEFINE_SYMBOL "grgsm_EXPORTS")
+GR_LIBRARY_FOO(grgsm)
 
 ########################################################################
 # Install built library files
