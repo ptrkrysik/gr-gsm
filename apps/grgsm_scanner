@@ -288,6 +288,12 @@ class channel_info(object):
             return self.getKey().__cmp__(other.getKey())
 
     def __repr__(self):
+        return "%s(%s, %s, %s, %s, %s, %s, %s, %s, %s)" % (
+            self.__class__, self.arfcn, self.freq, self.cid, self.lac,
+            self.mcc, self.mnc, self.ccch_conf, self.power,
+            self.neighbours, self.cell_arfcns)
+
+    def __str__(self):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
