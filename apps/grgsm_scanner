@@ -249,6 +249,8 @@ class wideband_scanner(gr.top_block):
 
 class channel_info(object):
     def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns):
+        if not arfcn:
+            arfcn = -1
         self.arfcn = arfcn
         self.freq = freq
         self.cid = cid
@@ -288,7 +290,7 @@ class channel_info(object):
             return self.getKey().__cmp__(other.getKey())
 
     def __repr__(self):
-        return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
+        return "ARFCN: %4d, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
 
