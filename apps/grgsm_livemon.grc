@@ -384,7 +384,7 @@
     </param>
     <param>
       <key>host</key>
-      <value>127.0.0.1</value>
+      <value>collector</value>
     </param>
     <param>
       <key>id</key>
@@ -392,7 +392,7 @@
     </param>
     <param>
       <key>mtu</key>
-      <value>10000</value>
+      <value>1500</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -404,7 +404,7 @@
     </param>
     <param>
       <key>port</key>
-      <value>4729</value>
+      <value>collectorport</value>
     </param>
     <param>
       <key>tcp_no_delay</key>
@@ -2874,6 +2874,92 @@
     <param>
       <key>value</key>
       <value>400e3</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1248, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>collector</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>IP or DNS name of collector point</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>localhost</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(1248, 96)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>collectorport</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>UDP port number of collector</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>4729</value>
     </param>
   </block>
   <connection>
