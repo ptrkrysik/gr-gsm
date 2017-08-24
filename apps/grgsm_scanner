@@ -291,49 +291,16 @@ class channel_info(object):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
-
-if __name__ == '__main__':
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    bands_list = ", ".join(grgsm.arfcn.get_bands())
-    parser.add_option("-b", "--band", dest="band", default="P-GSM",
-                      help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list)
-    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="float", default=2e6,
-                      help="Set sample rate [default=%default] - allowed values even_number*0.2e6")
-    parser.add_option("-p", "--ppm", dest="ppm", type="intx", default=0,
-                      help="Set frequency correction in ppm [default=%default]")
-    parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=24.0,
-                      help="Set gain [default=%default]")
-    parser.add_option("", "--args", dest="args", type="string", default="",
-                      help="Set device arguments [default=%default]")
-    parser.add_option("--speed", dest="speed", type="intx", default=4,
-                      help="Scan speed [default=%default]. Value range 0-5.")
-    parser.add_option("-v", "--verbose", action="store_true",
-                      help="If set, verbose information output is printed: ccch configuration, cell ARFCN's, neighbour ARFCN's")
-
-    """
-        Dont forget: sudo sysctl kernel.shmmni=32000
-    """
-
-    (options, args) = parser.parse_args()
-
-    if options.band not in grgsm.arfcn.get_bands():
-        parser.error("Invalid GSM band\n")
-
-    if options.speed < 0 or options.speed > 5:
-        parser.error("Invalid scan speed.\n")
-
-    if (options.samp_rate / 0.2e6) % 2 != 0:
-        parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
-
-    channels_num = int(options.samp_rate / 0.2e6)
-    print ""
-    for arfcn_range in grgsm.arfcn.get_arfcn_ranges(options.band):
+def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
+    signallist = []
+    channels_num = int(samp_rate / 0.2e6)
+    for arfcn_range in grgsm.arfcn.get_arfcn_ranges(band):
         first_arfcn = arfcn_range[0]
         last_arfcn = arfcn_range[1]
         last_center_arfcn = last_arfcn - int((channels_num / 2) - 1)
 
-        current_freq = grgsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1, options.band)
-        last_freq = grgsm.arfcn.arfcn2downlink(last_center_arfcn, options.band)
+        current_freq = grgsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1, band)
+        last_freq = grgsm.arfcn.arfcn2downlink(last_center_arfcn, band)
         stop_freq = last_freq + 0.2e6 * channels_num
 
         while current_freq < stop_freq:
@@ -348,10 +315,10 @@ if __name__ == '__main__':
             os.dup2(null_fds[1], 2)
 
             # instantiate scanner and processor
-            scanner = wideband_scanner(rec_len=6 - options.speed,
-                                       sample_rate=options.samp_rate,
+            scanner = wideband_scanner(rec_len=6 - speed,
+                                       sample_rate=samp_rate,
                                        carrier_frequency=current_freq,
-                                       ppm=options.ppm, gain=options.gain, args=options.args)
+                                       ppm=ppm, gain=gain, args=args)
 
             # start recording
             scanner.start()
@@ -379,7 +346,7 @@ if __name__ == '__main__':
                     cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                     neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
 
-                    info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i], options.band), found_freqs[i],
+                    info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i], band), found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
                                         neighbour_list, cell_arfcn_list)
                     found_list.append(info)
@@ -392,10 +359,57 @@ if __name__ == '__main__':
             # close the temporary fds
             os.close(null_fds[0])
             os.close(null_fds[1])
-
-            for info in sorted(found_list):
-                print info
-                if options.verbose:
-                    print info.get_verbose_info()
+            if prn:
+                prn(found_list)
+            signallist.extend(found_list)
 
             current_freq += channels_num * 0.2e6
+    return signallist
+
+def argument_parser():
+    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
+    bands_list = ", ".join(grgsm.arfcn.get_bands())
+    parser.add_option("-b", "--band", dest="band", default="P-GSM",
+                      help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list)
+    parser.add_option("-s", "--samp-rate", dest="samp_rate", type="float", default=2e6,
+                      help="Set sample rate [default=%default] - allowed values even_number*0.2e6")
+    parser.add_option("-p", "--ppm", dest="ppm", type="intx", default=0,
+                      help="Set frequency correction in ppm [default=%default]")
+    parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=24.0,
+                      help="Set gain [default=%default]")
+    parser.add_option("", "--args", dest="args", type="string", default="",
+                      help="Set device arguments [default=%default]")
+    parser.add_option("--speed", dest="speed", type="intx", default=4,
+                      help="Scan speed [default=%default]. Value range 0-5.")
+    parser.add_option("-v", "--verbose", action="store_true",
+                      help="If set, verbose information output is printed: ccch configuration, cell ARFCN's, neighbour ARFCN's")
+
+    """
+        Dont forget: sudo sysctl kernel.shmmni=32000
+    """
+    return parser
+
+def main(options = None):
+    if options is None:
+        (options, args) = argument_parser().parse_args()
+
+    if options.band not in grgsm.arfcn.get_bands():
+        parser.error("Invalid GSM band\n")
+
+    if options.speed < 0 or options.speed > 5:
+        parser.error("Invalid scan speed.\n")
+
+    if (options.samp_rate / 0.2e6) % 2 != 0:
+        parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
+
+    def printfunc(found_list):
+        for info in sorted(found_list):
+            print info
+            if options.verbose:
+                print info.get_verbose_info()
+    print ""
+    do_scan(options.samp_rate, options.band, options.speed,
+            options.ppm, options.gain, options.args, prn = printfunc)
+
+if __name__ == '__main__':
+    main()
