@@ -29,9 +29,9 @@ GR_PYTHON_INSTALL(
     DESTINATION bin
 )
 
-CREATE_SYMLINK(grgsm_livemon airprobe_rtlsdr.py)
-CREATE_SYMLINK(grgsm_decode airprobe_decode.py)
-CREATE_SYMLINK(grgsm_scanner airprobe_rtlsdr_scanner.py)
+#CREATE_SYMLINK(grgsm_livemon airprobe_rtlsdr.py)
+#CREATE_SYMLINK(grgsm_decode airprobe_decode.py)
+#CREATE_SYMLINK(grgsm_scanner airprobe_rtlsdr_scanner.py)
 
 add_custom_target(apps_symlinks ALL DEPENDS ${symlinks})
 
