@@ -435,7 +435,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1512, 459)</value>
+      <value>(976, 184)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -854,7 +854,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1512, 270)</value>
+      <value>(1120, 188)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2932,6 +2932,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_socket_pdu_0_0</source_block_id>
+    <sink_block_id>gsm_message_printer_1</sink_block_id>
+    <source_key>pdus</source_key>
+    <sink_key>msgs</sink_key>
+  </connection>
+  <connection>
     <source_block_id>gsm_bcch_ccch_sdcch4_demapper_0</source_block_id>
     <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
     <source_key>bursts</source_key>
@@ -2950,22 +2956,10 @@
     <sink_key>pdus</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_control_channels_decoder_0</source_block_id>
-    <sink_block_id>gsm_message_printer_1</sink_block_id>
-    <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
-  </connection>
-  <connection>
     <source_block_id>gsm_control_channels_decoder_0_0</source_block_id>
     <sink_block_id>blocks_socket_pdu_0</sink_block_id>
     <source_key>msgs</source_key>
     <sink_key>pdus</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gsm_control_channels_decoder_0_0</source_block_id>
-    <sink_block_id>gsm_message_printer_1</sink_block_id>
-    <source_key>msgs</source_key>
-    <sink_key>msgs</sink_key>
   </connection>
   <connection>
     <source_block_id>gsm_decryption_0</source_block_id>
