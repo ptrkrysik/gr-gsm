@@ -463,7 +463,7 @@
     </param>
     <param>
       <key>port</key>
-      <value>4729</value>
+      <value>serverport</value>
     </param>
     <param>
       <key>tcp_no_delay</key>
@@ -2874,6 +2874,49 @@
     <param>
       <key>value</key>
       <value>400e3</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(784, 112)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>serverport</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>UDP server listening port</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>string</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>4729</value>
     </param>
   </block>
   <connection>
