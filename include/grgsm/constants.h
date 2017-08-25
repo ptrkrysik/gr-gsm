@@ -49,9 +49,14 @@ namespace gr {
   GRGSM_API const std::string api_version();
 
   /*!
-   * \brief returnjust the minor version defined by cmake
+   * \brief return just the minor version defined by cmake
    */
   GRGSM_API const std::string minor_version();
+  
+  /*!
+   * \brief return just the maint version defined by cmake
+   */
+  GRGSM_API const std::string maint_version();
  } /* namespace gsm */
 } /* namespace gr */
 

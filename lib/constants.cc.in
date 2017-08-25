@@ -59,5 +59,11 @@ namespace gr {
   {
     return "@MINOR_VERSION@";
   }
+  
+  const std::string
+  maint_version()
+  {
+    return "@MAINT_VERSION@";
+  }
  } /* namespace gsm */
 } /* namespace gr */

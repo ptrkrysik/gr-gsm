@@ -233,4 +233,4 @@ include(CPack)
 # Print summary
 ########################################################################
 message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Building for version: ${VERSION} / ${LIBVER} / ${BUILD_DATE}")
+message(STATUS "Building for version: ${VERSION} / ${LIBVER}")

@@ -32,5 +32,6 @@ namespace gr {
   const std::string major_version();
   const std::string api_version();
   const std::string minor_version();
+  const std::string maint_version();
  } /* namespace gsm */
 } /* namespace gr */
