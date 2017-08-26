@@ -25,7 +25,7 @@
 # Title: Gr-gsm Livemon
 # Author: Piotr Krysik
 # Description: Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)
-# Generated: Sat Aug 26 12:54:55 2017
+# Generated: Sat Aug 26 13:26:35 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -58,7 +58,7 @@ import time
 
 class grgsm_livemon(gr.top_block, Qt.QWidget):
 
-    def __init__(self, args="", fc=941.8e6, gain=30, osr=4, ppm=0, samp_rate=2000000.052982, shiftoff=400e3, serverport="4729"):
+    def __init__(self, args="", collector="localhost", collectorport="4729", fc=941.8e6, gain=30, osr=4, ppm=0, samp_rate=2000000.052982, serverport="4729", shiftoff=400e3):
         gr.top_block.__init__(self, "Gr-gsm Livemon")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Gr-gsm Livemon")
@@ -85,13 +85,15 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         # Parameters
         ##################################################
         self.args = args
+        self.collector = collector
+        self.collectorport = collectorport
         self.fc = fc
         self.gain = gain
         self.osr = osr
         self.ppm = ppm
         self.samp_rate = samp_rate
-        self.shiftoff = shiftoff
         self.serverport = serverport
+        self.shiftoff = shiftoff
 
         ##################################################
         # Variables
@@ -185,8 +187,8 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.gsm_bcch_ccch_sdcch4_demapper_0 = grgsm.gsm_bcch_ccch_sdcch4_demapper(
             timeslot_nr=0,
         )
+        self.blocks_socket_pdu_0_1 = blocks.socket_pdu("UDP_CLIENT", collector, collectorport, 1500, False)
         self.blocks_socket_pdu_0_0 = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", serverport, 10000, False)
-        self.blocks_socket_pdu_0 = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000, False)
         self.blocks_rotator_cc_0 = blocks.rotator_cc(-2*pi*shiftoff/samp_rate)
 
         ##################################################
@@ -195,8 +197,8 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_socket_pdu_0_0, 'pdus'), (self.gsm_message_printer_1, 'msgs'))    
         self.msg_connect((self.gsm_bcch_ccch_sdcch4_demapper_0, 'bursts'), (self.gsm_control_channels_decoder_0, 'bursts'))    
         self.msg_connect((self.gsm_clock_offset_control_0, 'ctrl'), (self.gsm_input_0, 'ctrl_in'))    
-        self.msg_connect((self.gsm_control_channels_decoder_0, 'msgs'), (self.blocks_socket_pdu_0, 'pdus'))    
-        self.msg_connect((self.gsm_control_channels_decoder_0_0, 'msgs'), (self.blocks_socket_pdu_0, 'pdus'))    
+        self.msg_connect((self.gsm_control_channels_decoder_0, 'msgs'), (self.blocks_socket_pdu_0_1, 'pdus'))    
+        self.msg_connect((self.gsm_control_channels_decoder_0_0, 'msgs'), (self.blocks_socket_pdu_0_1, 'pdus'))    
         self.msg_connect((self.gsm_decryption_0, 'bursts'), (self.gsm_control_channels_decoder_0_0, 'bursts'))    
         self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_bcch_ccch_sdcch4_demapper_0, 'bursts'))    
         self.msg_connect((self.gsm_receiver_0, 'measurements'), (self.gsm_clock_offset_control_0, 'measurements'))    
@@ -218,6 +220,18 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
 
     def set_args(self, args):
         self.args = args
+
+    def get_collector(self):
+        return self.collector
+
+    def set_collector(self, collector):
+        self.collector = collector
+
+    def get_collectorport(self):
+        return self.collectorport
+
+    def set_collectorport(self, collectorport):
+        self.collectorport = collectorport
 
     def get_fc(self):
         return self.fc
@@ -258,6 +272,12 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_frequency_range(self.fc_slider, self.samp_rate)
         self.rtlsdr_source_0.set_sample_rate(self.samp_rate)
 
+    def get_serverport(self):
+        return self.serverport
+
+    def set_serverport(self, serverport):
+        self.serverport = serverport
+
     def get_shiftoff(self):
         return self.shiftoff
 
@@ -266,12 +286,6 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.blocks_rotator_cc_0.set_phase_inc(-2*pi*self.shiftoff/self.samp_rate)
         self.rtlsdr_source_0.set_center_freq(self.fc_slider-self.shiftoff, 0)
         self.rtlsdr_source_0.set_bandwidth(250e3+abs(self.shiftoff), 0)
-
-    def get_serverport(self):
-        return self.serverport
-
-    def set_serverport(self, serverport):
-        self.serverport = serverport
 
     def get_ppm_slider(self):
         return self.ppm_slider
@@ -302,6 +316,12 @@ def argument_parser():
         "", "--args", dest="args", type="string", default="",
         help="Set Device Arguments [default=%default]")
     parser.add_option(
+        "", "--collector", dest="collector", type="string", default="localhost",
+        help="Set IP or DNS name of collector point [default=%default]")
+    parser.add_option(
+        "", "--collectorport", dest="collectorport", type="string", default="4729",
+        help="Set UDP port number of collector [default=%default]")
+    parser.add_option(
         "-f", "--fc", dest="fc", type="eng_float", default=eng_notation.num_to_str(941.8e6),
         help="Set GSM channel's central frequency [default=%default]")
     parser.add_option(
@@ -317,11 +337,11 @@ def argument_parser():
         "-s", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(2000000.052982),
         help="Set samp_rate [default=%default]")
     parser.add_option(
-        "-o", "--shiftoff", dest="shiftoff", type="eng_float", default=eng_notation.num_to_str(400e3),
-        help="Set Frequency Shiftoff [default=%default]")
-    parser.add_option(
         "", "--serverport", dest="serverport", type="string", default="4729",
         help="Set UDP server listening port [default=%default]")
+    parser.add_option(
+        "-o", "--shiftoff", dest="shiftoff", type="eng_float", default=eng_notation.num_to_str(400e3),
+        help="Set Frequency Shiftoff [default=%default]")
     return parser
 
 
@@ -335,7 +355,7 @@ def main(top_block_cls=grgsm_livemon, options=None):
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
 
-    tb = top_block_cls(args=options.args, fc=options.fc, gain=options.gain, osr=options.osr, ppm=options.ppm, samp_rate=options.samp_rate, shiftoff=options.shiftoff, serverport=options.serverport)
+    tb = top_block_cls(args=options.args, collector=options.collector, collectorport=options.collectorport, fc=options.fc, gain=options.gain, osr=options.osr, ppm=options.ppm, samp_rate=options.samp_rate, serverport=options.serverport, shiftoff=options.shiftoff)
     tb.start()
     tb.show()
 
