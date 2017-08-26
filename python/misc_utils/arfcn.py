@@ -112,7 +112,7 @@ def arfcn2uplink(arfcn, band):
         if offset is not None:
             f = f_start + (__chan_spacing * (arfcn - offset))
             return round(f, 1)
-    return None
+    return -1
 
 
 def arfcn2downlink(arfcn, band):
@@ -120,7 +120,7 @@ def arfcn2downlink(arfcn, band):
         conf = __band_conf.get(band)
         distance = conf['distance']
         return round(arfcn2uplink(arfcn, band) + distance, 1)
-    return None
+    return -1
 
 
 def uplink2arfcn(freq, band):
@@ -135,7 +135,7 @@ def uplink2arfcn(freq, band):
             arfcn = int(round(offset + ((freq - f_start) / __chan_spacing), 0))
             if arfcn_start <= arfcn <= arfcn_end:
                 return arfcn
-    return None
+    return -1
 
 
 def downlink2arfcn(freq, band):
@@ -144,7 +144,7 @@ def downlink2arfcn(freq, band):
         distance = conf['distance']
         freq_uplink = freq - distance
         return int(round(uplink2arfcn(freq_uplink, band), 0))
-    return None
+    return -1
 
 
 def get_arfcn_ranges(band):

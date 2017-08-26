@@ -288,7 +288,7 @@ class channel_info(object):
             return self.getKey().__cmp__(other.getKey())
 
     def __repr__(self):
-        return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
+        return "ARFCN: %4d, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
 def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
