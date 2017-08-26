@@ -29,6 +29,9 @@ GR_PYTHON_INSTALL(
     DESTINATION bin
 )
 
+SET(XDG_DESKTOP_DIR "/usr/share/applications/")
+INSTALL (FILES grgsm_livemon.desktop DESTINATION ${XDG_DESKTOP_DIR})
+
 #CREATE_SYMLINK(grgsm_livemon airprobe_rtlsdr.py)
 #CREATE_SYMLINK(grgsm_decode airprobe_decode.py)
 #CREATE_SYMLINK(grgsm_scanner airprobe_rtlsdr_scanner.py)
