@@ -25,7 +25,7 @@
 # Title: Gr-gsm Livemon
 # Author: Piotr Krysik
 # Description: Interactive monitor of a single C0 channel with analysis performed by Wireshark (command to run wireshark: sudo wireshark -k -f udp -Y gsmtap -i lo)
-# Generated: Sat Aug 26 13:26:35 2017
+# Generated: Sun Aug 27 08:34:42 2017
 ##################################################
 
 if __name__ == '__main__':
@@ -184,7 +184,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self.gsm_control_channels_decoder_0_0 = grgsm.control_channels_decoder()
         self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
         self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc-shiftoff, samp_rate, osr)
-        self.gsm_bcch_ccch_sdcch4_demapper_0 = grgsm.gsm_bcch_ccch_sdcch4_demapper(
+        self.gsm_bcch_ccch_demapper_0 = grgsm.gsm_bcch_ccch_demapper(
             timeslot_nr=0,
         )
         self.blocks_socket_pdu_0_1 = blocks.socket_pdu("UDP_CLIENT", collector, collectorport, 1500, False)
@@ -195,12 +195,12 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.msg_connect((self.blocks_socket_pdu_0_0, 'pdus'), (self.gsm_message_printer_1, 'msgs'))    
-        self.msg_connect((self.gsm_bcch_ccch_sdcch4_demapper_0, 'bursts'), (self.gsm_control_channels_decoder_0, 'bursts'))    
+        self.msg_connect((self.gsm_bcch_ccch_demapper_0, 'bursts'), (self.gsm_control_channels_decoder_0, 'bursts'))    
         self.msg_connect((self.gsm_clock_offset_control_0, 'ctrl'), (self.gsm_input_0, 'ctrl_in'))    
         self.msg_connect((self.gsm_control_channels_decoder_0, 'msgs'), (self.blocks_socket_pdu_0_1, 'pdus'))    
         self.msg_connect((self.gsm_control_channels_decoder_0_0, 'msgs'), (self.blocks_socket_pdu_0_1, 'pdus'))    
         self.msg_connect((self.gsm_decryption_0, 'bursts'), (self.gsm_control_channels_decoder_0_0, 'bursts'))    
-        self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_bcch_ccch_sdcch4_demapper_0, 'bursts'))    
+        self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_bcch_ccch_demapper_0, 'bursts'))    
         self.msg_connect((self.gsm_receiver_0, 'measurements'), (self.gsm_clock_offset_control_0, 'measurements'))    
         self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_sdcch8_demapper_0, 'bursts'))    
         self.msg_connect((self.gsm_sdcch8_demapper_0, 'bursts'), (self.gsm_decryption_0, 'bursts'))    

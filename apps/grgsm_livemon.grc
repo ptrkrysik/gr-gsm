@@ -647,7 +647,7 @@
     </param>
   </block>
   <block>
-    <key>gsm_bcch_ccch_sdcch4_demapper</key>
+    <key>gsm_bcch_ccch_demapper</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -666,7 +666,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(920, 284)</value>
+      <value>(896, 284)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -674,7 +674,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>gsm_bcch_ccch_sdcch4_demapper_0</value>
+      <value>gsm_bcch_ccch_demapper_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -3024,7 +3024,7 @@
     <sink_key>msgs</sink_key>
   </connection>
   <connection>
-    <source_block_id>gsm_bcch_ccch_sdcch4_demapper_0</source_block_id>
+    <source_block_id>gsm_bcch_ccch_demapper_0</source_block_id>
     <sink_block_id>gsm_control_channels_decoder_0</sink_block_id>
     <source_key>bursts</source_key>
     <sink_key>bursts</sink_key>
@@ -3061,7 +3061,7 @@
   </connection>
   <connection>
     <source_block_id>gsm_receiver_0</source_block_id>
-    <sink_block_id>gsm_bcch_ccch_sdcch4_demapper_0</sink_block_id>
+    <sink_block_id>gsm_bcch_ccch_demapper_0</sink_block_id>
     <source_key>C0</source_key>
     <sink_key>bursts</sink_key>
   </connection>

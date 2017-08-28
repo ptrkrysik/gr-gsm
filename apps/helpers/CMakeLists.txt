@@ -18,7 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 include(GrPython)
-include(CreateSymlink)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
@@ -27,13 +26,8 @@ GR_PYTHON_INSTALL(
     DESTINATION bin
 )
 
-CREATE_SYMLINK(grgsm_capture airprobe_rtlsdr_capture.py)
-
-add_custom_target(helpers_symlinks ALL DEPENDS ${symlinks})
-
 install(
     PROGRAMS
-    ${symlinks}
     DESTINATION bin
 )
 
