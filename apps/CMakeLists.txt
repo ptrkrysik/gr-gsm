@@ -33,3 +33,9 @@ install(
     DESTINATION bin
 )
 
+set(XDG_DESKTOP_DIR "/usr/share/applications/")
+install(
+   FILES
+   grgsm_livemon.desktop
+   DESTINATION ${XDG_DESKTOP_DIR}
+)
