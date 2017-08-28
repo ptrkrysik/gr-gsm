@@ -23,6 +23,7 @@ add_subdirectory(helpers)
 GR_PYTHON_INSTALL(
     PROGRAMS
     grgsm_livemon
+    grgsm_livemon_headless
     grgsm_scanner
     grgsm_decode
     DESTINATION bin
