@@ -1,5 +1,5 @@
 gr-gsm (0.40-0ppa0) xenial; urgency=low
 
-  * Initial upload!
+  * Initial upload (Closes: #871055).
 
  -- Piotr Krysik <ptrkrysik@gmail.com>  Sun, 24 Apr 2016 16:00:00 +0100
