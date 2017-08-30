@@ -17,19 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-include(GrPython)
-add_subdirectory(helpers)
-
-GR_PYTHON_INSTALL(
-    PROGRAMS
-    grgsm_livemon
-    grgsm_livemon_headless
-    grgsm_scanner
-    grgsm_decode
-    DESTINATION bin
-)
-
 install(
-    PROGRAMS
-    DESTINATION bin
+   FILES
+   grgsm_livemon.desktop
+   DESTINATION ${GR_PKG_DATA_DIR}
 )
