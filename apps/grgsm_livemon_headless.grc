@@ -97,7 +97,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(872, 11)</value>
+      <value>(752, 7)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -125,7 +125,7 @@
     </param>
   </block>
   <block>
-    <key>blocks_rotator_cc</key>
+    <key>blocks_head</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -145,6 +145,57 @@
     <param>
       <key>_coordinate</key>
       <value>(256, 300)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_head_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>num_items</key>
+      <value>int(rec_len*samp_rate)</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_rotator_cc</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(416, 300)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -187,7 +238,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1632, 295)</value>
+      <value>(1736, 295)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -246,7 +297,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1504, 295)</value>
+      <value>(1608, 295)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -301,7 +352,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1240, 7)</value>
+      <value>(1048, 7)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -344,7 +395,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1240, 95)</value>
+      <value>(1208, 7)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -387,7 +438,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(624, 11)</value>
+      <value>(584, 8)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -430,7 +481,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(552, 11)</value>
+      <value>(480, 8)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -442,7 +493,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>gain</value>
+      <value>RF Gain</value>
     </param>
     <param>
       <key>short_id</key>
@@ -477,7 +528,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(920, 284)</value>
+      <value>(1016, 284)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -520,7 +571,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(552, 411)</value>
+      <value>(688, 414)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -571,7 +622,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1264, 289)</value>
+      <value>(1368, 289)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -610,7 +661,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1264, 345)</value>
+      <value>(1368, 345)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -653,7 +704,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1104, 333)</value>
+      <value>(1208, 333)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -696,7 +747,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(488, 305)</value>
+      <value>(624, 305)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -751,7 +802,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1776, 302)</value>
+      <value>(1880, 302)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -802,7 +853,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(672, 289)</value>
+      <value>(808, 289)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -853,7 +904,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 340)</value>
+      <value>(1016, 340)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -892,7 +943,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1016, 11)</value>
+      <value>(200, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -923,7 +974,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1088, 7)</value>
+      <value>(896, 7)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -966,7 +1017,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(712, 11)</value>
+      <value>(312, 112)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -978,7 +1029,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>ppm</value>
+      <value>Clock frequency offset in ppms (1/1e6 parts)</value>
     </param>
     <param>
       <key>short_id</key>
@@ -991,6 +1042,49 @@
     <param>
       <key>value</key>
       <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(312, 8)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>rec_len</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Recording length in seconds</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>T</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1000000</value>
     </param>
   </block>
   <block>
@@ -2416,7 +2510,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 115)</value>
+      <value>(16, 128)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2459,7 +2553,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1400, 7)</value>
+      <value>(1368, 7)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2502,7 +2596,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(784, 11)</value>
+      <value>(584, 112)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2529,6 +2623,12 @@
       <value>400e3</value>
     </param>
   </block>
+  <connection>
+    <source_block_id>blocks_head_0</source_block_id>
+    <sink_block_id>blocks_rotator_cc_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
   <connection>
     <source_block_id>blocks_rotator_cc_0</source_block_id>
     <sink_block_id>gsm_input_0</sink_block_id>
@@ -2603,7 +2703,7 @@
   </connection>
   <connection>
     <source_block_id>rtlsdr_source_0</source_block_id>
-    <sink_block_id>blocks_rotator_cc_0</sink_block_id>
+    <sink_block_id>blocks_head_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
