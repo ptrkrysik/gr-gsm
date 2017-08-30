@@ -172,7 +172,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>g_slider</value>
+      <value>gain_slider</value>
     </param>
     <param>
       <key>label</key>
@@ -1513,7 +1513,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>g_slider</value>
+      <value>gain_slider</value>
     </param>
     <param>
       <key>ant10</key>
