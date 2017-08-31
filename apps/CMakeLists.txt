@@ -19,6 +19,8 @@
 
 include(GrPython)
 add_subdirectory(helpers)
+add_subdirectory(apps_data)
+
 
 GR_PYTHON_INSTALL(
     PROGRAMS

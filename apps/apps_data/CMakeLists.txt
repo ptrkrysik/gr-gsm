@@ -17,8 +17,25 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
+set(grgsm_freedesktop_path ${GR_PKG_DATA_DIR}/gr-gsm/freedesktop)
+
 install(
    FILES
-   grgsm_livemon.desktop
-   DESTINATION ${GR_PKG_DATA_DIR}
+   grgsm-livemon.desktop
+   DESTINATION ${grgsm_freedesktop_path}
+   COMPONENT "gr-gsm"
 )
+
+find_program(HAVE_XDG_UTILS xdg-desktop-menu)
+
+if(UNIX AND HAVE_XDG_UTILS)
+    set(SRCDIR ${CMAKE_INSTALL_PREFIX}/${grgsm_freedesktop_path})
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/grgsm_setup_freedesktop.in
+        ${CMAKE_CURRENT_BINARY_DIR}/grgsm_setup_freedesktop
+    @ONLY)
+    install(
+        PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/grgsm_setup_freedesktop
+        DESTINATION ${GR_PKG_LIBEXEC_DIR} COMPONENT "gr-gsm"
+    )
+endif(UNIX AND HAVE_XDG_UTILS)
