@@ -462,7 +462,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>941.8e6</value>
+      <value>957e6</value>
     </param>
   </block>
   <block>
@@ -837,7 +837,7 @@
     </param>
     <param>
       <key>cell_allocation</key>
-      <value>[0]</value>
+      <value>[arfcn.downlink2arfcn(fc)]</value>
     </param>
     <param>
       <key>comment</key>
@@ -956,6 +956,37 @@
     <param>
       <key>import</key>
       <value>from math import pi</value>
+    </param>
+  </block>
+  <block>
+    <key>import</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(200, 60)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>import_1</value>
+    </param>
+    <param>
+      <key>import</key>
+      <value>from grgsm import arfcn</value>
     </param>
   </block>
   <block>
