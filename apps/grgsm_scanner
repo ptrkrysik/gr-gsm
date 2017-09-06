@@ -305,8 +305,8 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
         last_arfcn = arfcn_range[1]
         last_center_arfcn = last_arfcn - int((channels_num / 2) - 1)
 
-        current_freq = grgsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1, band)
-        last_freq = grgsm.arfcn.arfcn2downlink(last_center_arfcn, band)
+        current_freq = grgsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1)
+        last_freq = grgsm.arfcn.arfcn2downlink(last_center_arfcn)
         stop_freq = last_freq + 0.2e6 * channels_num
 
         while current_freq < stop_freq:
@@ -352,7 +352,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
                     cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                     neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
 
-                    info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i], band), found_freqs[i],
+                    info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
                                         neighbour_list, cell_arfcn_list)
                     found_list.append(info)
@@ -375,7 +375,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
 def argument_parser():
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
     bands_list = ", ".join(grgsm.arfcn.get_bands())
-    parser.add_option("-b", "--band", dest="band", default="P-GSM",
+    parser.add_option("-b", "--band", dest="band", default="GSM900",
                       help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list)
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="float", default=2e6,
                       help="Set sample rate [default=%default] - allowed values even_number*0.2e6")
