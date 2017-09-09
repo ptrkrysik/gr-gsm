@@ -139,11 +139,11 @@ class grgsm_capture(gr.top_block):
         if self.verbose or self.burst_file:
             self.gsm_receiver.set_cell_allocation([self.arfcn])
             if options.band:
-                new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn, self.band)
+                new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn)
             else:
                 for band in grgsm.arfcn.get_bands():
                     if grgsm.arfcn.is_valid_arfcn(arfcn):
-                        new_freq = grgsm.arfcn.arfcn2downlink(arfcn, band)
+                        new_freq = grgsm.arfcn.arfcn2downlink(arfcn)
                         break
             self.set_fc(new_freq)
 
@@ -236,12 +236,12 @@ if __name__ == '__main__':
                 parser.error("ARFCN is not valid in the specified band\n")
             else:
                 arfcn = options.arfcn
-                fc = grgsm.arfcn.arfcn2downlink(arfcn, options.band)
+                fc = grgsm.arfcn.arfcn2downlink(arfcn)
         else:
             arfcn = options.arfcn
             for band in grgsm.arfcn.get_bands():
                 if grgsm.arfcn.is_valid_arfcn(arfcn):
-                    fc = grgsm.arfcn.arfcn2downlink(arfcn, band)
+                    fc = grgsm.arfcn.arfcn2downlink(arfcn)
                     break
     elif options.fc:
         fc = options.fc

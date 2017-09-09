@@ -94,7 +94,7 @@ class grgsm_channelize(gr.top_block):
         print("Extracting channels %s, given that the center frequency is at %s" % (str(channels), eng_notation.num_to_str(fc)))
 
         for channel in channels:
-            channel_freq = arfcn.arfcn2downlink(channel, band)
+            channel_freq = arfcn.arfcn2downlink(channel)
             if channel_freq is None:
                 print("Warning: invalid ARFCN %d for band %s" % (channel, band))
                 continue
