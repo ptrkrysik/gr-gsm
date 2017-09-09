@@ -142,7 +142,7 @@ class grgsm_capture(gr.top_block):
                 new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn, self.band)
             else:
                 for band in grgsm.arfcn.get_bands():
-                    if grgsm.arfcn.is_valid_arfcn(arfcn, band):
+                    if grgsm.arfcn.is_valid_arfcn(arfcn):
                         new_freq = grgsm.arfcn.arfcn2downlink(arfcn, band)
                         break
             self.set_fc(new_freq)
@@ -232,7 +232,7 @@ if __name__ == '__main__':
         if options.band:
             if options.band not in grgsm.arfcn.get_bands():
                 parser.error("Invalid GSM band\n")
-            elif not grgsm.arfcn.is_valid_arfcn(options.arfcn, options.band):
+            elif not grgsm.arfcn.is_valid_arfcn(options.arfcn):
                 parser.error("ARFCN is not valid in the specified band\n")
             else:
                 arfcn = options.arfcn
@@ -240,7 +240,7 @@ if __name__ == '__main__':
         else:
             arfcn = options.arfcn
             for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_arfcn(arfcn, band):
+                if grgsm.arfcn.is_valid_arfcn(arfcn):
                     fc = grgsm.arfcn.arfcn2downlink(arfcn, band)
                     break
     elif options.fc:
