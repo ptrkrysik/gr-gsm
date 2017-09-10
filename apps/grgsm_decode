@@ -351,16 +351,13 @@ if __name__ == '__main__':
             if options.band not in grgsm.arfcn.get_bands():
                 parser.error("Invalid GSM band\n")
             elif not grgsm.arfcn.is_valid_arfcn(options.arfcn):
-                parser.error("ARFCN is not valid in the specified band\n")
+                parser.error("ARFCN is not valid\n")
             else:
                 arfcn = options.arfcn
                 fc = grgsm.arfcn.arfcn2downlink(arfcn)
         else:
             arfcn = options.arfcn
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_arfcn(arfcn):
-                    fc = grgsm.arfcn.arfcn2downlink(arfcn)
-                    break
+            grgsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
         if options.band:

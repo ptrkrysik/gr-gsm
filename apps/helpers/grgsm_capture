@@ -138,13 +138,7 @@ class grgsm_capture(gr.top_block):
         self.arfcn = arfcn
         if self.verbose or self.burst_file:
             self.gsm_receiver.set_cell_allocation([self.arfcn])
-            if options.band:
-                new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn)
-            else:
-                for band in grgsm.arfcn.get_bands():
-                    if grgsm.arfcn.is_valid_arfcn(arfcn):
-                        new_freq = grgsm.arfcn.arfcn2downlink(arfcn)
-                        break
+            new_freq = grgsm.arfcn.arfcn2downlink(self.arfcn)
             self.set_fc(new_freq)
 
     def get_gain(self):
@@ -233,16 +227,13 @@ if __name__ == '__main__':
             if options.band not in grgsm.arfcn.get_bands():
                 parser.error("Invalid GSM band\n")
             elif not grgsm.arfcn.is_valid_arfcn(options.arfcn):
-                parser.error("ARFCN is not valid in the specified band\n")
+                parser.error("ARFCN is not valid\n")
             else:
                 arfcn = options.arfcn
                 fc = grgsm.arfcn.arfcn2downlink(arfcn)
         else:
             arfcn = options.arfcn
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_arfcn(arfcn):
-                    fc = grgsm.arfcn.arfcn2downlink(arfcn)
-                    break
+            fc = grgsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
         if options.band:
