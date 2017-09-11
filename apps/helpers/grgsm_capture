@@ -218,15 +218,18 @@ if __name__ == '__main__':
     arfcn = 0
     fc = 939.4e6
     if options.arfcn:
-        arfcn = options.arfcn
-        fc = grgsm.arfcn.arfcn2downlink(arfcn)
+        if not grgsm.arfcn.is_valid_arfcn(options.arfcn):
+            parser.error("ARFCN is not valid\n")
+        else:
+            arfcn = options.arfcn
+            fc = grgsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
         arfcn = grgsm.arfcn.downlink2arfcn(options.fc)
      
     tb = grgsm_capture(fc=fc, gain=options.gain, samp_rate=options.samp_rate,
                          ppm=options.ppm, arfcn=arfcn, cfile=options.cfile, 
-                         burst_file=options.burst_file, band=options.band, verbose=options.verbose,
+                         burst_file=options.burst_file, verbose=options.verbose,
                          rec_length=options.rec_length, args=options.args)
     
     def signal_handler(signal, frame):
