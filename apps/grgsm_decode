@@ -284,12 +284,7 @@ if __name__ == '__main__':
     cfile_options.add_option("-f", "--fc", dest="fc", type="eng_float",
                              help="Frequency of cfile capture")
     cfile_options.add_option("-a", "--arfcn", dest="arfcn", type="intx",
-                             help="Set ARFCN instead of frequency. "
-                                  "In some cases you may have to provide the GSM band also")
-    cfile_options.add_option("--band", dest="band",
-                             help="Specify the GSM band for the frequency.\nAvailable bands are: "
-                                  + ", ".join(grgsm.arfcn.get_bands()) + "."
-                                  + "If no band is specified, it will be determined automatically, defaulting to 0.")
+                             help="Set ARFCN instead of frequency (for PCS1900 add 0x8000 (2**15) to the ARFCN number).")
     cfile_options.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float",
                              default=eng_notation.num_to_str(1e6),
                              help="Sample rate of cfile capture [default=%default]")
@@ -347,34 +342,14 @@ if __name__ == '__main__':
     arfcn = None
     fc = None
     if options.arfcn:
-        if options.band:
-            if options.band not in grgsm.arfcn.get_bands():
-                parser.error("Invalid GSM band\n")
-            elif not grgsm.arfcn.is_valid_arfcn(options.arfcn, options.band):
-                parser.error("ARFCN is not valid in the specified band\n")
-            else:
-                arfcn = options.arfcn
-                fc = grgsm.arfcn.arfcn2downlink(arfcn, options.band)
+        if not grgsm.arfcn.is_valid_arfcn(options.arfcn):
+            parser.error("ARFCN is not valid\n")
         else:
             arfcn = options.arfcn
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_arfcn(arfcn, band):
-                    fc = grgsm.arfcn.arfcn2downlink(arfcn, band)
-                    break
+            fc = grgsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
-        if options.band:
-            if options.band not in grgsm.arfcn.get_bands():
-                parser.error("Invalid GSM band\n")
-            elif not grgsm.arfcn.is_valid_downlink(options.fc, options.band):
-                parser.error("Frequency is not valid in the specified band\n")
-            else:
-                arfcn = grgsm.arfcn.downlink2arfcn(options.fc, options.band)
-        else:
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_downlink(options.fc, band):
-                    arfcn = grgsm.arfcn.downlink2arfcn(options.fc, band)
-                    break
+        arfcn = grgsm.arfcn.downlink2arfcn(options.fc)
 
     # instanciate decoder
     tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
@@ -389,4 +364,3 @@ if __name__ == '__main__':
     # run
     tb.start()
     tb.wait()
-

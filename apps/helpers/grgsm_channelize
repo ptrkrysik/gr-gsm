@@ -56,24 +56,16 @@ def eng_float(value):
     except:
         raise ArgumentTypeError("invalid engineering notation value: {0}".format(value))
 
-def gsm_band(value):
-    choices = arfcn.get_bands()
-    if value in choices:
-        return value
-    else:
-        raise ArgumentTypeError("invalid GSM band: {0}. Possible choices are: {1}".format(value, choices))
-
 class grgsm_channelize(gr.top_block):
-    def __init__(self, channels, resamp_rate, fc, band, samp_rate, input_file, dest_dir, data_type="complex"):
+    def __init__(self, arfcns, resamp_rate, fc, samp_rate, input_file, dest_dir, data_type="complex"):
         gr.top_block.__init__(self, "grgsm_channelize")
 
         ##################################################
         # Parameters
         ##################################################
-        self.channels = channels
+        self.arfcns = arfcns
         self.resamp_rate = resamp_rate
         self.fc = fc
-        self.band = band
         self.samp_rate = samp_rate
         self.blocks_resamplers = {}
         self.blocks_rotators = {}
@@ -91,13 +83,10 @@ class grgsm_channelize(gr.top_block):
             self.source = blocks.file_source(gr.sizeof_gr_complex, input_file, False)
 
         fc_str = eng_notation.num_to_str(fc)
-        print("Extracting channels %s, given that the center frequency is at %s" % (str(channels), eng_notation.num_to_str(fc)))
+        print("Extracting channels %s, given that the center frequency is at %s" % (str(arfcns), eng_notation.num_to_str(fc)))
 
-        for channel in channels:
-            channel_freq = arfcn.arfcn2downlink(channel, band)
-            if channel_freq is None:
-                print("Warning: invalid ARFCN %d for band %s" % (channel, band))
-                continue
+        for channel in self.arfcns:
+            channel_freq = arfcn.arfcn2downlink(channel)
             freq_diff = channel_freq - fc
             freq_diff_str = "+" if 0 <= freq_diff else ""
             freq_diff_str += eng_notation.num_to_str(freq_diff)
@@ -115,14 +104,12 @@ class grgsm_channelize(gr.top_block):
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter, description='Split wideband a GSM capture into seperate files per ARFCN.', add_help=True, epilog=EXTRA_HELP)
-    parser.add_argument(dest="channel", type=int, nargs='+',
-        help="List of ARFCNs")
+    parser.add_argument(dest="arfcns", type=int, nargs='+',
+        help="List of ARFCNs (for PCS1900 add 0x8000 (2**15) to the ARFCN number)")
     parser.add_argument("-s", "--samp-rate", dest="samp_rate", type=eng_float, default=eng_notation.num_to_str(2e6),
         help="Sample rate of the wideband capture file [default=%(default)s]")
     parser.add_argument("-f", "--fc", dest="fc", type=eng_float, default=eng_notation.num_to_str(935e6), required=True,
         help="Carrier frequency in Hz [default=%(default)s]")
-    parser.add_argument("-b", "--band", dest="band", type=gsm_band, default='E-GSM',
-        help="GSM band [default=%(default)s]") #TODO: add automatic discovery based on fc
     parser.add_argument("-o", "--out-samp-rate", dest="out_samp_rate", type=eng_float, default=eng_notation.num_to_str(1e6),
         help="Sample rate of the output capture files [default=%(default)s]")
     parser.add_argument("-i", "--input_file", dest="input_file", type=str, required=True,
@@ -133,7 +120,11 @@ if __name__ == '__main__':
         help="Destination directory - if not given defaults to input file name without extension")
         
     args = parser.parse_args()
-    
+
+    for ch in args.arfcns:
+        if not arfcn.is_valid_arfcn(ch):
+            parser.error("ARFCN "+str(ch)+" is not valid\n")
+
     if not os.path.exists(args.input_file):
         raise IOError(args.input_file + " does not exist")
 
@@ -154,10 +145,9 @@ if __name__ == '__main__':
     print("Output sample rate: " + eng_notation.num_to_str(args.out_samp_rate))
     print("==> using resample rate of " + str(resamp_rate))
 
-    tb = grgsm_channelize(channels=args.channel,
+    tb = grgsm_channelize(arfcns=args.arfcns,
          resamp_rate=resamp_rate,
          fc=args.fc,
-         band=args.band,
          samp_rate=args.samp_rate,
          input_file=args.input_file,
          dest_dir=args.dest_dir,         
