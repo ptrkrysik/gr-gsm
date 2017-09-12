@@ -64,6 +64,7 @@
 #include "grgsm/misc_utils/message_file_source.h"
 #include "grgsm/misc_utils/msg_to_tag.h"
 #include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
+#include "grgsm/trx_interface/trx.h"
 %}
 
 %include "constants.i"
@@ -143,4 +144,5 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
-
+%include "grgsm/trx_interface/trx.h"
+GR_SWIG_BLOCK_MAGIC2(grgsm, trx);

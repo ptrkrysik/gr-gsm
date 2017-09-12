@@ -96,6 +96,8 @@ list(APPEND grgsm_sources
     qa_utils/message_source_impl.cc
     qa_utils/message_sink_impl.cc
     decryption/decryption_impl.cc
+    trx_interface/udp_socket.cc
+    trx_interface/trx_impl.cc
 )
 
 
