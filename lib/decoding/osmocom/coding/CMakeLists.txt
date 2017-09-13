@@ -17,7 +17,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-add_sources(APPEND grgsm_sources
+add_sources(
     gsm0503_conv.c
     gsm0503_coding.c
     gsm0503_interleaving.c

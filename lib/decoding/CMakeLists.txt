@@ -18,11 +18,12 @@
 # Boston, MA 02110-1301, USA.
 
 
+add_subdirectory(osmocom/coding)
+add_subdirectory(openbts)
+
 add_sources(
     control_channels_decoder_impl.cc
     tch_f_decoder_impl.cc
     sch.c
 )
 
-add_subdirectory(osmocom/coding)
-add_subdirectory(openbts)
