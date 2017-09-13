@@ -17,11 +17,28 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-########################################################################
-# Setup library
-########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 include(GrMiscUtils)
+
+########################################################################
+# Add sources macro
+########################################################################
+set(grgsm_sources "")
+
+macro (add_sources)
+    file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}/lib" "${CMAKE_CURRENT_SOURCE_DIR}")
+    foreach (_src ${ARGN})
+        if (_relPath)
+            list (APPEND grgsm_sources "${_relPath}/${_src}")
+        else()
+            list (APPEND grgsm_sources "${_src}")
+        endif()
+    endforeach()
+    if (_relPath)
+        # propagate grgsm_sources to parent directory
+        set (grgsm_sources ${grgsm_sources} PARENT_SCOPE)
+    endif()
+endmacro()
 
 ########################################################################
 # Handle the generated constants
@@ -42,64 +59,25 @@ configure_file(
     ESCAPE_QUOTES
 @ONLY)
 
-list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
+add_sources(constants.cc)
 #########################################################################
+# Subdirecories
+#########################################################################
+add_subdirectory(decoding)
+add_subdirectory(decryption)
+add_subdirectory(demapping)
+add_subdirectory(flow_control)
+add_subdirectory(misc_utils)
+add_subdirectory(qa_utils)
+add_subdirectory(receiver)
+add_subdirectory(transmitter)
+add_subdirectory(trx_interface)
 
+########################################################################
+# Setup library
+########################################################################
 include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND grgsm_sources
-    receiver/receiver_impl.cc
-    receiver/receiver_config.cc
-    receiver/viterbi_detector.cc
-    decoding/sch.c
-    receiver/clock_offset_control_impl.cc
-    receiver/cx_channel_hopper_impl.cc
-    demapping/universal_ctrl_chans_demapper_impl.cc
-    demapping/tch_f_chans_demapper_impl.cc
-    decoding/control_channels_decoder_impl.cc
-    decoding/tch_f_decoder_impl.cc
-    decoding/openbts/AmrCoder.cpp
-    decoding/openbts/BitVector.cpp
-    decoding/openbts/GSM610Tables.cpp
-    decoding/openbts/GSM660Tables.cpp
-    decoding/openbts/GSM503Tables.cpp
-    decoding/openbts/ViterbiR204.cpp
-    decoding/osmocom/coding/gsm0503_conv.c
-    decoding/osmocom/coding/gsm0503_coding.c
-    decoding/osmocom/coding/gsm0503_interleaving.c
-    decoding/osmocom/coding/gsm0503_mapping.c
-    decoding/osmocom/coding/gsm0503_parity.c
-    decoding/osmocom/coding/gsm0503_tables.c
-    flow_control/burst_timeslot_splitter_impl.cc
-    flow_control/burst_sdcch_subslot_splitter_impl.cc
-    flow_control/burst_timeslot_filter_impl.cc
-    flow_control/burst_sdcch_subslot_filter_impl.cc
-    flow_control/burst_fnr_filter_impl.cc
-    flow_control/dummy_burst_filter_impl.cc
-    flow_control/uplink_downlink_splitter_impl.cc
-    misc_utils/collect_system_info_impl.cc
-    misc_utils/controlled_rotator_cc_impl.cc
-    misc_utils/controlled_fractional_resampler_cc_impl.cc
-    misc_utils/msg_to_tag_impl.cc
-    misc_utils/message_printer_impl.cc
-    misc_utils/tmsi_dumper_impl.cc
-    misc_utils/burst_file_sink_impl.cc
-    misc_utils/burst_file_source_impl.cc
-    misc_utils/message_file_sink_impl.cc
-    misc_utils/message_file_source_impl.cc
-    misc_utils/bursts_printer_impl.cc
-    misc_utils/extract_system_info_impl.cc
-    misc_utils/extract_immediate_assignment_impl.cc
-    misc_utils/extract_cmc_impl.cc
-    qa_utils/burst_sink_impl.cc
-    qa_utils/burst_source_impl.cc
-    qa_utils/message_source_impl.cc
-    qa_utils/message_sink_impl.cc
-    decryption/decryption_impl.cc
-    trx_interface/udp_socket.cc
-    trx_interface/trx_impl.cc
-)
-
 
 add_library(grgsm SHARED ${grgsm_sources})
 target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} 
