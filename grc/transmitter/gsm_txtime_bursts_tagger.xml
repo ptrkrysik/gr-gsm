@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<block>
+  <name>txtime_bursts_tagger</name>
+  <key>gsm_txtime_bursts_tagger</key>
+  <category>GSM</category>
+  <import>import grgsm</import>
+  <make>grgsm.txtime_bursts_tagger()</make>
+
+  <param>
+    <name>init_fn</name>
+    <key>init_fn</key>
+    <value>20</value>
+    <type>int</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>init_time</name>
+    <key>init_time</key>
+    <value>[10 0.1]</value>
+    <type>none</type>
+    <hide>part</hide>
+  </param>
+
+  <sink>
+    <name>fn_time</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+
+  <sink>
+    <name>bursts</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+
+  <source>
+    <name>bursts</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>
