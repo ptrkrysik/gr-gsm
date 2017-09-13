@@ -31,6 +31,7 @@ endif()
 add_subdirectory(misc_utils)
 add_subdirectory(receiver)
 add_subdirectory(demapping)
+add_subdirectory(transmitter)
 
 GR_PYTHON_INSTALL(
     FILES
