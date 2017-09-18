@@ -25,4 +25,3 @@ add_sources(
     GSM503Tables.cpp
     ViterbiR204.cpp
 )
-

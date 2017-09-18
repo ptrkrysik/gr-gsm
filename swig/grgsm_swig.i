@@ -143,4 +143,3 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
-

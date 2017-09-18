@@ -17,8 +17,10 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+GR_PYTHON_INSTALL(
+    FILES
     arfcn.py
     clock_offset_corrector_tagged.py
-    hier_block.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    hier_block.py 
+    fn_time.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )

@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+GR_PYTHON_INSTALL(
+    FILES
     gsm_input.py
     fcch_burst_tagger.py
     sch_detector.py

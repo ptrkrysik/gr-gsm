@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+GR_PYTHON_INSTALL(
+    FILES
     gsm_bcch_ccch_demapper.py
     gsm_bcch_ccch_sdcch4_demapper.py
     gsm_sdcch8_demapper.py DESTINATION ${GR_PYTHON_DIR}/grgsm
