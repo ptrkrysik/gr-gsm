@@ -25,6 +25,7 @@
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
+#include <pmt/pmt.h>
 
 namespace gr {
   namespace gsm {
@@ -52,6 +53,7 @@ namespace gr {
       virtual std::vector<int> get_framenumbers() = 0;
       virtual std::vector<int> get_timeslots() = 0;
       virtual std::vector<std::string> get_burst_data() = 0;
+      virtual pmt::pmt_t get_bursts() = 0;      
     };
   } // namespace gsm
 } // namespace gr
