@@ -22,6 +22,10 @@
       <block>gsm_input</block>
     </cat>
     <cat>
+      <name>Transmitter</name>
+      <block>gsm_txtime_bursts_tagger</block>
+    </cat>
+    <cat>
       <name>Logical channels demapping</name>
       <block>gsm_universal_ctrl_chans_demapper</block>
       <block>gsm_bcch_ccch_demapper</block>

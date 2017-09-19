@@ -17,6 +17,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+GR_PYTHON_INSTALL(
+    FILES
     txtime_bursts_tagger.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )

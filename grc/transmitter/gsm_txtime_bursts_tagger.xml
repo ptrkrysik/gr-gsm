@@ -2,14 +2,14 @@
 <block>
   <name>txtime_bursts_tagger</name>
   <key>gsm_txtime_bursts_tagger</key>
-  <category>GSM</category>
   <import>import grgsm</import>
-  <make>grgsm.txtime_bursts_tagger()</make>
+  <make>grgsm.txtime_bursts_tagger($init_fn, $init_time, $time_hint)</make>
+  <callback>set_time_hint($time_hint)</callback>
 
   <param>
     <name>init_fn</name>
     <key>init_fn</key>
-    <value>20</value>
+    <value>0</value>
     <type>int</type>
     <hide>part</hide>
   </param>
@@ -17,8 +17,16 @@
   <param>
     <name>init_time</name>
     <key>init_time</key>
-    <value>[10 0.1]</value>
-    <type>none</type>
+    <value>0</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>time_hint</name>
+    <key>time_hint</key>
+    <value>0</value>
+    <type>float</type>
     <hide>part</hide>
   </param>
 
@@ -27,6 +35,8 @@
     <type>message</type>
     <optional>1</optional>
   </sink>
+
+
 
   <sink>
     <name>bursts</name>
