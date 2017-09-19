@@ -59,7 +59,7 @@ configure_file(
     ESCAPE_QUOTES
 @ONLY)
 
-add_sources(constants.cc)
+list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
 #########################################################################
 # Subdirecories
 #########################################################################

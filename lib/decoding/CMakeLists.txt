@@ -17,6 +17,11 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
+add_subdirectory(osmocom/coding)
+add_subdirectory(openbts)
+
+add_subdirectory(osmocom/coding)
+add_subdirectory(openbts)
 
 add_sources(
     control_channels_decoder_impl.cc
@@ -24,5 +29,3 @@ add_sources(
     sch.c
 )
 
-add_subdirectory(osmocom/coding)
-add_subdirectory(openbts)
