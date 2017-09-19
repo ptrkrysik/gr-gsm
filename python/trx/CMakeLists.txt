@@ -1,4 +1,4 @@
-# Copyright 2011 Free Software Foundation, Inc.
+# Copyright 2011,2012 Free Software Foundation, Inc.
 #
 # This file is part of GNU Radio
 #
@@ -17,22 +17,11 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-include(GrPython)
-add_subdirectory(helpers)
-add_subdirectory(apps_data)
-
-
 GR_PYTHON_INSTALL(
-    PROGRAMS
-    grgsm_livemon
-    grgsm_livemon_headless
-    grgsm_scanner
-    grgsm_decode
-    grgsm_trx
-    DESTINATION bin
-)
-
-install(
-    PROGRAMS
-    DESTINATION bin
+    FILES
+    ctrl_if_bb.py
+    ctrl_if.py
+    fake_pm.py
+    radio_if.py
+    udp_link.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )
