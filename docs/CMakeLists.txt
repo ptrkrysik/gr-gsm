@@ -38,9 +38,6 @@ endif(ENABLE_DOXYGEN)
 # Convert manual pages from rst to roff and install them
 ########################################################################
 find_program(RST2MAN_EXECUTABLE NAMES rst2man rst2man.py rst2man2 rst2man2.py)
-if(NOT RST2MAN_EXECUTABLE)
-    message(FATAL "rst2man from python-docutils is required to build man pages")
-endif()
 
 function(BUILD_MAN_PAGE _sources _src _dst)
     add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_dst}"
@@ -53,5 +50,11 @@ function(BUILD_MAN_PAGE _sources _src _dst)
     add_custom_target(man_${_src} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_dst})
 endfunction()
 
-build_man_page(MAN1_OUTPUT grgsm_livemon.rst grgsm_livemon.1)
-install(FILES ${MAN1_OUTPUT} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1)
+if(NOT RST2MAN_EXECUTABLE)
+    message(WARNING "rst2man from python-docutils is required to build man pages")
+else()
+    build_man_page(MAN1_OUTPUT grgsm_livemon.rst grgsm_livemon.1)
+    install(FILES ${MAN1_OUTPUT} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1)
+endif()
+
+
