@@ -20,9 +20,6 @@
 add_subdirectory(osmocom/coding)
 add_subdirectory(openbts)
 
-add_subdirectory(osmocom/coding)
-add_subdirectory(openbts)
-
 add_sources(
     control_channels_decoder_impl.cc
     tch_f_decoder_impl.cc
