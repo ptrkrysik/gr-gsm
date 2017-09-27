@@ -74,10 +74,12 @@ namespace gr
     ) : gr::sync_block("receiver",
           gr::io_signature::make(1, -1, sizeof(gr_complex)),
           gr::io_signature::make(0, 0, 0)),
+        d_rx_time_received(false),
+        d_time_samp_ref(GSM_SYMBOL_RATE * osr),
         d_OSR(osr),
         d_process_uplink(process_uplink),
         d_chan_imp_length(CHAN_IMP_RESP_LENGTH),
-        d_counter(0),
+        d_counter(0),       //TODO: use nitems_read instead of d_counter
         d_fcch_start_pos(0),
         d_freq_offset_setting(0),
         d_state(fcch_search),
@@ -147,6 +149,7 @@ namespace gr
       std::vector<const gr_complex *> iii =
         (std::vector<const gr_complex *>) input_items;
 #endif
+      
 
       /* Time synchronization loop */
       float current_time =
@@ -175,7 +178,25 @@ namespace gr
           d_freq_offset_tag_in_fcch = tag_offset < last_sample_nr;
         }
       }
+      
+      /* Obtaining current time with use of rx_time tag provided i.e. by UHD devices */
+      /* And storing it in time_sample_ref for sample number to time conversion */
+      std::vector<tag_t> rx_time_tags;
 
+      get_tags_in_window(rx_time_tags, 0, 0, noutput_items, pmt::string_to_symbol("rx_time"));
+      if(!rx_time_tags.empty()){
+        d_rx_time_received = true;
+        tag_t rx_time_tag = *(rx_time_tags.begin());
+
+        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
+        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
+        
+        time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
+        uint64_t current_start_offset = rx_time_tag.offset;
+        d_time_samp_ref.update(current_rx_time, current_start_offset);
+//        std::cout << "Mam rx_time: " << current_rx_time.get_real_secs() << std::endl;
+      }
+      
       /* Main state machine */
       switch (d_state) {
       case fcch_search:
@@ -335,7 +356,7 @@ namespace gr
 
           /* Compose a message with GSMTAP header and bits */
           send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_SCH, input_nr);
+            GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
 
           /* Attempt to decode SCH burst */
           rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc);
@@ -381,7 +402,7 @@ namespace gr
 
           /* Compose a message with GSMTAP header and bits */
           send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_NORMAL, input_nr);
+            GSMTAP_BURST_NORMAL, input_nr, d_c0_burst_start);
 
           break;
         }
@@ -405,13 +426,13 @@ namespace gr
 
             /* Compose a message with GSMTAP header and bits */
             send_burst(d_burst_nr, output_binary,
-              GSMTAP_BURST_NORMAL, input_nr); 
+              GSMTAP_BURST_NORMAL, input_nr, normal_burst_start); 
           } else {
             d_c0_burst_start = dummy_burst_start;
 
             /* Compose a message with GSMTAP header and bits */
             send_burst(d_burst_nr, dummy_burst,
-              GSMTAP_BURST_DUMMY, input_nr);
+              GSMTAP_BURST_DUMMY, input_nr, dummy_burst_start);
           }
 
           break;
@@ -463,7 +484,7 @@ namespace gr
             burst_start, output_binary);
 
           /* Compose a message with GSMTAP header and bits */
-          send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
+          send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
 
           break;
         }
@@ -980,7 +1001,7 @@ namespace gr
     void
     receiver_impl::send_burst(burst_counter burst_nr,
       const unsigned char * burst_binary, uint8_t burst_type,
-      unsigned int input_nr)
+      unsigned int input_nr, unsigned int burst_start)
     {
       /* Buffer for GSMTAP header and burst */
       uint8_t buf[sizeof(gsmtap_hdr) + BURST_SIZE];
@@ -1018,6 +1039,17 @@ namespace gr
 
       tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
       tap_header->snr_db = 0; /* FIXME: Can we calculate this? */
+
+      pmt::pmt_t pdu_header = pmt::make_dict();
+
+      /* Add timestamp of the first sample - if available */
+      if(d_rx_time_received) {
+        time_spec_t time_spec_of_first_sample = d_time_samp_ref.offset_to_time(nitems_read(0)+burst_start);
+        uint64_t full = time_spec_of_first_sample.get_full_secs();
+        double   frac = time_spec_of_first_sample.get_frac_secs();
+        pdu_header    = 
+          pmt::dict_add(pdu_header, pmt::mp("fn_time"), pmt::cons(pmt::from_uint64(frame_number), pmt::cons(pmt::from_uint64(full), pmt::from_double(frac))));
+      }
 
       /* Copy burst to the buffer */
       memcpy(burst, burst_binary, BURST_SIZE);
@@ -1093,6 +1125,5 @@ namespace gr
     {
       d_state = fcch_search;
     }
-
   } /* namespace gsm */
 } /* namespace gr */

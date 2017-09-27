@@ -28,12 +28,15 @@
 #include <gsm_constants.h>
 #include <receiver_config.h>
 #include <vector>
+#include "time_sample_ref.h"
 
 namespace gr {
   namespace gsm {
     class receiver_impl : public receiver
     {
      private:
+        bool d_rx_time_received;
+        time_sample_ref d_time_samp_ref;
         unsigned int d_c0_burst_start;
         float d_c0_signal_dbm;
         
@@ -195,7 +198,7 @@ namespace gr {
          * @param burst_binary - content of the burst
          * @b_type - type of the burst
          */
-        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, unsigned int input_nr);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, unsigned int input_nr, unsigned int burst_start=-1);
 
         /**
          * Configures burst types in different channels
@@ -209,13 +212,13 @@ namespace gr {
             gr_vector_const_void_star &input_items, int noutput_items);
 
      public:
-       receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
-      ~receiver_impl();
+         receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
+        ~receiver_impl();
       
-      int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
-      virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
-      virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
-      virtual void reset();
+        int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
+        virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
+        virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
+        virtual void reset();
     };
   } // namespace gsm
 } // namespace gr
