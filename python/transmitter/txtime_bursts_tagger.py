@@ -55,7 +55,7 @@ class txtime_bursts_tagger(gr.basic_block):
             self.fn_ref = pmt.car(fn_time)
             self.time_ref = pmt.cdr(fn_time)
             self.time_hint = self.time_ref
-            
+             
     def process_txtime_of_burst(self, msg):
         burst_with_header = pmt.to_python(pmt.cdr(msg))
         fn = burst_with_header[11]+burst_with_header[10]*2**8+burst_with_header[9]*2**16+burst_with_header[8]*2**24
