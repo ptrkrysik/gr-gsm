@@ -61,7 +61,9 @@ class txtime_bursts_tagger(gr.basic_block):
         fn = burst_with_header[11]+burst_with_header[10]*2**8+burst_with_header[9]*2**16+burst_with_header[8]*2**24
         ts_num = burst_with_header[3]
         fn_delta, txtime = fn_time_delta(self.fn_ref, self.time_ref, fn, self.time_hint, ts_num)
-        tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("txtime"), pmt.from_double(txtime))
+        txtime_secs = int(txtime)
+        txtime_fracs = txtime-int(txtime)
+        tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("tx_time"), pmt.make_tuple(pmt.from_uint64(txtime_secs),pmt.from_double(txtime_fracs)))
         new_msg = pmt.cons(tags_dict, pmt.cdr(msg))
         self.message_port_pub(pmt.intern("bursts"), new_msg)
         
