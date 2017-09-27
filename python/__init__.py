@@ -55,6 +55,7 @@ from gsm_input import gsm_input
 from gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
 from gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
 from gsm_sdcch8_demapper import gsm_sdcch8_demapper
+from gsm_gmsk_mod import gsm_gmsk_mod
 from fn_time import *
 from txtime_bursts_tagger import *
 #from ctrl_if import *

@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
+    gsm_gmsk_mod.xml
     gsm_txtime_bursts_tagger.xml DESTINATION share/gnuradio/grc/blocks
 )
