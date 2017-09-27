@@ -44,7 +44,14 @@ def fnmod_delta(fn1, fn2):
         delta = delta + __hyper_frame
     
     return delta
-  
+
+def fn_time_diff_delta(fn_x, fn_ref, time_diff_hint=0):
+    frames_diff = int(round(time_diff_hint/__frame_period))
+    fn_ref_hint = (fn_ref + frames_diff)
+    fn_delta = fnmod_delta(fn_x,fn_ref_hint)+frames_diff
+    
+    return fn_delta
+
 #fn_time_delta computes difference between reference frame number and a second frame number. It also computes timestamp of the second frame number. The full list of parameters is following:
 #* fn_ref - reference frame number modulo __hyper_frame
 #* time_ref - precise timestamp of the first sample in the frame fn_ref
@@ -59,13 +66,11 @@ def fn_time_delta(fn_ref, time_ref, fn_x, time_hint=None, ts_num=None):
     if ts_num is None:
         ts_num = 0
 
-    time_diff = time_hint-time_ref
-    frames_diff = int(round(time_diff/__frame_period))
-    fn_ref = (fn_ref + frames_diff)
-    fn_delta = fnmod_delta(fn_x,fn_ref)+frames_diff
-    time2_precise = fn_delta*__frame_period+time_ref+ts_num*__ts_period
+    time_diff_hint = time_hint-time_ref
+    fn_delta = fn_time_diff_delta(fn_x,fn_ref, time_diff_hint)
+    time_x_precise = fn_delta*__frame_period+time_ref+ts_num*__ts_period
     
-    return fn_delta, time2_precise
+    return fn_delta, time_x_precise
 
 
 if __name__ == "__main__":
@@ -77,8 +82,8 @@ if __name__ == "__main__":
         time2_err = time2+error
         fn_delta, time2_precise = fn_time_delta(fn1, time1, fn2, time2_err)
         if fn_delta != fn2-fn1:
-            print "dupa:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_h4_prev, time_diff
-        time_diff = time2 - time2_precise
-        if time_diff > 0.1:
+            print "dupa:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
+        time_diff_hint = time2 - time2_precise
+        if time_diff_hint > 0.1:
             print "dupa"
 
