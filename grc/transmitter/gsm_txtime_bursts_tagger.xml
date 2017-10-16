@@ -9,8 +9,8 @@
   <param>
     <name>init_fn</name>
     <key>init_fn</key>
-    <value>0</value>
-    <type>int</type>
+    <value>None</value>
+    <type>raw</type>
     <hide>part</hide>
   </param>
 

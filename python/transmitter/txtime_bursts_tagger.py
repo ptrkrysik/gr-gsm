@@ -47,25 +47,33 @@ class txtime_bursts_tagger(gr.basic_block):
         self.set_msg_handler(pmt.intern("bursts"), self.process_txtime_of_burst)
         
     def process_fn_time_reference(self, msg):
-        time_hint = pmt.to_python(pmt.dict_ref(pmt.car(msg), (pmt.intern("time_hint"),PMT_NIL)))
-        fn_time = pmt.to_python(pmt.dict_ref(pmt.car(msg), (pmt.intern("fn_time"),PMT_NIL)))
+        time_hint = pmt.to_python(pmt.dict_ref(msg, pmt.intern("time_hint"), pmt.PMT_NIL))
+        fn_time = pmt.to_python(pmt.dict_ref(msg, pmt.intern("fn_time"), pmt.PMT_NIL))
+
+#        if self.fn_ref is None:
         if time_hint is not None:
             self.time_hint = time_hint
         elif fn_time is not None:
-            self.fn_ref = pmt.car(fn_time)
-            self.time_ref = pmt.cdr(fn_time)
+            self.fn_ref = fn_time[0][0]
+            self.ts = fn_time[0][1]
+            full = fn_time[1][0]
+            frac = fn_time[1][1]
+        
+            self.time_ref = full+frac
             self.time_hint = self.time_ref
              
     def process_txtime_of_burst(self, msg):
         burst_with_header = pmt.to_python(pmt.cdr(msg))
         fn = burst_with_header[11]+burst_with_header[10]*2**8+burst_with_header[9]*2**16+burst_with_header[8]*2**24
         ts_num = burst_with_header[3]
-        fn_delta, txtime = fn_time_delta(self.fn_ref, self.time_ref, fn, self.time_hint, ts_num)
-        txtime_secs = int(txtime)
-        txtime_fracs = txtime-int(txtime)
-        tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("tx_time"), pmt.make_tuple(pmt.from_uint64(txtime_secs),pmt.from_double(txtime_fracs)))
-        new_msg = pmt.cons(tags_dict, pmt.cdr(msg))
-        self.message_port_pub(pmt.intern("bursts"), new_msg)
+        if self.fn_ref is not None:
+          fn_delta, txtime = fn_time_delta(self.fn_ref, self.time_ref, fn, self.time_hint, ts_num)
+          txtime_secs = int(txtime)
+          txtime_fracs = txtime-int(txtime)
+          #print "txtime_secs",txtime_secs,"txtime_fracs",txtime_fracs
+          tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("tx_time"), pmt.make_tuple(pmt.from_uint64(txtime_secs),pmt.from_double(txtime_fracs)))
+          new_msg = pmt.cons(tags_dict, pmt.cdr(msg))
+          self.message_port_pub(pmt.intern("bursts"), new_msg)
         
     def set_fn_time_reference(self, init_fn, init_time):
         self.fn_ref = init_fn

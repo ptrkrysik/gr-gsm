@@ -35,6 +35,7 @@ namespace gr {
     class receiver_impl : public receiver
     {
      private:
+        unsigned int d_samples_consumed;
         bool d_rx_time_received;
         time_sample_ref d_time_samp_ref;
         unsigned int d_c0_burst_start;

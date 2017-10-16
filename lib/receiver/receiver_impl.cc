@@ -74,6 +74,7 @@ namespace gr
     ) : gr::sync_block("receiver",
           gr::io_signature::make(1, -1, sizeof(gr_complex)),
           gr::io_signature::make(0, 0, 0)),
+        d_samples_consumed(0),
         d_rx_time_received(false),
         d_time_samp_ref(GSM_SYMBOL_RATE * osr),
         d_OSR(osr),
@@ -183,21 +184,8 @@ namespace gr
       /* And storing it in time_sample_ref for sample number to time conversion */
       std::vector<tag_t> rx_time_tags;
 
-      get_tags_in_window(rx_time_tags, 0, 0, noutput_items, pmt::string_to_symbol("rx_time"));
-      if(!rx_time_tags.empty()){
-        d_rx_time_received = true;
-        tag_t rx_time_tag = *(rx_time_tags.begin());
-
-        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
-        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
-        
-        time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
-        uint64_t current_start_offset = rx_time_tag.offset;
-        d_time_samp_ref.update(current_rx_time, current_start_offset);
-//        std::cout << "Mam rx_time: " << current_rx_time.get_real_secs() << std::endl;
-      }
-      
       /* Main state machine */
+      d_samples_consumed = 0;
       switch (d_state) {
       case fcch_search:
         fcch_search_handler(input, noutput_items);
@@ -210,7 +198,21 @@ namespace gr
         break;
       }
 
-      return 0;
+      get_tags_in_window(rx_time_tags, 0, 0, d_samples_consumed, pmt::string_to_symbol("rx_time"));
+      if(!rx_time_tags.empty()){
+        d_rx_time_received = true;
+        tag_t rx_time_tag = *(rx_time_tags.begin());
+
+        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
+        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
+        
+        time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
+        uint64_t current_start_offset = rx_time_tag.offset;
+        d_time_samp_ref.update(current_rx_time, current_start_offset);
+        std::cout << "Mam rx_time: " << current_rx_time.get_real_secs() << std::endl;
+      }
+
+      return d_samples_consumed;
     }
 
     void
@@ -270,7 +272,9 @@ namespace gr
       d_burst_nr++;
 
       /* Consume samples up to the next guard period */
-      consume_each(burst_start + BURST_SIZE * d_OSR + 4 * d_OSR);
+      unsigned int to_consume = burst_start + BURST_SIZE * d_OSR + 4 * d_OSR;
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       /* Update current state */
       d_state = synchronized;
@@ -505,7 +509,8 @@ namespace gr
 
           /* Consume samples of the burst up to next guard period */
           to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();
-          consume_each(to_consume);
+//          consume_each(to_consume);
+          d_samples_consumed += to_consume;
         }
       }
     }
@@ -696,7 +701,8 @@ namespace gr
       }
 
       d_counter += to_consume;
-      consume_each(to_consume);
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       return result;
     }
@@ -747,7 +753,8 @@ namespace gr
       }
 
       d_counter += to_consume;
-      consume_each(to_consume);
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       return result;
     }
@@ -1047,8 +1054,11 @@ namespace gr
         time_spec_t time_spec_of_first_sample = d_time_samp_ref.offset_to_time(nitems_read(0)+burst_start);
         uint64_t full = time_spec_of_first_sample.get_full_secs();
         double   frac = time_spec_of_first_sample.get_frac_secs();
-        pdu_header    = 
-          pmt::dict_add(pdu_header, pmt::mp("fn_time"), pmt::cons(pmt::from_uint64(frame_number), pmt::cons(pmt::from_uint64(full), pmt::from_double(frac))));
+        pdu_header = 
+          pmt::dict_add(pdu_header, pmt::mp("fn_time"), 
+            pmt::cons(
+              pmt::cons(pmt::from_uint64(be32toh(frame_number)), pmt::from_uint64(tn)),
+              pmt::cons(pmt::from_uint64(full), pmt::from_double(frac))));
       }
 
       /* Copy burst to the buffer */
@@ -1056,7 +1066,7 @@ namespace gr
 
       /* Allocate a new message */
       pmt::pmt_t blob = pmt::make_blob(buf, sizeof(gsmtap_hdr) + BURST_SIZE);
-      pmt::pmt_t msg = pmt::cons(pmt::PMT_NIL, blob);
+      pmt::pmt_t msg = pmt::cons(pdu_header, blob);
 
       /* Send message */
       if (input_nr == 0)
