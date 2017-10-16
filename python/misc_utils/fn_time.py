@@ -59,31 +59,30 @@ def fn_time_diff_delta(fn_x, fn_ref, time_diff_hint=0):
 #* time_hint - coarse time for fn_x that is used as a hint to avoid ambiguities caused by modulo operation applied to frame numbers. The correct are values from range <time2_precise-__hiperframe/2, time2_precise+__hiperframe/2> (where time2_precise is exact time of the first sample in frame fn_x)
 #* ts_num - number of timeslot in the frame
 
-def fn_time_delta(fn_ref, time_ref, fn_x, time_hint=None, ts_num=None):
+def fn_time_delta(fn_ref, time_ref, fn_x, time_hint=None, ts_num=0, ts_ref=0):
     if time_hint is None:
         time_hint = time_ref
         
-    if ts_num is None:
-        ts_num = 0
-
     time_diff_hint = time_hint-time_ref
     fn_delta = fn_time_diff_delta(fn_x,fn_ref, time_diff_hint)
-    time_x_precise = fn_delta*__frame_period+time_ref+ts_num*__ts_period
+    time_x_precise = fn_delta*__frame_period+time_ref+(ts_num-ts_ref)*__ts_period
     
     return fn_delta, time_x_precise
 
 
 if __name__ == "__main__":
     fn1 = 10000
+    ts_ref = 4
     time1 = 10
     for fn2 in xrange(__hyper_frame/2+fn1-10,__hyper_frame/2*10+fn1+10,10):
-        time2 = time1 + (fn2-fn1)*__frame_period 
+        ts_x = int(uniform(0,8))
+        time2 = time1 + (fn2-fn1)*__frame_period + (ts_ref-ts_x)*__ts_period
         error = uniform(-6200,6200)
         time2_err = time2+error
-        fn_delta, time2_precise = fn_time_delta(fn1, time1, fn2, time2_err)
+        fn_delta, time2_precise = fn_time_delta(fn1, time1, fn2, time2_err, ts_x, ts_ref)
         if fn_delta != fn2-fn1:
-            print "dupa:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
+            print "bad fn:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
         time_diff_hint = time2 - time2_precise
-        if time_diff_hint > 0.1:
-            print "dupa"
+        if time_diff_hint > 0.0001:
+            print "bad time diff"
 
