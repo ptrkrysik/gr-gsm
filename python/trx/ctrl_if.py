@@ -22,9 +22,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from grgsm import UDPLink
+from grgsm.trx import udp_link
 
-class CTRLInterface(UDPLink):
+class ctrl_if(udp_link):
 	def handle_rx(self, data):
 		if self.verify_req(data):
 			request = self.prepare_req(data)

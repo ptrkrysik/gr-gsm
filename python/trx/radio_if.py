@@ -32,7 +32,7 @@ from math import pi
 from gnuradio import blocks
 from gnuradio import gr
 
-class RadioInterface(gr.top_block):
+class radio_if(gr.top_block):
 	# PHY specific variables
 	samp_rate = 2000000
 	shiftoff = 400e3

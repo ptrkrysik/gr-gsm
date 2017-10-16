@@ -22,12 +22,12 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from ctrl_if import CTRLInterface
+from ctrl_if import ctrl_if
 
-class CTRLInterfaceBB(CTRLInterface):
+class ctrl_if_bb(ctrl_if):
 	def __init__(self, remote_addr, remote_port, bind_port, tb, pm):
 		print("[i] Init CTRL interface")
-		CTRLInterface.__init__(self, remote_addr, remote_port, bind_port)
+		ctrl_if.__init__(self, remote_addr, remote_port, bind_port)
 
 		# Set link to the follow graph (top block)
 		self.tb = tb
@@ -36,7 +36,7 @@ class CTRLInterfaceBB(CTRLInterface):
 
 	def shutdown(self):
 		print("[i] Shutdown CTRL interface")
-		CTRLInterface.shutdown(self)
+		ctrl_if.shutdown(self)
 
 	def parse_cmd(self, request):
 		# Power control
