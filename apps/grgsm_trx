@@ -43,7 +43,10 @@ class Application:
 
 	# PHY specific
 	phy_sample_rate = 2000000
-	phy_gain = 30
+	phy_tx_antenna = "TX/RX"
+	phy_rx_antenna = "RX2"
+	phy_rx_gain = 30
+	phy_tx_gain = 10
 	phy_args = ""
 	phy_ppm = 0
 
@@ -57,7 +60,9 @@ class Application:
 	def run(self):
 		# Init Radio interface
 		self.radio = radio_if(self.phy_args, self.phy_sample_rate,
-			self.phy_gain, self.phy_ppm, self.remote_addr, self.base_port)
+			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
+			self.phy_rx_antenna, self.phy_tx_antenna,
+			self.remote_addr, self.base_port)
 
 		# Power measurement emulation
 		# Noise: -120 .. -105
@@ -90,24 +95,28 @@ class Application:
 
 		# TRX specific
 		s += " TRX interface specific\n" \
-			 "  -s --remote-addr  Set remote address (default 127.0.0.1)\n" \
+			 "  -i --remote-addr  Set remote address (default 127.0.0.1)\n" \
 			 "  -p --base-port    Set base port number (default 5700)\n\n"
 
 		# PHY specific
 		s += " Radio interface specific\n" \
 			 "  -a --device-args  Set device arguments\n" \
-			 "  -s --sample-rate  Set PHY sample rate (default 2000000)\n" \
-			 "  -g --gain         Set PHY gain (default 30)\n" \
-			 "     --ppm          Set PHY frequency correction (default 0)\n"
+			 "  -s --sample-rate  Set sample rate (default 2000000)\n" \
+			 "  -g --rx-gain      Set RX gain (default 30)\n" \
+			 "  -G --tx-gain      Set TX gain (default 10)\n" \
+			 "     --rx-antenna   Set RX antenna (default RX2)\n" \
+			 "     --tx-antenna   Set TX antenna (default TX/RX)\n" \
+			 "     --ppm          Set frequency correction (default 0)\n"
 
 		print(s)
 
 	def parse_argv(self):
 		try:
 			opts, args = getopt.getopt(sys.argv[1:],
-				"a:p:i:s:g:h",
+				"i:p:a:s:g:G:h",
 				["help", "remote-addr=", "base-port=", "device-args=",
-				"gain=", "sample-rate=", "ppm="])
+				"sample-rate=", "rx-gain=", "tx-gain=", "ppm=",
+				"rx-antenna", "tx-antenna"])
 		except getopt.GetoptError as err:
 			# Print(help and exit)
 			self.print_help()
@@ -132,10 +141,16 @@ class Application:
 			# PHY specific
 			elif o in ("-a", "--device-args"):
 				self.phy_args = v
-			elif o in ("-g", "--gain"):
-				self.phy_gain = int(v)
 			elif o in ("-s", "--sample-rate"):
 				self.phy_sample_rate = int(v)
+			elif o in ("-g", "--rx-gain"):
+				self.phy_rx_gain = int(v)
+			elif o in ("-G", "--tx-gain"):
+				self.phy_tx_gain = int(v)
+			elif o in ("--rx-antenna"):
+				self.phy_rx_antenna = v
+			elif o in ("--tx-antenna"):
+				self.phy_tx_antenna = v
 			elif o in ("--ppm"):
 				self.phy_ppm = int(v)
 
