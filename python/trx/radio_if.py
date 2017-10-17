@@ -45,18 +45,17 @@ class radio_if(gr.top_block):
 	trx_started = False
 	fc_set = False
 
-	def __init__(self, phy_args, phy_sample_rate, phy_gain, phy_ppm,
+	def __init__(self, phy_args, phy_sample_rate,
+			phy_rx_gain, phy_tx_gain, phy_ppm,
+			phy_rx_antenna, phy_tx_antenna,
 			trx_remote_addr, trx_base_port):
-		print("[i] Init Radio interface")
 
-		# TRX block specific variables
-		self.trx_remote_addr = trx_remote_addr
-		self.trx_base_port = trx_base_port
+		print("[i] Init Radio interface")
 
 		# PHY specific variables
 		self.samp_rate = phy_sample_rate
-		self.device_args = phy_args
-		self.gain = phy_gain
+		self.rx_gain = phy_rx_gain
+		self.tx_gain = phy_tx_gain
 		self.ppm = phy_ppm
 
 		gr.top_block.__init__(self, "GR-GSM TRX")
@@ -65,8 +64,7 @@ class radio_if(gr.top_block):
 		##################################################
 		# PHY Definition
 		##################################################
-		self.phy = osmosdr.source(
-			args = "numchan=%d %s" % (1, self.device_args))
+		self.phy = osmosdr.source(args = "numchan=%d %s" % (1, phy_args))
 
 		self.phy.set_bandwidth(250e3 + abs(self.shiftoff), 0)
 		self.phy.set_center_freq(shift_fc, 0)
@@ -75,10 +73,10 @@ class radio_if(gr.top_block):
 		self.phy.set_iq_balance_mode(2, 0)
 		self.phy.set_dc_offset_mode(2, 0)
 		self.phy.set_gain_mode(False, 0)
-		self.phy.set_gain(self.gain, 0)
+		self.phy.set_gain(self.rx_gain, 0)
 		self.phy.set_if_gain(20, 0)
 		self.phy.set_bb_gain(20, 0)
-		self.phy.set_antenna("", 0)
+		self.phy.set_antenna(phy_rx_antenna, 0)
 
 		##################################################
 		# GR-GSM Magic
@@ -99,7 +97,7 @@ class radio_if(gr.top_block):
 		self.gsm_ts_filter.set_policy(grgsm.FILTER_POLICY_DROP_ALL)
 
 		self.gsm_trx_burst_if = grgsm.trx_burst_if(
-			self.trx_remote_addr, str(self.trx_base_port))
+			trx_remote_addr, str(trx_base_port))
 
 		##################################################
 		# Connections
