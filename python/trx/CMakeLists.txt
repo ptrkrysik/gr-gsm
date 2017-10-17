@@ -19,9 +19,10 @@
 
 GR_PYTHON_INSTALL(
     FILES
-    ctrl_if_bb.py
+    __init__.py
+    udp_link.py
     ctrl_if.py
+    ctrl_if_bb.py
     fake_pm.py
-    radio_if.py
-    udp_link.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    radio_if.py DESTINATION ${GR_PYTHON_DIR}/grgsm/trx
 )
