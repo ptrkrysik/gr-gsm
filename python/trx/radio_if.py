@@ -36,7 +36,6 @@ class radio_if(gr.top_block):
 	# PHY specific variables
 	samp_rate = 2000000
 	shiftoff = 400e3
-	subdev_spec = "" # TODO: use it
 	device_args = ""
 	fc = 941.6e6 # TODO: set ARFCN to 0?
 	gain = 30
@@ -46,9 +45,8 @@ class radio_if(gr.top_block):
 	trx_started = False
 	fc_set = False
 
-	def __init__(self, phy_args, phy_subdev_spec,
-				phy_sample_rate, phy_gain, phy_ppm,
-				trx_remote_addr, trx_base_port):
+	def __init__(self, phy_args, phy_sample_rate, phy_gain, phy_ppm,
+			trx_remote_addr, trx_base_port):
 		print("[i] Init Radio interface")
 
 		# TRX block specific variables
@@ -56,7 +54,6 @@ class radio_if(gr.top_block):
 		self.trx_base_port = trx_base_port
 
 		# PHY specific variables
-		self.subdev_spec = phy_subdev_spec
 		self.samp_rate = phy_sample_rate
 		self.device_args = phy_args
 		self.gain = phy_gain
