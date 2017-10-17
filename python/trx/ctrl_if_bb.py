@@ -22,6 +22,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import grgsm
 from ctrl_if import ctrl_if
 
 class ctrl_if_bb(ctrl_if):
@@ -107,14 +108,18 @@ class ctrl_if_bb(ctrl_if):
 				return -1
 
 			# Ignore timeslot type for now
-			# Value 0 means 'drop all'
-			config = -1 if int(request[2]) == 0 else tn
-
+			config = int(request[2])
 			print("[i] Configure timeslot filter to: %s"
-				% ("drop all" if config == -1 else "TS %d" % tn))
+				% ("drop all" if config == 0 else "TS %d" % tn))
 
-			# HACK: configure built-in timeslot filter
-			self.tb.gsm_trx_if.ts_filter_set_tn(config)
+			if config == 0:
+				# Value 0 means 'drop all'
+				self.tb.gsm_ts_filter.set_policy(
+					grgsm.FILTER_POLICY_DROP_ALL)
+			else:
+				self.tb.gsm_ts_filter.set_policy(
+					grgsm.FILTER_POLICY_DEFAULT)
+				self.tb.gsm_ts_filter.set_tn(tn)
 
 			return 0
 

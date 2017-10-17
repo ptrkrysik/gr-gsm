@@ -35,7 +35,6 @@ namespace gr {
     {
      private:
       udp_socket *d_data_sock;
-      int d_ts_filter_tn;
 
       bool detect_rach(uint8_t *burst);
       void burst_pack(pmt::pmt_t msg, uint8_t *buf);
@@ -43,10 +42,6 @@ namespace gr {
      public:
       trx_burst_if_impl(const std::string &remote_addr, int base_port);
       ~trx_burst_if_impl();
-
-      /* Timeslot filter API */
-      void ts_filter_set_tn(int tn);
-      int ts_filter_get_tn(void);
 
       void handle_dl_burst(pmt::pmt_t msg);
       void handle_ul_burst(uint8_t *payload, size_t len);

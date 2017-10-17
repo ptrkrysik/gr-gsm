@@ -98,6 +98,9 @@ class radio_if(gr.top_block):
 		self.gsm_clck_ctrl = grgsm.clock_offset_control(
 			shift_fc, self.samp_rate, osr = 4)
 
+		self.gsm_ts_filter = grgsm.burst_timeslot_filter(0)
+		self.gsm_ts_filter.set_policy(grgsm.FILTER_POLICY_DROP_ALL)
+
 		self.gsm_trx_burst_if = grgsm.trx_burst_if(
 			self.trx_remote_addr, str(self.trx_base_port))
 
@@ -115,6 +118,9 @@ class radio_if(gr.top_block):
 			(self.gsm_input, 'ctrl_in'))
 
 		self.msg_connect((self.gsm_receiver, 'C0'),
+			(self.gsm_ts_filter, 'in'))
+
+		self.msg_connect((self.gsm_ts_filter, 'out'),
 			(self.gsm_trx_burst_if, 'bursts'))
 
 	def check_available(self):
