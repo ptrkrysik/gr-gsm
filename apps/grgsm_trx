@@ -43,7 +43,6 @@ class Application:
 
 	# PHY specific
 	phy_sample_rate = 2000000
-	phy_subdev_spec = False
 	phy_gain = 30
 	phy_args = ""
 	phy_ppm = 0
@@ -57,9 +56,8 @@ class Application:
 
 	def run(self):
 		# Init Radio interface
-		self.radio = radio_if(self.phy_args, self.phy_subdev_spec,
-			self.phy_sample_rate, self.phy_gain, self.phy_ppm,
-			self.remote_addr, self.base_port)
+		self.radio = radio_if(self.phy_args, self.phy_sample_rate,
+			self.phy_gain, self.phy_ppm, self.remote_addr, self.base_port)
 
 		# Power measurement emulation
 		# Noise: -120 .. -105
@@ -99,7 +97,6 @@ class Application:
 		s += " Radio interface specific\n" \
 			 "  -a --device-args  Set device arguments\n" \
 			 "  -s --sample-rate  Set PHY sample rate (default 2000000)\n" \
-			 "  -S --subdev-spec  Set PHY sub-device specification\n" \
 			 "  -g --gain         Set PHY gain (default 30)\n" \
 			 "     --ppm          Set PHY frequency correction (default 0)\n"
 
@@ -108,9 +105,9 @@ class Application:
 	def parse_argv(self):
 		try:
 			opts, args = getopt.getopt(sys.argv[1:],
-				"a:p:i:s:S:g:h",
+				"a:p:i:s:g:h",
 				["help", "remote-addr=", "base-port=", "device-args=",
-				"gain=", "subdev-spec=", "sample-rate=", "ppm="])
+				"gain=", "sample-rate=", "ppm="])
 		except getopt.GetoptError as err:
 			# Print(help and exit)
 			self.print_help()
@@ -137,8 +134,6 @@ class Application:
 				self.phy_args = v
 			elif o in ("-g", "--gain"):
 				self.phy_gain = int(v)
-			elif o in ("-S", "--subdev-spec"):
-				self.phy_subdev_spec = v
 			elif o in ("-s", "--sample-rate"):
 				self.phy_sample_rate = int(v)
 			elif o in ("--ppm"):
