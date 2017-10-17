@@ -75,16 +75,12 @@ namespace gr {
           boost::bind(&trx_burst_if_impl::handle_dl_burst, this, _1));
 
         // Prepare port numbers
-        std::string clck_src_port = boost::lexical_cast<std::string> (base_port + 0);
-        std::string clck_dst_port = boost::lexical_cast<std::string> (base_port + 100);
         std::string data_src_port = boost::lexical_cast<std::string> (base_port + 2);
         std::string data_dst_port = boost::lexical_cast<std::string> (base_port + 102);
 
-        // Init DATA & CLCK interfaces
+        // Init DATA interface
         d_data_sock = new udp_socket(remote_addr,
           data_src_port, data_dst_port, DATA_IF_MTU);
-        d_clck_sock = new udp_socket(remote_addr,
-          clck_src_port, clck_dst_port, DATA_IF_MTU);
 
         // Bind DATA interface handler
         d_data_sock->udp_rx_handler = boost::bind(
@@ -101,7 +97,6 @@ namespace gr {
     {
         // Release all UDP sockets and free memory
         delete d_data_sock;
-        delete d_clck_sock;
     }
 
     /*
@@ -138,19 +133,6 @@ namespace gr {
     }
 
     /*
-     * Create an UDP payload with clock indication
-     */
-    void
-    trx_burst_if_impl::clck_ind_send(uint32_t frame_nr)
-    {
-      char buf[20];
-      size_t n;
-
-      n = snprintf(buf, 20, "IND CLOCK %u", frame_nr);
-      d_clck_sock->udp_send((uint8_t *) buf, n + 1);
-    }
-
-    /*
      * Create an UDP payload with burst bits
      * and some channel data.
      */
@@ -168,10 +150,6 @@ namespace gr {
 
       // Extract frame number
       uint32_t frame_nr = be32toh(header->frame_number);
-
-      // HACK: send clock indications every 51-th frame
-      if (frame_nr % 51 == 0)
-        clck_ind_send(frame_nr);
 
       // Pack frame number
       buf[1] = (frame_nr >> 24) & 0xff;

@@ -35,11 +35,9 @@ namespace gr {
     {
      private:
       udp_socket *d_data_sock;
-      udp_socket *d_clck_sock;
       int d_ts_filter_tn;
 
       bool detect_rach(uint8_t *burst);
-      void clck_ind_send(uint32_t frame_nr);
       void burst_pack(pmt::pmt_t msg, uint8_t *buf);
 
      public:
