@@ -20,8 +20,8 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_TRX_H
-#define INCLUDED_GRGSM_TRX_H
+#ifndef INCLUDED_GRGSM_TRX_BURST_IF_H
+#define INCLUDED_GRGSM_TRX_BURST_IF_H
 
 #include <grgsm/api.h>
 #include <gnuradio/sync_block.h>
@@ -34,17 +34,17 @@ namespace gr {
      * \ingroup grgsm
      *
      */
-    class GRGSM_API trx : virtual public gr::block
+    class GRGSM_API trx_burst_if : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<trx> sptr;
+      typedef boost::shared_ptr<trx_burst_if> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of grgsm::trx.
+       * \brief Return a shared_ptr to a new instance of grgsm::trx_burst_if.
        *
-       * To avoid accidental use of raw pointers, grgsm::trx's
+       * To avoid accidental use of raw pointers, grgsm::trx_burst_if's
        * constructor is in a private implementation
-       * class. grgsm::trx::make is the public interface for
+       * class. grgsm::trx_burst_if::make is the public interface for
        * creating new instances.
        */
       static sptr make(
@@ -59,5 +59,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_TRX_H */
+#endif /* INCLUDED_GRGSM_TRX_BURST_IF_H */
 

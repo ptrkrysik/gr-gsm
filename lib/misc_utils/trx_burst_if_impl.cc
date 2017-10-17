@@ -28,7 +28,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include "udp_socket.h"
-#include "trx_impl.h"
+#include "trx_burst_if_impl.h"
 
 #define BURST_SIZE     148
 #define DATA_IF_MTU    160
@@ -46,22 +46,24 @@ static uint8_t rach_synch_seq[] = {
 namespace gr {
   namespace gsm {
 
-    trx::sptr
-    trx::make(
+    trx_burst_if::sptr
+    trx_burst_if::make(
       const std::string &remote_addr,
       const std::string &base_port)
     {
       int base_port_int = boost::lexical_cast<int> (base_port);
 
       return gnuradio::get_initial_sptr
-        (new trx_impl(remote_addr, base_port_int));
+        (new trx_burst_if_impl(remote_addr, base_port_int));
     }
 
     /*
      * The private constructor
      */
-    trx_impl::trx_impl(const std::string &remote_addr, int base_port)
-    : gr::block("trx",
+    trx_burst_if_impl::trx_burst_if_impl(
+      const std::string &remote_addr,
+      int base_port
+    ) : gr::block("trx_burst_if",
         gr::io_signature::make(0, 0, 0),
         gr::io_signature::make(0, 0, 0))
     {
@@ -70,7 +72,7 @@ namespace gr {
 
         // Bind a port handler
         set_msg_handler(pmt::mp("bursts"),
-          boost::bind(&trx_impl::handle_dl_burst, this, _1));
+          boost::bind(&trx_burst_if_impl::handle_dl_burst, this, _1));
 
         // Prepare port numbers
         std::string clck_src_port = boost::lexical_cast<std::string> (base_port + 0);
@@ -86,7 +88,7 @@ namespace gr {
 
         // Bind DATA interface handler
         d_data_sock->udp_rx_handler = boost::bind(
-          &trx_impl::handle_ul_burst, this, _1, _2);
+          &trx_burst_if_impl::handle_ul_burst, this, _1, _2);
 
         // Init timeslot filter
         d_ts_filter_tn = -1;
@@ -95,7 +97,7 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    trx_impl::~trx_impl()
+    trx_burst_if_impl::~trx_burst_if_impl()
     {
         // Release all UDP sockets and free memory
         delete d_data_sock;
@@ -106,13 +108,13 @@ namespace gr {
      * Timeslot filter API (getter and setter)
      */
     void
-    trx_impl::ts_filter_set_tn(int tn)
+    trx_burst_if_impl::ts_filter_set_tn(int tn)
     {
       d_ts_filter_tn = (tn >= 0 && tn <= 7) ? tn : -1;
     }
 
     int
-    trx_impl::ts_filter_get_tn(void)
+    trx_burst_if_impl::ts_filter_get_tn(void)
     {
       return d_ts_filter_tn;
     }
@@ -120,7 +122,7 @@ namespace gr {
     /*
      * Check if burst is a RACH burst
      */
-    bool trx_impl::detect_rach(uint8_t *burst)
+    bool trx_burst_if_impl::detect_rach(uint8_t *burst)
     {
       // Compare synchronization sequence
       for (int i = 0; i < 41; i++)
@@ -139,7 +141,7 @@ namespace gr {
      * Create an UDP payload with clock indication
      */
     void
-    trx_impl::clck_ind_send(uint32_t frame_nr)
+    trx_burst_if_impl::clck_ind_send(uint32_t frame_nr)
     {
       char buf[20];
       size_t n;
@@ -153,7 +155,7 @@ namespace gr {
      * and some channel data.
      */
     void
-    trx_impl::burst_pack(pmt::pmt_t msg, uint8_t *buf)
+    trx_burst_if_impl::burst_pack(pmt::pmt_t msg, uint8_t *buf)
     {
       pmt::pmt_t header_plus_burst = pmt::cdr(msg);
 
@@ -200,7 +202,7 @@ namespace gr {
     }
 
     void
-    trx_impl::handle_dl_burst(pmt::pmt_t msg)
+    trx_burst_if_impl::handle_dl_burst(pmt::pmt_t msg)
     {
       // 8 bytes of header + 148 bytes of burst
       // + two unused, but required bytes
@@ -219,7 +221,7 @@ namespace gr {
     }
 
     void
-    trx_impl::handle_ul_burst(uint8_t *payload, size_t len)
+    trx_burst_if_impl::handle_ul_burst(uint8_t *payload, size_t len)
     {
       // Check length according to the protocol
       if (len != 154)

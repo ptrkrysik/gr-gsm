@@ -67,10 +67,10 @@
 #include "grgsm/misc_utils/message_file_source.h"
 #include "grgsm/misc_utils/msg_to_tag.h"
 #include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
-#include "grgsm/trx_interface/trx.h"
 //#include "grgsm/misc_utils/time_spec.h"
 #include "grgsm/misc_utils/fn_time.h"
 #include "grgsm/transmitter/txtime_setter.h"
+#include "grgsm/misc_utils/trx_burst_if.h"
 %}
 
 %include "constants.i"
@@ -140,6 +140,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
 %include "grgsm/misc_utils/extract_cmc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
+%include "grgsm/misc_utils/trx_burst_if.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, trx_burst_if);
 
 
 %include "grgsm/qa_utils/burst_sink.h"
@@ -150,8 +152,6 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
-%include "grgsm/trx_interface/trx.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, trx);
 
 //#pragma SWIG nowarn=319
 //%include "grgsm/misc_utils/time_spec.h"
