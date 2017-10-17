@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <block>
   <name>TRX Burst Interface</name>
-  <key>grgsm_trx_burst_if</key>
+  <key>gsm_trx_burst_if</key>
   <import>import grgsm</import>
   <make>grgsm.trx_burst_if($remote_addr, $base_port)</make>
 
