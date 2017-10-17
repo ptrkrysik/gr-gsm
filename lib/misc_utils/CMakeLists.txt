@@ -34,5 +34,7 @@ add_sources(
     tmsi_dumper_impl.cc
     time_spec.cc
     fn_time.cc
+    udp_socket.cc
+    trx_burst_if_impl.cc
 )
 

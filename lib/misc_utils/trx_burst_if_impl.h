@@ -20,18 +20,18 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_TRX_IMPL_H
-#define INCLUDED_GRGSM_TRX_IMPL_H
- 
+#ifndef INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H
+#define INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H
+
 #include <stddef.h>
 
 #include <grgsm/gsmtap.h>
-#include <grgsm/trx_interface/trx.h>
+#include <grgsm/misc_utils/trx_burst_if.h>
 
 namespace gr {
   namespace gsm {
 
-    class trx_impl : public trx
+    class trx_burst_if_impl : public trx_burst_if
     {
      private:
       udp_socket *d_data_sock;
@@ -43,8 +43,8 @@ namespace gr {
       void burst_pack(pmt::pmt_t msg, uint8_t *buf);
 
      public:
-      trx_impl(const std::string &remote_addr, int base_port);
-      ~trx_impl();
+      trx_burst_if_impl(const std::string &remote_addr, int base_port);
+      ~trx_burst_if_impl();
 
       /* Timeslot filter API */
       void ts_filter_set_tn(int tn);
@@ -57,5 +57,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_TRX_IMPL_H */
+#endif /* INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H */
 
