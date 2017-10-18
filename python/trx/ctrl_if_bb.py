@@ -72,12 +72,22 @@ class ctrl_if_bb(ctrl_if):
 
 			return 0
 
+		# Gain control
 		elif self.verify_cmd(request, "SETRXGAIN", 1):
 			print("[i] Recv SETRXGAIN cmd")
 
 			# TODO: check gain value
 			gain = int(request[1])
-			self.tb.set_gain(gain)
+			self.tb.set_rx_gain(gain)
+
+			return 0
+
+		elif self.verify_cmd(request, "SETTXGAIN", 1):
+			print("[i] Recv SETTXGAIN cmd")
+
+			# TODO: check gain value
+			gain = int(request[1])
+			self.tb.set_tx_gain(gain)
 
 			return 0
 

@@ -126,6 +126,10 @@ class radio_if(gr.top_block):
 		self.fc_set = True
 		self.fc = fc
 
-	def set_gain(self, gain):
+	def set_rx_gain(self, gain):
 		self.phy.set_gain(gain, 0)
-		self.gain = gain
+		self.rx_gain = gain
+
+	def set_tx_gain(self, gain):
+		# TODO: TX chain not implemented yet
+		self.tx_gain = gain
