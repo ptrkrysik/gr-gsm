@@ -34,12 +34,8 @@ from gnuradio import gr
 
 class radio_if(gr.top_block):
 	# PHY specific variables
-	samp_rate = 2000000
 	shiftoff = 400e3
-	device_args = ""
 	fc = 941.6e6 # TODO: set ARFCN to 0?
-	gain = 30
-	ppm = 0
 
 	# Application state flags
 	trx_started = False
@@ -53,10 +49,8 @@ class radio_if(gr.top_block):
 		print("[i] Init Radio interface")
 
 		# PHY specific variables
-		self.samp_rate = phy_sample_rate
 		self.rx_gain = phy_rx_gain
 		self.tx_gain = phy_tx_gain
-		self.ppm = phy_ppm
 
 		gr.top_block.__init__(self, "GR-GSM TRX")
 		shift_fc = self.fc - self.shiftoff
@@ -68,8 +62,8 @@ class radio_if(gr.top_block):
 
 		self.phy.set_bandwidth(250e3 + abs(self.shiftoff), 0)
 		self.phy.set_center_freq(shift_fc, 0)
-		self.phy.set_sample_rate(self.samp_rate)
-		self.phy.set_freq_corr(self.ppm, 0)
+		self.phy.set_sample_rate(phy_sample_rate)
+		self.phy.set_freq_corr(phy_ppm, 0)
 		self.phy.set_iq_balance_mode(2, 0)
 		self.phy.set_dc_offset_mode(2, 0)
 		self.phy.set_gain_mode(False, 0)
@@ -82,16 +76,16 @@ class radio_if(gr.top_block):
 		# GR-GSM Magic
 		##################################################
 		self.blocks_rotator = blocks.rotator_cc(
-			-2 * pi * self.shiftoff / self.samp_rate)
+			-2 * pi * self.shiftoff / phy_sample_rate)
 
 		self.gsm_input = grgsm.gsm_input(
-			ppm = self.ppm, osr = 4, fc = self.fc,
-			samp_rate_in = self.samp_rate)
+			ppm = phy_ppm, osr = 4, fc = self.fc,
+			samp_rate_in = phy_sample_rate)
 
 		self.gsm_receiver = grgsm.receiver(4, ([0]), ([]))
 
 		self.gsm_clck_ctrl = grgsm.clock_offset_control(
-			shift_fc, self.samp_rate, osr = 4)
+			shift_fc, phy_sample_rate, osr = 4)
 
 		self.gsm_ts_filter = grgsm.burst_timeslot_filter(0)
 		self.gsm_ts_filter.set_policy(grgsm.FILTER_POLICY_DROP_ALL)
