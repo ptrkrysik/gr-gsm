@@ -126,51 +126,12 @@ class radio_if(gr.top_block):
 		self.stop()
 		self.wait()
 
-	def get_args(self):
-		return self.args
-
-	def set_args(self, args):
-		self.args = args
-
-	def get_fc(self):
-		return self.fc
-
 	def set_fc(self, fc):
 		self.phy.set_center_freq(fc - self.shiftoff, 0)
 		self.gsm_input.set_fc(fc)
 		self.fc_set = True
 		self.fc = fc
 
-	def get_gain(self):
-		return self.gain
-
 	def set_gain(self, gain):
 		self.phy.set_gain(gain, 0)
 		self.gain = gain
-
-	def get_ppm(self):
-		return self.ppm
-
-	def set_ppm(self, ppm):
-		self.rtlsdr_source_0.set_freq_corr(ppm, 0)
-		self.ppm = ppm
-
-	def get_samp_rate(self):
-		return self.samp_rate
-
-	def set_samp_rate(self, samp_rate):
-		self.blocks_rotator.set_phase_inc(
-			-2 * pi * self.shiftoff / samp_rate)
-		self.gsm_input.set_samp_rate_in(samp_rate)
-		self.phy.set_sample_rate(samp_rate)
-		self.samp_rate = samp_rate
-
-	def get_shiftoff(self):
-		return self.shiftoff
-
-	def set_shiftoff(self, shiftoff):
-		self.blocks_rotator.set_phase_inc(
-			-2 * pi * shiftoff / self.samp_rate)
-		self.phy.set_bandwidth(250e3 + abs(shiftoff), 0)
-		self.phy.set_center_freq(self.fc - shiftoff, 0)
-		self.shiftoff = shiftoff
