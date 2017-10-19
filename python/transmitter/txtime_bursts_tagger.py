@@ -30,7 +30,7 @@ class txtime_bursts_tagger(gr.basic_block):
     """
     A block that adds txtime metadata to a burst
     """
-    def __init__(self, init_fn=0, init_time=0, time_hint=None):
+    def __init__(self, init_fn=0, init_time=0, time_hint=None, timing_advance=0, delay_correction=0):
         gr.basic_block.__init__(self,
             name="txtime_bursts_tagger",
             in_sig=[],
@@ -38,6 +38,9 @@ class txtime_bursts_tagger(gr.basic_block):
         self.set_fn_time_reference(init_fn, init_time)
         if time_hint is not None:
             self.set_time_hint(time_hint)
+
+        self.timing_advance = timing_advance
+        self.delay_correction = delay_correction
 
         self.message_port_register_in(pmt.intern("fn_time"))
         self.message_port_register_in(pmt.intern("bursts"))
@@ -50,7 +53,6 @@ class txtime_bursts_tagger(gr.basic_block):
         time_hint = pmt.to_python(pmt.dict_ref(msg, pmt.intern("time_hint"), pmt.PMT_NIL))
         fn_time = pmt.to_python(pmt.dict_ref(msg, pmt.intern("fn_time"), pmt.PMT_NIL))
 
-#        if self.fn_ref is None:
         if time_hint is not None:
             self.time_hint = time_hint
         elif fn_time is not None:
@@ -68,10 +70,14 @@ class txtime_bursts_tagger(gr.basic_block):
         ts_num = burst_with_header[3]
         if self.fn_ref is not None:
           fn_delta, txtime = fn_time_delta(self.fn_ref, self.time_ref, fn, self.time_hint, ts_num)
+          txtime_corrected = txtime - self.delay_correction
+          txtime_final = txtime_corrected - self.timing_advance
+          
           txtime_secs = int(txtime)
           txtime_fracs = txtime-int(txtime)
           #print "txtime_secs",txtime_secs,"txtime_fracs",txtime_fracs
           tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("tx_time"), pmt.make_tuple(pmt.from_uint64(txtime_secs),pmt.from_double(txtime_fracs)))
+          tags_dict = pmt.dict_add(tags_dict, pmt.intern("fn"), pmt.from_uint64(fn))
           new_msg = pmt.cons(tags_dict, pmt.cdr(msg))
           self.message_port_pub(pmt.intern("bursts"), new_msg)
         
@@ -83,3 +89,9 @@ class txtime_bursts_tagger(gr.basic_block):
     def set_time_hint(self, time_hint):
         self.time_hint = time_hint
 
+    def set_delay_correction(delay_correction):
+        self.delay_correction = delay_correction
+        
+    def set_timing_advance(timing_advance):
+        self.timing_advance = timing_advance
+        
