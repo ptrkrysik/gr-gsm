@@ -32,6 +32,7 @@ add_sources(
     message_printer_impl.cc
     msg_to_tag_impl.cc
     tmsi_dumper_impl.cc
+    time_spec.cc
     fn_time.cc
 )
 

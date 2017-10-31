@@ -25,7 +25,7 @@
 #define INCLUDED_GRGSM_FN_TIME_H
 
 #include <stdint.h>
-#include <uhd/types/time_spec.hpp>
+#include <grgsm/misc_utils/time_spec.h>
 
 namespace gr {
   namespace gsm {
@@ -41,8 +41,8 @@ namespace gr {
      *                   frame numbers
      * @return           difference between fn_ref and fn
      */
-    uhd::time_spec_t fn_time_delta(uint32_t fn_ref, uhd::time_spec_t time_ref, uint32_t fn_x, 
-      uhd::time_spec_t time_hint, uint32_t ts_num, uint32_t ts_ref);
+    time_spec_t fn_time_delta2(uint32_t fn_ref, time_spec_t time_ref, uint32_t fn_x, 
+      time_spec_t time_hint, uint32_t ts_num, uint32_t ts_ref);
 
   } // namespace grgsm
 } // namespace gr

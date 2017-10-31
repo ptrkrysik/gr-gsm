@@ -23,7 +23,6 @@
 
 #include <grgsm/misc_utils/fn_time.h>
 #include <math.h>
-#include <uhd/types/time_spec.hpp>
 
 #define GSM_HYPER_FRAME 26 * 51 * 2048
 #define GSM_SYM_RATE 13.0e6 / 48.0
@@ -33,7 +32,6 @@
 
 namespace gr {
   namespace gsm {
-    using namespace uhd;
   	/**
   	 * Computes difference between two frame numbers modulo
   	 * GSM_HYPER_FRAME / 2. The result is correct if difference
@@ -79,7 +77,7 @@ namespace gr {
      *                   frame numbers
      * @return           difference between fn_ref and fn
      */
-    time_spec_t fn_time_delta(uint32_t fn_ref, time_spec_t time_ref, uint32_t fn_x, 
+    time_spec_t fn_time_delta2(uint32_t fn_ref, time_spec_t time_ref, uint32_t fn_x, 
       time_spec_t time_hint, uint32_t ts_num, uint32_t ts_ref)
     {
 			time_spec_t time_diff_hint = time_hint - time_ref;
