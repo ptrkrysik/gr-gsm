@@ -34,5 +34,6 @@ install(FILES
     message_printer.h
     tmsi_dumper.h
     msg_to_tag.h
-    controlled_fractional_resampler_cc.h DESTINATION include/grgsm/misc_utils
+    controlled_fractional_resampler_cc.h 
+    fn_time.h DESTINATION include/grgsm/misc_utils
 )
