@@ -73,8 +73,8 @@ class txtime_bursts_tagger(gr.basic_block):
           txtime_corrected = txtime - self.delay_correction
           txtime_final = txtime_corrected - self.timing_advance
           
-          txtime_secs = int(txtime)
-          txtime_fracs = txtime-int(txtime)
+          txtime_secs = int(txtime_final)
+          txtime_fracs = txtime_final-int(txtime_final)
           #print "txtime_secs",txtime_secs,"txtime_fracs",txtime_fracs
           tags_dict = pmt.dict_add(pmt.make_dict(), pmt.intern("tx_time"), pmt.make_tuple(pmt.from_uint64(txtime_secs),pmt.from_double(txtime_fracs)))
           tags_dict = pmt.dict_add(tags_dict, pmt.intern("fn"), pmt.from_uint64(fn))
