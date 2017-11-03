@@ -18,6 +18,7 @@
 #ifndef INCLUDED_TYPES_TIME_SPEC_HPP
 #define INCLUDED_TYPES_TIME_SPEC_HPP
 
+#include <grgsm/api.h>
 #include <boost/operators.hpp>
 #include <ctime>
 
@@ -36,15 +37,8 @@ namespace gr {
      * This gives the fractional seconds enough precision to unambiguously
      * specify a clock-tick/sample-count up to rates of several petahertz.
      */
-    class time_spec_t : boost::additive<time_spec_t>, boost::totally_ordered<time_spec_t>{
+    class GRGSM_API time_spec_t : boost::additive<time_spec_t>, boost::totally_ordered<time_spec_t>{
     public:
-
-        /*!
-         * Get the system time in time_spec_t format.
-         * Uses the highest precision clock available.
-         * \return the system time as a time_spec_t
-         */
-        static time_spec_t get_system_time(void);
 
         /*!
          * Copy constructor

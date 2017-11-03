@@ -151,5 +151,27 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 %include "grgsm/trx_interface/trx.h"
 GR_SWIG_BLOCK_MAGIC2(grgsm, trx);
+
+//#pragma SWIG nowarn=319
 //%include "grgsm/misc_utils/time_spec.h"
+
+//%extend gr::gsm::time_spec_t{
+//    gr::gsm::time_spec_t __add__(const gr::gsm::time_spec_t &what)
+//    {
+//        gr::gsm::time_spec_t temp = *self;
+//        temp += what;
+//        return temp;
+//    }
+//    gr::gsm::time_spec_t __sub__(const gr::gsm::time_spec_t &what)
+//    {
+//        gr::gsm::time_spec_t temp = *self;
+//        temp -= what;
+//        return temp;
+//    }
+//    bool __eq__(const gr::gsm::time_spec_t &what)
+//    {
+//      return (what == *self);
+//    }
+//};
+
 %include "grgsm/misc_utils/fn_time.h"
