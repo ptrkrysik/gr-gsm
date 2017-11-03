@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* @file
  * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author Vadim Yanitskiy <axilirator@gmail.com>
  * @section LICENSE
  * 
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -24,8 +25,9 @@
 #ifndef INCLUDED_GRGSM_FN_TIME_H
 #define INCLUDED_GRGSM_FN_TIME_H
 
+#include <grgsm/api.h>
 #include <stdint.h>
-#include <grgsm/misc_utils/time_spec.h>
+#include <utility>
 
 namespace gr {
   namespace gsm {
@@ -41,10 +43,12 @@ namespace gr {
      *                   frame numbers
      * @return           difference between fn_ref and fn
      */
-    time_spec_t fn_time_delta2(uint32_t fn_ref, time_spec_t time_ref, uint32_t fn_x, 
-      time_spec_t time_hint, uint32_t ts_num, uint32_t ts_ref);
+     typedef std::pair<unsigned long long, double> time_format;
+     
+    GRGSM_API time_format fn_time_delta_cpp(uint32_t fn_ref, time_format time_ref, uint32_t fn_x,
+      time_format time_hint, uint32_t ts_num, uint32_t ts_ref);
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_FN_TIME_H */
