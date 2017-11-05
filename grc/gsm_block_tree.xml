@@ -24,6 +24,7 @@
     <cat>
       <name>Transmitter</name>
       <block>gsm_txtime_bursts_tagger</block>
+      <block>gsm_txtime_setter</block>
       <block>gsm_gmsk_mod</block>
     </cat>
     <cat>

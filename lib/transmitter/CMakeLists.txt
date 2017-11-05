@@ -17,23 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-########################################################################
-# Install public header files
-########################################################################
-install(FILES
-    plotting.hpp
-    api.h
-    gsmtap.h
-    constants.h
-    DESTINATION include/grgsm
+add_sources(
+   txtime_setter_impl.cc
 )
-
-add_subdirectory(decoding)
-add_subdirectory(decryption)
-add_subdirectory(demapping)
-add_subdirectory(receiver)
-add_subdirectory(misc_utils)
-add_subdirectory(qa_utils)
-add_subdirectory(flow_control)
-add_subdirectory(transmitter)
-add_subdirectory(trx_interface)

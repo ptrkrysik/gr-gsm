@@ -70,6 +70,7 @@
 #include "grgsm/trx_interface/trx.h"
 //#include "grgsm/misc_utils/time_spec.h"
 #include "grgsm/misc_utils/fn_time.h"
+#include "grgsm/transmitter/txtime_setter.h"
 %}
 
 %include "constants.i"
@@ -175,3 +176,5 @@ GR_SWIG_BLOCK_MAGIC2(grgsm, trx);
 //};
 
 %include "grgsm/misc_utils/fn_time.h"
+%include "grgsm/transmitter/txtime_setter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);
