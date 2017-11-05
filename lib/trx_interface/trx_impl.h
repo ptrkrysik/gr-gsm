@@ -22,7 +22,7 @@
 
 #ifndef INCLUDED_GRGSM_TRX_IMPL_H
 #define INCLUDED_GRGSM_TRX_IMPL_H
-
+ 
 #include <stddef.h>
 
 #include <grgsm/gsmtap.h>
