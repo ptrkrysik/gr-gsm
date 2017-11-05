@@ -29,7 +29,7 @@
 #include <grgsm/trx_interface/trx.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     class trx_impl : public trx
     {
@@ -54,7 +54,7 @@ namespace gr {
       void handle_ul_burst(uint8_t *payload, size_t len);
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_TRX_IMPL_H */

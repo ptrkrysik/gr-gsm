@@ -27,7 +27,7 @@
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     /*!
      * \brief <+description of block+>
@@ -56,7 +56,7 @@ namespace gr {
       virtual int ts_filter_get_tn(void) = 0;
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_TRX_H */

@@ -26,7 +26,7 @@
 #include <grgsm/flow_control/uplink_downlink_splitter.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     class uplink_downlink_splitter_impl : public uplink_downlink_splitter
     {
@@ -36,7 +36,7 @@ namespace gr {
 
       void process_msg(pmt::pmt_t msg);
     };
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H */

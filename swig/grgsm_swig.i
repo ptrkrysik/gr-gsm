@@ -109,7 +109,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_fnr_filter);
 %include "grgsm/flow_control/dummy_burst_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, dummy_burst_filter);
 %include "grgsm/flow_control/uplink_downlink_splitter.h"
-GR_SWIG_BLOCK_MAGIC2(grgsm, uplink_downlink_splitter);
+GR_SWIG_BLOCK_MAGIC2(gsm, uplink_downlink_splitter);
 
 
 %include "grgsm/misc_utils/bursts_printer.h"
@@ -151,7 +151,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 %include "grgsm/trx_interface/trx.h"
-GR_SWIG_BLOCK_MAGIC2(grgsm, trx);
+GR_SWIG_BLOCK_MAGIC2(gsm, trx);
 
 //#pragma SWIG nowarn=319
 //%include "grgsm/misc_utils/time_spec.h"
@@ -176,5 +176,6 @@ GR_SWIG_BLOCK_MAGIC2(grgsm, trx);
 //};
 
 %include "grgsm/misc_utils/fn_time.h"
+
 %include "grgsm/transmitter/txtime_setter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);

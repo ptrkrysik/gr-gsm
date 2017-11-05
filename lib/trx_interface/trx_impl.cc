@@ -44,7 +44,7 @@ static uint8_t rach_synch_seq[] = {
 };
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     trx::sptr
     trx::make(
@@ -269,5 +269,5 @@ namespace gr {
       message_port_pub(pmt::mp("bursts"), msg);
     }
 
-  } /* namespace grgsm */
+  } /* namespace gsm */
 } /* namespace gr */

@@ -35,7 +35,7 @@
 using boost::asio::ip::udp;
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     udp_socket::udp_socket(
       const std::string &remote_addr,
@@ -115,5 +115,5 @@ namespace gr {
           boost::asio::placeholders::bytes_transferred));
     }
 
-  } /* namespace blocks */
+  } /* namespace gsm */
 }/* namespace gr */

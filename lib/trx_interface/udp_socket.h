@@ -32,7 +32,7 @@
 #include <pmt/pmt.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     class udp_socket
     {
@@ -63,7 +63,7 @@ namespace gr {
       boost::function<void (uint8_t *, size_t)> udp_rx_handler;
     };
 
-  } /* namespace blocks */
+  } /* namespace gsm */
 } /* namespace gr */
 
 #endif /* INCLUDED_GRGSM_TRX_UDP_SOCKET_H */

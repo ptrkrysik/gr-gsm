@@ -57,7 +57,7 @@ namespace gr {
       virtual void set_resamp_ratio(float resamp_ratio) = 0;
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_CONTROLLED_FRACTIONAL_RESAMPLER_CC_H */
