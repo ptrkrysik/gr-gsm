@@ -25,7 +25,7 @@
 
 #include <grgsm/receiver/receiver.h>
 #include <grgsm/gsmtap.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 #include <receiver_config.h>
 #include <vector>
 #include "time_sample_ref.h"

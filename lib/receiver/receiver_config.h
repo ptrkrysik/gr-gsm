@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <math.h>
 #include <stdint.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 
 class multiframe_configuration
 {

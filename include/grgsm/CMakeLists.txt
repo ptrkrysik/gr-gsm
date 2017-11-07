@@ -25,6 +25,7 @@ install(FILES
     api.h
     gsmtap.h
     constants.h
+    gsm_constants.h
     DESTINATION include/grgsm
 )
 
