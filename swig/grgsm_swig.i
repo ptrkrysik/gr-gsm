@@ -47,6 +47,7 @@
 #include "grgsm/flow_control/burst_timeslot_filter.h"
 #include "grgsm/flow_control/burst_sdcch_subslot_filter.h"
 #include "grgsm/flow_control/burst_fnr_filter.h"
+#include "grgsm/flow_control/burst_type_filter.h"
 #include "grgsm/flow_control/dummy_burst_filter.h"
 #include "grgsm/flow_control/uplink_downlink_splitter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
@@ -106,6 +107,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_timeslot_filter);
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_sdcch_subslot_filter);
 %include "grgsm/flow_control/burst_fnr_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_fnr_filter);
+%include "grgsm/flow_control/burst_type_filter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_type_filter);
 %include "grgsm/flow_control/dummy_burst_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, dummy_burst_filter);
 %include "grgsm/flow_control/uplink_downlink_splitter.h"

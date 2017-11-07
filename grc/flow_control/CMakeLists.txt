@@ -21,6 +21,7 @@ install(FILES
     gsm_burst_timeslot_splitter.xml
     gsm_burst_fnr_filter.xml
     gsm_burst_timeslot_filter.xml
+    gsm_burst_type_filter.xml
     gsm_dummy_burst_filter.xml
     gsm_burst_sdcch_subslot_splitter.xml
     gsm_burst_sdcch_subslot_filter.xml 
