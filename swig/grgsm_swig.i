@@ -71,6 +71,7 @@
 //#include "grgsm/misc_utils/time_spec.h"
 #include "grgsm/misc_utils/fn_time.h"
 #include "grgsm/transmitter/txtime_setter.h"
+#include "grgsm/transmitter/preprocess_tx_burst.h"
 #include "grgsm/misc_utils/trx_burst_if.h"
 %}
 
@@ -182,3 +183,5 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 
 %include "grgsm/transmitter/txtime_setter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);
+%include "grgsm/transmitter/preprocess_tx_burst.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, preprocess_tx_burst);

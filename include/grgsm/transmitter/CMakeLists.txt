@@ -21,5 +21,7 @@
 # Install public header files
 ########################################################################
 install(FILES
-    txtime_setter.h DESTINATION include/grgsm/transmitter
+    txtime_setter.h 
+    preprocess_tx_burst.h
+    DESTINATION include/grgsm/transmitter
 )

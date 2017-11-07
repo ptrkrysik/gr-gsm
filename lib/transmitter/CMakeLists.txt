@@ -19,4 +19,5 @@
 
 add_sources(
    txtime_setter_impl.cc
+   preprocess_tx_burst_impl.cc
 )
