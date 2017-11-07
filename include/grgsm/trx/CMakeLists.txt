@@ -21,5 +21,5 @@
 # Install public header files
 ########################################################################
 install(FILES
-    trx.h DESTINATION include/grgsm/trx_interface
+#    trx.h DESTINATION include/grgsm/trx_interface
 )
