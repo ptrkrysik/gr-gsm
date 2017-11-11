@@ -52,10 +52,10 @@ namespace gr {
     {
         set_selected_burst_types(selected_burst_types);
     
-        message_port_register_in(pmt::mp("in"));
-        message_port_register_out(pmt::mp("out"));
+        message_port_register_in(pmt::mp("bursts_in"));
+        message_port_register_out(pmt::mp("bursts_out"));
         
-        set_msg_handler(pmt::mp("in"), boost::bind(&burst_type_filter_impl::process_burst, this, _1));
+        set_msg_handler(pmt::mp("bursts_in"), boost::bind(&burst_type_filter_impl::process_burst, this, _1));
     }
 
     /*
@@ -69,15 +69,14 @@ namespace gr {
           return;
 
         if (d_filter_policy == FILTER_POLICY_PASS_ALL) {
-          message_port_pub(pmt::mp("out"), msg);
+          message_port_pub(pmt::mp("bursts_out"), msg);
           return;
         }
 
         gsmtap_hdr * header = (gsmtap_hdr *)pmt::blob_data(pmt::cdr(msg));
-//        std::cout << "header->type: " << (int)(header->sub_type) << std::endl; 
         if (std::find(d_selected_burst_types.begin(), d_selected_burst_types.end(), header->sub_type) != d_selected_burst_types.end()) //check if burst type is listed in burst types to pass
         {
-            message_port_pub(pmt::mp("out"), msg);
+            message_port_pub(pmt::mp("bursts_out"), msg);
         }
     }
     
