@@ -103,11 +103,22 @@ namespace gr {
           txtime_spec = txtime_spec - d_delay_correction;
           txtime_spec = txtime_spec - d_timing_advance;
           
-          pmt::pmt_t tags_dict = pmt::dict_add(pmt::make_dict(), pmt::intern("tx_time"), pmt::make_tuple(pmt::from_uint64(txtime_spec.get_full_secs()),pmt::from_double(txtime_spec.get_frac_secs())));
-          tags_dict = pmt::dict_add(tags_dict, pmt::intern("fn"), pmt::from_uint64(frame_nr));
-          tags_dict = pmt::dict_add(tags_dict, pmt::intern("ts"), pmt::from_uint64(ts_num));
-          pmt::pmt_t new_msg = pmt::cons(tags_dict, pmt::cdr(burst));
-          message_port_pub(pmt::intern("bursts_out"), new_msg);
+          if(txtime_spec <= time_spec_t(d_time_hint.first, d_time_hint.second))
+          {
+            std::cout << "lB" << std::flush;
+          }
+          else if(txtime_spec > time_spec_t(d_time_hint.first, d_time_hint.second)+10.0)
+          {
+            std::cout << "eB" << std::flush;
+          }
+          else
+          {
+            pmt::pmt_t tags_dict = pmt::dict_add(pmt::make_dict(), pmt::intern("tx_time"), pmt::make_tuple(pmt::from_uint64(txtime_spec.get_full_secs()),pmt::from_double(txtime_spec.get_frac_secs())));
+            tags_dict = pmt::dict_add(tags_dict, pmt::intern("fn"), pmt::from_uint64(frame_nr));
+            tags_dict = pmt::dict_add(tags_dict, pmt::intern("ts"), pmt::from_uint64(ts_num));
+            pmt::pmt_t new_msg = pmt::cons(tags_dict, pmt::cdr(burst));
+            message_port_pub(pmt::intern("bursts_out"), new_msg);
+          }
         }
     }
 
