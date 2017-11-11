@@ -58,6 +58,7 @@ from gsm_sdcch8_demapper import gsm_sdcch8_demapper
 from gsm_gmsk_mod import gsm_gmsk_mod
 from fn_time import *
 from txtime_bursts_tagger import *
+from burst_to_fn_time import *
 import arfcn
 
 
