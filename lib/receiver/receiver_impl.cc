@@ -209,7 +209,6 @@ namespace gr
         time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
         uint64_t current_start_offset = rx_time_tag.offset;
         d_time_samp_ref.update(current_rx_time, current_start_offset);
-        std::cout << "Mam rx_time: " << current_rx_time.get_real_secs() << std::endl;
       }
 
       return d_samples_consumed;
@@ -346,7 +345,7 @@ namespace gr
 
         case sch_burst:
         {
-          int d_ncc, d_bcc;
+          int ncc, bcc;
           int t1, t2, t3;
           int rc;
 
@@ -358,12 +357,8 @@ namespace gr
           detect_burst(input, &channel_imp_resp[0],
             d_c0_burst_start, output_binary);
 
-          /* Compose a message with GSMTAP header and bits */
-          send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
-
           /* Attempt to decode SCH burst */
-          rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc);
+          rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &ncc, &bcc);
           if (rc) {
             if (++d_failed_sch >= MAX_SCH_ERRORS) {
               /* We have to resynchronize, change state */
@@ -374,9 +369,12 @@ namespace gr
                 pmt::from_double(0.0),pmt::mp("sync_loss"));
               message_port_pub(pmt::mp("measurements"), msg);
             }
-
             break;
           }
+
+          /* Compose a message with GSMTAP header and bits */
+          send_burst(d_burst_nr, output_binary,
+            GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
 
           /**
            * Decoding was successful, now
@@ -1073,6 +1071,7 @@ namespace gr
         message_port_pub(pmt::mp("C0"), msg);
       else
         message_port_pub(pmt::mp("CX"), msg);
+
     }
 
     void 

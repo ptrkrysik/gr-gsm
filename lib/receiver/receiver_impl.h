@@ -38,7 +38,7 @@ namespace gr {
         unsigned int d_samples_consumed;
         bool d_rx_time_received;
         time_sample_ref d_time_samp_ref;
-        unsigned int d_c0_burst_start;
+        int d_c0_burst_start;
         float d_c0_signal_dbm;
         
         /**@name Configuration of the receiver */
