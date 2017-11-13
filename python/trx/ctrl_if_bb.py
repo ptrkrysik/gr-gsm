@@ -49,11 +49,6 @@ class ctrl_if_bb(ctrl_if):
 				print("[!] Transceiver already started")
 				return -1
 
-			# Ensure transceiver is ready to start
-			if not self.tb.check_available():
-				print("[!] Transceiver isn't ready to start")
-				return -1
-
 			print("[i] Starting transceiver...")
 			self.tb.trx_started = True
 			self.tb.start()
@@ -97,14 +92,17 @@ class ctrl_if_bb(ctrl_if):
 
 			# TODO: check freq range
 			freq = int(request[1]) * 1000
-			self.tb.set_fc(freq)
+			self.tb.set_rx_freq(freq)
 
 			return 0
 
 		elif self.verify_cmd(request, "TXTUNE", 1):
 			print("[i] Recv TXTUNE cmd")
 
-			# TODO: is not implemented yet
+			# TODO: check freq range
+			freq = int(request[1]) * 1000
+			self.tb.set_tx_freq(freq)
+
 			return 0
 
 		# Timeslot management
@@ -124,12 +122,12 @@ class ctrl_if_bb(ctrl_if):
 
 			if config == 0:
 				# Value 0 means 'drop all'
-				self.tb.gsm_ts_filter.set_policy(
+				self.tb.ts_filter.set_policy(
 					grgsm.FILTER_POLICY_DROP_ALL)
 			else:
-				self.tb.gsm_ts_filter.set_policy(
+				self.tb.ts_filter.set_policy(
 					grgsm.FILTER_POLICY_DEFAULT)
-				self.tb.gsm_ts_filter.set_tn(tn)
+				self.tb.ts_filter.set_tn(tn)
 
 			return 0
 
