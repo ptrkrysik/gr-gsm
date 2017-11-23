@@ -116,7 +116,7 @@ class Application:
 				"i:p:a:s:g:G:h",
 				["help", "remote-addr=", "base-port=", "device-args=",
 				"sample-rate=", "rx-gain=", "tx-gain=", "ppm=",
-				"rx-antenna", "tx-antenna"])
+				"rx-antenna=", "tx-antenna="])
 		except getopt.GetoptError as err:
 			# Print(help and exit)
 			self.print_help()
