@@ -27,6 +27,7 @@
       <block>gsm_txtime_setter</block>
       <block>gsm_gmsk_mod</block>
       <block>gsm_preprocess_tx_burst</block>
+      <block>gsm_gen_test_ab</block>
     </cat>
     <cat>
       <name>Logical channels demapping</name>

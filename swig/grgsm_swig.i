@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014-2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -72,6 +72,7 @@
 #include "grgsm/misc_utils/fn_time.h"
 #include "grgsm/transmitter/txtime_setter.h"
 #include "grgsm/transmitter/preprocess_tx_burst.h"
+#include "grgsm/transmitter/gen_test_ab.h"
 #include "grgsm/misc_utils/trx_burst_if.h"
 %}
 
@@ -144,10 +145,6 @@ GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
 %include "grgsm/misc_utils/extract_cmc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
-%include "grgsm/misc_utils/trx_burst_if.h"
-GR_SWIG_BLOCK_MAGIC2(gsm, trx_burst_if);
-
-
 %include "grgsm/qa_utils/burst_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_sink);
 %include "grgsm/qa_utils/burst_source.h"
@@ -185,3 +182,9 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);
 %include "grgsm/transmitter/preprocess_tx_burst.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, preprocess_tx_burst);
+
+%include "grgsm/transmitter/gen_test_ab.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, gen_test_ab);
+
+%include "grgsm/misc_utils/trx_burst_if.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, trx_burst_if);

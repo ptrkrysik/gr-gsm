@@ -20,4 +20,5 @@
 add_sources(
    txtime_setter_impl.cc
    preprocess_tx_burst_impl.cc
+   gen_test_ab_impl
 )

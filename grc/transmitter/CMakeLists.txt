@@ -19,7 +19,9 @@
 
 install(FILES
     gsm_gmsk_mod.xml
-    gsm_txtime_bursts_tagger.xml 
-    gsm_txtime_setter.xml 
-    gsm_preprocess_tx_burst.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_txtime_bursts_tagger.xml
+    gsm_txtime_setter.xml
+    gsm_preprocess_tx_burst.xml
+    gsm_gen_test_ab.xml
+    DESTINATION share/gnuradio/grc/blocks
 )
