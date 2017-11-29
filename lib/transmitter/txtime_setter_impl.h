@@ -39,15 +39,20 @@ namespace gr {
       time_format d_time_hint;
       double d_timing_advance;
       double d_delay_correction;
-      
+
+      void process_fn_time_reference(pmt::pmt_t msg);
+      void process_txtime_of_burst(pmt::pmt_t msg);
+
      public:
-      txtime_setter_impl(uint32_t init_fn, uint64_t init_time_secs, double init_time_fracs, uint64_t time_hint_secs, double time_hint_fracs, double timing_advance, double delay_correction);
+      txtime_setter_impl(uint32_t init_fn, uint64_t init_time_secs,
+        double init_time_fracs, uint64_t time_hint_secs,
+        double time_hint_fracs, double timing_advance,
+        double delay_correction);
       ~txtime_setter_impl();
 
       // Where all the action really happens
-      void process_fn_time_reference(pmt::pmt_t msg);
-      void process_txtime_of_burst(pmt::pmt_t msg);
-      void set_fn_time_reference(uint32_t fn, uint32_t ts, uint64_t time_secs, double time_fracs);
+      void set_fn_time_reference(uint32_t fn, uint32_t ts,
+        uint64_t time_secs, double time_fracs);
       void set_time_hint(uint64_t time_hint_secs, double time_hint_fracs);
       void set_delay_correction(double delay_correction);
       void set_timing_advance(double timing_advance);
@@ -57,4 +62,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_GSM_TXTIME_SETTER_IMPL_H */
-
