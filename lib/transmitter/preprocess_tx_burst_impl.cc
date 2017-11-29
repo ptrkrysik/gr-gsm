@@ -86,7 +86,7 @@ namespace gr {
 
       // Prepare an output message
       pmt::pmt_t blob_out = pmt::make_blob(burst_bits, burst_len);
-      pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, blob_out);
+      pmt::pmt_t msg_out = pmt::cons(pmt::car(msg_in), blob_out);
 
       /* Send a message to the output */
       message_port_pub(pmt::mp("bursts_out"), msg_out);
