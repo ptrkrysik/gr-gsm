@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* @file
  * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author Vadim Yanitskiy <axilirator@gmail.com>
  * @section LICENSE
  * 
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -24,9 +25,12 @@
 #include "config.h"
 #endif
 
+#include <assert.h>
+
 #include <gnuradio/io_signature.h>
-#include <grgsm/gsmtap.h>
 #include <grgsm/gsm_constants.h>
+#include <grgsm/gsmtap.h>
+
 #include "preprocess_tx_burst_impl.h"
 
 namespace gr {
@@ -44,13 +48,14 @@ namespace gr {
      */
     preprocess_tx_burst_impl::preprocess_tx_burst_impl()
       : gr::block("preprocess_tx_burst",
-              gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+        gr::io_signature::make(0, 0, 0),
+        gr::io_signature::make(0, 0, 0))
     {
-        message_port_register_in(pmt::intern("bursts_in"));
-        message_port_register_out(pmt::intern("bursts_out"));
+        message_port_register_in(pmt::mp("bursts_in"));
+        message_port_register_out(pmt::mp("bursts_out"));
 
-        set_msg_handler(pmt::intern("bursts_in"),  boost::bind(&preprocess_tx_burst_impl::process_burst,   this, _1));
+        set_msg_handler(pmt::mp("bursts_in"),
+          boost::bind(&preprocess_tx_burst_impl::process_burst, this, _1));
     }
 
     /*
@@ -60,26 +65,32 @@ namespace gr {
     {
     }
     
-    void preprocess_tx_burst_impl::process_burst(pmt::pmt_t burst)
+    void preprocess_tx_burst_impl::process_burst(pmt::pmt_t msg_in)
     {
-        int8_t * header_bits = (int8_t *)(pmt::blob_data(pmt::cdr(burst)));
-        int8_t * burst_bits = (int8_t *)(pmt::blob_data(pmt::cdr(burst)))+sizeof(gsmtap_hdr);
+      pmt::pmt_t blob_in = pmt::cdr(msg_in);
 
-        pmt::pmt_t header_bits_pmt = pmt::make_blob(header_bits,sizeof(gsmtap_hdr));
-        
-        size_t burst_size = pmt::blob_length(pmt::cdr(burst))-sizeof(gsmtap_hdr);
-        if(((gsmtap_hdr*)header_bits)->sub_type == GSMTAP_BURST_ACCESS){ //cut unneeded bits from the end of access bursts
-          burst_size = ACCESS_BURST_SIZE; 
-        } 
-        pmt::pmt_t burst_bits_pmt = pmt::make_blob(burst_bits, burst_size);
-        
-        pmt::pmt_t pdu_first_part = pmt::car(burst);
-//        pmt::pmt_t new_pdu_first_part = pmt::dict_add( pdu_first_part, pmt::intern("gsmtap_header"), header_bits_pmt );
-        pmt::pmt_t new_pdu_first_part = pdu_first_part;
-        
-        pmt::pmt_t new_msg = pmt::cons(new_pdu_first_part, burst_bits_pmt);
-        message_port_pub(pmt::intern("bursts_out"), new_msg);
+      // Extract GSMTAP header from message
+      gsmtap_hdr *burst_hdr = (gsmtap_hdr *) pmt::blob_data(blob_in);
+
+      // Extract burst bits from message
+      uint8_t *burst_bits = (uint8_t *)
+        (pmt::blob_data(blob_in)) + sizeof(gsmtap_hdr);
+
+      // Determine and check burst length
+      size_t burst_len = pmt::blob_length(blob_in) - sizeof(gsmtap_hdr);
+      assert(burst_len == BURST_SIZE);
+
+      // The Access Burst last has reduced length
+      if (burst_hdr->sub_type == GSMTAP_BURST_ACCESS)
+        burst_len = ACCESS_BURST_SIZE;
+
+      // Prepare an output message
+      pmt::pmt_t blob_out = pmt::make_blob(burst_bits, burst_len);
+      pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, blob_out);
+
+      /* Send a message to the output */
+      message_port_pub(pmt::mp("bursts_out"), msg_out);
     }
+
   } /* namespace gsm */
 } /* namespace gr */
-
