@@ -24,4 +24,5 @@ from udp_link import udp_link
 from ctrl_if import ctrl_if
 from ctrl_if_bb import ctrl_if_bb
 from fake_pm import fake_pm
+from radio_if_grc import radio_if_grc
 from radio_if import radio_if

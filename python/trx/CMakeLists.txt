@@ -24,5 +24,7 @@ GR_PYTHON_INSTALL(
     ctrl_if.py
     ctrl_if_bb.py
     fake_pm.py
-    radio_if.py DESTINATION ${GR_PYTHON_DIR}/grgsm/trx
+    radio_if.py
+    radio_if_grc.py
+    DESTINATION ${GR_PYTHON_DIR}/grgsm/trx
 )
