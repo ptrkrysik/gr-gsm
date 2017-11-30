@@ -37,29 +37,6 @@ from gnuradio import gr
 
 
 # HACK: should be implemented in C++!
-import numpy as np
-
-class burst_type_filter(gr.sync_block):
-    def __init__(self, burst_types=[]):
-        gr.sync_block.__init__(
-            self,
-            name='Burst type filter',
-            in_sig=[],
-            out_sig=[]
-        )
-        self.burst_types = burst_types
-        self.message_port_register_in(pmt.intern("bursts_in"))
-        self.message_port_register_out(pmt.intern("bursts_out"))
-        self.set_msg_handler(pmt.intern("bursts_in"), self.filter)
-
-    def filter(self, msg):
-        burst_with_header = pmt.to_python(pmt.cdr(msg))
-        burst = burst_with_header[-148:]
-        header = np.ndarray.tolist(burst_with_header[0:-148])
-        burst_type = header[12]
-        if burst_type in self.burst_types:
-            self.message_port_pub(pmt.intern("bursts_out"), msg)
-
 class burst_to_fn_time(gr.basic_block):
     def __init__(self):  # only default arguments here
         gr.basic_block.__init__(
@@ -210,7 +187,7 @@ class radio_if(gr.top_block):
 
 
 		# RX & TX synchronization
-		self.bt_filter = burst_type_filter([3])
+		self.bt_filter = grgsm.burst_type_filter([3])
 		self.burst_to_fn_time = burst_to_fn_time()
 
 		# Connections
