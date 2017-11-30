@@ -5,7 +5,7 @@
 # Title: Trx radio interface
 # Author: (C) Piotr Krysik 2017
 # Description: Alpha version of trx radio interface
-# Generated: Thu Nov 30 13:02:31 2017
+# Generated: Thu Nov 30 13:41:21 2017
 ##################################################
 
 from gnuradio import blocks
@@ -87,27 +87,20 @@ class radio_if_grc(gr.top_block):
             pulse_duration=4,
             sps=osr,
         )
-        self.gsm_gen_test_ab_0 = grgsm.gen_test_ab()
         self.gsm_controlled_rotator_cc_0_0 = grgsm.controlled_rotator_cc(-ppm/1.0e6*2*math.pi*tx_freq/samp_rate)
         self.gsm_controlled_rotator_cc_0 = grgsm.controlled_rotator_cc(ppm/1.0e6*2*math.pi*rx_freq/samp_rate)
-        self.gsm_burst_type_filter_0_0 = grgsm.burst_type_filter(([1,3]))
         self.gsm_burst_type_filter_0 = grgsm.burst_type_filter(([3]))
         self.gsm_burst_to_fn_time_0 = grgsm.burst_to_fn_time()
-        self.gsm_burst_timeslot_filter_0 = grgsm.burst_timeslot_filter(0)
         self.digital_burst_shaper_xx_0 = digital.burst_shaper_cc((firdes.window(firdes.WIN_HANN, 16, 0)), 0, 20, False, "packet_len")
         self.blocks_pdu_to_tagged_stream_0_0 = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.gsm_burst_timeslot_filter_0, 'out'), (self.gsm_gen_test_ab_0, 'bursts_in'))    
         self.msg_connect((self.gsm_burst_to_fn_time_0, 'fn_time_out'), (self.gsm_txtime_setter_0, 'fn_time'))    
         self.msg_connect((self.gsm_burst_type_filter_0, 'bursts_out'), (self.gsm_burst_to_fn_time_0, 'bursts_in'))    
-        self.msg_connect((self.gsm_burst_type_filter_0_0, 'bursts_out'), (self.gsm_burst_timeslot_filter_0, 'in'))    
-        self.msg_connect((self.gsm_gen_test_ab_0, 'bursts_out'), (self.gsm_txtime_setter_0, 'bursts_in'))    
         self.msg_connect((self.gsm_preprocess_tx_burst_0, 'bursts_out'), (self.blocks_pdu_to_tagged_stream_0_0, 'pdus'))    
         self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_burst_type_filter_0, 'bursts_in'))    
-        self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_burst_type_filter_0_0, 'bursts_in'))    
         self.msg_connect((self.gsm_receiver_0, 'C0'), (self.ts_filter, 'in'))    
         self.msg_connect((self.gsm_trx_burst_if_0, 'bursts'), (self.gsm_txtime_setter_0, 'bursts_in'))    
         self.msg_connect((self.gsm_txtime_setter_0, 'bursts_out'), (self.gsm_preprocess_tx_burst_0, 'bursts_in'))    
