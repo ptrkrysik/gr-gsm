@@ -28,7 +28,7 @@ import select
 class udp_link:
 	def __init__(self, remote_addr, remote_port, bind_port):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		self.sock.bind(('0.0.0.0', bind_port))
+		self.sock.bind((remote_addr, bind_port))
 		self.sock.setblocking(0)
 
 		# Save remote info
