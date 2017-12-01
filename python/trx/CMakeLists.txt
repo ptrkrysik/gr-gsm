@@ -26,5 +26,6 @@ GR_PYTHON_INSTALL(
     fake_pm.py
     radio_if.py
     radio_if_grc.py
+    change_sign_of_dict_elements.py
     DESTINATION ${GR_PYTHON_DIR}/grgsm/trx
 )
