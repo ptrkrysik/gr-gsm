@@ -46,7 +46,7 @@ class Application:
 	phy_tx_antenna = "TX/RX"
 	phy_rx_antenna = "RX2"
 	phy_rx_gain = 30
-	phy_tx_gain = 10
+	phy_tx_gain = 40
 	phy_args = ""
 	phy_ppm = 0
 
