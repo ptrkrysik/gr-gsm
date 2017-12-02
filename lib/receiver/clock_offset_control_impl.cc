@@ -1,8 +1,7 @@
-
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2015-2017 Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -175,6 +174,7 @@ void clock_offset_control_impl::send_ctrl_messages(float freq_offset)
     messages = dict_add(messages, pmt::string_to_symbol("set_phase_inc"), pmt::from_double(-2*M_PI*freq_offset/(d_osr * GSM_SYMBOL_RATE)));
     messages = dict_add(messages, pmt::string_to_symbol("set_resamp_ratio"), pmt::from_double((1-(freq_offset/d_fc))*samp_rate_ratio));
     messages = dict_add(messages, pmt::string_to_symbol("setting_freq_offset"), pmt::from_double(-freq_offset));
+    messages = dict_add(messages, pmt::string_to_symbol("clock_offset_in_ppm"), pmt::from_double(-freq_offset/d_fc*1.0e6));
     message_port_pub(pmt::intern("ctrl"), messages);
 }
 

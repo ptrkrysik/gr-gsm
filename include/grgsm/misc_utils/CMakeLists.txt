@@ -24,10 +24,12 @@ install(FILES
     bursts_printer.h
     burst_file_source.h
     burst_file_sink.h
+    collect_system_info.h
     message_file_sink.h
     message_file_source.h
     extract_system_info.h
     extract_immediate_assignment.h
+    extract_cmc.h
     controlled_rotator_cc.h
     message_printer.h
     tmsi_dumper.h

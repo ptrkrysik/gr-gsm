@@ -1,7 +1,8 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
+ *         (C) 2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -29,10 +30,33 @@
 #include "stdio.h"
 #include "tch_f_decoder_impl.h"
 
+extern "C" {
+    #include "osmocom/coding/gsm0503_coding.h"
+}
+
 #define DATA_BYTES 23
 
 namespace gr {
   namespace gsm {
+
+    static int ubits2sbits(ubit_t *ubits, sbit_t *sbits, int count)
+    {
+	    int i;
+
+	    for (i = 0; i < count; i++) {
+		    if (*ubits == 0x23) {
+			    ubits++;
+			    sbits++;
+			    continue;
+		    }
+		    if ((*ubits++) & 1)
+			    *sbits++ = -127;
+		    else
+			    *sbits++ = 127;
+	    }
+
+	    return count;
+    }
 
     tch_f_decoder::sptr
     tch_f_decoder::make(tch_mode mode, bool boundary_check)
@@ -107,6 +131,7 @@ namespace gr {
 
         if (d_collected_bursts_num == 8)
         {
+        	ubit_t bursts_u[116 * 8];
             d_collected_bursts_num = 0;
 
             // reorganize data
@@ -114,6 +139,9 @@ namespace gr {
             {
                 pmt::pmt_t header_plus_burst = pmt::cdr(d_bursts[ii]);
                 int8_t * burst_bits = (int8_t *)(pmt::blob_data(header_plus_burst))+sizeof(gsmtap_hdr);
+
+                memcpy(&bursts_u[ii*116], &burst_bits[3],58);
+                memcpy(&bursts_u[ii*116+58], &burst_bits[3+57+1+26],58);
 
                 for (int jj = 0; jj < 57; jj++)
                 {
@@ -266,28 +294,22 @@ namespace gr {
                 // check parity of class 1A
                 unsigned sentParity = (~mTCHU.peekField(91, 3)) & 0x07;
                 unsigned calcParity = mClass1A_d.parity(mTCHParity) & 0x07;
-
-                bool good = (sentParity == calcParity);
+                unsigned tail = mTCHU.peekField(185, 4);
+                bool good = (sentParity == calcParity) && (tail == 0);
 
                 if (good)
                 {
-                    unsigned char frameBuffer[33];
+                    uint8_t frameBuffer[33];
+                    sbit_t bursts_s[116 * 8];
+                    int n_errors, n_bits_total;
                     unsigned int  mTCHFrameLength;
+                    ubits2sbits(bursts_u, bursts_s, 116 * 8);                    
 
                     if (d_tch_mode == TCH_FS) // GSM-FR
                     {
-                        unsigned char mFrameHeader = 0x0d;
                         mTCHFrameLength = 33;
-
-                        // Undo Um's importance-sorted bit ordering.
-                        // See GSM 05.03 3.1 and Table 2.
-                        BitVector frFrame(260 + 4); // FR has a frameheader of 4 bits only
-                        frFrame.fillField(0, mFrameHeader, 4);
-                        BitVector payload = frFrame.tail(4);
-
-                        mTCHD.unmap(GSM::g610BitOrder, 260, payload);
-                        frFrame.pack(frameBuffer);
-
+                        gsm0503_tch_fr_decode(frameBuffer, bursts_s, 1, 0, &n_errors, &n_bits_total);
+                        //std::cout << "Errors: " << n_errors << std::endl;
                     }
                     else if (d_tch_mode == TCH_EFR) // GSM-EFR
                     {
@@ -327,7 +349,8 @@ namespace gr {
                         // Put the whole frame (hdr + payload)
                         mTCHFrameLength = 32;
                         amrFrame.pack(frameBuffer);
-
+                        //when itegrating with libosmocore lines above can be removed and line below uncommented, efr decoding with libosmocore need to be tested however
+                        //gsm0503_tch_fr_decode(frameBuffer, bursts_s, 1, 1, &n_errors, &n_bits_total);
                     }
                     message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(frameBuffer,mTCHFrameLength)));
                 }

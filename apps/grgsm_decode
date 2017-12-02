@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @file
-# @author Roman Khassraf <rkhassraf@gmail.com>
+# @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
 # @section LICENSE
 #
 # Gr-gsm is free software; you can redistribute it and/or modify
@@ -39,6 +39,7 @@ class grgsm_decoder(gr.top_block):
                  cfile=None, fc=None, samp_rate=2e6, 
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
+                 enable_voice_boundary_detection=False,
                  verbose=False,
                  print_bursts=False, ppm=0):
 
@@ -62,6 +63,7 @@ class grgsm_decoder(gr.top_block):
         self.speech_codec = speech_codec
         self.verbose = verbose
         self.print_bursts = print_bursts
+        self.enable_voice_boundary_detection = enable_voice_boundary_detection
 
         ##################################################
         # Blocks
@@ -95,7 +97,7 @@ class grgsm_decoder(gr.top_block):
             self.sdcch8_demapper = grgsm.gsm_sdcch8_demapper(self.timeslot)
         elif self.chan_mode == 'TCHF':
             self.tch_f_demapper = grgsm.tch_f_chans_demapper(self.timeslot)
-            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec)
+            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
             self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
@@ -282,12 +284,7 @@ if __name__ == '__main__':
     cfile_options.add_option("-f", "--fc", dest="fc", type="eng_float",
                              help="Frequency of cfile capture")
     cfile_options.add_option("-a", "--arfcn", dest="arfcn", type="intx",
-                             help="Set ARFCN instead of frequency. "
-                                  "In some cases you may have to provide the GSM band also")
-    cfile_options.add_option("--band", dest="band",
-                             help="Specify the GSM band for the frequency.\nAvailable bands are: "
-                                  + ", ".join(grgsm.arfcn.get_bands()) + "."
-                                  + "If no band is specified, it will be determined automatically, defaulting to 0.")
+                             help="Set ARFCN instead of frequency (for PCS1900 add 0x8000 (2**15) to the ARFCN number).")
     cfile_options.add_option("-s", "--samp-rate", dest="samp_rate", type="eng_float",
                              default=eng_notation.num_to_str(1e6),
                              help="Sample rate of cfile capture [default=%default]")
@@ -317,6 +314,8 @@ if __name__ == '__main__':
                                 "Valid options are " + ", ".join(tch_codecs.keys()))
     tch_options.add_option("-o", "--output-tch", dest="speech_output_file", default="/tmp/speech.au.gsm",
                            help="TCH/F speech output file [default=%default].")
+    tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true", default=False,
+                           help="Enable voice boundary detection for traffic channels. This can help reduce noice in the output.")
     parser.add_option_group(tch_options)
 
     # parse
@@ -343,34 +342,14 @@ if __name__ == '__main__':
     arfcn = None
     fc = None
     if options.arfcn:
-        if options.band:
-            if options.band not in grgsm.arfcn.get_bands():
-                parser.error("Invalid GSM band\n")
-            elif not grgsm.arfcn.is_valid_arfcn(options.arfcn, options.band):
-                parser.error("ARFCN is not valid in the specified band\n")
-            else:
-                arfcn = options.arfcn
-                fc = grgsm.arfcn.arfcn2downlink(arfcn, options.band)
+        if not grgsm.arfcn.is_valid_arfcn(options.arfcn):
+            parser.error("ARFCN is not valid\n")
         else:
             arfcn = options.arfcn
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_arfcn(arfcn, band):
-                    fc = grgsm.arfcn.arfcn2downlink(arfcn, band)
-                    break
+            fc = grgsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
-        if options.band:
-            if options.band not in grgsm.arfcn.get_bands():
-                parser.error("Invalid GSM band\n")
-            elif not grgsm.arfcn.is_valid_downlink(options.fc, options.band):
-                parser.error("Frequency is not valid in the specified band\n")
-            else:
-                arfcn = grgsm.arfcn.downlink2arfcn(options.fc, options.band)
-        else:
-            for band in grgsm.arfcn.get_bands():
-                if grgsm.arfcn.is_valid_downlink(options.fc, band):
-                    arfcn = grgsm.arfcn.downlink2arfcn(options.fc, band)
-                    break
+        arfcn = grgsm.arfcn.downlink2arfcn(options.fc)
 
     # instanciate decoder
     tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
@@ -378,10 +357,10 @@ if __name__ == '__main__':
                           cfile=options.cfile, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
+                          enable_voice_boundary_detection=options.enable_voice_boundary_detection,
                           verbose=options.verbose,
                           print_bursts=options.print_bursts, ppm=options.ppm)
 
     # run
     tb.start()
     tb.wait()
-

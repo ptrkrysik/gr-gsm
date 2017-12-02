@@ -23,7 +23,9 @@
 install(FILES
     plotting.hpp
     api.h
-    gsmtap.h DESTINATION include/grgsm
+    gsmtap.h
+    constants.h
+    DESTINATION include/grgsm
 )
 
 add_subdirectory(decoding)

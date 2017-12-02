@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -76,6 +76,12 @@ namespace gr {
             info.lac = (msg_elements[8]<<8)+msg_elements[9];             //take lac
             info.mcc =  ((msg_elements[5] & 0xF)  * 100) + (((msg_elements[5] & 0xF0) >> 4) * 10) + ((msg_elements[6] & 0xF)); // take mcc
             info.mnc = (msg_elements[7] & 0xF) * 10 + (msg_elements[7]>>4); //take mnc
+            if (((msg_elements[6] & 0xF0) >> 4) < 10) // we have a 3 digit mnc, see figure 10.5.3 of 3GPP TS 24.008
+            {
+                info.mnc *= 10;
+                info.mnc += (msg_elements[6] & 0xF0) >> 4;
+            }
+
             info.ccch_conf = (msg_elements[10] & 0x7); // ccch_conf
             
             boost::mutex::scoped_lock lock(extract_mutex);
@@ -92,6 +98,11 @@ namespace gr {
             info.lac = (msg_elements[6]<<8)+msg_elements[7];            //take lac
             info.mcc =  ((msg_elements[3] & 0xF) * 100) + (((msg_elements[3] & 0xF0) >> 4) * 10) + ((msg_elements[4] & 0xF)); // take mcc
             info.mnc = (msg_elements[5] & 0xF) * 10 + (msg_elements[5]>>4); //take mnc
+            if (((msg_elements[4] & 0xF0) >> 4) < 10) // we have a 3 digit mnc, see figure 10.5.3 of 3GPP TS 24.008
+            {
+                info.mnc *= 10;
+                info.mnc += (msg_elements[4] & 0xF0) >> 4;
+            }
             
             boost::mutex::scoped_lock lock(extract_mutex);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
@@ -169,7 +180,7 @@ namespace gr {
             info.pwr_db = header->signal_dbm;
             boost::mutex::scoped_lock lock(extract_mutex);
             //read cell arfcn's
-            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8c, 0x01);
+            gsm48_decode_freq_list(freq, &msg_elements[3], 16, 0x8e, 0x01);
             if(d_c0_channels.find(info.id) != d_c0_channels.end()){
                 d_c0_channels[info.id].copy_nonzero_elements(info);
             } else {
@@ -269,10 +280,10 @@ namespace gr {
     {
         d_c0_channels.clear();
         if(!empty_p(pmt::mp("bursts"))){
-            delete_head_blocking(pmt::mp("bursts"));
+//            delete_head_blocking(pmt::mp("bursts"));
         }
         if(!empty_p(pmt::mp("msgs"))){
-            delete_head_blocking(pmt::mp("msgs"));
+//            delete_head_blocking(pmt::mp("msgs"));
         }
     }
     

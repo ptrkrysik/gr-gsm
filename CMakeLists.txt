@@ -22,7 +22,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.6)
-project(gr-grgsm CXX C)
+project(gr-gsm CXX C)
 enable_testing()
 
 #set(CMAKE_BUILD_TYPE "Debug")
@@ -34,6 +34,17 @@ endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+
+########################################################################
+# Set version variables (
+########################################################################
+
+# Set the version information here
+set(VERSION_INFO_MAJOR_VERSION 0)
+set(VERSION_INFO_API_COMPAT    41)
+set(VERSION_INFO_MINOR_VERSION 2)
+set(VERSION_INFO_MAINT_VERSION 0)
+include(GrVersion) #setup version info
 
 ########################################################################
 # Compiler specific setup
@@ -107,6 +118,8 @@ find_package(Volk)
 find_package(CppUnit)
 find_package(Doxygen)
 find_package(Libosmocore)
+#find_package(Libosmocoding)
+find_package(Libosmocodec)
 
 if(NOT GNURADIO_RUNTIME_FOUND)
     message(FATAL_ERROR "GnuRadio Runtime required to compile gr-gsm")
@@ -120,6 +133,12 @@ endif()
 if(NOT LIBOSMOCORE_FOUND)
     message(FATAL_ERROR "Libosmocore required to compile gr-gsm")
 endif()
+if(NOT LIBOSMOCODEC_FOUND)
+    message(FATAL_ERROR "Libosmocodec required to compile gr-gsm")
+endif()
+#if(NOT LIBOSMOCODING_FOUND)
+#    message(FATAL_ERROR "Libosmocoding required to compile gr-gsm")
+#endif()
 
 ########################################################################
 # Setup doxygen option
@@ -200,12 +219,7 @@ install(FILES cmake/Modules/gr-gsmConfig.cmake
 )
 
 ########################################################################
-# Cpack stuff
+# Print summary
 ########################################################################
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "gnuradio (>> 3.7.9), gr-osmosdr, libosmogsm5")
-set(CPACK_PACKAGE_NAME gr-gsm)
-set(CPACK_PACKAGE_VERSION 0.9.0)
-set(CPACK_PACKAGE_MAINTAINER ptrkrysik@gmail.com)
-set(CPACK_PACKAGE_DESCRIPTION "GSM functionality for Gnuradio")
-set(CPACK_PACKAGE_CONTACT ptrkrysik@gmail.com)
-include(CPack)
+message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Building for version: ${VERSION} / ${LIBVER}")

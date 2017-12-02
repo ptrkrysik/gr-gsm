@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y \
     liblog4cpp5 \
     liblog4cpp5-dev \
     build-essential \
+    python-docutils \
     libtool \
     shtool \
     pkg-config \

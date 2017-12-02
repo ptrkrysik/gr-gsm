@@ -1,19 +1,22 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2014 <+YOU OR YOUR COMPANY+>.
+ * @file
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
+ * @section LICENSE
  *
- * This is free software; you can redistribute it and/or modify
+ * Gr-gsm is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * Gr-gsm is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this software; see the file COPYING.  If not, write to
+ * along with gr-gsm; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
@@ -57,7 +60,6 @@ namespace gr {
         set_a5_version(a5_version);
         validate_k_c();
 
-//        std::cout << "Be careful with decryption block - it wasn't tested yet!" << std::endl;
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&decryption_impl::decrypt, this, _1));
         message_port_register_out(pmt::mp("bursts"));
@@ -138,7 +140,7 @@ namespace gr {
             for (int i = 0; i < 3; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
-            //encrypt first part of the burst
+            //decrypt first part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+3] = keystream[i] ^ burst_binary[i+3];
             }
@@ -146,7 +148,7 @@ namespace gr {
             for (int i = 60; i < 88; i++) {
                 decrypted_data[i] = burst_binary[i];
             }
-            //encrypt second part of the burst
+            //decrypt second part of the burst
             for (int i = 0; i < 57; i++) {
                 decrypted_data[i+88] = keystream[i+57] ^ burst_binary[i+88];
             }

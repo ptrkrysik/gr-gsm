@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* @file
- * @author Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -36,6 +36,10 @@ namespace gr {
       burst_sdcch_subslot_splitter_impl(splitter_mode mode);
       ~burst_sdcch_subslot_splitter_impl();
       void process_burst(pmt::pmt_t msg);
+
+      /* External API */
+      splitter_mode get_mode(void);
+      splitter_mode set_mode(splitter_mode mode);
     };
 
   } // namespace gsm

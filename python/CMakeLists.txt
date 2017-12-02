@@ -28,21 +28,13 @@ endif()
 ########################################################################
 # Install python sources
 ########################################################################
+add_subdirectory(misc_utils)
+add_subdirectory(receiver)
+add_subdirectory(demapping)
+
 GR_PYTHON_INSTALL(
     FILES
-    __init__.py
-    demapping/gsm_bcch_ccch_demapper.py
-    demapping/gsm_bcch_ccch_sdcch4_demapper.py
-    demapping/gsm_sdcch8_demapper.py
-    receiver/gsm_input.py
-    receiver/gsm_wideband_input.py
-    receiver/fcch_burst_tagger.py
-    receiver/sch_detector.py
-    receiver/fcch_detector.py
-    receiver/chirpz.py
-    misc_utils/arfcn.py
-    misc_utils/clock_offset_corrector_tagged.py
-    misc_utils/hier_block.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    __init__.py DESTINATION ${GR_PYTHON_DIR}/grgsm
 )
 
 ########################################################################
@@ -51,7 +43,8 @@ GR_PYTHON_INSTALL(
 include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gr-gsm)
-set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig:${CMAKE_BINARY_DIR}/python/misc_utils)
+GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
 GR_ADD_TEST(qa_decryption ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_decryption.py)
 GR_ADD_TEST(qa_burst_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_printer.py)
 GR_ADD_TEST(qa_message_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_message_printer.py)
@@ -61,6 +54,6 @@ GR_ADD_TEST(qa_burst_timeslot_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE
 GR_ADD_TEST(qa_burst_sdcch_subslot_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_sdcch_subslot_filter.py)
 GR_ADD_TEST(qa_burst_fnr_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_fnr_filter.py)
 GR_ADD_TEST(qa_dummy_burst_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_dummy_burst_filter.py)
-#GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
 #GR_ADD_TEST(qa_msg_to_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_tag.py)
 #GR_ADD_TEST(qa_controlled_fractional_resampler_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_controlled_fractional_resampler_cc.py)
+#GR_ADD_TEST(qa_uplink_downlink_splitter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_uplink_downlink_splitter.py)

@@ -59,6 +59,7 @@ GR_SWIG_INSTALL(TARGETS grgsm_swig DESTINATION ${GR_PYTHON_DIR}/grgsm)
 install(
     FILES
     grgsm_swig.i
+    constants.i
     ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i
     DESTINATION ${GR_INCLUDE_DIR}/grgsm/swig
 )

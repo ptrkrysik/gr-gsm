@@ -17,66 +17,76 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
+include(GrPlatform) #define LIB_SUFFIX
+include(GrMiscUtils)
+
+########################################################################
+# Add sources macro
+########################################################################
+set(grgsm_sources "")
+
+macro (add_sources)
+    file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}/lib" "${CMAKE_CURRENT_SOURCE_DIR}")
+    foreach (_src ${ARGN})
+        if (_relPath)
+            list (APPEND grgsm_sources "${_relPath}/${_src}")
+        else()
+            list (APPEND grgsm_sources "${_src}")
+        endif()
+    endforeach()
+    if (_relPath)
+        # propagate grgsm_sources to parent directory
+        set (grgsm_sources ${grgsm_sources} PARENT_SCOPE)
+    endif()
+endmacro()
+
+########################################################################
+# Handle the generated constants
+########################################################################
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+    "import time;print time.strftime('%a, %d %b %Y %H:%M:%S', time.gmtime())"
+    OUTPUT_VARIABLE BUILD_DATE OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "Loading build date ${BUILD_DATE} into constants...")
+message(STATUS "Loading version ${VERSION} into constants...")
+
+#double escape for windows backslash path separators
+string(REPLACE "\\" "\\\\" prefix "${prefix}")
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/constants.cc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/constants.cc
+    ESCAPE_QUOTES
+@ONLY)
+
+list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
+#########################################################################
+# Subdirecories
+#########################################################################
+add_subdirectory(decoding)
+add_subdirectory(decryption)
+add_subdirectory(demapping)
+add_subdirectory(flow_control)
+add_subdirectory(misc_utils)
+add_subdirectory(qa_utils)
+add_subdirectory(receiver)
+
 ########################################################################
 # Setup library
 ########################################################################
-include(GrPlatform) #define LIB_SUFFIX
-
 include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND grgsm_sources
-    receiver/receiver_impl.cc
-    receiver/receiver_config.cc
-    receiver/viterbi_detector.cc
-    receiver/sch.c
-    receiver/clock_offset_control_impl.cc
-    receiver/cx_channel_hopper_impl.cc
-    demapping/universal_ctrl_chans_demapper_impl.cc
-    demapping/tch_f_chans_demapper_impl.cc
-    decoding/control_channels_decoder_impl.cc
-    decoding/cch.c
-    decoding/fire_crc.c
-    decoding/tch_f_decoder_impl.cc
-    decoding/AmrCoder.cpp
-    decoding/BitVector.cpp
-    decoding/GSM610Tables.cpp
-    decoding/GSM660Tables.cpp
-    decoding/GSM503Tables.cpp
-    decoding/ViterbiR204.cpp
-    flow_control/burst_timeslot_splitter_impl.cc
-    flow_control/burst_sdcch_subslot_splitter_impl.cc
-    flow_control/burst_timeslot_filter_impl.cc
-    flow_control/burst_sdcch_subslot_filter_impl.cc
-    flow_control/burst_fnr_filter_impl.cc
-    flow_control/dummy_burst_filter_impl.cc
-    misc_utils/controlled_rotator_cc_impl.cc
-    misc_utils/controlled_fractional_resampler_cc_impl.cc
-    misc_utils/msg_to_tag_impl.cc
-    misc_utils/message_printer_impl.cc
-    misc_utils/tmsi_dumper_impl.cc
-    misc_utils/burst_file_sink_impl.cc
-    misc_utils/burst_file_source_impl.cc
-    misc_utils/message_file_sink_impl.cc
-    misc_utils/message_file_source_impl.cc
-    misc_utils/bursts_printer_impl.cc
-    misc_utils/extract_system_info_impl.cc
-    misc_utils/extract_immediate_assignment_impl.cc
-    qa_utils/burst_sink_impl.cc
-    qa_utils/burst_source_impl.cc
-    qa_utils/message_source_impl.cc
-    qa_utils/message_sink_impl.cc
-    decryption/decryption_impl.cc
-)
-
 
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCORE_LIBRARIES}
+target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} 
+# ${LIBOSMOCODING_LIBRARIES} 
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
 #    boost_filesystem
 )
 set_target_properties(grgsm PROPERTIES DEFINE_SYMBOL "grgsm_EXPORTS")
+GR_LIBRARY_FOO(grgsm)
 
 ########################################################################
 # Install built library files

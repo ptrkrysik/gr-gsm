@@ -1,4 +1,25 @@
 /* -*- c++ -*- */
+/*
+ * @file
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+ * @section LICENSE
+ *
+ * Gr-gsm is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * Gr-gsm is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with gr-gsm; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street,
+ * Boston, MA 02110-1301, USA.
+ */
+
 
 #define GRGSM_API
 
@@ -8,6 +29,7 @@
 %include "grgsm_swig_doc.i"
 
 %{
+#include "grgsm/constants.h"
 #include "grgsm/receiver/receiver.h"
 #include "grgsm/receiver/clock_offset_control.h"
 #include "grgsm/receiver/cx_channel_hopper.h"
@@ -16,12 +38,14 @@
 #include "grgsm/decryption/decryption.h"
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 #include "grgsm/demapping/tch_f_chans_demapper.h"
+#include "grgsm/flow_control/common.h"
 #include "grgsm/flow_control/burst_timeslot_splitter.h"
 #include "grgsm/flow_control/burst_sdcch_subslot_splitter.h"
 #include "grgsm/flow_control/burst_timeslot_filter.h"
 #include "grgsm/flow_control/burst_sdcch_subslot_filter.h"
 #include "grgsm/flow_control/burst_fnr_filter.h"
 #include "grgsm/flow_control/dummy_burst_filter.h"
+#include "grgsm/flow_control/uplink_downlink_splitter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
 #include "grgsm/misc_utils/controlled_rotator_cc.h"
 #include "grgsm/misc_utils/extract_system_info.h"
@@ -30,6 +54,8 @@
 #include "grgsm/misc_utils/tmsi_dumper.h"
 #include "grgsm/misc_utils/burst_file_sink.h"
 #include "grgsm/misc_utils/burst_file_source.h"
+#include "grgsm/misc_utils/collect_system_info.h"
+#include "grgsm/misc_utils/extract_cmc.h"
 #include "grgsm/qa_utils/burst_sink.h"
 #include "grgsm/qa_utils/burst_source.h"
 #include "grgsm/qa_utils/message_source.h"
@@ -39,6 +65,8 @@
 #include "grgsm/misc_utils/msg_to_tag.h"
 #include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
 %}
+
+%include "constants.i"
 
 %include "grgsm/receiver/receiver.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, receiver);
@@ -60,6 +88,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, universal_ctrl_chans_demapper);
 %include "grgsm/demapping/tch_f_chans_demapper.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_chans_demapper);
 
+%include "grgsm/flow_control/common.h"
 %include "grgsm/flow_control/burst_timeslot_splitter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_timeslot_splitter);
 %include "grgsm/flow_control/burst_sdcch_subslot_splitter.h"
@@ -72,6 +101,9 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_sdcch_subslot_filter);
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_fnr_filter);
 %include "grgsm/flow_control/dummy_burst_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, dummy_burst_filter);
+%include "grgsm/flow_control/uplink_downlink_splitter.h"
+GR_SWIG_BLOCK_MAGIC2(grgsm, uplink_downlink_splitter);
+
 
 %include "grgsm/misc_utils/bursts_printer.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
@@ -79,6 +111,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, bursts_printer);
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_sink);
 %include "grgsm/misc_utils/burst_file_source.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_file_source);
+%include "grgsm/misc_utils/collect_system_info.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, collect_system_info);
 %include "grgsm/misc_utils/extract_system_info.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_system_info);
 %include "grgsm/misc_utils/extract_immediate_assignment.h"
@@ -97,6 +131,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_file_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
 %include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
+%include "grgsm/misc_utils/extract_cmc.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
 
 
 %include "grgsm/qa_utils/burst_sink.h"

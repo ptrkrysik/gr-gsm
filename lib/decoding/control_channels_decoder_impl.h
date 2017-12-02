@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -24,8 +24,9 @@
 #define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_IMPL_H
 
 #include <grgsm/decoding/control_channels_decoder.h>
-#include "fire_crc.h"
-#include "cch.h"
+extern "C" {
+    #include "osmocom/coding/gsm0503_coding.h"
+}
 
 namespace gr {
   namespace gsm {
@@ -35,9 +36,8 @@ namespace gr {
      private:
       unsigned int d_collected_bursts_num;
       pmt::pmt_t d_bursts[4];
-      unsigned short interleave_trans[CONV_SIZE];      
-      FC_CTX fc_ctx;      
-      void decode(pmt::pmt_t msg);
+     
+      void decode(pmt::pmt_t msg);      
      public:
       control_channels_decoder_impl();
       ~control_channels_decoder_impl();
