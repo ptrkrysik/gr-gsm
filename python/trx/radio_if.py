@@ -29,11 +29,13 @@ import osmosdr
 
 from math import pi
 
-from gnuradio.filter import firdes
 from gnuradio import digital
 from gnuradio import blocks
 from gnuradio import uhd
 from gnuradio import gr
+
+from gnuradio import filter
+from gnuradio.filter import firdes
 
 
 # HACK: should be implemented in C++!
@@ -55,10 +57,29 @@ class burst_to_fn_time(gr.basic_block):
         if pmt.to_python(fn_time) is not None:
             self.message_port_pub(pmt.intern("fn_time_out"), fn_time_msg)
 
+class dict_toggle_sign(gr.basic_block):
+    def __init__(self):  # only default arguments here
+        gr.basic_block.__init__(self,
+            name='Change sign of elts in dict',
+            in_sig=[],
+            out_sig=[]
+        )
+        self.message_port_register_in(pmt.intern("dict_in"))
+        self.message_port_register_out(pmt.intern("dict_out"))
+        self.set_msg_handler(pmt.intern("dict_in"), self.change_sign)
+
+    def change_sign(self, msg):
+        if pmt.is_dict(msg):
+            d = pmt.to_python(msg)
+            for key, value in d.items():
+                d[key] *= -1
+            self.message_port_pub(pmt.intern("dict_out"), pmt.to_pmt(d))
+
 class radio_if(gr.top_block):
 	# PHY specific variables
 	rx_freq = 935e6
 	tx_freq = 890e6
+	osr = 4
 
 	# Application state flags
 	trx_started = False
@@ -75,8 +96,10 @@ class radio_if(gr.top_block):
 		print("[i] Init Radio interface")
 
 		# PHY specific variables
+		self.sample_rate = phy_sample_rate
 		self.rx_gain = phy_rx_gain
 		self.tx_gain = phy_tx_gain
+		self.ppm = phy_ppm
 
 		gr.top_block.__init__(self, "GR-GSM TRX")
 
@@ -97,14 +120,15 @@ class radio_if(gr.top_block):
 		self.phy_src.set_bandwidth(650e3, 0)
 		self.phy_src.set_gain(phy_rx_gain)
 
-		self.gsm_input = grgsm.gsm_input(
-			ppm = phy_ppm - int(phy_ppm), osr = 4,
-			fc = self.rx_freq, samp_rate_in = phy_sample_rate)
+		self.msg_to_tag_src = grgsm.msg_to_tag()
 
-		self.gsm_receiver = grgsm.receiver(4, ([0]), ([]))
+		self.rotator_src = grgsm.controlled_rotator_cc(
+			self.calc_phase_inc(self.rx_freq))
 
-		self.gsm_clck_ctrl = grgsm.clock_offset_control(
-			self.rx_freq, phy_sample_rate, osr = 4)
+		self.lpf = filter.fir_filter_ccf(1, firdes.low_pass(
+			1, phy_sample_rate, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
+
+		self.gsm_receiver = grgsm.receiver(self.osr, ([0]), ([]))
 
 		self.ts_filter = grgsm.burst_timeslot_filter(0)
 		self.ts_filter.set_policy(grgsm.FILTER_POLICY_DROP_ALL)
@@ -112,10 +136,18 @@ class radio_if(gr.top_block):
 		# Connections
 		self.connect(
 			(self.phy_src, 0),
-			(self.gsm_input, 0))
+			(self.msg_to_tag_src, 0))
 
 		self.connect(
-			(self.gsm_input, 0),
+			(self.msg_to_tag_src, 0),
+			(self.rotator_src, 0))
+
+		self.connect(
+			(self.rotator_src, 0),
+			(self.lpf, 0))
+
+		self.connect(
+			(self.lpf, 0),
 			(self.gsm_receiver, 0))
 
 		self.msg_connect(
@@ -125,14 +157,6 @@ class radio_if(gr.top_block):
 		self.msg_connect(
 			(self.ts_filter, 'out'),
 			(self.trx_burst_if, 'bursts'))
-
-		self.msg_connect(
-			(self.gsm_receiver, 'measurements'),
-			(self.gsm_clck_ctrl, 'measurements'))
-
-		self.msg_connect(
-			(self.gsm_clck_ctrl, 'ctrl'),
-			(self.gsm_input, 'ctrl_in'))
 
 
 		# TX Path Definition
@@ -156,11 +180,16 @@ class radio_if(gr.top_block):
 			blocks.byte_t, 'packet_len')
 
 		self.gmsk_mod = grgsm.gsm_gmsk_mod(
-			BT = 4, pulse_duration = 4, sps = 4)
+			BT = 0.3, pulse_duration = 4, sps = self.osr)
 
 		self.burst_shaper = digital.burst_shaper_cc(
 			(firdes.window(firdes.WIN_HANN, 16, 0)),
 			0, 20, False, "packet_len")
+
+		self.msg_to_tag_sink = grgsm.msg_to_tag()
+
+		self.rotator_sink = grgsm.controlled_rotator_cc(
+			-self.calc_phase_inc(self.tx_freq))
 
 		# Connections
 		self.msg_connect(
@@ -185,6 +214,14 @@ class radio_if(gr.top_block):
 
 		self.connect(
 			(self.burst_shaper, 0),
+			(self.msg_to_tag_sink, 0))
+
+		self.connect(
+			(self.msg_to_tag_sink, 0),
+			(self.rotator_sink, 0))
+
+		self.connect(
+			(self.rotator_sink, 0),
 			(self.phy_sink, 0))
 
 
@@ -205,19 +242,46 @@ class radio_if(gr.top_block):
 			(self.burst_to_fn_time, 'fn_time_out'),
 			(self.tx_time_setter, 'fn_time'))
 
+
+		# AFC (Automatic Frequency Correction)
+		self.gsm_clck_ctrl = grgsm.clock_offset_control(
+			self.rx_freq, phy_sample_rate, osr = self.osr)
+
+		self.dict_toggle_sign = dict_toggle_sign()
+
+		# Connections
+		self.msg_connect(
+			(self.gsm_receiver, 'measurements'),
+			(self.gsm_clck_ctrl, 'measurements'))
+
+		self.msg_connect(
+			(self.gsm_clck_ctrl, 'ctrl'),
+			(self.msg_to_tag_src, 'msg'))
+
+		self.msg_connect(
+			(self.gsm_clck_ctrl, 'ctrl'),
+			(self.dict_toggle_sign, 'dict_in'))
+
+		self.msg_connect(
+			(self.dict_toggle_sign, 'dict_out'),
+			(self.msg_to_tag_sink, 'msg'))
+
 	def shutdown(self):
 		print("[i] Shutdown Radio interface")
 		self.stop()
 		self.wait()
 
+	def calc_phase_inc(self, fc):
+		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
+
 	def set_rx_freq(self, fc):
 		self.phy_src.set_center_freq(fc, 0)
-		self.gsm_clck_ctrl.set_fc(fc)
-		self.gsm_input.set_fc(fc)
+		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
 		self.phy_sink.set_center_freq(fc, 0)
+		self.rotator_sink.set_phase_inc(-self.calc_phase_inc(fc))
 		self.tx_freq = fc
 
 	def set_rx_gain(self, gain):
