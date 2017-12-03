@@ -90,6 +90,7 @@ class radio_if(gr.top_block):
 			uhd.stream_args(cpu_format="fc32",
 				channels=range(1)))
 
+		self.phy_src.set_clock_rate(26e6, uhd.ALL_MBOARDS)
 		self.phy_src.set_center_freq(self.rx_freq, 0)
 		self.phy_src.set_antenna(phy_rx_antenna, 0)
 		self.phy_src.set_samp_rate(phy_sample_rate)
@@ -139,6 +140,7 @@ class radio_if(gr.top_block):
 			uhd.stream_args(cpu_format="fc32",
 				channels=range(1)), "packet_len")
 
+		self.phy_sink.set_clock_rate(26e6, uhd.ALL_MBOARDS)
 		self.phy_sink.set_antenna(phy_tx_antenna, 0)
 		self.phy_sink.set_samp_rate(phy_sample_rate)
 		self.phy_sink.set_center_freq(self.tx_freq, 0)
