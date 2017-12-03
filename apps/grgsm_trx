@@ -42,7 +42,7 @@ class Application:
 	base_port = 5700
 
 	# PHY specific
-	phy_sample_rate = 2000000
+	phy_sample_rate = 4 * 1625000 / 6
 	phy_tx_antenna = "TX/RX"
 	phy_rx_antenna = "RX2"
 	phy_rx_gain = 30
@@ -101,7 +101,7 @@ class Application:
 		# PHY specific
 		s += " Radio interface specific\n" \
 			 "  -a --device-args  Set device arguments\n" \
-			 "  -s --sample-rate  Set sample rate (default 2000000)\n" \
+			 "  -s --sample-rate  Set sample rate\n" \
 			 "  -g --rx-gain      Set RX gain (default 30)\n" \
 			 "  -G --tx-gain      Set TX gain (default 10)\n" \
 			 "     --rx-antenna   Set RX antenna (default RX2)\n" \
