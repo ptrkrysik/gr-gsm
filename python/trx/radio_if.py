@@ -66,9 +66,17 @@ class radio_if(gr.top_block):
 	# Application state flags
 	trx_started = False
 
-	# GSM timings
-	delay_correction = 285.616e-6
-	ul_dl_shift = -(6.0/1625000*(156.25)*3)
+	# GSM timings (in microseconds [uS])
+	# One timeslot duration is 576.9 μs = 15/26 ms,
+	# or 156.25 symbol periods (a symbol period is 48/13 μs)
+	GSM_SYM_PERIOD_uS = 48.0 / 13.0
+	GSM_TS_PERIOD_uS = GSM_SYM_PERIOD_uS * 156.25
+	GSM_UL_DL_SHIFT_uS = -(GSM_TS_PERIOD_uS * 3)
+
+	# FIXME: shall be measured (automatically?) for
+	# particular device and particular clock rate.
+	# The current value is measured for USRP B2X0 at 26e6.
+	delay_correction = (285.616 + 2 * GSM_SYM_PERIOD_uS) * 1e-6
 
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
@@ -154,7 +162,7 @@ class radio_if(gr.top_block):
 
 		self.tx_time_setter = grgsm.txtime_setter(
 			0xffffffff, 0, 0, 0, 0, 0,
-			self.delay_correction + self.ul_dl_shift)
+			self.delay_correction + self.GSM_UL_DL_SHIFT_uS * 1e-6)
 
 		self.tx_burst_proc = grgsm.preprocess_tx_burst()
 
