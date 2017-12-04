@@ -281,3 +281,8 @@ class radio_if(gr.top_block):
 	def set_tx_gain(self, gain):
 		self.phy_sink.set_gain(gain, 0)
 		self.tx_gain = gain
+
+	def set_ta(self, ta):
+		print("[i] Setting TA value %d" % ta)
+		advance_time_sec = ta * self.GSM_SYM_PERIOD_uS * 1e-6
+		self.tx_time_setter.set_timing_advance(advance_time_sec)
