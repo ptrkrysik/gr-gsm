@@ -105,7 +105,7 @@ namespace gr {
             //convert to soft bits
             ubits2sbits(bursts_u, bursts_s, 116 * 4);
             //decode
-            gsm0503_xcch_decode(result, bursts_s, &n_errors, &n_bits_total);
+            if (gsm0503_xcch_decode(result, bursts_s, &n_errors, &n_bits_total) != 0) return;
 
             //extract header of the first burst of the four bursts
             pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);
@@ -120,7 +120,6 @@ namespace gr {
             //send message to the output
             message_port_pub(pmt::mp("msgs"), msg_out);
         }
-        return;
     }
   } /* namespace gsm */
 } /* namespace gr */
