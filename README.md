@@ -22,7 +22,7 @@ Mailing list is a place for general discussions, questions about the usage and i
 
 To join the group with any e-mail address, use this link:
 
-https://lists.osmocom.org/mailman/listinfo/gr-gsm
+<https://lists.osmocom.org/mailman/listinfo/gr-gsm>
 
 Development
 ===========
@@ -34,7 +34,7 @@ Videos
 ======
 Short presentation of *Airprobe*'like application of *gr-gsm*:
 
-https://www.youtube.com/watch?v=Eofnb7zr8QE
+<https://www.youtube.com/watch?v=Eofnb7zr8QE>
 
 Credits
 =======
