@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa81d914_f95163d9",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2018-01-03T21:50:24Z",
+      "side": 1,
+      "message": "Typo: addressi -\u003e address.",
+      "revId": "cce7d1e18c127c8a6aa4ba8516f5a5d19118c78b",
+      "serverId": "035e6965-6537-41bd-912c-053f3cf69326",
+      "unresolved": false
+    }
+  ]
+}
