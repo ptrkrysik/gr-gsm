@@ -13,3 +13,4 @@ Integration testing with use of the grgsm_scanner application:
 
 This will copy the entire contents of the currently checked out branch of gr-gsm to a temp folder, and attempt to build the docker images according to the definitions in the .docker files located under gr-gsm/dockerfiles.  
 Once the images are created, the script instantiates a container for testing the rtlsdr scanner on each band, against each Docker image built.  This can take quite a while.  If you're running on Mac, consider using the ```caffeinate``` command to keep your machine from sleeping.
+ 
