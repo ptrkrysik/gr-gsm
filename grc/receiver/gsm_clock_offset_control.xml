@@ -4,7 +4,7 @@
   <key>gsm_clock_offset_control</key>
   <import>import grgsm</import>
   <make>grgsm.clock_offset_control($fc, $samp_rate, $osr)</make>
-  <callback></callback>
+  <callback>set_fc($fc)</callback>
   <param>
     <name>fc</name>
     <key>fc</key>
