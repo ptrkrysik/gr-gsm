@@ -48,7 +48,7 @@ namespace gr {
        * class. gsm::tch_f_chans_demapper::make is the public interface for
        * creating new instances.
        */
-      static sptr make(unsigned int timeslot_nr);
+      static sptr make(unsigned int timeslot_nr, int tch_type, int tch_h_channel);
     };
 
   } // namespace gsm
