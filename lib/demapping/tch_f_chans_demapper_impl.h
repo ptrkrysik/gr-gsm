@@ -32,6 +32,8 @@ namespace gr {
     {
      private:
       unsigned int d_timeslot;
+      int d_tch_type;
+      int d_tch_h_channel;
       // Downlink
       uint32_t d_frame_numbers_dl[3][8];       // for checking consecutive frame numbers of tch
       uint32_t d_frame_numbers_sacch_dl[4];    // for checking consecutive frame numbers of sacch
@@ -49,7 +51,7 @@ namespace gr {
                               uint32_t d_frame_numbers[3][8], pmt::pmt_t msg_out);
 
      public:
-      tch_f_chans_demapper_impl(unsigned int timeslot_nr);
+      tch_f_chans_demapper_impl(unsigned int timeslot_nr, int tch_type, int tch_h_channel);
       ~tch_f_chans_demapper_impl();
 
       void filter_tch_chans(pmt::pmt_t msg);
