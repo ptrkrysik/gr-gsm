@@ -1,5 +1,5 @@
 FROM debian:testing
-MAINTAINER Ash Wilson
+MAINTAINER Piotr Krysik
 
 RUN apt-get update && apt-get install -y \
     cmake \
