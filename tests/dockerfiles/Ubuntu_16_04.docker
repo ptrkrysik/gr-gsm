@@ -28,3 +28,4 @@ RUN cmake .. && \
     make test
 
 RUN /src/tests/scripts/decode.sh
+ 
