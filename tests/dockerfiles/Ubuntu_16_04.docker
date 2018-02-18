@@ -24,4 +24,7 @@ WORKDIR /src/build
 RUN cmake .. && \
     make && \
     make install && \
-    ldconfig
+    ldconfig && \
+    make test
+
+RUN /src/tests/scripts/decode.sh
