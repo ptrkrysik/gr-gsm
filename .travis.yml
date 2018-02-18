@@ -4,6 +4,7 @@ language: ruby
 
 env:
   - DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debtest-grgsm
+  - DOCKERFILE=tests/dockerfiles/Debian_testing_package.docker IMGNAME=debtest-grgsm-package
   - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04.docker IMGNAME=ubu16.04-grgsm
 
 services:
