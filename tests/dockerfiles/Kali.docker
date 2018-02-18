@@ -27,4 +27,4 @@ RUN cmake .. && \
     ldconfig && \
     make test
 
-RUN /src/tests/scripts/decode.sh
+#RUN /src/tests/scripts/decode.sh
