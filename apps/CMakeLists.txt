@@ -21,11 +21,39 @@ include(GrPython)
 add_subdirectory(helpers)
 add_subdirectory(apps_data)
 
+SET(PYTHONPATH
+	${CMAKE_SOURCE_DIR}/python
+	${CMAKE_SOURCE_DIR}/python/misc_utils
+	${CMAKE_SOURCE_DIR}/python/demapping
+	${CMAKE_SOURCE_DIR}/python/receiver
+	${CMAKE_BINARY_DIR}/swig
+	$ENV{PYTHONPATH}
+	)
+string(REPLACE ";" ":" PYTHONPATH "${PYTHONPATH}")
+
+ADD_CUSTOM_COMMAND(
+	OUTPUT grgsm_livemon
+	COMMAND "${CMAKE_COMMAND}"
+		-E env PYTHONPATH="${PYTHONPATH}" GRC_BLOCKS_PATH=${CMAKE_SOURCE_DIR}/grc
+		${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc -d ${CMAKE_CURRENT_BINARY_DIR}
+		${CMAKE_CURRENT_SOURCE_DIR}/grgsm_livemon.grc
+	COMMAND "${CMAKE_COMMAND}" -E rename grgsm_livemon.py grgsm_livemon
+	DEPENDS grgsm_livemon.grc
+	)
+ADD_CUSTOM_COMMAND(
+	OUTPUT grgsm_livemon_headless
+	COMMAND "${CMAKE_COMMAND}"
+		-E env PYTHONPATH="${PYTHONPATH}" GRC_BLOCKS_PATH=${CMAKE_SOURCE_DIR}/grc
+		${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc -d ${CMAKE_CURRENT_BINARY_DIR}
+		${CMAKE_CURRENT_SOURCE_DIR}/grgsm_livemon_headless.grc
+	COMMAND "${CMAKE_COMMAND}" -E rename grgsm_livemon_headless.py grgsm_livemon_headless
+	DEPENDS grgsm_livemon_headless.grc
+	)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    grgsm_livemon
-    grgsm_livemon_headless
+	${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon
+	${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless
     grgsm_scanner
     grgsm_decode
     DESTINATION bin
