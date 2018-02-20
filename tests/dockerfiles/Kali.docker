@@ -1,0 +1,28 @@
+FROM kalilinux/kali-linux-docker
+MAINTAINER Piotr Krysik
+
+RUN apt-get update && apt-get install -y \
+    cmake \
+    autoconf \
+    libtool \
+    build-essential \
+    python-docutils \
+    libcppunit-dev \
+    swig \
+    doxygen \
+    liblog4cpp5-dev \
+    python-scipy \
+    gnuradio-dev \
+    gr-osmosdr \
+    libosmocore-dev
+
+COPY ./ /src/
+RUN ls /src
+
+RUN mkdir /src/build
+WORKDIR /src/build
+RUN cmake .. && \
+    make && \
+    make install && \
+    ldconfig && \
+    make test

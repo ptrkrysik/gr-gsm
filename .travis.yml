@@ -7,6 +7,7 @@ env:
   #- DOCKERFILE=tests/dockerfiles/Ubuntu_15_04.docker IMGNAME=ubu15.04-grgsm
   #- DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debtest-grgsm
   - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04.docker IMGNAME=ubu16.04-grgsm
+  - DOCKERFILE=tests/dockerfiles/Kali.docker IMGNAME=kali-grgsm
 
 services:
   - docker
