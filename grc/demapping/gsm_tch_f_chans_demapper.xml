@@ -3,15 +3,40 @@
   <name>TCH/F Demapper</name>
   <key>gsm_tch_f_chans_demapper</key>
   <import>import grgsm</import>
-  <make>grgsm.tch_f_chans_demapper($timeslot_nr)</make>
+  <make>grgsm.tch_f_chans_demapper($timeslot_nr, $tch_type, $tch_h_channel)</make>
 
   <param>
-    <name>timeslot_nr</name>
+    <name>Timeslot</name>
     <key>timeslot_nr</key>
     <value>2</value>
     <type>int</type>
     <hide>part</hide>
   </param>
+
+  <param>
+    <name>TCH Type</name>
+    <key>tch_type</key>
+    <value>0</value>
+    <type>int</type>
+    <hide>part</hide>
+    <option>
+      <name>Full rate</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>Half rate</name>
+      <key>1</key>
+    </option>
+  </param>
+
+  <param>
+    <name>TCH/H Channel</name>
+    <key>tch_h_channel</key>
+    <value>0</value>
+    <type>int</type>
+    <hide>#if $tch_type() == 0 then 'all' else 'none'#</hide>
+  </param>
+  <check>$tch_h_channel() &gt; -1 and $tch_h_channel() &lt; 2</check>
 
   <sink>
     <name>bursts</name>
