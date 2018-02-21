@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     autoconf \
     libtool \
+    pkg-config \
     build-essential \
     python-docutils \
     libcppunit-dev \
