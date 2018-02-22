@@ -2,6 +2,10 @@
 
 TEST_DIR=`dirname "$0"`
 
+# PYTHONPATH and LD_LIBRARY_PATH are needed on Fedora 26
+export PYTHONPATH=/usr/local/lib64/python2.7/site-packages/:/usr/local/lib64/python2.7/site-packages/grgsm/:$PYTHONPATH
+export LD_LIBRARY_PATH=/usr/local/lib64/:$LD_LIBRARY_PATH
+
 export AP_DECODE="grgsm_decode"
 export CAPFILE="../../test_data/vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"
 export SHORTENED_CAPFILE="tmp.cfile"
