@@ -31,7 +31,6 @@
 #include <string.h>
 #include <iostream>
 #include <numeric>
-#include <math.h>
 #include <vector>
 
 #include <boost/circular_buffer.hpp>
@@ -264,7 +263,7 @@ namespace gr
        * bursts according to burst type for given burst number
        */
       std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
-      unsigned int inputs_to_process = d_cell_allocation.size();
+      size_t inputs_to_process = d_cell_allocation.size();
       unsigned char output_binary[BURST_SIZE];
       burst_type b_type;
       int to_consume = 0;
@@ -274,7 +273,7 @@ namespace gr
         inputs_to_process *= 2;
 
       /* Process all connected inputs */
-      for (int input_nr = 0; input_nr < inputs_to_process; input_nr++) {
+      for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
         input = (gr_complex *) input_items[input_nr];
         double signal_pwr = 0;
 
@@ -421,7 +420,7 @@ namespace gr
         {
           std::vector<gr_complex> v(input, input + noutput_items);
           float normal_corr_max = -1e6;
-          float normal_corr_max_tmp;
+//          float normal_corr_max_tmp;
           unsigned int burst_start;
           int max_tn, tseq_num;
 
@@ -980,7 +979,7 @@ namespace gr
     void
     receiver_impl::send_burst(burst_counter burst_nr,
       const unsigned char * burst_binary, uint8_t burst_type,
-      unsigned int input_nr)
+      size_t input_nr)
     {
       /* Buffer for GSMTAP header and burst */
       uint8_t buf[sizeof(gsmtap_hdr) + BURST_SIZE];
