@@ -13,11 +13,11 @@
 
 void gsm0503_xcch_burst_unmap(sbit_t *iB, const sbit_t *eB,
 	sbit_t *hl, sbit_t *hn);
-void gsm0503_xcch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *hl,
+void gsm0503_xcch_burst_map(const ubit_t *iB, ubit_t *eB, const ubit_t *hl,
 	const ubit_t *hn);
 
-void gsm0503_tch_burst_unmap(sbit_t *iB, sbit_t *eB, sbit_t *h, int odd);
-void gsm0503_tch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *h, int odd);
+void gsm0503_tch_burst_unmap(sbit_t *iB, const sbit_t *eB, sbit_t *h, int odd);
+void gsm0503_tch_burst_map(const ubit_t *iB, ubit_t *eB, const ubit_t *h, int odd);
 
 void gsm0503_mcs5_ul_burst_map(const ubit_t *di, ubit_t *eB,
 	const ubit_t *hi, int B);
