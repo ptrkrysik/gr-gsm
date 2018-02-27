@@ -388,7 +388,7 @@ namespace gr {
 
                 if (good)
                 {
-                    unsigned char frameBuffer[mAMRFrameLth];
+                    unsigned char * frameBuffer = new unsigned char [mAMRFrameLth];
                     // AMR Frame, consisting of a 8 bit frame header, plus the payload from decoding
                     BitVector amrFrame(mKd + 8);
                     BitVector payload = amrFrame.tail(8);
@@ -402,6 +402,7 @@ namespace gr {
                     mTCHD.copyTo(payload);
                     amrFrame.pack(frameBuffer);
                     message_port_pub(pmt::mp("voice"), pmt::cons(pmt::PMT_NIL, pmt::make_blob(frameBuffer,mAMRFrameLth)));
+					delete[] frameBuffer;
                 }
             }
         }

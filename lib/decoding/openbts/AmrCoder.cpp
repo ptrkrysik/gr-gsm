@@ -24,10 +24,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
-
-
 
 ViterbiTCH_AFS12_2::ViterbiTCH_AFS12_2()
 {
@@ -378,7 +377,7 @@ void ViterbiTCH_AFS12_2::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -394,8 +393,8 @@ void ViterbiTCH_AFS12_2::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -445,6 +444,9 @@ void ViterbiTCH_AFS12_2::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -582,7 +584,7 @@ void ViterbiTCH_AFS10_2::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -598,8 +600,8 @@ void ViterbiTCH_AFS10_2::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -649,6 +651,9 @@ void ViterbiTCH_AFS10_2::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -786,7 +791,7 @@ void ViterbiTCH_AFS7_95::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -802,8 +807,8 @@ void ViterbiTCH_AFS7_95::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -853,6 +858,9 @@ void ViterbiTCH_AFS7_95::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -990,7 +998,7 @@ void ViterbiTCH_AFS7_4::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -1006,8 +1014,8 @@ void ViterbiTCH_AFS7_4::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -1057,6 +1065,9 @@ void ViterbiTCH_AFS7_4::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -1196,7 +1207,7 @@ void ViterbiTCH_AFS6_7::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -1212,8 +1223,8 @@ void ViterbiTCH_AFS6_7::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -1263,6 +1274,9 @@ void ViterbiTCH_AFS6_7::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -1402,7 +1416,7 @@ void ViterbiTCH_AFS5_9::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -1418,8 +1432,8 @@ void ViterbiTCH_AFS5_9::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -1469,6 +1483,9 @@ void ViterbiTCH_AFS5_9::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -1610,7 +1627,7 @@ void ViterbiTCH_AFS5_15::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -1626,8 +1643,8 @@ void ViterbiTCH_AFS5_15::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -1677,6 +1694,9 @@ void ViterbiTCH_AFS5_15::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
@@ -1818,7 +1838,7 @@ void ViterbiTCH_AFS4_75::decode(const SoftVector &in, BitVector& target)
 	assert(sz == decoder.iRate()*target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -1834,8 +1854,8 @@ void ViterbiTCH_AFS4_75::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -1885,6 +1905,9 @@ void ViterbiTCH_AFS4_75::decode(const SoftVector &in, BitVector& target)
 			oCount++;
 		}
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 
