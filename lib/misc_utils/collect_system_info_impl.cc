@@ -26,7 +26,7 @@
 
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <grgsm/endian.h>
 
 #include "collect_system_info_impl.h"
