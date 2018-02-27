@@ -90,7 +90,8 @@ endif()
 
 add_library(grgsm SHARED ${grgsm_sources})
 target_link_libraries(grgsm ${grgsm_link_libraries} #${LIBOSMOCORE_LIBRARIES}
-# ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODING_LIBRARIES} 
+# ${LIBOSMOCODEC_LIBRARIES}
+# ${LIBOSMOCODING_LIBRARIES} 
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system

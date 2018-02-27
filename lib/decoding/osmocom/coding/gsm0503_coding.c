@@ -47,7 +47,7 @@
 #include <osmocom/coding/gsm0503_interleaving.h>
 #include <osmocom/coding/gsm0503_mapping.h>
 #include <osmocom/coding/gsm0503_tables.h>
-#include <osmocom/coding/gsm0503_coding.h>
+#include "osmocom/coding/gsm0503_coding.h"
 #include <osmocom/coding/gsm0503_parity.h>
 
 /*! \mainpage libosmocoding Documentation
