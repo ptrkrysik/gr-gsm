@@ -162,11 +162,11 @@ endif()
 ########################################################################
 # Setup doxygen option
 ########################################################################
-if(DOXYGEN_FOUND)
-	option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
-else(DOXYGEN_FOUND)
+#if(DOXYGEN_FOUND)
+#	option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
+#else(DOXYGEN_FOUND)
 	option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
-endif(DOXYGEN_FOUND)
+#endif(DOXYGEN_FOUND)
 
 ########################################################################
 # Setup the include and linker paths
