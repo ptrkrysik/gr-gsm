@@ -9,6 +9,8 @@
 #include <osmocom/core/defs.h>
 #include <osmocom/core/bits.h>
 
+#include <stdbool.h> //!!
+
 /*! \addtogroup coding
  *  @{
  * \file gsm0503_coding.h */
@@ -65,17 +67,17 @@ int gsm0503_tch_ahs_decode(uint8_t *tch_data, const sbit_t *bursts, int odd,
 	int codec_mode_req, uint8_t *codec, int codecs, uint8_t *ft,
 	uint8_t *cmr, int *n_errors, int *n_bits_total);
 
-int gsm0503_rach_ext_encode(ubit_t *burst, uint16_t ra, uint8_t bsic, bool is_11bit);
-int gsm0503_rach_encode(ubit_t *burst, const uint8_t *ra, uint8_t bsic) OSMO_DEPRECATED("Use gsm0503_rach_ext_encode() instead");
+//int gsm0503_rach_ext_encode(ubit_t *burst, uint16_t ra, uint8_t bsic, bool is_11bit);
+//int gsm0503_rach_encode(ubit_t *burst, const uint8_t *ra, uint8_t bsic) OSMO_DEPRECATED("Use gsm0503_rach_ext_encode() instead");
 
-int gsm0503_rach_decode(uint8_t *ra, const sbit_t *burst, uint8_t bsic)
-	OSMO_DEPRECATED("Use gsm0503_rach_decode_ber() instead");
-int gsm0503_rach_decode_ber(uint8_t *ra, const sbit_t *burst, uint8_t bsic,
-			    int *n_errors, int *n_bits_total);
-int gsm0503_rach_ext_decode(uint16_t *ra, const sbit_t *burst, uint8_t bsic)
-	OSMO_DEPRECATED("Use gsm0503_rach_ext_decode_ber() instead");
-int gsm0503_rach_ext_decode_ber(uint16_t *ra, const sbit_t *burst, uint8_t bsic,
-				int *n_errors, int *n_bits_total);
+//int gsm0503_rach_decode(uint8_t *ra, const sbit_t *burst, uint8_t bsic)
+//	OSMO_DEPRECATED("Use gsm0503_rach_decode_ber() instead");
+//int gsm0503_rach_decode_ber(uint8_t *ra, const sbit_t *burst, uint8_t bsic,
+			    //int *n_errors, int *n_bits_total);
+//int gsm0503_rach_ext_decode(uint16_t *ra, const sbit_t *burst, uint8_t bsic)
+//	OSMO_DEPRECATED("Use gsm0503_rach_ext_decode_ber() instead");
+//int gsm0503_rach_ext_decode_ber(uint16_t *ra, const sbit_t *burst, uint8_t bsic,
+//				int *n_errors, int *n_bits_total);
 
 int gsm0503_sch_encode(ubit_t *burst, const uint8_t *sb_info);
 int gsm0503_sch_decode(uint8_t *sb_info, const sbit_t *burst);
