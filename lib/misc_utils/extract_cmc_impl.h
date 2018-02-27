@@ -35,10 +35,12 @@ namespace gr {
       std::vector<int> d_framenumbers;
       std::vector<int> d_a5_versions;
       std::vector<int> d_start_ciphering;
+      std::vector<int> d_assignment_commands;
      public:
       virtual std::vector<int> get_framenumbers();
       virtual std::vector<int> get_a5_versions();
       virtual std::vector<int> get_start_ciphering();
+      virtual std::vector<int> get_assignment_commands();
       extract_cmc_impl();
       ~extract_cmc_impl();
     };
