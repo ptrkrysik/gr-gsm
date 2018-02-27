@@ -77,14 +77,26 @@ add_subdirectory(receiver)
 include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
 
+set(grgsm_link_libraries "")
+list (APPEND grgsm_link_libraries ${Boost_LIBRARIES})
+list (APPEND grgsm_link_libraries ${GNURADIO_ALL_LIBRARIES})
+list (APPEND grgsm_link_libraries ${VOLK_LIBRARIES})
+list (APPEND grgsm_link_libraries ${Boost_LIBRARIES})
+if(WIN32)
+	list (APPEND grgsm_link_libraries wsock32)
+	list (APPEND grgsm_link_libraries ws2_32)
+endif()
+
+
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES} ${VOLK_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} 
-# ${LIBOSMOCODING_LIBRARIES} 
+target_link_libraries(grgsm ${grgsm_link_libraries} #${LIBOSMOCORE_LIBRARIES}
+# ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODING_LIBRARIES} 
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
 #    boost_filesystem
 )
+
 set_target_properties(grgsm PROPERTIES DEFINE_SYMBOL "grgsm_EXPORTS")
 GR_LIBRARY_FOO(grgsm)
 
