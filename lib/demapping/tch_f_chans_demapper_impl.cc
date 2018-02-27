@@ -109,7 +109,7 @@ namespace gr {
         }
     }
 
-    void tch_f_chans_demapper_impl::sacch_tch_demapper(uint32_t fn_mod13, u_int32_t fn_mod26, uint32_t frame_nr,
+    void tch_f_chans_demapper_impl::sacch_tch_demapper(uint32_t fn_mod13, uint32_t fn_mod26, uint32_t frame_nr,
                                                        pmt::pmt_t *d_bursts_sacch,
                                                        uint32_t *d_frame_numbers_sacch, pmt::pmt_t d_bursts[3][8],
                                                        uint32_t d_frame_numbers[3][8], pmt::pmt_t msg_out)
