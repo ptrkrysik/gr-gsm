@@ -18,6 +18,10 @@
 # Boston, MA 02110-1301, USA.
 
 add_subdirectory(osmocom/coding)
+add_subdirectory(osmocom/core)
+add_subdirectory(osmocom/codec)
+add_subdirectory(osmocom/gsm)
+add_subdirectory(osmocom/crypt)
 add_subdirectory(openbts)
 
 add_sources(
