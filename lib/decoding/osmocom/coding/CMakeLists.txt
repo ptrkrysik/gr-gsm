@@ -25,4 +25,3 @@ add_sources(
     gsm0503_parity.c
     gsm0503_tables.c
 )
-

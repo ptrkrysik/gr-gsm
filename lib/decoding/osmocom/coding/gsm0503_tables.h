@@ -1,28 +1,16 @@
-/*
- * (C) 2013 by Andreas Eversberg <jolly@eversberg.eu>
- * (C) 2016 by Tom Tsou <tom.tsou@ettus.com>
- *
- * All Rights Reserved
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+/*! \file gsm0503_tables.h
+ *  GSM TS 05.03 tables.
  */
 
 #pragma once
 
 #include <stdint.h>
 #include <osmocom/core/bits.h>
+//#include "bits.h"
+
+/*! \addtogroup tables
+ *  @{
+ * \file gsm0503_tables.h */
 
 extern const ubit_t gsm0503_pdtch_hl_hn_ubit[4][8];
 extern const ubit_t gsm0503_pdtch_edge_hl_hn_ubit[3][8];
@@ -69,3 +57,5 @@ extern const ubit_t gsm0503_ahs_ic_ubit[4][4];
 extern const sbit_t gsm0503_ahs_ic_sbit[4][4];
 extern const uint8_t gsm0503_tch_hr_interleaving[228][2];
 extern const ubit_t gsm0503_mcs5_usf_precode_table[8][36];
+
+/*! @} */

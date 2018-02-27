@@ -1,37 +1,23 @@
-/*
- * (C) 2013 by Andreas Eversberg <jolly@eversberg.eu>
- * (C) 2016 by Tom Tsou <tom.tsou@ettus.com>
- *
- * All Rights Reserved
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+/*! \file gsm0503_interleaving.h
+ *  GSM TS 05.03 interleaving.
  */
-
 
 #pragma once
 
 #include <osmocom/core/bits.h>
 
+/*! \addtogroup interleaving
+ *  @{
+ * \file gsm0503_interleaving.h */
+
 void gsm0503_xcch_deinterleave(sbit_t *cB, const sbit_t *iB);
-void gsm0503_xcch_interleave(ubit_t *cB, ubit_t *iB);
+void gsm0503_xcch_interleave(const ubit_t *cB, ubit_t *iB);
 
-void gsm0503_tch_fr_deinterleave(sbit_t *cB, sbit_t *iB);
-void gsm0503_tch_fr_interleave(ubit_t *cB, ubit_t *iB);
+void gsm0503_tch_fr_deinterleave(sbit_t *cB, const sbit_t *iB);
+void gsm0503_tch_fr_interleave(const ubit_t *cB, ubit_t *iB);
 
-void gsm0503_tch_hr_deinterleave(sbit_t *cB, sbit_t *iB);
-void gsm0503_tch_hr_interleave(ubit_t *cB, ubit_t *iB);
+void gsm0503_tch_hr_deinterleave(sbit_t *cB, const sbit_t *iB);
+void gsm0503_tch_hr_interleave(const ubit_t *cB, ubit_t *iB);
 
 void gsm0503_mcs1_ul_deinterleave(sbit_t *hc, sbit_t *dc, const sbit_t *iB);
 void gsm0503_mcs1_ul_interleave(const ubit_t *hc,
@@ -71,3 +57,5 @@ void gsm0503_mcs8_dl_deinterleave(sbit_t *hc, sbit_t *c1, sbit_t *c2,
 	const sbit_t *hi, const sbit_t *di);
 void gsm0503_mcs8_dl_interleave(const ubit_t *hc, const ubit_t *c1,
 	const ubit_t *c2, ubit_t *hi, ubit_t *di);
+
+/*! @} */

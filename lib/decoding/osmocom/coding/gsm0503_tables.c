@@ -4,6 +4,8 @@
  *
  * All Rights Reserved
  *
+ * SPDX-License-Identifier: GPL-2.0+
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -22,7 +24,18 @@
 #include <stdint.h>
 
 #include <osmocom/core/bits.h>
-#include "gsm0503_tables.h"
+#include <osmocom/coding/gsm0503_tables.h>
+
+/*! \addtogroup tables
+ *  @{
+ *
+ *  GSM TS 05.03 tables.
+ *
+ *  This module contains various tables defining parts of 3GPP TS 05.03
+ *  / 45.003, primarily for the purpose of (de)puncturing, interleaving,
+ *  etc.
+ *
+ * \file gsm0503_tables.c */
 
 const ubit_t gsm0503_pdtch_hl_hn_ubit[4][8] = {
 	{ 1,1, 1,1, 1,1, 1,1 },
@@ -1692,7 +1705,7 @@ const uint8_t gsm0503_tch_hr_interleaving[228][2] = {
 	{ 86 ,0 }, { 87 ,2 }, { 110,0 }, { 111,2 }, { 4  ,0 }, { 5  ,2 },
 	{ 82 ,1 }, { 83 ,3 }, { 52 ,0 }, { 53 ,2 }, { 58 ,1 }, { 59 ,3 },
 	{ 28 ,0 }, { 29 ,2 }, { 34 ,1 }, { 35 ,3 }, { 76 ,0 }, { 77 ,2 },
-	{ 10 ,1 }, { 12 ,3 }, { 100,0 }, { 101,2 }, { 16 ,0 }, { 17 ,2 },
+	{ 10 ,1 }, { 11 ,3 }, { 100,0 }, { 101,2 }, { 16 ,0 }, { 17 ,2 },
 	{ 106,1 }, { 107,3 }, { 64 ,0 }, { 65 ,2 }, { 70 ,1 }, { 71 ,3 },
 	{ 94 ,1 }, { 95 ,3 }, { 40 ,0 }, { 41 ,2 }, { 46 ,1 }, { 47 ,3 },
 	{ 22 ,1 }, { 23 ,3 }, { 88 ,0 }, { 89 ,2 }, { 112,0 }, { 113,2 },
@@ -1730,3 +1743,5 @@ const ubit_t gsm0503_mcs5_usf_precode_table[8][36] = {
 	{ 0,0,1,0,0,1,1,0,1, 1,0,1,1,1,1,1,1,1, 0,1,1,0,1,0,0,0,1, 0,0,1,1,1,0,1,0,0, },
 	{ 0,1,1,0,1,0,1,1,1, 0,1,0,1,0,1,1,1,1, 0,0,0,1,1,1,1,1,0, 0,1,0,0,1,0,0,1,1, },
 };
+
+/*! @} */

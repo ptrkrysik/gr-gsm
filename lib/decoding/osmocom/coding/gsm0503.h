@@ -1,13 +1,13 @@
+
 /*
- * gsm0503.h
- *
+ * Copyright (C) 2011-2016 Sylvain Munaut <tnt@246tNt.com>
  * Copyright (C) 2016 sysmocom s.f.m.c. GmbH
  *
  * All Rights Reserved
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -22,162 +22,264 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #include <stdint.h>
-
 #include <osmocom/core/conv.h>
 
-/*! \file gsm0503.h
- * Osmocom convolutional encoder/decoder for xCCH channels, see 3GPP TS 05.03
- */
-
-/*! \brief structure describing convolutional code xCCH
- *
- *  Non-recursive code, flushed, not punctured code.
+/*! structure describing xCCH convolutional code:.
+ * 228 bits blocks, rate 1/2, k = 5
+ * G0 = 1 + D3 + D4
+ * G1 = 1 + D + D3 + D4
  */
 extern const struct osmo_conv_code gsm0503_xcch;
 
-/*! \brief structure describing convolutional code RACH
+/*! structure describing RACH convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_rach;
 
-/*! \brief structure describing convolutional code SCH
+/*! structure describing Extended RACH (11 bit) convolutional code.
+ */
+extern const struct osmo_conv_code gsm0503_rach_ext;
+
+/*! structure describing SCH convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_sch;
 
-/*! \brief structures describing convolutional codes CS2/3
+/*! structure describing CS2 convolutional code:.
+ * G0 = 1 + D3 + D4
+ * G1 = 1 + D + D3 + D4
  */
 extern const struct osmo_conv_code gsm0503_cs2;
+
+/*! structure describing CS3 convolutional code:.
+ * G0 = 1 + D3 + D4
+ * G1 = 1 + D + D3 + D4
+ */
 extern const struct osmo_conv_code gsm0503_cs3;
 
-/*! \brief structure describing convolutional code TCH/FR
+/*! structure describing CS2 convolutional code (non-punctured):.
+ * G0 = 1 + D3 + D4
+ * G1 = 1 + D + D3 + D4
  */
-extern const struct osmo_conv_code gsm0503_tch_fr;
+extern const struct osmo_conv_code gsm0503_cs2_np;
 
-/*! \brief structure describing convolutional code TCH/HR
+/*! structure describing CS3 convolutional code (non-punctured):.
+ * G0 = 1 + D3 + D4
+ * G1 = 1 + D + D3 + D4
  */
-extern const struct osmo_conv_code gsm0503_tch_hr;
+extern const struct osmo_conv_code gsm0503_cs3_np;
 
-/*! \brief structure describing convolutional code TCH/AFS 12.2
+/*! structure describing TCH/AFS 12.2 kbits convolutional code:.
+ * 250 bits block, rate 1/2, punctured
+ * G0/G0 = 1
+ * G1/G0 = 1 + D + D3 + D4 / 1 + D3 + D4
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_12_2;
 
-/*! \brief structure describing convolutional code TCH/AFS 10.2
+/*! structure describing TCH/AFS 10.2 kbits convolutional code:.
+ * G1/G3 = 1 + D + D3 + D4 / 1 + D + D2 + D3 + D4
+ * G2/G3 = 1 + D2 + D4     / 1 + D + D2 + D3 + D4
+ * G3/G3 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_10_2;
 
-/*! \brief structure describing convolutional code TCH/AFS 7.95
+/*! structure describing TCH/AFS 7.95 kbits convolutional code:.
+ * G4/G4 = 1
+ * G5/G4 = 1 + D + D4 + D6           / 1 + D2 + D3 + D5 + D6
+ * G6/G4 = 1 + D + D2 + D3 + D4 + D6 / 1 + D2 + D3 + D5 + D6
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_7_95;
 
-/*! \brief structure describing convolutional code TCH/AFS 7.4
+/*! structure describing TCH/AFS 7.4 kbits convolutional code:.
+ * G1/G3 = 1 + D + D3 + D4 / 1 + D + D2 + D3 + D4
+ * G2/G3 = 1 + D2 + D4     / 1 + D + D2 + D3 + D4
+ * G3/G3 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_7_4;
 
-/*! \brief structure describing convolutional code TCH/AFS 6.7
+/*! structure describing TCH/AFS 6.7 kbits convolutional code:.
+ * G1/G3 = 1 + D + D3 + D4 / 1 + D + D2 + D3 + D4
+ * G2/G3 = 1 + D2 + D4     / 1 + D + D2 + D3 + D4
+ * G3/G3 = 1
+ * G3/G3 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_6_7;
 
-/*! \brief structure describing convolutional code TCH/AFS 5.9
+/*! structure describing TCH/AFS 5.9 kbits convolutional code:.
+ * 124 bits
+ * G4/G6 = 1 + D2 + D3 + D5 + D6 / 1 + D + D2 + D3 + D4 + D6
+ * G5/G6 = 1 + D + D4 + D6       / 1 + D + D2 + D3 + D4 + D6
+ * G6/G6 = 1
+ * G6/G6 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_5_9;
 
-/*! \brief structure describing convolutional code TCH/AFS 5.15
+/*! structure describing TCH/AFS 5.15 kbits convolutional code:.
+ * G1/G3 = 1 + D + D3 + D4 / 1 + D + D2 + D3 + D4
+ * G1/G3 = 1 + D + D3 + D4 / 1 + D + D2 + D3 + D4
+ * G2/G3 = 1 + D2 + D4     / 1 + D + D2 + D3 + D4
+ * G3/G3 = 1
+ * G3/G3 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_5_15;
 
-/*! \brief structure describing convolutional code TCH/AFS 4.75
+/*! structure describing TCH/AFS 4.75 kbits convolutional code:.
+ * G4/G6 = 1 + D2 + D3 + D5 + D6 / 1 + D + D2 + D3 + D4 + D6
+ * G4/G6 = 1 + D2 + D3 + D5 + D6 / 1 + D + D2 + D3 + D4 + D6
+ * G5/G6 = 1 + D + D4 + D6       / 1 + D + D2 + D3 + D4 + D6
+ * G6/G6 = 1
+ * G6/G6 = 1
  */
 extern const struct osmo_conv_code gsm0503_tch_afs_4_75;
 
-/*! \brief structure describing convolutional code TCH/AHS 7.95
+/*! structure describing TCH/F convolutional code.
+ */
+extern const struct osmo_conv_code gsm0503_tch_fr;
+
+/*! structure describing TCH/H convolutional code.
+ */
+extern const struct osmo_conv_code gsm0503_tch_hr;
+
+/*! structure describing TCH/AHS 7.95 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_7_95;
 
-/*! \brief structure describing convolutional code TCH/AHS 7.4
+/*! structure describing TCH/AHS 7.4 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_7_4;
 
-/*! \brief structure describing convolutional code TCH/AHS 6.7
+/*! structure describing TCH/AHS 6.7 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_6_7;
 
-/*! \brief structure describing convolutional code TCH/AHS 5.9
+/*! structure describing TCH/AHS 5.9 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_5_9;
 
-/*! \brief structure describing convolutional code TCH/AHS 5.15
+/*! structure describing TCH/AHS 5.15 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_5_15;
 
-/*! \brief structure describing convolutional code TCH/AHS 4.75
+/*! structure describing TCH/AHS 4.75 kbits convolutional code.
  */
 extern const struct osmo_conv_code gsm0503_tch_ahs_4_75;
 
-/*! \brief structure describing convolutional code EDGE MCS-1 DL HDR
+/*! structure describing EDGE MCS-1 DL header convolutional code:.
+ * 42 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs1_dl_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-1 UL HDR
+/*! structure describing EDGE MCS-1 UL header convolutional code:.
+ * 45 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs1_ul_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-1
+/*! structure describing EDGE MCS-1 data convolutional code:.
+ * 196 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs1;
 
-/*! \brief structure describing convolutional code EDGE MCS-2
+/*! structure describing EDGE MCS-2 data convolutional code:.
+ * 244 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs2;
 
-/*! \brief structure describing convolutional code EDGE MCS-3
+/*! structure describing EDGE MCS-3 data convolutional code:.
+ * 316 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs3;
 
-/*! \brief structure describing convolutional code EDGE MCS-4
+/*! structure describing EDGE MCS-4 data convolutional code:.
+ * 372 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs4;
 
-/*! \brief structure describing convolutional code EDGE MCS-5 DL HDR
+/*! structure describing EDGE MCS-5 DL header convolutional code:.
+ * 39 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs5_dl_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-5 UL HDR
+/*! structure describing EDGE MCS-5 UL header convolutional code:.
+ * 51 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs5_ul_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-5
+/*! structure describing EDGE MCS-5 data convolutional code:.
+ * 468 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs5;
 
-/*! \brief structure describing convolutional code EDGE MCS-6
+/*! structure describing EDGE MCS-6 data convolutional code:.
+ * 612 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs6;
 
-/*! \brief structure describing convolutional code EDGE MCS-7 DL HDR
+/*! structure describing EDGE MCS-7 DL header convolutional code:.
+ * 51 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs7_dl_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-7 UL HDR
+/*! structure describing EDGE MCS-7 UL header convolutional code:.
+ * 60 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs7_ul_hdr;
 
-/*! \brief structure describing convolutional code EDGE MCS-7
+/*! structure describing EDGE MCS-7 data convolutional code:.
+ * 468 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs7;
 
-/*! \brief structure describing convolutional code EDGE MCS-8
+/*! structure describing EDGE MCS-8 data convolutional code:.
+ * 564 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs8;
 
-/*! \brief structure describing convolutional code EDGE MCS-9
+/*! structure describing EDGE MCS-9 data convolutional code:.
+ * 612 bits blocks, rate 1/3, k = 7
+ * G4 = 1 + D2 + D3 + D5 + D6
+ * G7 = 1 + D + D2 + D3 + D6
+ * G5 = 1 + D + D4 + D6
  */
 extern const struct osmo_conv_code gsm0503_mcs9;
 
-#ifdef __cplusplus
-}
-#endif
