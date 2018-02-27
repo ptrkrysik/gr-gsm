@@ -136,9 +136,9 @@ find_package(Gnuradio)
 find_package(Volk)
 find_package(CppUnit)
 find_package(Doxygen)
-find_package(Libosmocore)
+#find_package(Libosmocore)
 #find_package(Libosmocoding)
-find_package(Libosmocodec)
+#find_package(Libosmocodec)
 
 if(NOT GNURADIO_RUNTIME_FOUND)
     message(FATAL_ERROR "GnuRadio Runtime required to compile gr-gsm")
@@ -146,15 +146,15 @@ endif()
 if(NOT VOLK_FOUND)
     message(FATAL_ERROR "Volk library required to compile gr-gsm")
 endif()
-if(NOT CPPUNIT_FOUND)
-    message(FATAL_ERROR "CppUnit required to compile gr-gsm")
-endif()
-if(NOT LIBOSMOCORE_FOUND)
-    message(FATAL_ERROR "Libosmocore required to compile gr-gsm")
-endif()
-if(NOT LIBOSMOCODEC_FOUND)
-    message(FATAL_ERROR "Libosmocodec required to compile gr-gsm")
-endif()
+#if(NOT CPPUNIT_FOUND)
+#    message(FATAL_ERROR "CppUnit required to compile gr-gsm")
+#endif()
+#if(NOT LIBOSMOCORE_FOUND)
+#    message(FATAL_ERROR "Libosmocore required to compile gr-gsm")
+#endif()
+#if(NOT LIBOSMOCODEC_FOUND)
+#    message(FATAL_ERROR "Libosmocodec required to compile gr-gsm")
+#endif()
 #if(NOT LIBOSMOCODING_FOUND)
 #    message(FATAL_ERROR "Libosmocoding required to compile gr-gsm")
 #endif()
@@ -179,7 +179,8 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CPPUNIT_INCLUDE_DIRS}
     ${GNURADIO_ALL_INCLUDE_DIRS}
-    ${LIBOSMOCORE_INCLUDE_DIR}
+#    ${LIBOSMOCORE_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/lib/decoding
 )
 
 link_directories(
