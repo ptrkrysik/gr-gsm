@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#define GSM_MACBLOCK_LEN 23
+
 #include <osmocom/core/bits.h>
 #include <osmocom/core/conv.h>
 //#include <osmocom/core/utils.h>
@@ -36,8 +38,8 @@
 #include <osmocom/core/endian.h>
 
 //#include <osmocom/gsm/protocol/gsm_04_08.h>
-#include <osmocom/gprs/protocol/gsm_04_60.h>
-#include <osmocom/gprs/gprs_rlc.h>
+/*#include <osmocom/gprs/protocol/gsm_04_60.h>*/
+/*#include <osmocom/gprs/gprs_rlc.h>*/
 
 #include <osmocom/gsm/gsm0503.h>
 #include <osmocom/codec/codec.h>
@@ -131,14 +133,14 @@
 #define EGPRS_DATA_C1		612
 #define EGPRS_DATA_C2		EGPRS_DATA_C1
 
-/*! union across the three different EGPRS Uplink header types */
+/*! union across the three different EGPRS Uplink header types *
 union gprs_rlc_ul_hdr_egprs {
 	struct gprs_rlc_ul_header_egprs_1 type1;
 	struct gprs_rlc_ul_header_egprs_2 type2;
 	struct gprs_rlc_ul_header_egprs_3 type3;
 };
 
-/*! union across the three different EGPRS Downlink header types */
+/*! union across the three different EGPRS Downlink header types *
 union gprs_rlc_dl_hdr_egprs {
 	struct gprs_rlc_dl_header_egprs_1 type1;
 	struct gprs_rlc_dl_header_egprs_2 type2;
@@ -305,13 +307,13 @@ int gsm0503_xcch_encode(ubit_t *bursts, const uint8_t *l2_data)
  *  \param[out] usf_p uplink stealing flag
  *  \param[out] n_errors number of detected bit-errors
  *  \param[out] n_bits_total total number of dcoded bits
- *  \returns 0 on success; negative on error */
+ *  \returns 0 on success; negative on error *
 int gsm0503_pdtch_decode(uint8_t *l2_data, const sbit_t *bursts, uint8_t *usf_p,
 	int *n_errors, int *n_bits_total)
 {
 	sbit_t iB[456], cB[676], hl_hn[8];
 	ubit_t conv[456];
-	int i, j, k, rv, best = 0, cs = 0, usf = 0; /* make GCC happy */
+	int i, j, k, rv, best = 0, cs = 0, usf = 0; /* make GCC happy *
 
 	for (i = 0; i < 4; i++)
 		gsm0503_xcch_burst_unmap(&iB[i * 114], &bursts[i * 116],
@@ -454,7 +456,7 @@ int gsm0503_pdtch_decode(uint8_t *l2_data, const sbit_t *bursts, uint8_t *usf_p,
 
 	return -1;
 }
-
+*/
 
 /*! GPRS DL message encoding
  *  \param[out] bursts caller-allocated buffer for unpacked burst bits
@@ -479,7 +481,7 @@ int gsm0503_pdtch_encode(ubit_t *bursts, const uint8_t *l2_data, uint8_t l2_len)
 		hl_hn = gsm0503_pdtch_hl_hn_ubit[0];
 
 		break;
-	case 34:
+	/*case 34:
 		osmo_pbit2ubit_ext(conv, 3, l2_data, 0, 271, 1);
 		usf = l2_data[0] & 0x7;
 
@@ -514,7 +516,7 @@ int gsm0503_pdtch_encode(ubit_t *bursts, const uint8_t *l2_data, uint8_t l2_len)
 
 		hl_hn = gsm0503_pdtch_hl_hn_ubit[2];
 
-		break;
+		break;*/
 	case 54:
 		osmo_pbit2ubit_ext(cB, 9, l2_data, 0, 431, 1);
 		usf = l2_data[0] & 0x7;
@@ -1889,7 +1891,7 @@ static inline void rach_apply_bsic(ubit_t *d, uint8_t bsic, uint8_t start)
 	for (i = 0; i < 6; i++)
 		d[start + i] ^= ((bsic >> (5 - i)) & 1);
 }
-
+/*
 static inline int16_t rach_decode_ber(const sbit_t *burst, uint8_t bsic, bool is_11bit,
 				      int *n_errors, int *n_bits_total)
 {
@@ -1910,12 +1912,13 @@ static inline int16_t rach_decode_ber(const sbit_t *burst, uint8_t bsic, bool is
 
 	return is_11bit ? osmo_load16le(ra) : ra[0];
 }
+*/
 
 /*! Decode the Extended (11-bit) RACH according to 3GPP TS 45.003
  *  \param[out] ra output buffer for RACH data
  *  \param[in] burst Input burst data
  *  \param[in] bsic BSIC used in this cell
- *  \returns 0 on success; negative on error (e.g. CRC error) */
+ *  \returns 0 on success; negative on error (e.g. CRC error) *
 int gsm0503_rach_ext_decode(uint16_t *ra, const sbit_t *burst, uint8_t bsic)
 {
 	int16_t r = rach_decode_ber(burst, bsic, true, NULL, NULL);
@@ -1932,7 +1935,7 @@ int gsm0503_rach_ext_decode(uint16_t *ra, const sbit_t *burst, uint8_t bsic)
  *  \param[out] ra output buffer for RACH data
  *  \param[in] burst Input burst data
  *  \param[in] bsic BSIC used in this cell
- *  \returns 0 on success; negative on error (e.g. CRC error) */
+ *  \returns 0 on success; negative on error (e.g. CRC error) *
 int gsm0503_rach_decode(uint8_t *ra, const sbit_t *burst, uint8_t bsic)
 {
 	int16_t r = rach_decode_ber(burst, bsic, false, NULL, NULL);
@@ -1949,7 +1952,7 @@ int gsm0503_rach_decode(uint8_t *ra, const sbit_t *burst, uint8_t bsic)
  *  \param[in] bsic BSIC used in this cell
  *  \param[out] n_errors Number of detected bit errors
  *  \param[out] n_bits_total Total number of bits
- *  \returns 0 on success; negative on error (e.g. CRC error) */
+ *  \returns 0 on success; negative on error (e.g. CRC error) *
 int gsm0503_rach_ext_decode_ber(uint16_t *ra, const sbit_t *burst, uint8_t bsic,
 				int *n_errors, int *n_bits_total)
 {
@@ -1967,7 +1970,7 @@ int gsm0503_rach_ext_decode_ber(uint16_t *ra, const sbit_t *burst, uint8_t bsic,
  *  \param[in] bsic BSIC used in this cell
  *  \param[out] n_errors Number of detected bit errors
  *  \param[out] n_bits_total Total number of bits
- *  \returns 0 on success; negative on error (e.g. CRC error) */
+ *  \returns 0 on success; negative on error (e.g. CRC error) *
 int gsm0503_rach_decode_ber(uint8_t *ra, const sbit_t *burst, uint8_t bsic,
 			    int *n_errors, int *n_bits_total)
 {
@@ -1985,7 +1988,7 @@ int gsm0503_rach_decode_ber(uint8_t *ra, const sbit_t *burst, uint8_t bsic,
  *  \param[out] burst Caller-allocated output burst buffer
  *  \param[in] ra Input RACH data
  *  \param[in] bsic BSIC used in this cell
- *  \returns 0 on success; negative on error */
+ *  \returns 0 on success; negative on error *
 int gsm0503_rach_encode(ubit_t *burst, const uint8_t *ra, uint8_t bsic)
 {
 	return gsm0503_rach_ext_encode(burst, *ra, bsic, false);
@@ -1996,7 +1999,7 @@ int gsm0503_rach_encode(ubit_t *burst, const uint8_t *ra, uint8_t bsic)
  *  \param[in] ra11 Input RACH data
  *  \param[in] bsic BSIC used in this cell
  *  \param[in] is_11bit whether given RA is 11 bit or not
- *  \returns 0 on success; negative on error */
+ *  \returns 0 on success; negative on error *
 int gsm0503_rach_ext_encode(ubit_t *burst, uint16_t ra11, uint8_t bsic, bool is_11bit)
 {
 	ubit_t conv[17];

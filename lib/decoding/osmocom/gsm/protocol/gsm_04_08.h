@@ -939,8 +939,8 @@ struct gsm48_rr_status {
 #define GSM48_PDISC_USSD	0x11
 
 extern const struct value_string gsm48_pdisc_names[];
-static inline const char *gsm48_pdisc_name(uint8_t val)
-{ return get_value_string(gsm48_pdisc_names, val); }
+/*static inline const char *gsm48_pdisc_name(uint8_t val)
+{ return get_value_string(gsm48_pdisc_names, val); }*/
 
 bool gsm48_hdr_gmm_cipherable(const struct gsm48_hdr *hdr);
 
