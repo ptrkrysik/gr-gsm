@@ -38,7 +38,7 @@ extern const struct osmo_conv_code gsm0503_rach;
 
 /*! structure describing Extended RACH (11 bit) convolutional code.
  */
-extern const struct osmo_conv_code gsm0503_rach_ext;
+//extern const struct osmo_conv_code gsm0503_rach_ext;
 
 /*! structure describing SCH convolutional code.
  */
@@ -60,13 +60,13 @@ extern const struct osmo_conv_code gsm0503_cs3;
  * G0 = 1 + D3 + D4
  * G1 = 1 + D + D3 + D4
  */
-extern const struct osmo_conv_code gsm0503_cs2_np;
+//extern const struct osmo_conv_code gsm0503_cs2_np;
 
 /*! structure describing CS3 convolutional code (non-punctured):.
  * G0 = 1 + D3 + D4
  * G1 = 1 + D + D3 + D4
  */
-extern const struct osmo_conv_code gsm0503_cs3_np;
+//extern const struct osmo_conv_code gsm0503_cs3_np;
 
 /*! structure describing TCH/AFS 12.2 kbits convolutional code:.
  * 250 bits block, rate 1/2, punctured
