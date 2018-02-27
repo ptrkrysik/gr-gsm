@@ -23,7 +23,7 @@
 #include <string.h>
 #include "gsm_constants.h"
 
-#include "osmocom/coding/gsm0503_coding.h"
+#include <osmocom/coding/gsm0503_coding.h>
 #include <osmocom/core/utils.h>
 
 static int ubits2sbits(ubit_t *ubits, sbit_t *sbits, int count)
