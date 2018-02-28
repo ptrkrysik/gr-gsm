@@ -23,6 +23,7 @@
 #include <string.h>
 #include "gsm_constants.h"
 
+#include <stdbool.h>
 #include <osmocom/coding/gsm0503_coding.h>
 #include <osmocom/core/utils.h>
 
