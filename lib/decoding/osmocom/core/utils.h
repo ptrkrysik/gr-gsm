@@ -30,9 +30,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define __attribute__(_arg_)
-#define __deprecated__
-
 /*! A mapping between human-readable string and numeric value */
 struct value_string {
 	unsigned int value;	/*!< numeric value */
