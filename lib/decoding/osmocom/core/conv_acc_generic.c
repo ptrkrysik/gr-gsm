@@ -129,8 +129,9 @@ static void gen_path_metrics(int num_states, int16_t *sums,
 			new_sums[i] -= min;
 	}
 	
-	free(new_sums);
 	memcpy(sums, new_sums, num_states * sizeof(int16_t));
+	free(new_sums);
+
 }
 
 /* Not-aligned Memory Allocator */
