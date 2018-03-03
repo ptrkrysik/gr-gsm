@@ -257,6 +257,12 @@ class radio_if(gr.top_block):
 			(self.dict_toggle_sign, 'dict_out'),
 			(self.msg_to_tag_sink, 'msg'))
 
+
+		# Some UHD devices, such as UmTRX, require one
+		# to manually reset the hardware clock
+		self.phy_src.set_time_now(uhd.time_spec(0.0))
+		self.phy_sink.set_time_now(uhd.time_spec(0.0))
+
 	def shutdown(self):
 		print("[i] Shutdown Radio interface")
 		self.stop()
