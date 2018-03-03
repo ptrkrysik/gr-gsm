@@ -40,7 +40,7 @@ COPYRIGHT = \
 class Application:
 	# Application variables
 	remote_addr = "127.0.0.1"
-	base_port = 5700
+	base_port = 6700
 
 	# PHY specific
 	phy_sample_rate = 4 * 1625000 / 6
