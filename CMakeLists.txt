@@ -168,6 +168,7 @@ endif()
 ########################################################################
 # Setup the include and linker paths
 ########################################################################
+
 list (APPEND grgsm_include_directories
     ${CMAKE_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}/include
@@ -189,7 +190,7 @@ include_directories(
     ${grgsm_include_directories}
 )
 
-list (APPEND
+list (APPEND grgsm_link_directories
     ${Boost_LIBRARY_DIRS}
     ${CPPUNIT_LIBRARY_DIRS}
     ${GNURADIO_ALL_LIBRARY_DIRS}
