@@ -81,17 +81,22 @@ set(grgsm_link_libraries "")
 list (APPEND grgsm_link_libraries ${Boost_LIBRARIES})
 list (APPEND grgsm_link_libraries ${GNURADIO_ALL_LIBRARIES})
 list (APPEND grgsm_link_libraries ${VOLK_LIBRARIES})
-list (APPEND grgsm_link_libraries ${Boost_LIBRARIES})
 if(WIN32)
-	list (APPEND grgsm_link_libraries wsock32)
-	list (APPEND grgsm_link_libraries ws2_32)
+    list (APPEND grgsm_link_libraries wsock32)
+    list (APPEND grgsm_link_libraries ws2_32)
+endif()
+
+if(LIBOSMOCORE_FOUND AND LIBOSMOCODEC_FOUND)
+    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES})
+    if(LIBOSMOCODING_FOUND)
+        list (APPEND grgsm_link_libraries ${LIBOSMOCODING_LIBRARIES})
+    endif()
 endif()
 
 
+
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm ${grgsm_link_libraries} #${LIBOSMOCORE_LIBRARIES}
-# ${LIBOSMOCODEC_LIBRARIES}
-# ${LIBOSMOCODING_LIBRARIES} 
+target_link_libraries(grgsm ${grgsm_link_libraries}
 # libraries required by plotting.h - have troubles to be installed by pybombs
 #    boost_iostreams
 #    boost_system
