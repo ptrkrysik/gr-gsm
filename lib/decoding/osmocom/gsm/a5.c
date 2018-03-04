@@ -37,7 +37,7 @@
 
 #include <osmocom/gsm/a5.h>
 #include <osmocom/gsm/kasumi.h>
-//#include <osmocom/crypt/auth.h>
+#include <osmocom/crypt/auth.h>
 
 /* Somme OS (like Nuttx) don't have ENOTSUP */
 #ifndef ENOTSUP

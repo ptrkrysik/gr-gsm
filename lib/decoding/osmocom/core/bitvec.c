@@ -36,6 +36,7 @@
  *
  * \file bitvec.c */
 
+#include <stdlib.h>
 #include <errno.h>
 #include <stdint.h>
 #include <string.h>
