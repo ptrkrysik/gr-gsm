@@ -2,6 +2,15 @@
 
 #include <stdbool.h>
 
+#if (defined(_WIN16) || defined(_WIN32) || defined(_WIN64)) && !defined(__WINDOWS__)
+#	define __WINDOWS__
+#endif
+
+#ifdef __WINDOWS__
+#	define __attribute__(_arg_)
+#	define __deprecated__
+#endif
+
 //#include <osmocom/core/backtrace.h>
 //#include <osmocom/core/talloc.h>
 
