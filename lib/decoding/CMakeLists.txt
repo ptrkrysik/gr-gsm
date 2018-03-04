@@ -18,12 +18,11 @@
 # Boston, MA 02110-1301, USA.
 
 if(NOT LIBOSMOCORE_FOUND OR NOT LIBOSMOCODEC_FOUND)
-    message(STATUS "Libosmocore installation not found - compiling local version")
     add_subdirectory(osmocom/core)
     add_subdirectory(osmocom/codec)
     add_subdirectory(osmocom/gsm)
+    add_subdirectory(osmocom/coding)
 elseif(NOT LIBOSMOCODING_FOUND)
-    message(STATUS "Libosmocore found but libosmocoding is missing - compiling local version")
     add_subdirectory(osmocom/coding)
 endif()
 
