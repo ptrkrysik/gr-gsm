@@ -25,6 +25,7 @@ add_sources(
     controlled_fractional_resampler_cc_impl.cc
     controlled_rotator_cc_impl.cc
     extract_cmc_impl.cc
+    extract_assignment_cmd_impl.cc
     extract_immediate_assignment_impl.cc
     extract_system_info_impl.cc
     message_file_sink_impl.cc

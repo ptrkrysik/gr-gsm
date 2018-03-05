@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author (C) 2016 by Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2018 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -21,8 +21,8 @@
  */
 
 
-#ifndef INCLUDED_GSM_EXTRACT_CMC_H
-#define INCLUDED_GSM_EXTRACT_CMC_H
+#ifndef INCLUDED_GSM_EXTRACT_ASSIGNMENT_CMD_H
+#define INCLUDED_GSM_EXTRACT_ASSIGNMENT_CMD_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -36,25 +36,23 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GRGSM_API extract_cmc : virtual public gr::block
+    class GRGSM_API extract_assignment_cmd : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<extract_cmc> sptr;
+      typedef boost::shared_ptr<extract_assignment_cmd> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::extract_cmc.
+       * \brief Return a shared_ptr to a new instance of gsm::extract_assignment_cmd.
        *
-       * To avoid accidental use of raw pointers, gsm::extract_cmc's
+       * To avoid accidental use of raw pointers, gsm::extract_assignment_cmd's
        * constructor is in a private implementation
-       * class. gsm::extract_cmc::make is the public interface for
+       * class. gsm::extract_assignment_cmd::make is the public interface for
        * creating new instances.
        */
       static sptr make();
-      virtual std::vector<int> get_framenumbers() = 0;
-      virtual std::vector<int> get_a5_versions() = 0;
-      virtual std::vector<int> get_start_ciphering() = 0;
+      virtual std::vector<int> get_assignment_commands() = 0;
     };
 
   } // namespace gsm
 } // namespace gr
-#endif /* INCLUDED_GSM_EXTRACT_CMC_H */
+#endif /* INCLUDED_GSM_EXTRACT_ASSIGNMENT_CMD_H */

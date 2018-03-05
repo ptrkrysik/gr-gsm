@@ -56,6 +56,7 @@
 #include "grgsm/misc_utils/burst_file_source.h"
 #include "grgsm/misc_utils/collect_system_info.h"
 #include "grgsm/misc_utils/extract_cmc.h"
+#include "grgsm/misc_utils/extract_assignment_cmd.h"
 #include "grgsm/qa_utils/burst_sink.h"
 #include "grgsm/qa_utils/burst_source.h"
 #include "grgsm/qa_utils/message_source.h"
@@ -133,7 +134,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, msg_to_tag);
 GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
 %include "grgsm/misc_utils/extract_cmc.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
-
+%include "grgsm/misc_utils/extract_assignment_cmd.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, extract_assignment_cmd);
 
 %include "grgsm/qa_utils/burst_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_sink);
