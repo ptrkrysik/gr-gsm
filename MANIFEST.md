@@ -6,6 +6,9 @@ author:
   - Piotr Krysik
 copyright_owner:
   - Piotr Krysik
+  - Roman Khassraf
+  - Vadim Yanitskiy
+  - Pieter Robyns
 dependencies:
   - gnuradio
   - gr-osmosdr
