@@ -105,7 +105,11 @@ namespace gr {
             //convert to soft bits
             ubits2sbits(bursts_u, bursts_s, 116 * 4);
             //decode
-            gsm0503_xcch_decode(result, bursts_s, &n_errors, &n_bits_total);
+            if (-1 == gsm0503_xcch_decode(result, bursts_s, &n_errors, &n_bits_total))
+            {
+                //Possibly an encrypted message
+                return;
+            }
 
             //extract header of the first burst of the four bursts
             pmt::pmt_t first_header_plus_burst = pmt::cdr(d_bursts[0]);

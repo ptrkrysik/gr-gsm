@@ -20,3 +20,4 @@ before_install:
 script:
 #  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
   - docker run -it --rm $IMGNAME /src/tests/scripts/decode.sh
+  - docker run -it --rm $IMGNAME /src/tests/scripts/decrypt.sh
