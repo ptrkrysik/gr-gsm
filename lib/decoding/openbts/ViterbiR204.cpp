@@ -285,8 +285,8 @@ void ViterbiR2O4::decode(const SoftVector &in, BitVector& target)
 		const ViterbiR2O4::vCand *minCost = NULL;
 		while (op<opt) {
 			// Viterbi algorithm
-			assert(match-matchCostTable<(float)sizeof(matchCostTable)/sizeof(matchCostTable[0])-1);
-			assert(mismatch-mismatchCostTable<(float)sizeof(mismatchCostTable)/sizeof(mismatchCostTable[0])-1);
+			assert(match - matchCostTable < ctsz - 1);
+			assert(mismatch - mismatchCostTable < ctsz - 1);
 			minCost = decoder.vstep(*ip, match, mismatch, oCount < oSize);
 			ip += step;
 			match += step;
