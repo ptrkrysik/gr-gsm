@@ -32,5 +32,6 @@ add_sources(
     control_channels_decoder_impl.cc
     tch_f_decoder_impl.cc
     sch.c
+    fire_crc.c
 )
 
