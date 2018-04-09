@@ -21,7 +21,7 @@ RUN cmake .. && \
         # The parallel build sometimes fails when the .grc_gnuradio
         # and .gnuradio directories do not exist
         mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
-        make -j $(nproc) && \
+        make && \
         make install && \
         ldconfig && \
         make test
