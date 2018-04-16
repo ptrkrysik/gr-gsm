@@ -64,7 +64,7 @@ namespace gr {
       void set_resamp_ratio(float resamp_ratio);
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_CONTROLLED_FRACTIONAL_RESAMPLER_CC_IMPL_H */

@@ -77,6 +77,7 @@ GR_PYTHON_INSTALL(
 	${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless
     grgsm_scanner
     grgsm_decode
+    grgsm_trx
     DESTINATION bin
 )
 

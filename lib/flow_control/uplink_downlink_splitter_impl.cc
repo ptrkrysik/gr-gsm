@@ -30,7 +30,7 @@
 #include <grgsm/endian.h>
 #define BURST_SIZE 148
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     uplink_downlink_splitter::sptr
     uplink_downlink_splitter::make()
@@ -71,6 +71,6 @@ namespace gr {
     uplink_downlink_splitter_impl::~uplink_downlink_splitter_impl()
     {
     }
-  } /* namespace grgsm */
+  } /* namespace gsm */
 } /* namespace gr */
 

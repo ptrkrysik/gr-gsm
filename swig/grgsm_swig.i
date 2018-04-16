@@ -23,6 +23,9 @@
 
 #define GRGSM_API
 
+%include <std_pair.i>
+%template(pairud) std::pair<unsigned long long,double>;
+
 %include "gnuradio.i"			// the common stuff
 
 //load generated python docstrings
@@ -44,6 +47,7 @@
 #include "grgsm/flow_control/burst_timeslot_filter.h"
 #include "grgsm/flow_control/burst_sdcch_subslot_filter.h"
 #include "grgsm/flow_control/burst_fnr_filter.h"
+#include "grgsm/flow_control/burst_type_filter.h"
 #include "grgsm/flow_control/dummy_burst_filter.h"
 #include "grgsm/flow_control/uplink_downlink_splitter.h"
 #include "grgsm/misc_utils/bursts_printer.h"
@@ -65,6 +69,12 @@
 #include "grgsm/misc_utils/message_file_source.h"
 #include "grgsm/misc_utils/msg_to_tag.h"
 #include "grgsm/misc_utils/controlled_fractional_resampler_cc.h"
+//#include "grgsm/misc_utils/time_spec.h"
+#include "grgsm/misc_utils/fn_time.h"
+#include "grgsm/transmitter/txtime_setter.h"
+#include "grgsm/transmitter/preprocess_tx_burst.h"
+#include "grgsm/transmitter/gen_test_ab.h"
+#include "grgsm/misc_utils/trx_burst_if.h"
 %}
 
 %include "constants.i"
@@ -100,10 +110,12 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_timeslot_filter);
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_sdcch_subslot_filter);
 %include "grgsm/flow_control/burst_fnr_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_fnr_filter);
+%include "grgsm/flow_control/burst_type_filter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, burst_type_filter);
 %include "grgsm/flow_control/dummy_burst_filter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, dummy_burst_filter);
 %include "grgsm/flow_control/uplink_downlink_splitter.h"
-GR_SWIG_BLOCK_MAGIC2(grgsm, uplink_downlink_splitter);
+GR_SWIG_BLOCK_MAGIC2(gsm, uplink_downlink_splitter);
 
 
 %include "grgsm/misc_utils/bursts_printer.h"
@@ -145,3 +157,38 @@ GR_SWIG_BLOCK_MAGIC2(gsm, burst_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 %include "grgsm/qa_utils/message_sink.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
+
+//#pragma SWIG nowarn=319
+//%include "grgsm/misc_utils/time_spec.h"
+
+//%extend gr::gsm::time_spec_t{
+//    gr::gsm::time_spec_t __add__(const gr::gsm::time_spec_t &what)
+//    {
+//        gr::gsm::time_spec_t temp = *self;
+//        temp += what;
+//        return temp;
+//    }
+//    gr::gsm::time_spec_t __sub__(const gr::gsm::time_spec_t &what)
+//    {
+//        gr::gsm::time_spec_t temp = *self;
+//        temp -= what;
+//        return temp;
+//    }
+//    bool __eq__(const gr::gsm::time_spec_t &what)
+//    {
+//      return (what == *self);
+//    }
+//};
+
+%include "grgsm/misc_utils/fn_time.h"
+
+%include "grgsm/transmitter/txtime_setter.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);
+%include "grgsm/transmitter/preprocess_tx_burst.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, preprocess_tx_burst);
+
+%include "grgsm/transmitter/gen_test_ab.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, gen_test_ab);
+
+%include "grgsm/misc_utils/trx_burst_if.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, trx_burst_if);

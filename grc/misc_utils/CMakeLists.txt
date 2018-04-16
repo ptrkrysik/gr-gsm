@@ -32,6 +32,9 @@ install(FILES
     gsm_burst_file_source.xml
     gsm_message_file_sink.xml
     gsm_message_file_source.xml
+    gsm_trx_burst_if.xml
     gsm_msg_to_tag.xml
-    gsm_controlled_fractional_resampler_cc.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_controlled_fractional_resampler_cc.xml
+    gsm_burst_to_fn_time.xml
+    DESTINATION share/gnuradio/grc/blocks
 )

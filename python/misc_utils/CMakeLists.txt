@@ -22,5 +22,7 @@ GR_PYTHON_INSTALL(
     arfcn.py
     clock_offset_corrector_tagged.py
     hier_block.py 
-    fn_time.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    fn_time.py
+    burst_to_fn_time.py
+    DESTINATION ${GR_PYTHON_DIR}/grgsm
 )

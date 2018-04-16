@@ -28,7 +28,7 @@
 #include <gnuradio/block.h>
 
 namespace gr {
-  namespace grgsm {
+  namespace gsm {
 
     /*!
      * \brief <+description of block+>
@@ -51,7 +51,7 @@ namespace gr {
       static sptr make();
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_H */

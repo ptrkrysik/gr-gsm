@@ -23,4 +23,5 @@ add_sources(
     receiver_config.cc
     receiver_impl.cc
     viterbi_detector.cc
+    time_sample_ref.cc
 )
