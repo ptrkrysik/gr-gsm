@@ -26,6 +26,8 @@ SET(PYTHONPATH
 	${CMAKE_SOURCE_DIR}/python/misc_utils
 	${CMAKE_SOURCE_DIR}/python/demapping
 	${CMAKE_SOURCE_DIR}/python/receiver
+	${CMAKE_SOURCE_DIR}/python/transmitter
+	${CMAKE_SOURCE_DIR}/python/trx
 	${CMAKE_BINARY_DIR}/swig
 	$ENV{PYTHONPATH}
 	)
