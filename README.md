@@ -42,6 +42,10 @@ Credits
 
 *Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels,  decryption block supporting all ciphers used in GSM, blocks for storing and reading GSM bursts, project planning and user support
 
+*Vadim Yanitskiy* - control and data interface for the transceiver, grgsm_trx application
+
+*Vasil Velichkov* - automatic compilation of grc applications, fixes and user support
+
 *Pieter Robyns* \<pieter.robyns (at) uhasselt.be\> - block reversing channel hopping
 
 
