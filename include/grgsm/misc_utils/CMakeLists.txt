@@ -36,6 +36,7 @@ install(FILES
     tmsi_dumper.h
     msg_to_tag.h
     trx_burst_if.h
+    burst_to_fn_time.h
     controlled_fractional_resampler_cc.h 
     time_spec.h
     fn_time.h DESTINATION include/grgsm/misc_utils

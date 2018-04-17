@@ -90,15 +90,14 @@ namespace gr {
     
     void txtime_setter_impl::process_fn_time_reference(pmt::pmt_t msg)
     {
-      pmt::pmt_t not_found = pmt::intern("not_found");
       pmt::pmt_t fn_time, time_hint;
 
       fn_time = pmt::dict_ref(msg,
-        pmt::intern("fn_time"), not_found);
+        pmt::intern("fn_time"), pmt::PMT_NIL);
       time_hint = pmt::dict_ref(msg,
-        pmt::intern("fn_time"), not_found);
+        pmt::intern("time_hint"), pmt::PMT_NIL);
 
-      if (fn_time != not_found) {
+      if (fn_time != pmt::PMT_NIL) {
         uint32_t fn_ref = static_cast<uint32_t>
           (pmt::to_uint64(pmt::car(pmt::car(fn_time))));
         uint32_t ts = static_cast<uint32_t>
@@ -109,7 +108,7 @@ namespace gr {
           pmt::cdr(pmt::cdr(fn_time)));
 
         set_fn_time_reference(fn_ref, ts, time_secs, time_fracs);
-      } else if (time_hint != not_found) {
+      } else if (time_hint != pmt::PMT_NIL) {
         set_time_hint(pmt::to_uint64(pmt::car(fn_time)),
           pmt::to_double(pmt::cdr(fn_time)));
       }

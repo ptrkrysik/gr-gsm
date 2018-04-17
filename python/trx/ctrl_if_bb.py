@@ -62,6 +62,7 @@ class ctrl_if_bb(ctrl_if):
 			if self.tb.trx_started:
 				print("[i] Stopping transceiver...")
 				self.tb.trx_started = False
+				self.tb.set_ta(0)
 				self.tb.stop()
 				self.tb.wait()
 
@@ -143,6 +144,19 @@ class ctrl_if_bb(ctrl_if):
 			meas_dbm = str(self.pm.measure(meas_freq))
 
 			return (0, [meas_dbm])
+
+		# Timing Advance control
+		elif self.verify_cmd(request, "SETTA", 1):
+			print("[i] Recv SETTA cmd")
+
+			# Check TA range
+			ta = int(request[1])
+			if ta < 0 or ta > 63:
+				print("[!] TA value must be in range: 0..63")
+				return -1
+
+			self.tb.set_ta(ta)
+			return 0
 
 		# Misc
 		elif self.verify_cmd(request, "ECHO", 0):
