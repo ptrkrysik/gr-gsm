@@ -73,10 +73,22 @@ print(re.sub('\\W', '_', '${desc} ${reldir}'))"
     add_custom_target(${_target} ALL DEPENDS ${ARGN})
 endfunction(GR_UNIQUE_TARGET)
 
+set(grgsm_flowgraphs "")
+OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
+OPTION(ENABLE_GRGSM_LIVEMON "Compile grgsm_livemon" ON)
+OPTION(ENABLE_GRGSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
+
+if(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
+    list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
+endif(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
+
+if(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
+    list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless)
+endif(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
+
 GR_PYTHON_INSTALL(
     PROGRAMS
-    ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon
-    ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless
+    ${grgsm_flowgraphs}
     grgsm_scanner
     grgsm_decode
     grgsm_trx
