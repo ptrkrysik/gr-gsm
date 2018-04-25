@@ -22,6 +22,7 @@ RUN cmake .. && \
         # and .gnuradio directories do not exist
         mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
         make && \
+        make -j $(nproc) && \
         make install && \
         ldconfig && \
         make test
