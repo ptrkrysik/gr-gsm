@@ -140,7 +140,9 @@ find_package(Libosmocore)
 find_package(Libosmocodec)
 find_package(Libosmocoding)
 
-
+if(NOT PKG_CONFIG_FOUND)
+    message(FATAL_ERROR "pkg-config is required to compile gr-gsm")
+endif()
 if(NOT GNURADIO_RUNTIME_FOUND)
     message(FATAL_ERROR "GnuRadio Runtime required to compile gr-gsm")
 endif()
