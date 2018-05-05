@@ -71,6 +71,7 @@ add_subdirectory(misc_utils)
 add_subdirectory(qa_utils)
 add_subdirectory(receiver)
 add_subdirectory(transmitter)
+add_subdirectory(trx)
 
 ########################################################################
 # Setup library

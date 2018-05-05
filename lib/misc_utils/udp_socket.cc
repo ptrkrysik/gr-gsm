@@ -30,7 +30,7 @@
 #include <pmt/pmt.h>
 
 #include <boost/lexical_cast.hpp>
-#include "udp_socket.h"
+#include "grgsm/misc_utils/udp_socket.h"
 
 using boost::asio::ip::udp;
 

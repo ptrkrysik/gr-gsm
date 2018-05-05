@@ -36,7 +36,6 @@ add_sources(
     time_spec.cc
     fn_time.cc
     udp_socket.cc
-    trx_burst_if_impl.cc
     burst_to_fn_time_impl.cc
 )
 

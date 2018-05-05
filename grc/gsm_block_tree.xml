@@ -30,6 +30,10 @@
       <block>gsm_gen_test_ab</block>
     </cat>
     <cat>
+      <name>Transceiver</name>
+      <block>gsm_trx_burst_if</block>
+    </cat>
+    <cat>
       <name>Logical channels demapping</name>
       <block>gsm_universal_ctrl_chans_demapper</block>
       <block>gsm_bcch_ccch_demapper</block>
@@ -75,7 +79,6 @@
       <block>gsm_clock_offset_corrector_tagged</block>
       <block>gsm_msg_to_tag</block>
       <block>gsm_tmsi_dumper</block>
-      <block>gsm_trx_burst_if</block>
       <block>gsm_burst_to_fn_time</block>
     </cat>
   </cat>
