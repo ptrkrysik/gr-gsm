@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
+ * @author (C) 2018 by Vasil Velichkov <vvvelichkov@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -21,8 +21,8 @@
  */
 
 
-#ifndef INCLUDED_GSM_TCH_F_DECODER_H
-#define INCLUDED_GSM_TCH_F_DECODER_H
+#ifndef INCLUDED_GSM_TCH_H_DECODER_H
+#define INCLUDED_GSM_TCH_H_DECODER_H
 
 #include <grgsm/api.h>
 #include <gnuradio/block.h>
@@ -30,45 +30,30 @@
 namespace gr {
   namespace gsm {
 
-    enum tch_mode
-    {
-        TCH_AFS12_2,
-        TCH_AFS10_2,
-        TCH_AFS7_95,
-        TCH_AFS7_4,
-        TCH_AFS6_7,
-        TCH_AFS5_9,
-        TCH_AFS5_15,
-        TCH_AFS4_75,
-        TCH_FS,
-        TCH_EFR,
-        TCH_HS,
-    };
-
     /*!
      * \brief <+description of block+>
      * \ingroup gsm
      *
      */
-    class GRGSM_API tch_f_decoder : virtual public gr::block
+    class GRGSM_API tch_h_decoder : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<tch_f_decoder> sptr;
+      typedef boost::shared_ptr<tch_h_decoder> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of gsm::tch_f_decoder.
+       * \brief Return a shared_ptr to a new instance of gsm::tch_h_decoder.
        *
-       * To avoid accidental use of raw pointers, gsm::tch_f_decoder's
+       * To avoid accidental use of raw pointers, gsm::tch_h_decoder's
        * constructor is in a private implementation
-       * class. gsm::tch_f_decoder::make is the public interface for
+       * class. gsm::tch_h_decoder::make is the public interface for
        * creating new instances.
        */
-      static sptr make(tch_mode mode, bool boundary_check=false);
+      static sptr make(unsigned int sub_channel, std::string multi_rate, bool boundary_check=false);
 
     };
 
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_TCH_F_DECODER_H */
+#endif /* INCLUDED_GSM_TCH_H_DECODER_H */
 

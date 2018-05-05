@@ -22,5 +22,7 @@
 ########################################################################
 install(FILES
     control_channels_decoder.h 
-    tch_f_decoder.h DESTINATION include/grgsm/decoding
+    tch_f_decoder.h
+    tch_h_decoder.h
+	DESTINATION include/grgsm/decoding
 )

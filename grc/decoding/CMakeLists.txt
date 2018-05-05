@@ -19,5 +19,7 @@
 
 install(FILES
     gsm_control_channels_decoder.xml 
-    gsm_tch_f_decoder.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_tch_f_decoder.xml
+    gsm_tch_h_decoder.xml
+    DESTINATION share/gnuradio/grc/blocks
 )
