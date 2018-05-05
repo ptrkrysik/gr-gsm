@@ -35,7 +35,6 @@ install(FILES
     message_printer.h
     tmsi_dumper.h
     msg_to_tag.h
-    trx_burst_if.h
     burst_to_fn_time.h
     controlled_fractional_resampler_cc.h 
     time_spec.h
