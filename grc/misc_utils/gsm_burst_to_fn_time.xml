@@ -3,7 +3,7 @@
   <name>Burst to FN time</name>
   <key>gsm_burst_to_fn_time</key>
   <import>import grgsm</import>
-  <make>grgsm.gsm_burst_to_fn_time()</make>
+  <make>grgsm.burst_to_fn_time()</make>
 
   <sink>
     <name>bursts_in</name>
