@@ -38,6 +38,7 @@
 #include "grgsm/receiver/cx_channel_hopper.h"
 #include "grgsm/decoding/control_channels_decoder.h"
 #include "grgsm/decoding/tch_f_decoder.h"
+#include "grgsm/decoding/tch_h_decoder.h"
 #include "grgsm/decryption/decryption.h"
 #include "grgsm/demapping/universal_ctrl_chans_demapper.h"
 #include "grgsm/demapping/tch_f_chans_demapper.h"
@@ -91,6 +92,8 @@ GR_SWIG_BLOCK_MAGIC2(gsm, cx_channel_hopper);
 GR_SWIG_BLOCK_MAGIC2(gsm, control_channels_decoder);
 %include "grgsm/decoding/tch_f_decoder.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, tch_f_decoder);
+%include "grgsm/decoding/tch_h_decoder.h"
+GR_SWIG_BLOCK_MAGIC2(gsm, tch_h_decoder);
 
 %include "grgsm/decryption/decryption.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, decryption);
