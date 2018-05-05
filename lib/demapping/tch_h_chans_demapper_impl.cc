@@ -87,6 +87,7 @@ void tch_h_chans_demapper_impl::filter_tch_chans(pmt::pmt_t msg)
     memcpy(new_msg, header, sizeof(gsmtap_hdr)+BURST_SIZE);
 
     new_hdr->sub_type = (fn_mod13 == 12 ? GSMTAP_CHANNEL_ACCH : 0) | GSMTAP_CHANNEL_TCH_H;
+    new_hdr->sub_slot = d_tch_h_channel;
 
     pmt::pmt_t msg_binary_blob = pmt::make_blob(new_msg,sizeof(gsmtap_hdr)+BURST_SIZE);
     pmt::pmt_t msg_out = pmt::cons(pmt::PMT_NIL, msg_binary_blob);

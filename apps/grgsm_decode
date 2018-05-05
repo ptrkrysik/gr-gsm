@@ -40,6 +40,8 @@ class grgsm_decoder(gr.top_block):
                  a5=1, a5_kc=None,
                  speech_file=None, speech_codec=None,
                  enable_voice_boundary_detection=False,
+                 tch_h_channel=0,
+                 multi_rate=0,
                  verbose=False,
                  print_bursts=False, ppm=0):
 
@@ -100,11 +102,16 @@ class grgsm_decoder(gr.top_block):
             self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
             self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
+        elif self.chan_mode == 'TCHH':
+            self.tch_h_demapper = grgsm.tch_h_chans_demapper(self.timeslot, tch_h_channel)
+            self.tch_h_decoder = grgsm.tch_h_decoder(tch_h_channel, multi_rate, enable_voice_boundary_detection)
+            self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
         if self.kc != [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]:
             self.decryption = grgsm.decryption(self.kc, self.a5)
             self.cch_decoder_decrypted = grgsm.control_channels_decoder()
-            if self.chan_mode == 'TCHF':
+            if self.chan_mode in ('TCHF', 'TCHH'):
                 self.decryption_tch_sacch = grgsm.decryption(self.kc, self.a5)
 
         self.cch_decoder = grgsm.control_channels_decoder()
@@ -209,12 +216,32 @@ class grgsm_decoder(gr.top_block):
             if self.verbose:
                 self.msg_connect(self.tch_f_decoder, "msgs", self.message_printer, "msgs")
                 self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
-            
+
+        elif self.chan_mode == 'TCHH':
+            self.msg_connect(self.timeslot_filter, "out", self.tch_h_demapper, "bursts")
+            if self.kc != [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]:
+                self.msg_connect(self.tch_h_demapper, "acch_bursts", self.decryption_tch_sacch, "bursts")
+                self.msg_connect(self.tch_h_demapper, "tch_bursts", self.decryption, "bursts")
+
+                self.msg_connect(self.decryption_tch_sacch, "bursts", self.cch_decoder, "bursts")
+                self.msg_connect(self.decryption, "bursts", self.tch_h_decoder, "bursts")
+            else:
+                self.msg_connect(self.tch_h_demapper, "acch_bursts", self.cch_decoder, "bursts")
+                self.msg_connect(self.tch_h_demapper, "tch_bursts", self.tch_h_decoder, "bursts")
+
+            self.msg_connect(self.tch_h_decoder, "msgs", self.socket_pdu, "pdus")
+            self.msg_connect(self.cch_decoder, "msgs", self.socket_pdu, "pdus")
+            self.msg_connect(self.tch_h_decoder, "voice", self.tch_f_pdu_to_tagged_stream, "pdus")
+            self.connect((self.tch_f_pdu_to_tagged_stream, 0), (self.tch_f_file_sink, 0))
+
+            if self.verbose:
+                self.msg_connect(self.tch_h_decoder, "msgs", self.message_printer, "msgs")
+                self.msg_connect(self.cch_decoder, "msgs", self.message_printer, "msgs")
 
 if __name__ == '__main__':
 
     # List of channel configurations
-    channel_modes = ['BCCH', 'BCCH_SDCCH4', 'SDCCH8', 'TCHF']
+    channel_modes = ['BCCH', 'BCCH_SDCCH4', 'SDCCH8', 'TCHF', 'TCHH']
 
     # mapping options to grgsm's enums
     tch_codecs = collections.OrderedDict([
@@ -265,7 +292,7 @@ if __name__ == '__main__':
                       type='choice', choices=channel_modes,
                       help="Channel mode. Valid options are 'BCCH' (Non-combined C0), "
                            "'BCCH_SDCCH4'(Combined C0), 'SDCCH8' (Stand-alone control channel) "
-                           "and 'TCHF' (Traffic Channel, Full rate) ")
+                           "'TCHF' (Traffic Channel, Full rate), 'TCHH' (Traffic Channel, Half rate) ")
     parser.add_option("-t", "--timeslot", dest="timeslot", type="intx", default=0,
                       help="Timeslot to decode [default=%default]")
     parser.add_option("-u", "--subslot", dest="subslot", type="intx",
@@ -313,7 +340,12 @@ if __name__ == '__main__':
                            help="TCH-F speech codec [default=%default]. "
                                 "Valid options are " + ", ".join(tch_codecs.keys()))
     tch_options.add_option("-o", "--output-tch", dest="speech_output_file", default="/tmp/speech.au.gsm",
-                           help="TCH/F speech output file [default=%default].")
+                           help="tch/f speech output file [default=%default].")
+    tch_options.add_option("--sub-channel", dest="tch_h_channel", default="0", type='intx',
+                           help="TCH/H sub-channel. [default=0]")
+    tch_options.add_option("--multi-rate", dest="multi_rate", default="", type='string',
+                           help="The MultiRrate configuration element from the Assignment Command message. "
+                           "Example: 28111a40. See 3GPP TS 44.018 - 10.5.2.21aa MultiRate configuration")
     tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true", default=False,
                            help="Enable voice boundary detection for traffic channels. This can help reduce noice in the output.")
     parser.add_option_group(tch_options)
@@ -358,6 +390,8 @@ if __name__ == '__main__':
                           a5=options.a5, a5_kc=kc,
                           speech_file=options.speech_output_file, speech_codec=tch_codecs.get(options.speech_codec),
                           enable_voice_boundary_detection=options.enable_voice_boundary_detection,
+                          tch_h_channel=options.tch_h_channel,
+                          multi_rate=options.multi_rate,
                           verbose=options.verbose,
                           print_bursts=options.print_bursts, ppm=options.ppm)
 
