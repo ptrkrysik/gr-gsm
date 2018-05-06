@@ -74,7 +74,7 @@
 #include "grgsm/transmitter/txtime_setter.h"
 #include "grgsm/transmitter/preprocess_tx_burst.h"
 #include "grgsm/transmitter/gen_test_ab.h"
-#include "grgsm/misc_utils/trx_burst_if.h"
+#include "grgsm/trx/trx_burst_if.h"
 %}
 
 %include "constants.i"
@@ -148,7 +148,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, controlled_fractional_resampler_cc);
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_cmc);
 %include "grgsm/misc_utils/extract_assignment_cmd.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, extract_assignment_cmd);
-%include "grgsm/misc_utils/trx_burst_if.h"
+%include "grgsm/trx/trx_burst_if.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, trx_burst_if);
 %include "grgsm/misc_utils/burst_to_fn_time.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, burst_to_fn_time);
@@ -163,6 +163,7 @@ GR_SWIG_BLOCK_MAGIC2(gsm, message_source);
 GR_SWIG_BLOCK_MAGIC2(gsm, message_sink);
 
 %include "grgsm/misc_utils/fn_time.h"
+
 %include "grgsm/transmitter/txtime_setter.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, txtime_setter);
 %include "grgsm/transmitter/preprocess_tx_burst.h"

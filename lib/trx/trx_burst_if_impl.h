@@ -26,7 +26,7 @@
 #include <stddef.h>
 
 #include <grgsm/gsmtap.h>
-#include <grgsm/misc_utils/trx_burst_if.h>
+#include <grgsm/trx/trx_burst_if.h>
 
 namespace gr {
   namespace gsm {
