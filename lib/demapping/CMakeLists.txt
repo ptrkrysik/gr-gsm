@@ -19,6 +19,7 @@
 
 add_sources(
     tch_f_chans_demapper_impl.cc
+    tch_h_chans_demapper_impl.cc
     universal_ctrl_chans_demapper_impl.cc
 )
 

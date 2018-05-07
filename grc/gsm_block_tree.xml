@@ -40,6 +40,7 @@
       <block>gsm_bcch_ccch_sdcch4_demapper</block>
       <block>gsm_sdcch8_demapper</block>
       <block>gsm_tch_f_chans_demapper</block>
+      <block>gsm_tch_h_chans_demapper</block>
     </cat>
     <cat>
       <name>Decryption</name>
