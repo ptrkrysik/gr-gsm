@@ -35,6 +35,7 @@ add_sources(
     tmsi_dumper_impl.cc
     time_spec.cc
     fn_time.cc
+    freq_hopping_utils.cc
     udp_socket.cc
     burst_to_fn_time_impl.cc
 )

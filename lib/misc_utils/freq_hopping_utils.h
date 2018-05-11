@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* @file
- * @author (C) 2015 by Pieter Robyns <pieter.robyns@uhasselt.be>
+ * @author Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  * 
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -20,31 +20,17 @@
  * 
  */
 
-#ifndef INCLUDED_GSM_CX_CHANNEL_HOPPER_IMPL_H
-#define INCLUDED_GSM_CX_CHANNEL_HOPPER_IMPL_H
-
-#include <grgsm/receiver/cx_channel_hopper.h>
-#include <vector>
+#ifndef INCLUDED_FREQ_HOPPING_UTILS_H
+#define INCLUDED_FREQ_HOPPING_UTILS_H
 
 namespace gr {
   namespace gsm {
-    class cx_channel_hopper_impl : public cx_channel_hopper
-    {
-     private:
-      std::vector<int> d_ma; // Mobile Allocation list. Contains all channels that are used while channel hopping
-      int d_maio; // Mobile Allocation Index Offset
-      int d_hsn; // Hopping Sequence Number
-      int d_narfcn; // Length of d_ma
-
-      void assemble_bursts(pmt::pmt_t msg);
-
-     public:
-      cx_channel_hopper_impl(const std::vector<int> &ma, int maio, int hsn);
-      ~cx_channel_hopper_impl();
-    };
-
+    /*
+     * Slow Frequency Hopping (SFH) MAI calculation based
+     * on airprobe-hopping by Bogdan Diaconescu.
+     */
+    int calculate_ma_sfh(int maio, int hsn, int n, int fn);
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_CX_CHANNEL_HOPPER_IMPL_H */
-
+#endif /* INCLUDED_FREQ_HOPPING_UTILS_H */
