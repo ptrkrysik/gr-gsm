@@ -21,6 +21,7 @@
 # Install public header files
 ########################################################################
 install(FILES
+    freq_hopping.h
     trx_burst_if.h
     DESTINATION include/grgsm/trx
 )
