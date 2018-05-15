@@ -293,8 +293,29 @@ namespace gr {
                     // check if this is a call control message
                     if ((frameBuffer[3] & 0x0f) == 0x03)
                     {
+                        // Alerting
+                        if ((frameBuffer[4] & 0x3f) == 0x01)
+                        {
+                            if ((frameBuffer[5] == 0x1e) && //element id
+                                    (frameBuffer[6] == 2) && //length
+                                    ((frameBuffer[8] & 0x7f) == 0x08))
+                            {
+                                //.000 1000 = Progress description: In-band information or appropriate pattern now available (8)
+                                d_boundary_decode = true;
+                            }
+                        }
+                        // Progress
+                        else if ((frameBuffer[4] & 0x3f) == 0x03)
+                        {
+                            if ((frameBuffer[5] == 2) && //length
+                                    (frameBuffer[7] & 0x7f) == 0x08)
+                            {
+                                //.000 1000 = Progress description: In-band information or appropriate pattern now available (8)
+                                d_boundary_decode = true;
+                            }
+                        }
                         // Connect specified in GSM 04.08, 9.3.5
-                        if ((frameBuffer[4] & 0x3f) == 0x07)
+                        else if ((frameBuffer[4] & 0x3f) == 0x07)
                         {
                             d_boundary_decode = true;
                         }
