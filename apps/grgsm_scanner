@@ -209,7 +209,7 @@ class wideband_scanner(gr.top_block):
         # if no file name is given process data from rtl_sdr source
         print "Args=", args
         self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " + args)
-        self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len))
+        #self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
         self.rtlsdr_source.set_sample_rate(sample_rate)
 
         # capture half of GSM channel lower than channel center (-0.1MHz)
