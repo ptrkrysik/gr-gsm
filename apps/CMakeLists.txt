@@ -19,7 +19,7 @@
 
 include(GrPython)
 add_subdirectory(helpers)
-add_subdirectory(apps_data)
+#add_subdirectory(apps_data)
 
 SET(PYTHONPATH
 	${CMAKE_SOURCE_DIR}/python
