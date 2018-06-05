@@ -24,4 +24,4 @@ RUN cmake .. && \
         make && \
         make install && \
         ldconfig && \
-        make test
+        make CTEST_OUTPUT_ON_FAILURE=1 test
