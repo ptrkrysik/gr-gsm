@@ -210,7 +210,7 @@ namespace gr {
         void fcch_search_handler(gr_complex *input, int noutput_items);
         void sch_search_handler(gr_complex *input, int noutput_items);
         void synchronized_handler(gr_complex *input,
-            gr_vector_const_void_star &input_items, int noutput_items);
+            gr_vector_const_void_star &input_items, int noutput_items,int input_nr);
 
      public:
         receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
