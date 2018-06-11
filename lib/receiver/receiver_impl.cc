@@ -192,7 +192,7 @@ namespace gr
         sch_search_handler(input, noutput_items);
         break;
       case synchronized:
-	synchronized_handler(input, input_items, noutput_items);
+	synchronized_handler(input, input_items, noutput_items,0);
 	size_t inputs_to_process = d_cell_allocation.size();
 	if (d_process_uplink)
         	inputs_to_process *= 2;
@@ -286,7 +286,7 @@ namespace gr
 
     void
     receiver_impl::synchronized_handler(gr_complex *input,
-      gr_vector_const_void_star &input_items, int noutput_items)
+      gr_vector_const_void_star &input_items, int noutput_items,int input_nr)
     {
       /**
        * In this state receiver is synchronized and it processes
