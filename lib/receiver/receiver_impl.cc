@@ -303,7 +303,8 @@ namespace gr
         inputs_to_process *= 2;*/
 
       /* Process all connected inputs */
-      for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
+      //for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) 
+      {
         input = (gr_complex *) input_items[input_nr];
         double signal_pwr = 0;
 
