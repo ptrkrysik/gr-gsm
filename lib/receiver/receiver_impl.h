@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2009-2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -25,16 +25,20 @@
 
 #include <grgsm/receiver/receiver.h>
 #include <grgsm/gsmtap.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 #include <receiver_config.h>
 #include <vector>
+#include "time_sample_ref.h"
 
 namespace gr {
   namespace gsm {
     class receiver_impl : public receiver
     {
      private:
-        unsigned int d_c0_burst_start;
+        unsigned int d_samples_consumed;
+        bool d_rx_time_received;
+        time_sample_ref d_time_samp_ref;
+        int d_c0_burst_start;
         float d_c0_signal_dbm;
         
         /**@name Configuration of the receiver */
@@ -51,7 +55,6 @@ namespace gr {
         gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal and dummy burst
 
         float d_last_time;
-        bool freq_offset_tag_in_fcch; ///< frequency offset tag presence
 
         /** Counts samples consumed by the receiver
          *
@@ -64,6 +67,7 @@ namespace gr {
 
         /**@name Variables used to store result of the find_fcch_burst fuction */
         //@{
+        bool d_freq_offset_tag_in_fcch; ///< frequency offset tag presence
         unsigned d_fcch_start_pos; ///< position of the first sample of the fcch burst
         float d_freq_offset_setting; ///< frequency offset set in frequency shifter located upstream
         //@}
@@ -195,25 +199,30 @@ namespace gr {
          * @param burst_binary - content of the burst
          * @b_type - type of the burst
          */
-        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, unsigned int input_nr);
+        void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, size_t input_nr, unsigned int burst_start=-1);
 
         /**
          * Configures burst types in different channels
          */
         void configure_receiver();
-        
-        
+
+        /* State machine handlers */
+        void fcch_search_handler(gr_complex *input, int noutput_items);
+        void sch_search_handler(gr_complex *input, int noutput_items);
+        void synchronized_handler(gr_complex *input,
+            gr_vector_const_void_star &input_items, int noutput_items);
 
      public:
-       receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
-      ~receiver_impl();
-      void synchronized_handler(gr_complex *input, gr_vector_const_void_star &input_items, int noutput_items, int input_nr);
-      int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
-      virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
-      virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
-      virtual void reset();
+        receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
+        ~receiver_impl();
+      
+        int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);
+        virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
+        virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
+        virtual void reset();
     };
   } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GSM_RECEIVER_IMPL_H */
+
