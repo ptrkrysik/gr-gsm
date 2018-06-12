@@ -196,10 +196,15 @@ namespace gr
 	size_t inputs_to_process = d_cell_allocation.size();
 	if (d_process_uplink)
         	inputs_to_process *= 2;
+	boost::thread *threads[inputs_to_process];	      
 	for(int input_nr=1;input_nr<inputs_to_process;input_nr++){
-		boost::thread t1(&receiver_impl::synchronized_handler,this,input, input_items, noutput_items, input_nr);
-		usleep(200);
+		class receiver_impl *r1=  new receiver_impl(d_OSR, d_cell_allocation, d_tseq_nums, d_process_uplink);
+		boost::thread t1(&receiver_impl::synchronized_handler,r1,input, input_items, noutput_items, input_nr);
 	}
+	for(int input_nr=1;input_nr<inputs_to_process-1;input_nr++){
+        		threads[input_nr]->join();
+        		delete threads[input_nr];
+        }		      
         break;
       }
 
