@@ -199,6 +199,20 @@ namespace gr
 	boost::thread *threads[inputs_to_process];	      
 	for(int input_nr=1;input_nr<inputs_to_process;input_nr++){
 		class receiver_impl *r1=  new receiver_impl(d_OSR, d_cell_allocation, d_tseq_nums, d_process_uplink);
+		r1->d_c0_burst_start = this->d_c0_burst_start;
+        	r1->d_c0_signal_dbm = this->d_c0_signal_dbm;
+        	r1->d_process_uplink = this->d_process_uplink;
+        	r1->d_signal_dbm = this->d_signal_dbm;
+        	r1->d_tseq_nums = this->d_tseq_nums;
+        	r1->d_cell_allocation = this->d_cell_allocation;
+        	r1->d_counter = this->d_counter;
+        	r1->d_fcch_start_pos = this->d_fcch_start_pos;
+        	r1->d_freq_offset_vals = this->d_freq_offset_vals;
+        	r1->d_ncc = this->d_ncc;
+        	r1->d_bcc = this->d_bcc;
+        	r1->d_state = this->d_state;
+        	r1->d_failed_sch = this->d_failed_sch;
+        	r1->d_channel_conf = this->d_channel_conf;
 		boost::thread t1(&receiver_impl::synchronized_handler,r1,input, input_items, noutput_items, input_nr);
 	}
 	for(int input_nr=1;input_nr<inputs_to_process-1;input_nr++){
