@@ -527,7 +527,7 @@ namespace gr
           break;
         }
 
-        if (input_nr == input_items.size() - 1) {
+        //if (input_nr == input_items.size() - 1) {
           /* Go to the next burst */
           d_burst_nr++;
 
@@ -535,7 +535,7 @@ namespace gr
           to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();
 //          consume_each(to_consume);
           d_samples_consumed += to_consume;
-        }
+        //}
       }
     }
 
