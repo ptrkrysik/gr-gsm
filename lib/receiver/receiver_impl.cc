@@ -213,7 +213,7 @@ namespace gr
         	r1->d_state = this->d_state;
         	r1->d_failed_sch = this->d_failed_sch;
         	r1->d_channel_conf = this->d_channel_conf;
-		boost::thread t1(&receiver_impl::synchronized_handler,r1,input, input_items, noutput_items, input_nr);
+		threads[input_nr]= new boost::thread(&receiver_impl::synchronized_handler,r1,input, input_items, noutput_items, input_nr);
 	}
 	for(int input_nr=1;input_nr<inputs_to_process-1;input_nr++){
         		threads[input_nr]->join();
