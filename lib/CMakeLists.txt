@@ -88,14 +88,12 @@ if(WIN32)
     list (APPEND grgsm_link_libraries ws2_32)
 endif()
 
-if(LIBOSMOCORE_FOUND AND LIBOSMOCODEC_FOUND)
-    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES})
+if(LIBOSMOCORE_FOUND AND LIBOSMOCODEC_FOUND AND LIBOSMOGSM_FOUND)
+    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOGSM_LIBRARY})
     if(LIBOSMOCODING_FOUND)
         list (APPEND grgsm_link_libraries ${LIBOSMOCODING_LIBRARIES})
     endif()
 endif()
-
-
 
 add_library(grgsm SHARED ${grgsm_sources})
 target_link_libraries(grgsm ${grgsm_link_libraries}

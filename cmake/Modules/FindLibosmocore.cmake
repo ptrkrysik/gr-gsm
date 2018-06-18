@@ -1,7 +1,6 @@
 #find_package(PkgConfig)
 INCLUDE(FindPkgConfig)
 pkg_check_modules(PC_libosmocore libosmocore)
-pkg_check_modules(PC_libosmogsm libosmogsm)
 set(LIBOSMOCORE_DEFINITIONS ${PC_LIBOSMOCORE_CFLAGS_OTHER})
 
 find_path(
@@ -25,18 +24,8 @@ find_library(
                 /usr/lib
 )
 
-find_library(
-        LIBOSMOCORE_GSM_LIBRARY
-        NAMES   libosmogsm osmogsm
-        HINTS   ${PC_libosmocore_LIBDIR}
-                ${PC_libosmocore_LIBRARY_DIRS}
-                ${CMAKE_INSTALL_PREFIX}/lib/
-                ${CMAKE_INSTALL_PREFIX}/lib64/
-        PATHS   /usr/local/lib
-                /usr/lib
-)
 
-set(LIBOSMOCORE_LIBRARIES ${LIBOSMOCORE_LIBRARY} ${LIBOSMOCORE_GSM_LIBRARY})
+set(LIBOSMOCORE_LIBRARIES ${LIBOSMOCORE_LIBRARY})
 set(LIBOSMOCORE_INCLUDE_DIRS ${LIBOSMOCORE_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
