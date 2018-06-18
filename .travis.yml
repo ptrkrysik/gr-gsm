@@ -3,10 +3,12 @@ sudo: required
 language: ruby
 
 env:
-  #- DOCKERFILE=tests/dockerfiles/Debian_Jessie.docker IMGNAME=debjess-grgsm
-  #- DOCKERFILE=tests/dockerfiles/Ubuntu_15_04.docker IMGNAME=ubu15.04-grgsm
-  #- DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debtest-grgsm
+  - DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debtest-grgsm
   - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04.docker IMGNAME=ubu16.04-grgsm
+  - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04_nolibosmo.docker IMGNAME=ubu16.04-grgsm-nolibosmo
+  - DOCKERFILE=tests/dockerfiles/Kali.docker IMGNAME=kali-grgsm
+  - DOCKERFILE=tests/dockerfiles/Fedora_26.Dockerfile IMGNAME=fedora26-grgsm
+
 
 services:
   - docker
@@ -15,5 +17,6 @@ before_install:
   - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
-  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
+#  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
   - docker run -it --rm $IMGNAME /src/tests/scripts/decode.sh
+  - docker run -it --rm $IMGNAME /src/tests/scripts/decrypt.sh

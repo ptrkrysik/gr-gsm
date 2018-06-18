@@ -25,7 +25,7 @@
 
 #include <gnuradio/attributes.h>
 
-#ifdef gnuradio_gsm_EXPORTS
+#ifdef grgsm_EXPORTS
 #  define GRGSM_API __GR_ATTR_EXPORT
 #else
 #  define GRGSM_API __GR_ATTR_IMPORT

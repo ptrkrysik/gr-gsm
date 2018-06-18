@@ -25,7 +25,7 @@
 #endif
 
 #include <sch.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 #include "clock_offset_control_impl.h"
 
 namespace gr

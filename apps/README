@@ -31,3 +31,6 @@ There are following helper programs for grgsm_decode program:
                   After these changes are done, build the
                   grgsm_livemon_headless python code using the grcc
                   compiler.
+
+* grgsm_trx - a transceiver that together with Osmocom-BB (throught trxcon application)
+              forms a GSM mobile station. Currently it works on non-hopping channels only.

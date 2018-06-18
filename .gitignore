@@ -5,7 +5,7 @@ build
 *.pyc
 *.pyo
 .unittests
-build/
+build*/
 debian/tmp/
 debian/files
 .directory

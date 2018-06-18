@@ -25,6 +25,7 @@ add_sources(
     controlled_fractional_resampler_cc_impl.cc
     controlled_rotator_cc_impl.cc
     extract_cmc_impl.cc
+    extract_assignment_cmd_impl.cc
     extract_immediate_assignment_impl.cc
     extract_system_info_impl.cc
     message_file_sink_impl.cc
@@ -32,5 +33,9 @@ add_sources(
     message_printer_impl.cc
     msg_to_tag_impl.cc
     tmsi_dumper_impl.cc
+    time_spec.cc
+    fn_time.cc
+    udp_socket.cc
+    burst_to_fn_time_impl.cc
 )
 

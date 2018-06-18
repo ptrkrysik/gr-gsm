@@ -1,0 +1,35 @@
+FROM kalilinux/kali-linux-docker
+MAINTAINER Piotr Krysik
+
+RUN apt-get update && apt-get install -y \
+    cmake \
+    autoconf \
+    libtool \
+    pkg-config \
+    build-essential \
+    python-docutils \
+    libcppunit-dev \
+    swig \
+    doxygen \
+    liblog4cpp5-dev \
+    python-scipy \
+    gnuradio-dev \
+    gr-osmosdr \
+    libosmocore-dev
+
+COPY ./ /src/
+RUN ls /src
+
+RUN mkdir /src/build
+WORKDIR /src/build
+RUN cmake .. && \
+    # The parallel build sometimes fails when the .grc_gnuradio
+    # and .gnuradio directories do not exist
+    mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
+    # Workaround for the grcc failure
+    # https://github.com/ptrkrysik/gr-gsm/pull/378#issuecomment-379587145
+    ln -sf /usr/lib/x86_64-linux-gnu/libvolk.so.1.3.1 /usr/lib/x86_64-linux-gnu/libvolk.so.1.3 && \
+    make -j $(nproc) && \
+    make install && \
+    ldconfig && \
+    make test

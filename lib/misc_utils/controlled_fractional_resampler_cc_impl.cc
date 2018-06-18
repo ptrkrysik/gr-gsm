@@ -177,6 +177,6 @@ namespace gr {
       set_relative_rate(1.0 / resamp_ratio);
     }
 
-  } /* namespace grgsm */
+  } /* namespace gsm */
 } /* namespace gr */
 

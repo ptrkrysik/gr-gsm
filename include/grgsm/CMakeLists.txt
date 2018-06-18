@@ -25,6 +25,7 @@ install(FILES
     api.h
     gsmtap.h
     constants.h
+    gsm_constants.h
     DESTINATION include/grgsm
 )
 
@@ -35,3 +36,5 @@ add_subdirectory(receiver)
 add_subdirectory(misc_utils)
 add_subdirectory(qa_utils)
 add_subdirectory(flow_control)
+add_subdirectory(transmitter)
+add_subdirectory(trx)

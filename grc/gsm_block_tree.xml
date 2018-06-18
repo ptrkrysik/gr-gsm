@@ -22,6 +22,18 @@
       <block>gsm_input</block>
     </cat>
     <cat>
+      <name>Transmitter</name>
+      <block>gsm_txtime_bursts_tagger</block>
+      <block>gsm_txtime_setter</block>
+      <block>gsm_gmsk_mod</block>
+      <block>gsm_preprocess_tx_burst</block>
+      <block>gsm_gen_test_ab</block>
+    </cat>
+    <cat>
+      <name>Transceiver</name>
+      <block>gsm_trx_burst_if</block>
+    </cat>
+    <cat>
       <name>Logical channels demapping</name>
       <block>gsm_universal_ctrl_chans_demapper</block>
       <block>gsm_bcch_ccch_demapper</block>
@@ -46,6 +58,7 @@
       <block>gsm_burst_timeslot_filter</block>
       <block>gsm_burst_sdcch_subslot_filter</block>
       <block>gsm_burst_fnr_filter</block>
+      <block>gsm_burst_type_filter</block>
       <block>gsm_dummy_burst_filter</block>
       <block>gsm_uplink_downlink_splitter</block>
     </cat>
@@ -60,12 +73,14 @@
       <block>gsm_extract_system_info</block>
       <block>gsm_extract_immediate_assignment</block>
       <block>gsm_extract_cmc</block>
+      <block>gsm_extract_assignment_cmd</block>
       <block>gsm_controlled_rotator_cc</block>
       <block>gsm_controlled_fractional_resampler_cc</block>
       <block>gsm_message_printer</block>
       <block>gsm_clock_offset_corrector_tagged</block>
-      <block>gsm_msg_to_tag.xml</block>
+      <block>gsm_msg_to_tag</block>
       <block>gsm_tmsi_dumper</block>
+      <block>gsm_burst_to_fn_time</block>
     </cat>
   </cat>
 </cat>

@@ -31,7 +31,6 @@
 #include <string.h>
 #include <iostream>
 #include <numeric>
-#include <math.h>
 #include <vector>
 
 #include <boost/circular_buffer.hpp>
@@ -74,10 +73,13 @@ namespace gr
     ) : gr::sync_block("receiver",
           gr::io_signature::make(1, -1, sizeof(gr_complex)),
           gr::io_signature::make(0, 0, 0)),
+        d_samples_consumed(0),
+        d_rx_time_received(false),
+        d_time_samp_ref(GSM_SYMBOL_RATE * osr),
         d_OSR(osr),
         d_process_uplink(process_uplink),
         d_chan_imp_length(CHAN_IMP_RESP_LENGTH),
-        d_counter(0),
+        d_counter(0),       //TODO: use nitems_read instead of d_counter
         d_fcch_start_pos(0),
         d_freq_offset_setting(0),
         d_state(fcch_search),
@@ -175,8 +177,13 @@ namespace gr
           d_freq_offset_tag_in_fcch = tag_offset < last_sample_nr;
         }
       }
+      
+      /* Obtaining current time with use of rx_time tag provided i.e. by UHD devices */
+      /* And storing it in time_sample_ref for sample number to time conversion */
+      std::vector<tag_t> rx_time_tags;
 
       /* Main state machine */
+      d_samples_consumed = 0;
       switch (d_state) {
       case fcch_search:
         fcch_search_handler(input, noutput_items);
@@ -189,7 +196,20 @@ namespace gr
         break;
       }
 
-      return 0;
+      get_tags_in_window(rx_time_tags, 0, 0, d_samples_consumed, pmt::string_to_symbol("rx_time"));
+      if(!rx_time_tags.empty()){
+        d_rx_time_received = true;
+        tag_t rx_time_tag = *(rx_time_tags.begin());
+
+        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
+        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
+        
+        time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
+        uint64_t current_start_offset = rx_time_tag.offset;
+        d_time_samp_ref.update(current_rx_time, current_start_offset);
+      }
+
+      return d_samples_consumed;
     }
 
     void
@@ -249,7 +269,9 @@ namespace gr
       d_burst_nr++;
 
       /* Consume samples up to the next guard period */
-      consume_each(burst_start + BURST_SIZE * d_OSR + 4 * d_OSR);
+      unsigned int to_consume = burst_start + BURST_SIZE * d_OSR + 4 * d_OSR;
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       /* Update current state */
       d_state = synchronized;
@@ -264,7 +286,7 @@ namespace gr
        * bursts according to burst type for given burst number
        */
       std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
-      unsigned int inputs_to_process = d_cell_allocation.size();
+      size_t inputs_to_process = d_cell_allocation.size();
       unsigned char output_binary[BURST_SIZE];
       burst_type b_type;
       int to_consume = 0;
@@ -274,7 +296,7 @@ namespace gr
         inputs_to_process *= 2;
 
       /* Process all connected inputs */
-      for (int input_nr = 0; input_nr < inputs_to_process; input_nr++) {
+      for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
         input = (gr_complex *) input_items[input_nr];
         double signal_pwr = 0;
 
@@ -321,7 +343,7 @@ namespace gr
 
         case sch_burst:
         {
-          int d_ncc, d_bcc;
+          int ncc, bcc;
           int t1, t2, t3;
           int rc;
 
@@ -333,12 +355,8 @@ namespace gr
           detect_burst(input, &channel_imp_resp[0],
             d_c0_burst_start, output_binary);
 
-          /* Compose a message with GSMTAP header and bits */
-          send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_SCH, input_nr);
-
           /* Attempt to decode SCH burst */
-          rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &d_ncc, &d_bcc);
+          rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &ncc, &bcc);
           if (rc) {
             if (++d_failed_sch >= MAX_SCH_ERRORS) {
               /* We have to resynchronize, change state */
@@ -352,6 +370,10 @@ namespace gr
 
             break;
           }
+
+          /* Compose a message with GSMTAP header and bits */
+          send_burst(d_burst_nr, output_binary,
+            GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
 
           /**
            * Decoding was successful, now
@@ -381,7 +403,7 @@ namespace gr
 
           /* Compose a message with GSMTAP header and bits */
           send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_NORMAL, input_nr);
+            GSMTAP_BURST_NORMAL, input_nr, d_c0_burst_start);
 
           break;
         }
@@ -405,13 +427,13 @@ namespace gr
 
             /* Compose a message with GSMTAP header and bits */
             send_burst(d_burst_nr, output_binary,
-              GSMTAP_BURST_NORMAL, input_nr); 
+              GSMTAP_BURST_NORMAL, input_nr, normal_burst_start); 
           } else {
             d_c0_burst_start = dummy_burst_start;
 
             /* Compose a message with GSMTAP header and bits */
             send_burst(d_burst_nr, dummy_burst,
-              GSMTAP_BURST_DUMMY, input_nr);
+              GSMTAP_BURST_DUMMY, input_nr, dummy_burst_start);
           }
 
           break;
@@ -421,7 +443,7 @@ namespace gr
         {
           std::vector<gr_complex> v(input, input + noutput_items);
           float normal_corr_max = -1e6;
-          float normal_corr_max_tmp;
+//          float normal_corr_max_tmp;
           unsigned int burst_start;
           int max_tn, tseq_num;
 
@@ -463,7 +485,7 @@ namespace gr
             burst_start, output_binary);
 
           /* Compose a message with GSMTAP header and bits */
-          send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr);
+          send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
 
           break;
         }
@@ -484,7 +506,8 @@ namespace gr
 
           /* Consume samples of the burst up to next guard period */
           to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();
-          consume_each(to_consume);
+//          consume_each(to_consume);
+          d_samples_consumed += to_consume;
         }
       }
     }
@@ -675,7 +698,8 @@ namespace gr
       }
 
       d_counter += to_consume;
-      consume_each(to_consume);
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       return result;
     }
@@ -726,7 +750,8 @@ namespace gr
       }
 
       d_counter += to_consume;
-      consume_each(to_consume);
+//      consume_each(to_consume);
+      d_samples_consumed += to_consume;
 
       return result;
     }
@@ -980,7 +1005,7 @@ namespace gr
     void
     receiver_impl::send_burst(burst_counter burst_nr,
       const unsigned char * burst_binary, uint8_t burst_type,
-      unsigned int input_nr)
+      size_t input_nr, unsigned int burst_start)
     {
       /* Buffer for GSMTAP header and burst */
       uint8_t buf[sizeof(gsmtap_hdr) + BURST_SIZE];
@@ -1019,12 +1044,26 @@ namespace gr
       tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
       tap_header->snr_db = 0; /* FIXME: Can we calculate this? */
 
+      pmt::pmt_t pdu_header = pmt::make_dict();
+
+      /* Add timestamp of the first sample - if available */
+      if(d_rx_time_received) {
+        time_spec_t time_spec_of_first_sample = d_time_samp_ref.offset_to_time(nitems_read(0)+burst_start);
+        uint64_t full = time_spec_of_first_sample.get_full_secs();
+        double   frac = time_spec_of_first_sample.get_frac_secs();
+        pdu_header = 
+          pmt::dict_add(pdu_header, pmt::mp("fn_time"), 
+            pmt::cons(
+              pmt::cons(pmt::from_uint64(be32toh(frame_number)), pmt::from_uint64(tn)),
+              pmt::cons(pmt::from_uint64(full), pmt::from_double(frac))));
+      }
+
       /* Copy burst to the buffer */
       memcpy(burst, burst_binary, BURST_SIZE);
 
       /* Allocate a new message */
       pmt::pmt_t blob = pmt::make_blob(buf, sizeof(gsmtap_hdr) + BURST_SIZE);
-      pmt::pmt_t msg = pmt::cons(pmt::PMT_NIL, blob);
+      pmt::pmt_t msg = pmt::cons(pdu_header, blob);
 
       /* Send message */
       if (input_nr == 0)
@@ -1093,6 +1132,5 @@ namespace gr
     {
       d_state = fcch_search;
     }
-
   } /* namespace gsm */
 } /* namespace gr */

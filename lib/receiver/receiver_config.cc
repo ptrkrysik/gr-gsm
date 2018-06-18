@@ -23,7 +23,9 @@
 #include "config.h"
 #endif
 
+#include <cmath>
 #include <receiver_config.h>
+
 
 burst_counter & burst_counter::operator++(int)
 {

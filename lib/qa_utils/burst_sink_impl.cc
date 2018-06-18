@@ -47,7 +47,8 @@ namespace gr {
     burst_sink_impl::burst_sink_impl()
       : gr::block("burst_sink",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+        d_bursts(pmt::PMT_NIL)
     {
         message_port_register_in(pmt::mp("in"));
         set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_impl::process_burst, this, _1));
@@ -105,7 +106,10 @@ namespace gr {
     {
         return d_burst_data;
     }
-
+    pmt::pmt_t burst_sink_impl::get_bursts()
+    {
+        return d_bursts;
+    }
   } /* namespace gsm */
 } /* namespace gr */
 

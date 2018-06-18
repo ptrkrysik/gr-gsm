@@ -44,7 +44,7 @@ namespace gr {
          gr_vector_void_star &output_items);
     };
 
-  } // namespace grgsm
+  } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H */

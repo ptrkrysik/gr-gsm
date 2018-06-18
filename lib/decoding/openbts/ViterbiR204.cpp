@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <sstream>
 #include <string.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -70,7 +71,7 @@ void ViterbiR2O4::encode(const BitVector& in, BitVector& target) const
 	assert(sz*coder.iRate() == target.size());
 
 	// Build a "history" array where each element contains the full history.
-	uint32_t history[sz];
+	uint32_t * history = (uint32_t *) malloc(sizeof(uint32_t)*sz);
 	uint32_t accum = 0;
 	for (size_t i=0; i<sz; i++) {
 		accum = (accum<<1) | in.bit(i);
@@ -85,6 +86,7 @@ void ViterbiR2O4::encode(const BitVector& in, BitVector& target) const
 			*op++ = coder.stateTable(g,index);
 		}
 	}
+	free(history);
 }
 
 
@@ -224,7 +226,7 @@ void ViterbiR2O4::decode(const SoftVector &in, BitVector& target)
 
 	// Build a "history" array where each element contains the full history.
 	// (pat) We only use every other history element, so why are we setting them?
-	uint32_t history[ctsz];
+	uint32_t * history = (uint32_t *)malloc(sizeof(uint32_t)*ctsz);
 	{
 		BitVector bits = in.sliced();
 		uint32_t accum = 0;
@@ -241,8 +243,8 @@ void ViterbiR2O4::decode(const SoftVector &in, BitVector& target)
 	}
 
 	// Precompute metric tables.
-	float matchCostTable[ctsz];
-	float mismatchCostTable[ctsz];
+	float * matchCostTable = (float *)malloc(sizeof(float)*ctsz);
+	float * mismatchCostTable = (float *)malloc(sizeof(float)*ctsz);
 	{
 		const float *dp = in.begin();
 		for (size_t i=0; i<sz; i++) {
@@ -283,8 +285,8 @@ void ViterbiR2O4::decode(const SoftVector &in, BitVector& target)
 		const ViterbiR2O4::vCand *minCost = NULL;
 		while (op<opt) {
 			// Viterbi algorithm
-			assert(match-matchCostTable<(float)sizeof(matchCostTable)/sizeof(matchCostTable[0])-1);
-			assert(mismatch-mismatchCostTable<(float)sizeof(mismatchCostTable)/sizeof(mismatchCostTable[0])-1);
+			assert(match - matchCostTable < ctsz - 1);
+			assert(mismatch - mismatchCostTable < ctsz - 1);
 			minCost = decoder.vstep(*ip, match, mismatch, oCount < oSize);
 			ip += step;
 			match += step;
@@ -296,6 +298,9 @@ void ViterbiR2O4::decode(const SoftVector &in, BitVector& target)
 		// Dont think minCost == NULL can happen.
 		mBitErrorCnt = minCost ? minCost->bitErrorCnt : 0;
 	}
+	free(history);
+	free(matchCostTable);
+	free(mismatchCostTable);
 }
 
 // vim: ts=4 sw=4

@@ -4,6 +4,8 @@
  *
  * All Rights Reserved
  *
+ * SPDX-License-Identifier: GPL-2.0+
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -23,7 +25,17 @@
 #include <string.h>
 
 #include <osmocom/core/bits.h>
-#include "gsm0503_mapping.h"
+#include <osmocom/coding/gsm0503_mapping.h>
+
+/*! \addtogroup mapping
+ *  @{
+ *
+ *  GSM TS 05.03 burst mapping
+ *
+ *  This module contains burst mapping routines as specified in 3GPP TS
+ *  05.03 / 45.003.
+ *
+ * \file gsm0503_mapping.c */
 
 void gsm0503_xcch_burst_unmap(sbit_t *iB, const sbit_t *eB,
 	sbit_t *hl, sbit_t *hn)
@@ -38,7 +50,7 @@ void gsm0503_xcch_burst_unmap(sbit_t *iB, const sbit_t *eB,
 		*hn = eB[58];
 }
 
-void gsm0503_xcch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *hl,
+void gsm0503_xcch_burst_map(const ubit_t *iB, ubit_t *eB, const ubit_t *hl,
 	const ubit_t *hn)
 {
 	memcpy(eB,      iB,      57);
@@ -50,7 +62,7 @@ void gsm0503_xcch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *hl,
 		eB[58] = *hn;
 }
 
-void gsm0503_tch_burst_unmap(sbit_t *iB, sbit_t *eB, sbit_t *h, int odd)
+void gsm0503_tch_burst_unmap(sbit_t *iB, const sbit_t *eB, sbit_t *h, int odd)
 {
 	int i;
 
@@ -70,7 +82,7 @@ void gsm0503_tch_burst_unmap(sbit_t *iB, sbit_t *eB, sbit_t *h, int odd)
 	}
 }
 
-void gsm0503_tch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *h, int odd)
+void gsm0503_tch_burst_map(const ubit_t *iB, ubit_t *eB, const ubit_t *h, int odd)
 {
 	int i;
 
@@ -80,13 +92,8 @@ void gsm0503_tch_burst_map(ubit_t *iB, ubit_t *eB, const ubit_t *h, int odd)
 			eB[i] = iB[i];
 		for (i = 58 - odd; i < 114; i += 2)
 			eB[i + 2] = iB[i];
-	}
-
-	if (h) {
-		if (!odd)
-			eB[58] = *h;
-		else
-			eB[57] = *h;
+		if (h)
+			eB[odd ? 57 : 58] = *h;
 	}
 }
 
@@ -289,3 +296,5 @@ void gsm0503_mcs5_burst_swap(sbit_t *eB)
 	eB[191] = t[12];
 	eB[194] = t[13];
 }
+
+/*! @} */

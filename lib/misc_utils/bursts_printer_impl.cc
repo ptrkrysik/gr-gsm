@@ -30,7 +30,7 @@
 #include <iterator>
 #include <algorithm>
 #include "bursts_printer_impl.h"
-#include <unistd.h>
+//#include <unistd.h>
 #include <iostream>
 extern "C" {
     #include <osmocom/gsm/a5.h>

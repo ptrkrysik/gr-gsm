@@ -56,7 +56,7 @@
  */
 
 #include <gnuradio/gr_complex.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 #include <cmath>
 
 #define PATHS_NUM (1 << (CHAN_IMP_RESP_LENGTH-1))

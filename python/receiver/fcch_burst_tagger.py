@@ -24,7 +24,7 @@ from numpy import *
 #from pylab import *
 from gnuradio import gr
 import pmt
-from grgsm.chirpz import ZoomFFT
+from chirpz import ZoomFFT
 
 class fcch_burst_tagger(gr.sync_block):
     """

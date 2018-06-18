@@ -94,6 +94,6 @@ namespace gr {
       return noutput_items;
     }
 
-  } /* namespace grgsm */
+  } /* namespace gsm */
 } /* namespace gr */
 

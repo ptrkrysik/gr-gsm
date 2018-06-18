@@ -50,6 +50,16 @@
 
 #define GSMTAP_UDP_PORT		4729	/* officially registered with IANA */
 
+#if (defined(_WIN16) || defined(_WIN32) || defined(_WIN64)) && !defined(__WINDOWS__)
+#	define __WINDOWS__
+#endif
+
+#ifdef __WINDOWS__
+#define PACKED( class_to_pack ) __pragma( pack(push, 1) ) class_to_pack __pragma( pack(pop) )
+#else
+#define PACKED( class_to_pack ) class_to_pack __attribute__((__packed__))
+#endif
+PACKED(
 struct gsmtap_hdr {
 	uint8_t version;	/* version, set to GSMTAP_VERSION */
 	uint8_t hdr_len;	/* length in number of 32bit words */
@@ -67,6 +77,7 @@ struct gsmtap_hdr {
 	uint8_t sub_slot;	/* sub-slot within timeslot */
 	uint8_t res;		/* reserved for future use (RFU) */
 
-} __attribute__((packed));
+}
+);
 
 #endif /* _GSMTAP_H */

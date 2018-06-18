@@ -26,7 +26,6 @@
 
 #include <gnuradio/io_signature.h>
 #include "controlled_rotator_cc_impl.h"
-#include <math.h>
 
 namespace gr {
   namespace gsm {
