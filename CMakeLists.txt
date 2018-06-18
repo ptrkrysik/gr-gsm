@@ -139,6 +139,7 @@ find_package(CppUnit)
 find_package(Libosmocore)
 find_package(Libosmocodec)
 find_package(Libosmocoding)
+find_package(Libosmogsm)
 
 if(NOT PKG_CONFIG_FOUND)
     message(FATAL_ERROR "pkg-config is required to compile gr-gsm")

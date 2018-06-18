@@ -17,7 +17,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-if(NOT LIBOSMOCORE_FOUND OR NOT LIBOSMOCODEC_FOUND)
+if(NOT LIBOSMOCORE_FOUND OR NOT LIBOSMOCODEC_FOUND OR NOT LIBOSMOGSM_FOUND)
     add_subdirectory(osmocom/core)
     add_subdirectory(osmocom/codec)
     add_subdirectory(osmocom/gsm)
