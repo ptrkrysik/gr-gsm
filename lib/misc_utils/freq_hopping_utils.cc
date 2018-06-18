@@ -64,6 +64,7 @@ namespace gr {
           }
           mai = (s + maio) % n;
       }
+      return (mai);
     }
   } // namespace gsm
 } // namespace gr

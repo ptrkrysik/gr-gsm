@@ -36,6 +36,7 @@ namespace gr {
       bool d_hopping_enable; //if true block do the hopping, if not block just passes the bursts
       uint64_t d_hsn; //hopping sequence number
       uint64_t d_maio; //mobile allocation index offset
+      double d_base_freq; //local oscillator frequency
       std::vector<uint64_t> d_ma; //mobile allocation
      
       pmt::pmt_t d_hopping_cmd; //TODO: change this uint64_to a std::map

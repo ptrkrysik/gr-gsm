@@ -30,6 +30,9 @@
 
 #include "freq_hopping_impl.h"
 #include "../misc_utils/freq_hopping_utils.h"
+extern "C" {
+#include <osmocom/gsm/gsm_utils.h>
+}
 
 namespace gr {
   namespace gsm {
@@ -52,7 +55,8 @@ namespace gr {
           gr::io_signature::make(0, 0, 0),
           gr::io_signature::make(0, 0, 0)),
           d_hopping_cmd(PMT_NIL),
-          d_hopping_enable(false)
+          d_hopping_enable(false),
+          d_base_freq(890e6)
     {
         // Register I/O ports
         message_port_register_in(mp("hopping_cmd"));
@@ -90,6 +94,7 @@ namespace gr {
       } else if(dict_ref(cmd,intern("cmd"), PMT_NIL) == intern("stop")) {
         if(dict_ref(cmd,intern("fn"),PMT_NIL)  != PMT_NIL){
           //TODO add the command to the map<int,pmt_t>
+          
         } else {
           d_hopping_enable = false;
         }
@@ -98,25 +103,59 @@ namespace gr {
     
     void freq_hopping_impl::set_freq_metadata(pmt_t burst)
     {
+
       if(d_hopping_enable) {
-        pmt::pmt_t header_plus_burst = pmt::cdr(burst);
-        gsmtap_hdr *header = (gsmtap_hdr *)pmt::blob_data(header_plus_burst);
+        pmt_t pdu_header = car(burst);
+        pmt_t tx_time = dict_ref(pdu_header, intern("tx_time"),PMT_NIL);
+        if(tx_time != PMT_NIL){
+          pmt_t tx_command_time = cons(tuple_ref(tx_time,0),tuple_ref(tx_time,1));
+          pmt_t header_plus_burst = cdr(burst);
+          uint32_t frame_nr = 0;
+          
+          pmt_t fn = dict_ref(pdu_header,intern("fn"),PMT_NIL);
+          if(fn == PMT_NIL){
+            gsmtap_hdr *header = (gsmtap_hdr *)blob_data(header_plus_burst);
+            uint32_t frame_nr = be32toh(header->frame_number);
+          } else {
+            frame_nr = to_uint64(fn);
+          }
+          
+          int mai = calculate_ma_sfh(d_maio, d_hsn, d_ma.size(), frame_nr);
+          uint16_t arfcn = d_ma[mai];
+          
+  //        if(fn == PMT_NIL){
+  //          header->arfcn = htobe16(arfcn);
+  //          header->arfcn = header->arfcn | 0x8000; // set uplink flag
+  //        }
+          
+          //compute the frequences to be set in the burst header
+          double freq_uplink   = static_cast<double>(gsm_arfcn2freq10(arfcn, 1)) * 1.0e5;
+          double freq_downlink = static_cast<double>(gsm_arfcn2freq10(arfcn, 0)) * 1.0e5;
+          
+          pmt_t tx_command = dict_add(make_dict(),intern("lo_freq"),from_double(d_base_freq));
+          tx_command = dict_add(tx_command,intern("dsp_freq"),from_double(freq_uplink-d_base_freq));
+          tx_command = dict_add(tx_command,intern("time"),tx_command_time);
 
-        uint32_t frame_nr = be32toh(header->frame_number);
-        
-        int mai = calculate_ma_sfh(d_maio, d_hsn, d_ma.size(), frame_nr);
-        uint16_t arfcn = d_ma[mai];
-        header->arfcn = htobe16(arfcn);
-        header->arfcn = header->arfcn | 0x8000; // set uplink flag
-
-        //oblicz czestotliwosc i ustaw w headerze
-
+          pmt_t rx_command = dict_add(make_dict(),intern("lo_freq"),from_double(d_base_freq));
+          rx_command = dict_add(rx_command,intern("dsp_freq"),from_double(freq_uplink-d_base_freq));
+          rx_command = dict_add(rx_command,intern("time"),tx_command_time);
+          rx_command = dict_add(rx_command,intern("direction"),intern("RX"));
+          
+          pdu_header = dict_add(pdu_header, intern("tx_command"),tx_command);
+//          pdu_header = dict_add(pdu_header, intern("tx_command"),rx_command);
+//          std::cout << "arfcn " << arfcn << " mai " << mai << " d_ma.size() " << d_ma.size() << " d_hsn " << d_hsn << std::endl;
+          std::cout << "arfcn_uplink " << arfcn << std::endl;
+//          std::cout << "freq_downlink " << freq_downlink << std::endl;
+//          std::cout << "pdu_header " << pdu_header << std::endl;
+//          std::cout << "size_header_plus_burst " << length(header_plus_burst) << std::endl;
+          message_port_pub(mp("bursts_out"), cons(pdu_header,header_plus_burst));
+        }
       } else {
-        message_port_pub(pmt::mp("bursts_out"), burst);
+        message_port_pub(mp("bursts_out"), burst);
       }
     }
     
-    bool freq_hopping_impl::set_hopping_params(pmt::pmt_t hopping_params){
+    bool freq_hopping_impl::set_hopping_params(pmt_t hopping_params){
       bool retval = false;
       if(hopping_params != PMT_NIL){
         //set hopping parameters immediately
