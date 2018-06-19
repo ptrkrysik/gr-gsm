@@ -50,6 +50,8 @@
 #include "osmocom/coding/gsm0503_coding.h"
 #include <osmocom/coding/gsm0503_parity.h>
 
+#include "../../fire_crc.h"
+
 /*! \mainpage libosmocoding Documentation
  *
  * \section sec_intro Introduction
@@ -226,8 +228,17 @@ static int _xcch_decode_cB(uint8_t *l2_data, const sbit_t *cB,
 
 	rv = osmo_crc64gen_check_bits(&gsm0503_fire_crc40,
 		conv, 184, conv + 184);
-	if (rv)
-		return -1;
+
+	if (rv) {
+		FC_CTX fc_ctx;
+		FC_init(&fc_ctx, 40, 184);
+		unsigned char crc_result[184 + 40 + 4];
+		if (FC_check_crc(&fc_ctx, conv, crc_result) == 0) {
+			return -1;
+		} else {
+			memcpy(conv, crc_result, 184 + 40);
+		}
+	}
 
 	osmo_ubit2pbit_ext(l2_data, 0, conv, 0, 184, 1);
 
