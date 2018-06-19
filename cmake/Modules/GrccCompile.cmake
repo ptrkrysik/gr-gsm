@@ -48,7 +48,7 @@ macro(GRCC_COMPILE file_name)
             COMMAND "${CMAKE_COMMAND}" -E rename ${CMAKE_CURRENT_BINARY_DIR}/${file_name}.py ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
             DEPENDS ${file_name}.grc
         )
-    endif()         
+    endif()
 endmacro(GRCC_COMPILE)
 
 ########################################################################
