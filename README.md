@@ -6,13 +6,13 @@ The aim is to provide set of tools for receiving information transmitted by GSM 
 
 Installation and usage
 ======================
-Please see project's wiki https://github.com/ptrkrysik/gr-gsm/wiki for information on [installation](https://github.com/ptrkrysik/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
+Please see project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index) for information on [installation](https://osmocom.org/projects/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
 
 Mailing list
 ============
 Current gr-gsm project's mailing list address is following:
 
-gr-gsm@lists.osmocom.org
+gr-gsm@googlegroups.com
 
 Mailing list is a place for general discussions, questions about the usage and installation. In case of problem with installation please try to provide full information that will help reproducing it. Minimum information should contain:
 - operating system with version,
@@ -22,7 +22,7 @@ Mailing list is a place for general discussions, questions about the usage and i
 
 To join the group with any e-mail address, use this link:
 
-<https://lists.osmocom.org/mailman/listinfo/gr-gsm>
+<https://groups.google.com/forum/#!forum/gr-gsm/join>
 
 Development
 ===========
