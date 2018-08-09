@@ -25,6 +25,8 @@ import signal
 import getopt
 import sys
 
+from gnuradio import eng_notation
+
 from grgsm.trx import ctrl_if_bb
 from grgsm.trx import radio_if
 from grgsm.trx import fake_pm
@@ -45,6 +47,7 @@ class Application:
 
 	# PHY specific
 	phy_sample_rate = 4 * 1625000 / 6
+	phy_freq_offset_hz = None
 	phy_tx_antenna = "TX/RX"
 	phy_rx_antenna = "RX2"
 	phy_rx_gain = 30
@@ -66,6 +69,10 @@ class Application:
 			self.phy_rx_antenna, self.phy_tx_antenna,
 			self.bind_addr, self.remote_addr,
 			self.base_port)
+
+		# Optional frequency offset
+		if self.phy_freq_offset_hz is not None:
+			self.radio.freq_offset_hz = self.phy_freq_offset_hz
 
 		# Power measurement emulation
 		# Noise: -120 .. -105
@@ -110,6 +117,7 @@ class Application:
 			 "  -G --tx-gain      Set TX gain (default %d)\n" \
 			 "     --rx-antenna   Set RX antenna (default %s)\n" \
 			 "     --tx-antenna   Set TX antenna (default %s)\n" \
+			 "     --freq-offset  Shift baseband freq. (e.g. -500M)\n" \
 			 "     --ppm          Set frequency correction (default %d)\n"
 
 		print(s % (
@@ -128,7 +136,7 @@ class Application:
 				"i:b:p:a:s:g:G:h",
 				["help", "remote-addr=", "bind-addr=", "base-port=",
 				"device-args=", "sample-rate=", "rx-gain=", "tx-gain=",
-				"ppm=", "rx-antenna=", "tx-antenna="])
+				"ppm=", "rx-antenna=", "tx-antenna=", "freq-offset="])
 		except getopt.GetoptError as err:
 			# Print(help and exit)
 			self.print_help()
@@ -167,6 +175,10 @@ class Application:
 				self.phy_tx_antenna = v
 			elif o in ("--ppm"):
 				self.phy_ppm = int(v)
+			elif o in ("--freq-offset"):
+				# Convert /\d+(\.\d+)?(M|k)?/ to Hz
+				offset_hz = eng_notation.str_to_num(v)
+				self.phy_freq_offset_hz = offset_hz
 
 	def sig_handler(self, signum, frame):
 		print("Signal %d received" % signum)
