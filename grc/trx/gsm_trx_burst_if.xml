@@ -3,12 +3,19 @@
   <name>TRX Burst Interface</name>
   <key>gsm_trx_burst_if</key>
   <import>import grgsm</import>
-  <make>grgsm.trx_burst_if($remote_addr, $base_port)</make>
+  <make>grgsm.trx_burst_if($bind_addr, $remote_addr, $base_port)</make>
 
   <param>
     <name>base_port</name>
     <key>base_port</key>
     <value>5700</value>
+    <type>string</type>
+  </param>
+
+  <param>
+    <name>bind_addr</name>
+    <key>bind_addr</key>
+    <value>0.0.0.0</value>
     <type>string</type>
   </param>
 

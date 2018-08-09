@@ -53,8 +53,9 @@ namespace gr {
 
     public:
       udp_socket(
-        const std::string &remote_addr,
+        const std::string &bind_addr,
         const std::string &src_port,
+        const std::string &remote_addr,
         const std::string &dst_port,
         size_t mtu);
       ~udp_socket();
