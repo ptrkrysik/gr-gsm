@@ -27,9 +27,10 @@ from ctrl_if import ctrl_if
 
 class ctrl_if_bb(ctrl_if):
 	def __init__(self, remote_addr, remote_port, bind_addr, bind_port, tb, pm):
-		print("[i] Init CTRL interface")
 		ctrl_if.__init__(self, remote_addr, remote_port,
 			bind_addr, bind_port)
+
+		print("[i] Init CTRL interface (%s)" % self.desc_link())
 
 		# Set link to the follow graph (top block)
 		self.tb = tb
