@@ -47,6 +47,12 @@ class udp_link:
 			data, addr = self.sock.recvfrom(128)
 			self.handle_rx(data.decode(), addr)
 
+	def desc_link(self):
+		(bind_addr, bind_port) = self.sock.getsockname()
+
+		return "L:%s:%u <-> R:%s:%u" \
+			% (bind_addr, bind_port, self.remote_addr, self.remote_port)
+
 	def send(self, data, remote = None):
 		if type(data) not in [bytearray, bytes]:
 			data = data.encode()
