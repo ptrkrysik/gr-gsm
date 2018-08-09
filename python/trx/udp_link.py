@@ -35,6 +35,9 @@ class udp_link:
 		self.remote_addr = remote_addr
 		self.remote_port = remote_port
 
+	def __del__(self):
+		self.sock.close()
+
 	def loop(self):
 		r_event, w_event, x_event = select.select([self.sock], [], [])
 
@@ -42,9 +45,6 @@ class udp_link:
 		if self.sock in r_event:
 			data, addr = self.sock.recvfrom(128)
 			self.handle_rx(data.decode())
-
-	def shutdown(self):
-		self.sock.close();
 
 	def send(self, data):
 		if type(data) not in [bytearray, bytes]:
