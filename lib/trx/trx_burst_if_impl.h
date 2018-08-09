@@ -40,7 +40,8 @@ namespace gr {
       void burst_pack(pmt::pmt_t msg, uint8_t *buf);
 
      public:
-      trx_burst_if_impl(const std::string &remote_addr, int base_port);
+      trx_burst_if_impl(const std::string &bind_addr,
+        const std::string &remote_addr, int base_port);
       ~trx_burst_if_impl();
 
       void handle_dl_burst(pmt::pmt_t msg);
