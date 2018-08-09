@@ -84,7 +84,9 @@ class radio_if(gr.top_block):
 			trx_bind_addr, trx_remote_addr,
 			trx_base_port):
 
-		print("[i] Init Radio interface")
+		print("[i] Init Radio interface (L:%s:%u <-> R:%s:%u)"
+			% (trx_bind_addr, trx_base_port + 2,
+				trx_remote_addr, trx_base_port + 102))
 
 		# PHY specific variables
 		self.sample_rate = phy_sample_rate
