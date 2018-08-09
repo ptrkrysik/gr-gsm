@@ -3,7 +3,7 @@
 
 # GR-GSM based transceiver
 #
-# (C) 2016-2017 by Vadim Yanitskiy <axilirator@gmail.com>
+# (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>
 #
 # All Rights Reserved
 #
@@ -30,7 +30,7 @@ from grgsm.trx import radio_if
 from grgsm.trx import fake_pm
 
 COPYRIGHT = \
-	"Copyright (C) 2016-2017 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
+	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
 	"Copyright (C) 2017 by Piotr Krysik <ptrkrysik@gmail.com>\n" \
 	"License GPLv2+: GNU GPL version 2 or later " \
 	"<http://gnu.org/licenses/gpl.html>\n" \
@@ -40,6 +40,7 @@ COPYRIGHT = \
 class Application:
 	# Application variables
 	remote_addr = "127.0.0.1"
+	bind_addr = "0.0.0.0"
 	base_port = 6700
 
 	# PHY specific
@@ -63,7 +64,8 @@ class Application:
 		self.radio = radio_if(self.phy_args, self.phy_sample_rate,
 			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
 			self.phy_rx_antenna, self.phy_tx_antenna,
-			self.remote_addr, self.base_port)
+			self.bind_addr, self.remote_addr,
+			self.base_port)
 
 		# Power measurement emulation
 		# Noise: -120 .. -105
@@ -71,8 +73,9 @@ class Application:
 		self.pm = fake_pm(-120, -105, -75, -50)
 
 		# Init TRX CTRL interface
-		self.server = ctrl_if_bb(self.remote_addr,
-			self.base_port + 101, self.base_port + 1,
+		self.server = ctrl_if_bb(
+			self.remote_addr, self.base_port + 101,
+			self.bind_addr, self.base_port + 1,
 			self.radio, self.pm)
 
 		print("[i] Init complete")
@@ -96,6 +99,7 @@ class Application:
 		# TRX specific
 		s += " TRX interface specific\n" \
 			 "  -i --remote-addr  Set remote address (default %s)\n" \
+			 "  -b --bind-addr    Set bind address (default %s)\n" \
 			 "  -p --base-port    Set base port number (default %d)\n\n"
 
 		# PHY specific
@@ -110,6 +114,7 @@ class Application:
 
 		print(s % (
 			self.remote_addr,
+			self.bind_addr,
 			self.base_port,
 			self.phy_rx_gain,
 			self.phy_tx_gain,
@@ -120,10 +125,10 @@ class Application:
 	def parse_argv(self):
 		try:
 			opts, args = getopt.getopt(sys.argv[1:],
-				"i:p:a:s:g:G:h",
-				["help", "remote-addr=", "base-port=", "device-args=",
-				"sample-rate=", "rx-gain=", "tx-gain=", "ppm=",
-				"rx-antenna=", "tx-antenna="])
+				"i:b:p:a:s:g:G:h",
+				["help", "remote-addr=", "bind-addr=", "base-port=",
+				"device-args=", "sample-rate=", "rx-gain=", "tx-gain=",
+				"ppm=", "rx-antenna=", "tx-antenna="])
 		except getopt.GetoptError as err:
 			# Print(help and exit)
 			self.print_help()
@@ -138,6 +143,8 @@ class Application:
 			# TRX specific
 			elif o in ("-i", "--remote-addr"):
 				self.remote_addr = v
+			elif o in ("-b", "--bind-addr"):
+				self.bind_addr = v
 			elif o in ("-p", "--base-port"):
 				if int(v) >= 0 and int(v) <= 65535:
 					self.base_port = int(v)
