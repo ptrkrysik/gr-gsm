@@ -83,7 +83,6 @@ class Application:
 
 	def shutdown(self):
 		print("[i] Shutting down...")
-		self.server.shutdown()
 		self.radio.shutdown()
 
 	def print_copyright(self):

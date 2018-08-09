@@ -35,10 +35,6 @@ class ctrl_if_bb(ctrl_if):
 		# Power measurement
 		self.pm = pm
 
-	def shutdown(self):
-		print("[i] Shutdown CTRL interface")
-		ctrl_if.shutdown(self)
-
 	def parse_cmd(self, request):
 		# Power control
 		if self.verify_cmd(request, "POWERON", 0):
