@@ -45,13 +45,16 @@ class udp_link:
 		# Check for incoming data
 		if self.sock in r_event:
 			data, addr = self.sock.recvfrom(128)
-			self.handle_rx(data.decode())
+			self.handle_rx(data.decode(), addr)
 
-	def send(self, data):
+	def send(self, data, remote = None):
 		if type(data) not in [bytearray, bytes]:
 			data = data.encode()
 
-		self.sock.sendto(data, (self.remote_addr, self.remote_port))
+		if remote is None:
+			remote = (self.remote_addr, self.remote_port)
 
-	def handle_rx(self, data):
+		self.sock.sendto(data, remote)
+
+	def handle_rx(self, data, remote):
 		raise NotImplementedError
