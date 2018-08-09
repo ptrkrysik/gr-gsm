@@ -81,8 +81,8 @@ class radio_if(gr.top_block):
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
 			phy_rx_antenna, phy_tx_antenna,
-			trx_remote_addr, trx_base_port,
-			trx_bind_addr = "0.0.0.0"):
+			trx_bind_addr, trx_remote_addr,
+			trx_base_port):
 
 		print("[i] Init Radio interface")
 
