@@ -38,8 +38,9 @@ namespace gr {
   namespace gsm {
 
     udp_socket::udp_socket(
-      const std::string &remote_addr,
+      const std::string &bind_addr,
       const std::string &src_port,
+      const std::string &remote_addr,
       const std::string &dst_port,
       size_t mtu)
     {
@@ -50,7 +51,7 @@ namespace gr {
       udp::resolver resolver(d_io_service);
 
       udp::resolver::query rx_query(
-        udp::v4(), remote_addr, src_port,
+        udp::v4(), bind_addr, src_port,
         boost::asio::ip::resolver_query_base::passive);
       udp::resolver::query tx_query(
         udp::v4(), remote_addr, dst_port,

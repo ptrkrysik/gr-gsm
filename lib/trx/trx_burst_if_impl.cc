@@ -48,19 +48,22 @@ namespace gr {
 
     trx_burst_if::sptr
     trx_burst_if::make(
+      const std::string &bind_addr,
       const std::string &remote_addr,
       const std::string &base_port)
     {
       int base_port_int = boost::lexical_cast<int> (base_port);
 
       return gnuradio::get_initial_sptr
-        (new trx_burst_if_impl(remote_addr, base_port_int));
+        (new trx_burst_if_impl(bind_addr, remote_addr,
+          base_port_int));
     }
 
     /*
      * The private constructor
      */
     trx_burst_if_impl::trx_burst_if_impl(
+      const std::string &bind_addr,
       const std::string &remote_addr,
       int base_port
     ) : gr::block("trx_burst_if",
@@ -79,8 +82,8 @@ namespace gr {
         std::string data_dst_port = boost::lexical_cast<std::string> (base_port + 102);
 
         // Init DATA interface
-        d_data_sock = new udp_socket(remote_addr,
-          data_src_port, data_dst_port, DATA_IF_MTU);
+        d_data_sock = new udp_socket(bind_addr, data_src_port,
+          remote_addr, data_dst_port, DATA_IF_MTU);
 
         // Bind DATA interface handler
         d_data_sock->udp_rx_handler = boost::bind(

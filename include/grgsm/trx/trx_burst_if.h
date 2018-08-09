@@ -48,6 +48,7 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(
+        const std::string &bind_addr,
         const std::string &remote_addr,
         const std::string &base_port);
     };
