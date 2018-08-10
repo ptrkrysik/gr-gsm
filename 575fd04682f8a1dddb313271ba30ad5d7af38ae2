@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "424c9f38_3e14bd69",
+        "filename": "apps/grgsm_trx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000126
+      },
+      "writtenOn": "2018-08-10T09:45:41Z",
+      "side": 1,
+      "message": "note: for parsing arguments we could use optparse (https://docs.python.org/2/library/optparse.html) or argparse (https://docs.python.org/2/library/argparse.html#module-argparse)",
+      "range": {
+        "startLine": 99,
+        "startChar": 5,
+        "endLine": 99,
+        "endChar": 7
+      },
+      "revId": "575fd04682f8a1dddb313271ba30ad5d7af38ae2",
+      "serverId": "035e6965-6537-41bd-912c-053f3cf69326",
+      "unresolved": false
+    }
+  ]
+}
