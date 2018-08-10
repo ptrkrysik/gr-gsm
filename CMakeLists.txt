@@ -60,9 +60,9 @@ endif()
 
 # Set the version information here
 set(VERSION_INFO_MAJOR_VERSION 0)
-set(VERSION_INFO_API_COMPAT    41)
-set(VERSION_INFO_MINOR_VERSION 4)
-set(VERSION_INFO_MAINT_VERSION git)
+set(VERSION_INFO_API_COMPAT    42)
+set(VERSION_INFO_MINOR_VERSION 1)
+set(VERSION_INFO_MAINT_VERSION )
 include(GrVersion) #setup version info
 
 ########################################################################
