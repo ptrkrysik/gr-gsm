@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f34d5be4_e8f35d24",
+        "filename": "python/trx/radio_if.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000126
+      },
+      "writtenOn": "2018-08-10T09:27:17Z",
+      "side": 1,
+      "message": "set_time_now needs to be done only once, either for source or sink (I\u0027m having fun with gerrit review window ;) )",
+      "revId": "0011dcb6467f1fe79dc05bbba20e182ace620bf1",
+      "serverId": "035e6965-6537-41bd-912c-053f3cf69326",
+      "unresolved": false
+    }
+  ]
+}
