@@ -66,48 +66,50 @@ namespace gr {
             return;
         }
 
-        std::cout << d_prepend_string;
+        std::ostringstream out;
+        out << d_prepend_string;
         if (d_prepend_fnr)
         {
-            std::cout << frame_nr;
+            out << frame_nr;
         }
 
         if (d_prepend_fnr && d_prepend_frame_count)
         {
-            std::cout << " ";
+            out << " ";
         }
 
         if (d_prepend_frame_count)
         {
             // calculate fn count using libosmogsm
-            std::cout << osmo_a5_fn_count(frame_nr);
+            out << osmo_a5_fn_count(frame_nr);
         }
 
         if (d_prepend_fnr || d_prepend_frame_count)
         {
-            std::cout << ": ";
+            out << ": ";
         }
 
         if (d_print_payload_only)
         {
             for (int ii=0; ii<57; ii++)
             {
-                std::cout << std::setprecision(1) << static_cast<int>(burst[ii + 3]);
+                out << std::setprecision(1) << static_cast<int>(burst[ii + 3]);
             }
             for (int ii=0; ii<57; ii++)
             {
-                std::cout << std::setprecision(1) << static_cast<int>(burst[ii + 88]);
+                out << std::setprecision(1) << static_cast<int>(burst[ii + 88]);
             }
         }
         else
         {
             for(int ii=0; ii<burst_len; ii++)
             {
-              std::cout << std::setprecision(1) << static_cast<int>(burst[ii]);
+              out << std::setprecision(1) << static_cast<int>(burst[ii]);
             }
         }
 
-        std::cout << std::endl;
+        out << std::endl;
+        std::cout << out.str() << std::flush;
     }
 
     bool bursts_printer_impl::is_dummy_burst(int8_t *burst, size_t burst_len)
