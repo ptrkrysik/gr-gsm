@@ -297,7 +297,7 @@ class channel_info(object):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
-def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
+def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
     signallist = []
     channels_num = int(samp_rate / 0.2e6)
     for arfcn_range in grgsm.arfcn.get_arfcn_ranges(band):
@@ -311,14 +311,15 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
 
         while current_freq < stop_freq:
 
-            # silence rtl_sdr output:
-            # open 2 fds
-            null_fds = [os.open(os.devnull, os.O_RDWR) for x in xrange(2)]
-            # save the current file descriptors to a tuple
-            save = os.dup(1), os.dup(2)
-            # put /dev/null fds on 1 and 2
-            os.dup2(null_fds[0], 1)
-            os.dup2(null_fds[1], 2)
+            if not debug:
+                # silence rtl_sdr output:
+                # open 2 fds
+                null_fds = [os.open(os.devnull, os.O_RDWR) for x in xrange(2)]
+                # save the current file descriptors to a tuple
+                save = os.dup(1), os.dup(2)
+                # put /dev/null fds on 1 and 2
+                os.dup2(null_fds[0], 1)
+                os.dup2(null_fds[1], 2)
 
             # instantiate scanner and processor
             scanner = wideband_scanner(rec_len=6 - speed,
@@ -359,12 +360,14 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None):
 
             scanner = None
 
-            # restore file descriptors so we can print the results
-            os.dup2(save[0], 1)
-            os.dup2(save[1], 2)
-            # close the temporary fds
-            os.close(null_fds[0])
-            os.close(null_fds[1])
+
+            if not debug:
+                # restore file descriptors so we can print the results
+                os.dup2(save[0], 1)
+                os.dup2(save[1], 2)
+                # close the temporary fds
+                os.close(null_fds[0])
+                os.close(null_fds[1])
             if prn:
                 prn(found_list)
             signallist.extend(found_list)
@@ -389,6 +392,8 @@ def argument_parser():
                       help="Scan speed [default=%default]. Value range 0-5.")
     parser.add_option("-v", "--verbose", action="store_true",
                       help="If set, verbose information output is printed: ccch configuration, cell ARFCN's, neighbour ARFCN's")
+    parser.add_option("-d", "--debug", action="store_true",
+                      help="Print additional debug messages")
 
     """
         Dont forget: sudo sysctl kernel.shmmni=32000
@@ -415,7 +420,7 @@ def main(options = None):
                 print info.get_verbose_info()
     print ""
     do_scan(options.samp_rate, options.band, options.speed,
-            options.ppm, options.gain, options.args, prn = printfunc)
+            options.ppm, options.gain, options.args, prn = printfunc, debug = options.debug)
 
 if __name__ == '__main__':
     main()
