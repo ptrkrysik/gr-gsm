@@ -4,7 +4,6 @@
 # GR-GSM based transceiver
 #
 # (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>
-# (C) 2017-2018 by Piotr Krysik <ptrkrysik@gmail.com>
 #
 # All Rights Reserved
 #
@@ -31,40 +30,34 @@ from gnuradio import eng_notation
 from grgsm.trx import ctrl_if_bb
 from grgsm.trx import radio_if
 from grgsm.trx import fake_pm
-from argparse import ArgumentParser
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
-	"Copyright (C) 2017-2018 by Piotr Krysik <ptrkrysik@gmail.com>\n" \
+	"Copyright (C) 2017 by Piotr Krysik <ptrkrysik@gmail.com>\n" \
 	"License GPLv2+: GNU GPL version 2 or later " \
 	"<http://gnu.org/licenses/gpl.html>\n" \
 	"This is free software: you are free to change and redistribute it.\n" \
 	"There is NO WARRANTY, to the extent permitted by law.\n"
 
-class grgsm_trx:
-	def __init__(self,
-				 remote_addr,
-				 bind_addr,
-				 base_port,
-				 args,
-				 sample_rate,
-				 rx_gain,
-				 tx_gain,
-				 rx_antenna,
-				 tx_antenna,
-				 freq_offset,
-				 ppm):
-		self.remote_addr = remote_addr
-		self.bind_addr = bind_addr
-		self.base_port = base_port
-		self.phy_args = args
-		self.phy_sample_rate = sample_rate
-		self.phy_rx_gain = rx_gain
-		self.phy_tx_gain = tx_gain
-		self.phy_rx_antenna = rx_antenna
-		self.phy_tx_antenna = tx_antenna
-		self.phy_freq_offset = freq_offset
-		self.phy_ppm = ppm
+class Application:
+	# Application variables
+	remote_addr = "127.0.0.1"
+	bind_addr = "0.0.0.0"
+	base_port = 6700
+
+	# PHY specific
+	phy_sample_rate = 4 * 1625000 / 6
+	phy_freq_offset_hz = None
+	phy_tx_antenna = "TX/RX"
+	phy_rx_antenna = "RX2"
+	phy_rx_gain = 30
+	phy_tx_gain = 10
+	phy_args = ""
+	phy_ppm = 0
+
+	def __init__(self):
+		self.print_copyright()
+		self.parse_argv()
 
 		# Set up signal handlers
 		signal.signal(signal.SIGINT, self.sig_handler)
@@ -73,9 +66,13 @@ class grgsm_trx:
 		# Init Radio interface
 		self.radio = radio_if(self.phy_args, self.phy_sample_rate,
 			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
-			self.phy_rx_antenna, self.phy_tx_antenna, self.phy_freq_offset,
+			self.phy_rx_antenna, self.phy_tx_antenna,
 			self.bind_addr, self.remote_addr,
 			self.base_port)
+
+		# Optional frequency offset
+		if self.phy_freq_offset_hz is not None:
+			self.radio.freq_offset_hz = self.phy_freq_offset_hz
 
 		# Power measurement emulation
 		# Noise: -120 .. -105
@@ -98,73 +95,97 @@ class grgsm_trx:
 		print("[i] Shutting down...")
 		self.radio.shutdown()
 
+	def print_copyright(self):
+		print(COPYRIGHT)
+
+	def print_help(self):
+		s  = " Usage: " + sys.argv[0] + " [options]\n\n" \
+			 " Some help...\n" \
+			 "  -h --help         this text\n\n"
+
+		# TRX specific
+		s += " TRX interface specific\n" \
+			 "  -i --remote-addr  Set remote address (default %s)\n" \
+			 "  -b --bind-addr    Set bind address (default %s)\n" \
+			 "  -p --base-port    Set base port number (default %d)\n\n"
+
+		# PHY specific
+		s += " Radio interface specific\n" \
+			 "  -a --device-args  Set device arguments\n" \
+			 "  -s --sample-rate  Set sample rate\n" \
+			 "  -g --rx-gain      Set RX gain (default %d)\n" \
+			 "  -G --tx-gain      Set TX gain (default %d)\n" \
+			 "     --rx-antenna   Set RX antenna (default %s)\n" \
+			 "     --tx-antenna   Set TX antenna (default %s)\n" \
+			 "     --freq-offset  Shift baseband freq. (e.g. -500M)\n" \
+			 "     --ppm          Set frequency correction (default %d)\n"
+
+		print(s % (
+			self.remote_addr,
+			self.bind_addr,
+			self.base_port,
+			self.phy_rx_gain,
+			self.phy_tx_gain,
+			self.phy_rx_antenna,
+			self.phy_tx_antenna,
+			self.phy_ppm))
+
+	def parse_argv(self):
+		try:
+			opts, args = getopt.getopt(sys.argv[1:],
+				"i:b:p:a:s:g:G:h",
+				["help", "remote-addr=", "bind-addr=", "base-port=",
+				"device-args=", "sample-rate=", "rx-gain=", "tx-gain=",
+				"ppm=", "rx-antenna=", "tx-antenna=", "freq-offset="])
+		except getopt.GetoptError as err:
+			# Print(help and exit)
+			self.print_help()
+			print("[!] " + str(err))
+			sys.exit(2)
+
+		for o, v in opts:
+			if o in ("-h", "--help"):
+				self.print_help()
+				sys.exit(2)
+
+			# TRX specific
+			elif o in ("-i", "--remote-addr"):
+				self.remote_addr = v
+			elif o in ("-b", "--bind-addr"):
+				self.bind_addr = v
+			elif o in ("-p", "--base-port"):
+				if int(v) >= 0 and int(v) <= 65535:
+					self.base_port = int(v)
+				else:
+					print("[!] The port number should be in range [0-65536]")
+					sys.exit(2)
+
+			# PHY specific
+			elif o in ("-a", "--device-args"):
+				self.phy_args = v
+			elif o in ("-s", "--sample-rate"):
+				self.phy_sample_rate = int(v)
+			elif o in ("-g", "--rx-gain"):
+				self.phy_rx_gain = int(v)
+			elif o in ("-G", "--tx-gain"):
+				self.phy_tx_gain = int(v)
+			elif o in ("--rx-antenna"):
+				self.phy_rx_antenna = v
+			elif o in ("--tx-antenna"):
+				self.phy_tx_antenna = v
+			elif o in ("--ppm"):
+				self.phy_ppm = int(v)
+			elif o in ("--freq-offset"):
+				# Convert /\d+(\.\d+)?(M|k)?/ to Hz
+				offset_hz = eng_notation.str_to_num(v)
+				self.phy_freq_offset_hz = offset_hz
+
 	def sig_handler(self, signum, frame):
 		print("Signal %d received" % signum)
 		if signum is signal.SIGINT:
 			self.shutdown()
 			sys.exit(0)
 
-def parse_args():
-	description = 'Burst transceiver for GSM Mobile Station'
-	parser = ArgumentParser(prog="grgsm_trx", usage='%(prog)s [options]',
-		description=description)
-	# TRX specific
-	parser.add_argument("-i", "--remote-addr", dest="remote_addr", type=str,
-		default='127.0.0.1',
-		help="Set remote address default=%(default)s")
-	parser.add_argument("-b", "--bind-addr", dest="bind_addr", type=str,
-		default='0.0.0.0',
-		help="Set bind address default=%(default)s")
-	parser.add_argument(
-		"-p", "--base_port", dest="base_port", type=int,
-		default=6700,
-		help="Set base port number default=%(default)s")
-
-	# PHY specific
-	parser.add_argument("-a", "--args", dest="args", type=str,
-		default="",
-		help="Set Device Arguments default=%(default)s")
-	parser.add_argument("-s", "--sample-rate", dest="sample_rate", type=float,
-		default=1083333.3333333333,
-		help="Set samp_rate default=%(default)s")
-	parser.add_argument("-g", "--rx-gain", dest="rx_gain", type=float,
-		default=30,
-		help="Set RX gain default=%(default)s")
-	parser.add_argument("-G", "--tx-gain", dest="tx_gain", type=float,
-		default=10,
-		help="Set TX gain default=%(default)s")
-	parser.add_argument("--rx-antenna", dest="rx_antenna", type=str,
-		default="RX2",
-		help="Set RX antenna")
-	parser.add_argument("--tx-antenna", dest="tx_antenna", type=str,
-		default='TX/RX',
-		help="Set TX antenna default=%(default)s")
-	parser.add_argument(
-		"--freq-offset", dest="freq_offset", type=float,
-		default=0,
-		help="Shift Tx and Rx frequencies default=%(default)s")
-	parser.add_argument("--ppm", dest="ppm", type=float,
-		default=0,
-		help="Set ppm default=%(default)s")
-
-	return parser.parse_args()
-
-def main():
-	print(COPYRIGHT)
-	options = parse_args()
-	app = grgsm_trx(
-			remote_addr=options.remote_addr,
-			bind_addr=options.bind_addr,
-			base_port=options.base_port,
-			args=options.args,
-			sample_rate=options.sample_rate,
-			rx_gain=options.rx_gain,
-			tx_gain=options.tx_gain,
-			rx_antenna=options.rx_antenna,
-			tx_antenna=options.tx_antenna,
-			freq_offset=options.freq_offset,
-			ppm=options.ppm)
-	app.run()
-
 if __name__ == '__main__':
-	main()
+	app = Application()
+	app.run()
