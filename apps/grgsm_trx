@@ -46,7 +46,7 @@ class Application:
 	base_port = 6700
 
 	# PHY specific
-	phy_sample_rate = 4 * 1625000 / 6
+	phy_sample_rate = radio_if.SAMPLE_RATE
 	phy_freq_offset_hz = None
 	phy_tx_antenna = "TX/RX"
 	phy_rx_antenna = "RX2"
