@@ -31,8 +31,6 @@
 #include <grgsm/gsmtap.h>
 #include <grgsm/endian.h>
 
-#define PMT_SIZE 174
-
 namespace gr {
   namespace gsm {
 
@@ -110,8 +108,6 @@ namespace gr {
 
     void burst_source_impl::run()
     {
-        char *unserialized = (char*)malloc(sizeof(char) * PMT_SIZE);
-
         for (int i=0; i<d_burst_data.size(); i++)
         {
             if (d_burst_data[i].length() == BURST_SIZE &&
