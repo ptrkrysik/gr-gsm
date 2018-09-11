@@ -75,8 +75,8 @@ class radio_if(gr.top_block):
 	GSM_TS_PERIOD_uS = GSM_SYM_PERIOD_uS * 156.25
 	GSM_UL_DL_SHIFT_uS = -(GSM_TS_PERIOD_uS * 3)
 
-	# TODO: explain where do these values come from?
-	SAMPLE_RATE = 4.0 * 1625000.0 / 6.0
+	GSM_SYM_RATE = (1.0 / GSM_SYM_PERIOD_uS) * 1e6
+	SAMPLE_RATE = GSM_SYM_RATE * osr
 
 	# FIXME: shall be measured (automatically?) for
 	# particular device and particular clock rate.
