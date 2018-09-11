@@ -50,6 +50,7 @@ GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.p
 GR_ADD_TEST(qa_decryption ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_decryption.py)
 GR_ADD_TEST(qa_burst_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_printer.py)
 GR_ADD_TEST(qa_message_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_message_printer.py)
+GR_ADD_TEST(qa_burst_file_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_file_source.py)
 GR_ADD_TEST(qa_burst_timeslot_splitter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_timeslot_splitter.py)
 GR_ADD_TEST(qa_burst_sdcch_subslot_splitter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_sdcch_subslot_splitter.py)
 GR_ADD_TEST(qa_burst_timeslot_filter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_timeslot_filter.py)

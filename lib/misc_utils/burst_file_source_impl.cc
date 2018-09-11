@@ -28,8 +28,6 @@
 #include "burst_file_source_impl.h"
 #include "stdio.h"
 
-#define PMT_SIZE 174
-
 namespace gr {
   namespace gsm {
 
@@ -86,16 +84,13 @@ namespace gr {
 
     void burst_file_source_impl::run()
     {
-        char *unserialized = (char*)malloc(sizeof(char) * PMT_SIZE);
-        while (d_input_file.read(unserialized, PMT_SIZE) && !d_finished)
+        std::filebuf* pbuf = d_input_file.rdbuf();
+        while (!d_finished)
         {
-            if (d_input_file.bad())
-            {
+            pmt::pmt_t burst = pmt::deserialize(*pbuf);
+            if (pmt::is_eof_object(burst)) {
                 break;
             }
-
-            std::string s(unserialized, PMT_SIZE);
-            pmt::pmt_t burst = pmt::deserialize_str(s);
             message_port_pub(pmt::mp("out"), burst);
         }
         d_input_file.close();
