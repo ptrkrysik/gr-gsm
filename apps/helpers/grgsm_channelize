@@ -79,6 +79,10 @@ class grgsm_channelize(gr.top_block):
             self.blocks_file_source = blocks.file_source(gr.sizeof_short, input_file, False)
             self.source = blocks.interleaved_short_to_complex(False, False)
             self.connect((self.blocks_file_source, 0), (self.source, 0))
+        elif data_type == "ichar":
+            self.blocks_file_source = blocks.file_source(gr.sizeof_char, input_file, False)
+            self.source = blocks.interleaved_char_to_complex(False)
+            self.connect((self.blocks_file_source, 0), (self.source, 0))
         elif data_type == "complex":
             self.source = blocks.file_source(gr.sizeof_gr_complex, input_file, False)
 
@@ -114,7 +118,7 @@ if __name__ == '__main__':
         help="Sample rate of the output capture files [default=%(default)s]")
     parser.add_argument("-i", "--input_file", dest="input_file", type=str, required=True,
         help="Path to wideband GSM capture file")
-    parser.add_argument("-t", "--data_type", dest="data_type", type=str, choices=["complex","ishort"], default="complex",
+    parser.add_argument("-t", "--data_type", dest="data_type", type=str, choices=["complex","ishort","ichar"], default="complex",
         help="Type of the input file [default=%(default)s]")
     parser.add_argument("-d", "--dest_dir", dest="dest_dir", type=str, 
         help="Destination directory - if not given defaults to input file name without extension")
