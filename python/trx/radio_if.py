@@ -85,7 +85,7 @@ class radio_if(gr.top_block):
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
 			phy_rx_antenna, phy_tx_antenna,
-			phy_freq_offset_hz, trx_bind_addr,
+			phy_freq_offset, trx_bind_addr,
 			trx_remote_addr, trx_base_port):
 
 		print("[i] Init Radio interface (L:%s:%u <-> R:%s:%u)"
@@ -97,7 +97,7 @@ class radio_if(gr.top_block):
 		self.rx_gain = phy_rx_gain
 		self.tx_gain = phy_tx_gain
 		self.ppm = phy_ppm
-		self.freq_offset_hz = phy_freq_offset_hz
+		self.freq_offset = phy_freq_offset
 
 		gr.top_block.__init__(self, "GR-GSM TRX")
 
@@ -279,19 +279,19 @@ class radio_if(gr.top_block):
 		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
 
 	def set_rx_freq(self, fc):
-		fc += self.freq_offset_hz
+		fc += self.freq_offset
 		print("[#] Shifting RX freq. to %s (offset is %s)"
 			% (eng_notation.num_to_str(fc),
-				eng_notation.num_to_str(self.freq_offset_hz)))
+				eng_notation.num_to_str(self.freq_offset)))
 		self.phy_src.set_center_freq(fc, 0)
 		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
-		fc += self.freq_offset_hz
+		fc += self.freq_offset
 		print("[#] Shifting TX freq. to %s (offset is %s)"
 			% (eng_notation.num_to_str(fc),
-				eng_notation.num_to_str(self.freq_offset_hz)))
+				eng_notation.num_to_str(self.freq_offset)))
 		self.phy_sink.set_center_freq(fc, 0)
 		self.rotator_sink.set_phase_inc(-self.calc_phase_inc(fc))
 		self.tx_freq = fc
