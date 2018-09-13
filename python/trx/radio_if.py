@@ -86,8 +86,8 @@ class radio_if(gr.top_block):
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
 			phy_rx_antenna, phy_tx_antenna,
-			trx_bind_addr, trx_remote_addr,
-			trx_base_port):
+			phy_freq_offset_hz, trx_bind_addr,
+			trx_remote_addr, trx_base_port):
 
 		print("[i] Init Radio interface (L:%s:%u <-> R:%s:%u)"
 			% (trx_bind_addr, trx_base_port + 2,
@@ -98,6 +98,7 @@ class radio_if(gr.top_block):
 		self.rx_gain = phy_rx_gain
 		self.tx_gain = phy_tx_gain
 		self.ppm = phy_ppm
+		self.freq_offset_hz = phy_freq_offset_hz
 
 		gr.top_block.__init__(self, "GR-GSM TRX")
 
