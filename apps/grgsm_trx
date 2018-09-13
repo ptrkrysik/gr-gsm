@@ -52,7 +52,7 @@ class Application:
 		self.phy_tx_gain = argv.tx_gain
 		self.phy_rx_antenna = argv.rx_antenna
 		self.phy_tx_antenna = argv.tx_antenna
-		self.phy_freq_offset_hz = argv.freq_offset
+		self.phy_freq_offset = argv.freq_offset
 		self.phy_ppm = argv.ppm
 
 		# Set up signal handlers
@@ -63,7 +63,7 @@ class Application:
 		self.radio = radio_if(self.phy_args, self.phy_sample_rate,
 			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
 			self.phy_rx_antenna, self.phy_tx_antenna,
-			self.phy_freq_offset_hz, self.bind_addr,
+			self.phy_freq_offset, self.bind_addr,
 			self.remote_addr, self.base_port)
 
 		# Power measurement emulation
