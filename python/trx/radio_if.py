@@ -60,7 +60,6 @@ class dict_toggle_sign(gr.basic_block):
 
 class radio_if(gr.top_block):
 	# PHY specific variables
-	freq_offset_hz = None
 	rx_freq = 935e6
 	tx_freq = 890e6
 	osr = 4
@@ -280,21 +279,19 @@ class radio_if(gr.top_block):
 		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
 
 	def set_rx_freq(self, fc):
-		if self.freq_offset_hz is not None:
-			fc += self.freq_offset_hz
-			print("[#] Shifting RX freq. to %s (offset is %s)"
-				% (eng_notation.num_to_str(fc),
-					eng_notation.num_to_str(self.freq_offset_hz)))
+		fc += self.freq_offset_hz
+		print("[#] Shifting RX freq. to %s (offset is %s)"
+			% (eng_notation.num_to_str(fc),
+				eng_notation.num_to_str(self.freq_offset_hz)))
 		self.phy_src.set_center_freq(fc, 0)
 		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
-		if self.freq_offset_hz is not None:
-			fc += self.freq_offset_hz
-			print("[#] Shifting TX freq. to %s (offset is %s)"
-				% (eng_notation.num_to_str(fc),
-					eng_notation.num_to_str(self.freq_offset_hz)))
+		fc += self.freq_offset_hz
+		print("[#] Shifting TX freq. to %s (offset is %s)"
+			% (eng_notation.num_to_str(fc),
+				eng_notation.num_to_str(self.freq_offset_hz)))
 		self.phy_sink.set_center_freq(fc, 0)
 		self.rotator_sink.set_phase_inc(-self.calc_phase_inc(fc))
 		self.tx_freq = fc
