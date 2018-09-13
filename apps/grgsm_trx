@@ -66,10 +66,6 @@ class Application:
 			self.phy_freq_offset_hz, self.bind_addr,
 			self.remote_addr, self.base_port)
 
-		# Optional frequency offset
-		if self.phy_freq_offset_hz is not None:
-			self.radio.freq_offset_hz = self.phy_freq_offset_hz
-
 		# Power measurement emulation
 		# Noise: -120 .. -105
 		# BTS: -75 .. -50
