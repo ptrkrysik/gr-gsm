@@ -27,6 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include <boost/lexical_cast.hpp>
 
+#include "grgsm/endian.h"
 #include "grgsm/misc_utils/udp_socket.h"
 #include "trx_burst_if_impl.h"
 
