@@ -104,40 +104,42 @@ def parse_argv():
 	parser = ArgumentParser(prog = "grgsm_trx")
 
 	# TRX interface specific
-	parser.add_argument("-i", "--remote-addr",
+	trx_group = parser.add_argument_group("TRX interface")
+	trx_group.add_argument("-i", "--remote-addr",
 		dest = "remote_addr", type = str, default = "127.0.0.1",
 		help = "Set remote address (default %(default)s)")
-	parser.add_argument("-b", "--bind-addr",
+	trx_group.add_argument("-b", "--bind-addr",
 		dest = "bind_addr", type = str, default = "0.0.0.0",
 		help = "Set bind address (default %(default)s)")
-	parser.add_argument("-p", "--base_port",
+	trx_group.add_argument("-p", "--base_port",
 		dest = "base_port", type = int, default = 6700,
 		help = "Set base port number (default %(default)s)")
 
 	# PHY specific
-	parser.add_argument("-a", "--args",
+	phy_group = parser.add_argument_group("PHY parameters")
+	phy_group.add_argument("-a", "--args",
 		dest = "args", type = str, default = "",
 		help = "Set device arguments")
-	parser.add_argument("-s", "--sample-rate",
+	phy_group.add_argument("-s", "--sample-rate",
 		dest = "sample_rate", type = eng_float,
 		default = radio_if.SAMPLE_RATE,
 		help = "Set samp_rate (default %(default)s)")
-	parser.add_argument("-g", "--rx-gain",
+	phy_group.add_argument("-g", "--rx-gain",
 		dest = "rx_gain", type = float, default = 30,
 		help = "Set RX gain (default %(default)s)")
-	parser.add_argument("-G", "--tx-gain",
+	phy_group.add_argument("-G", "--tx-gain",
 		dest = "tx_gain", type = float, default = 10,
 		help = "Set TX gain (default %(default)s)")
-	parser.add_argument("--rx-antenna",
+	phy_group.add_argument("--rx-antenna",
 		dest = "rx_antenna", type = str, default = "RX2",
 		help = "Set RX antenna (default %(default)s)")
-	parser.add_argument("--tx-antenna",
+	phy_group.add_argument("--tx-antenna",
 		dest = "tx_antenna", type = str, default = "TX/RX",
 		help = "Set TX antenna (default %(default)s)")
-	parser.add_argument("--freq-offset",
+	phy_group.add_argument("--freq-offset",
 		dest = "freq_offset", type = eng_float, default = 0,
 		help = "Shift baseband freq. (e.g. -500M)")
-	parser.add_argument("--ppm",
+	phy_group.add_argument("--ppm",
 		dest = "ppm", type = float, default = 0,
 		help = "Set frequency correction (default %(default)s)")
 
