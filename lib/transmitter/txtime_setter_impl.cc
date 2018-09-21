@@ -116,52 +116,52 @@ namespace gr {
 
     void txtime_setter_impl::process_txtime_of_burst(pmt::pmt_t msg_in)
     {
-      if (d_fn_ref != UNKNOWN_FN)
-      {
-        pmt::pmt_t blob = pmt::cdr(msg_in);
+      if (d_fn_ref == UNKNOWN_FN)
+        return;
 
-        // Extract GSMTAP header from message
-        gsmtap_hdr *header = (gsmtap_hdr *) pmt::blob_data(blob);
-        uint32_t frame_nr = be32toh(header->frame_number);
-        uint32_t ts_num = header->timeslot;
+      pmt::pmt_t blob = pmt::cdr(msg_in);
 
-        time_format txtime = fn_time_delta_cpp(d_fn_ref, d_time_ref,
-          frame_nr, d_time_hint, ts_num, d_ts_ref);
+      // Extract GSMTAP header from message
+      gsmtap_hdr *header = (gsmtap_hdr *) pmt::blob_data(blob);
+      uint32_t frame_nr = be32toh(header->frame_number);
+      uint32_t ts_num = header->timeslot;
 
-        time_spec_t txtime_spec = time_spec_t(txtime.first, txtime.second);
-        txtime_spec -= d_delay_correction;
-        txtime_spec -= d_timing_advance;
+      time_format txtime = fn_time_delta_cpp(d_fn_ref, d_time_ref,
+        frame_nr, d_time_hint, ts_num, d_ts_ref);
 
-        time_spec_t current_time_estimate = time_spec_t(d_time_hint.first, d_time_hint.second);
+      time_spec_t txtime_spec = time_spec_t(txtime.first, txtime.second);
+      txtime_spec -= d_delay_correction;
+      txtime_spec -= d_timing_advance;
 
-        if (txtime_spec <= current_time_estimate) { // Drop too late bursts
-          std::cout << "lB" << std::flush;
-        } else if (txtime_spec > current_time_estimate + MAX_EARLY_TIME_DIFF) { // Drop too early bursts
-          std::cout << "eB" << std::flush;      //TODO: too early condition might happen when changing BTSes.
-                                                //Wrong fn_time is applied to new or old bursts in such situation.
-                                                //This solution is not perfect as MS might be blocked upto 
-                                                //MAX_EARLY_TIME_DIFF seconds.
-                                                //Better solution would be to indentify fn_time and burst coming
-                                                //from given BTS (i.e. based on ARFCN) and dropping bursts for which
-                                                //the bts_id doesn't match with bts_id of fn_time.
-        } else { //process bursts that are in the right time-frame
-          pmt::pmt_t tags_dict = pmt::dict_add(
-            pmt::make_dict(),
-            pmt::intern("tx_time"),
-            pmt::make_tuple(
-              pmt::from_uint64(txtime_spec.get_full_secs()),
-              pmt::from_double(txtime_spec.get_frac_secs()))
-          );
+      time_spec_t current_time_estimate = time_spec_t(d_time_hint.first, d_time_hint.second);
 
-          tags_dict = pmt::dict_add(tags_dict,
-            pmt::intern("fn"), pmt::from_uint64(frame_nr));
-          tags_dict = pmt::dict_add(tags_dict,
-            pmt::intern("ts"), pmt::from_uint64(ts_num));
+      if (txtime_spec <= current_time_estimate) { // Drop too late bursts
+        std::cout << "lB" << std::flush;
+      } else if (txtime_spec > current_time_estimate + MAX_EARLY_TIME_DIFF) { // Drop too early bursts
+        std::cout << "eB" << std::flush;      //TODO: too early condition might happen when changing BTSes.
+                                              //Wrong fn_time is applied to new or old bursts in such situation.
+                                              //This solution is not perfect as MS might be blocked upto
+                                              //MAX_EARLY_TIME_DIFF seconds.
+                                              //Better solution would be to indentify fn_time and burst coming
+                                              //from given BTS (i.e. based on ARFCN) and dropping bursts for which
+                                              //the bts_id doesn't match with bts_id of fn_time.
+      } else { //process bursts that are in the right time-frame
+        pmt::pmt_t tags_dict = pmt::dict_add(
+          pmt::make_dict(),
+          pmt::intern("tx_time"),
+          pmt::make_tuple(
+            pmt::from_uint64(txtime_spec.get_full_secs()),
+            pmt::from_double(txtime_spec.get_frac_secs()))
+        );
 
-          // Send a message to the output
-          pmt::pmt_t msg_out = pmt::cons(tags_dict, pmt::cdr(msg_in));
-          message_port_pub(pmt::mp("bursts_out"), msg_out);
-        }
+        tags_dict = pmt::dict_add(tags_dict,
+          pmt::intern("fn"), pmt::from_uint64(frame_nr));
+        tags_dict = pmt::dict_add(tags_dict,
+          pmt::intern("ts"), pmt::from_uint64(ts_num));
+
+        // Send a message to the output
+        pmt::pmt_t msg_out = pmt::cons(tags_dict, pmt::cdr(msg_in));
+        message_port_pub(pmt::mp("bursts_out"), msg_out);
       }
     }
 
