@@ -2,22 +2,22 @@
 /* @file
  * @author (C) 2015 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
- * 
+ *
  * Gr-gsm is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * Gr-gsm is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with gr-gsm; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  */
 
 
@@ -48,11 +48,11 @@ namespace gr {
        * class. gsm::tmsi_dumper::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(pmt::pmt_t prepend_string, const std::string &filename, bool print_message=true);
     };
+
 
   } // namespace gsm
 } // namespace gr
 
 #endif /* INCLUDED_GSM_TMSI_DUMPER_H */
-

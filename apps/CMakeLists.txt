@@ -24,11 +24,13 @@ add_subdirectory(helpers)
 
 GRCC_COMPILE(grgsm_livemon)
 GRCC_COMPILE(grgsm_livemon_headless)
+GRCC_COMPILE(grgsm_tmsi_dumper)
 
 set(grgsm_flowgraphs "")
 OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
 OPTION(ENABLE_GRGSM_LIVEMON "Compile grgsm_livemon" ON)
 OPTION(ENABLE_GRGSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
+OPTION(ENABLE_GRGSM_TMSI_DUMPER "Compile grgsm_tmsi_dumper" ON)
 
 if(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
     list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
@@ -37,6 +39,10 @@ endif(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
 if(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
     list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless)
 endif(ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
+
+if(ENABLE_GRCC AND ENABLE_GRGSM_TMSI_DUMPER)
+    list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_tmsi_dumper)
+endif(ENABLE_GRCC AND ENABLE_GRGSM_TMSI_DUMPER)
 
 GR_PYTHON_INSTALL(
     PROGRAMS

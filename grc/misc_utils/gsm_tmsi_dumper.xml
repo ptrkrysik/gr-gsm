@@ -4,10 +4,41 @@
   <key>gsm_tmsi_dumper</key>
   <import>import grgsm</import>
   <import>import pmt</import>
-  <make>grgsm.tmsi_dumper()</make>
+  <make>grgsm.tmsi_dumper(pmt.intern($prepend_string),$filename,$print_message)</make>
+
+  <param>
+    <name>Prepend String</name>
+    <key>prepend_string</key>
+    <value></value>
+    <type>string</type>
+    <hide>part</hide>
+  </param>
+
+
+  <param>
+    <name>Destination file</name>
+    <key>filename</key>
+    <value>/tmp/tmsicount.txt</value>
+    <type>file_open</type>
+  </param>
+
+  <param>
+    <name>Print message</name>
+    <key>print_message</key>
+    <value>True</value>
+    <type>bool</type>
+    <option>
+      <name>False</name>
+      <key>False</key>
+    </option>
+    <option>
+      <name>True</name>
+      <key>True</key>
+    </option>
+  </param>
 
   <sink>
-    <name>msgs</name>
+    <name>in</name>
     <type>message</type>
   </sink>
 </block>
