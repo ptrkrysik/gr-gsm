@@ -42,17 +42,14 @@ namespace gr {
     time_spec_t time_sample_ref::offset_to_time(uint64_t offset)
     {
       uint64_t samples_from_last_rx_time = offset - d_current_start_offset;
-      time_spec_t time = time_spec_t(static_cast<double>(samples_from_last_rx_time)/d_samp_rate) + d_last_rx_time;
-      
+      time_spec_t time = time_spec_t::from_ticks(samples_from_last_rx_time, d_samp_rate) + d_last_rx_time;
       return time;
     }
 
     uint64_t time_sample_ref::time_to_offset(time_spec_t time)
     {
-      double samples_since_last_rx_time_tag = (time-d_last_rx_time).get_real_secs()*d_samp_rate;
-//      double fractional_part = round(samples_since_last_rx_time_tag) - samples_since_last_rx_time_tag;
-      uint64_t offset = static_cast<uint64_t>(round(samples_since_last_rx_time_tag)) + d_current_start_offset;
-      
+      uint64_t samples_since_last_rx_time_tag = (time-d_last_rx_time).to_ticks(d_samp_rate);
+      uint64_t offset = samples_since_last_rx_time_tag + d_current_start_offset;
       return offset;
     }
   } // namespace gsm
