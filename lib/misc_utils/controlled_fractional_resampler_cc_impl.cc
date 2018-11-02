@@ -117,7 +117,7 @@ namespace gr {
           }
         } else {
           uint64_t out_samples_to_tag = round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc);
-          if( (out_samples_to_tag + produced_out_sum) <= noutput_items)
+          if( (out_samples_to_tag + produced_out_sum) < noutput_items)
           {
             add_item_tag(0, produced_out_sum + out_samples_to_tag + nitems_written(0), i_tag->key, i_tag->value);
           }
