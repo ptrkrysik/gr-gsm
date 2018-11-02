@@ -79,36 +79,34 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex*)input_items[0];
       gr_complex *out = (gr_complex*)output_items[0];
-      
+
       uint64_t processed_in = 0; //input samples processed in the last call to resample function
       uint64_t processed_in_sum = 0; //input samples processed during a whole call to general_work function
       uint64_t produced_out_sum = 0; //output samples produced during a whole call to general_work function
 
-      std::vector<tag_t> set_resamp_ratio_tags;
+      std::vector<tag_t> tags;
 
       pmt::pmt_t key = pmt::string_to_symbol("set_resamp_ratio");
-      get_tags_in_window(set_resamp_ratio_tags, 0, 0, ninput_items[0]);
-      
-      bool all_output_samples_produced = false;
-      for(std::vector<tag_t>::iterator i_tag = set_resamp_ratio_tags.begin(); i_tag < set_resamp_ratio_tags.end(); i_tag++)
+      get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0)+ninput_items[0]);
+      bool out_buffer_full = false;
+      for(std::vector<tag_t>::iterator i_tag = tags.begin(); i_tag < tags.end(); i_tag++)
       {
         uint64_t tag_offset_rel = i_tag->offset - nitems_read(0);
-        
+
         if(pmt::symbol_to_string(i_tag->key) == "set_resamp_ratio")
         {
-          uint64_t samples_to_produce = static_cast<uint64_t>(round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc)); //tu może być problem - bo to jest głupota przy d_mu_inc różnym od 1.0
-          
-          if( (samples_to_produce + produced_out_sum) > noutput_items)
+          uint64_t samples_to_produce = static_cast<uint64_t>(round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc));
+
+          if((samples_to_produce + produced_out_sum) > noutput_items)
           {
             samples_to_produce = noutput_items - produced_out_sum;
-            all_output_samples_produced = true;
+            out_buffer_full = true;
           }
-          
           processed_in = resample(in, processed_in_sum, out, produced_out_sum, samples_to_produce);
           processed_in_sum = processed_in_sum + processed_in;
           produced_out_sum = produced_out_sum + samples_to_produce;
 
-          if(all_output_samples_produced)
+          if(out_buffer_full)
           {
             break;
           } else {
@@ -124,16 +122,15 @@ namespace gr {
         }
       }
 
-      if(!all_output_samples_produced)
+      if(!out_buffer_full)
       {
         processed_in = resample(in, processed_in_sum, out, produced_out_sum, (noutput_items-produced_out_sum));
         processed_in_sum = processed_in_sum + processed_in;
       }
-      
       consume_each(processed_in_sum);
       return noutput_items;
     }
-    
+
     inline uint64_t 
     controlled_fractional_resampler_cc_impl::resample(const gr_complex *in, uint64_t first_in_sample, gr_complex *out, uint64_t first_out_sample, uint64_t samples_to_produce)
     {
