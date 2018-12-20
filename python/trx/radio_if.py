@@ -38,25 +38,7 @@ from gnuradio import gr
 from gnuradio import filter
 from gnuradio.filter import firdes
 
-
-# HACK: should be implemented in C++!
-class dict_toggle_sign(gr.basic_block):
-    def __init__(self):  # only default arguments here
-        gr.basic_block.__init__(self,
-            name='Change sign of elts in dict',
-            in_sig=[],
-            out_sig=[]
-        )
-        self.message_port_register_in(pmt.intern("dict_in"))
-        self.message_port_register_out(pmt.intern("dict_out"))
-        self.set_msg_handler(pmt.intern("dict_in"), self.change_sign)
-
-    def change_sign(self, msg):
-        if pmt.is_dict(msg):
-            d = pmt.to_python(msg)
-            for key, value in d.items():
-                d[key] *= -1
-            self.message_port_pub(pmt.intern("dict_out"), pmt.to_pmt(d))
+from dict_toggle_sign import dict_toggle_sign
 
 class radio_if(gr.top_block):
 	# PHY specific variables
