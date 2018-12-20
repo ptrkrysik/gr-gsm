@@ -8,7 +8,7 @@
 # Generated: Fri Dec  1 10:49:25 2017
 ##################################################
 
-from change_sign_of_dict_elements import change_sign_of_dict_elements
+from dict_toggle_sign import dict_toggle_sign
 from gnuradio import blocks
 from gnuradio import digital
 from gnuradio import eng_notation
@@ -94,16 +94,16 @@ class radio_if_grc(gr.top_block):
         self.gsm_burst_type_filter_0 = grgsm.burst_type_filter(([3]))
         self.gsm_burst_to_fn_time_0 = grgsm.burst_to_fn_time()
         self.digital_burst_shaper_xx_0 = digital.burst_shaper_cc((firdes.window(firdes.WIN_HANN, 16, 0)), 0, 20, False, "packet_len")
-        self.change_sign_of_dict_elements = change_sign_of_dict_elements()
+        self.dict_toggle_sign = dict_toggle_sign()
         self.blocks_pdu_to_tagged_stream_0_0 = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.change_sign_of_dict_elements, 'dict_out'), (self.gsm_msg_to_tag_0_0, 'msg'))    
+        self.msg_connect((self.dict_toggle_sign, 'dict_out'), (self.gsm_msg_to_tag_0_0, 'msg'))
         self.msg_connect((self.gsm_burst_to_fn_time_0, 'fn_time_out'), (self.gsm_txtime_setter_0, 'fn_time'))    
         self.msg_connect((self.gsm_burst_type_filter_0, 'bursts_out'), (self.gsm_burst_to_fn_time_0, 'bursts_in'))    
-        self.msg_connect((self.gsm_clock_offset_control_0, 'ctrl'), (self.change_sign_of_dict_elements, 'dict_in'))    
+        self.msg_connect((self.gsm_clock_offset_control_0, 'ctrl'), (self.dict_toggle_sign, 'dict_in'))
         self.msg_connect((self.gsm_clock_offset_control_0, 'ctrl'), (self.gsm_msg_to_tag_0, 'msg'))    
         self.msg_connect((self.gsm_preprocess_tx_burst_0, 'bursts_out'), (self.blocks_pdu_to_tagged_stream_0_0, 'pdus'))    
         self.msg_connect((self.gsm_receiver_0, 'C0'), (self.gsm_burst_type_filter_0, 'bursts_in'))    

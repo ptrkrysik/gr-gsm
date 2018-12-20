@@ -9,7 +9,7 @@ parameters. All of them are required to have default values!
 from gnuradio import gr
 from pmt import *
 
-class change_sign_of_dict_elements(gr.basic_block):
+class dict_toggle_sign(gr.basic_block):
     def __init__(self):  # only default arguments here
         gr.basic_block.__init__(
             self,
