@@ -23,11 +23,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 import grgsm
-from ctrl_if import ctrl_if
 
-class ctrl_if_bb(ctrl_if):
+from ctrl_if import CTRLInterface
+
+class CTRLInterfaceBB(CTRLInterface):
 	def __init__(self, remote_addr, remote_port, bind_addr, bind_port, tb, pm):
-		ctrl_if.__init__(self, remote_addr, remote_port,
+		CTRLInterface.__init__(self, remote_addr, remote_port,
 			bind_addr, bind_port)
 
 		print("[i] Init CTRL interface (%s)" % self.desc_link())

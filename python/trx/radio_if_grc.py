@@ -24,7 +24,7 @@ import math
 import time
 
 
-class radio_if_grc(gr.top_block):
+class RadioInterfaceGRC(gr.top_block):
 
     def __init__(self, delay_correction=285.616e-6, osr=4, ppm=-0.799427, rx_freq=935e6+36*0.2e6, rx_gain=40, samp_rate=13e6/12.0, timing_advance=0, trx_base_port="5710", trx_remote_addr="127.0.0.1", tx_freq=935e6+36*0.2e6-45e6, tx_gain=40, uplink_shift=-(6.0/1625000*(156.25)*3)):
         gr.top_block.__init__(self, "Trx radio interface")
@@ -255,7 +255,7 @@ def argument_parser():
     return parser
 
 
-def main(top_block_cls=radio_if_grc, options=None):
+def main(top_block_cls=RadioInterfaceGRC, options=None):
     if options is None:
         options, _ = argument_parser().parse_args()
 

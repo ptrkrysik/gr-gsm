@@ -40,7 +40,7 @@ from gnuradio.filter import firdes
 
 from dict_toggle_sign import dict_toggle_sign
 
-class radio_if(gr.top_block):
+class RadioInterface(gr.top_block):
 	# PHY specific variables
 	rx_freq = 935e6
 	tx_freq = 890e6

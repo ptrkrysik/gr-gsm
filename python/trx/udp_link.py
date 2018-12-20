@@ -25,7 +25,7 @@
 import socket
 import select
 
-class udp_link:
+class UDPLink:
 	def __init__(self, remote_addr, remote_port, bind_addr = '0.0.0.0', bind_port = 0):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
