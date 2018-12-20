@@ -116,15 +116,19 @@ namespace gr {
 
     void txtime_setter_impl::process_txtime_of_burst(pmt::pmt_t msg_in)
     {
-      if (d_fn_ref == UNKNOWN_FN)
-        return;
-
       pmt::pmt_t blob = pmt::cdr(msg_in);
 
       // Extract GSMTAP header from message
       gsmtap_hdr *header = (gsmtap_hdr *) pmt::blob_data(blob);
       uint32_t frame_nr = be32toh(header->frame_number);
       uint32_t ts_num = header->timeslot;
+
+      if (d_fn_ref == UNKNOWN_FN) {
+        std::cout << "Missing reference TDMA frame number, dropping "
+                  << format("burst (fn=%u, tn=%u)", frame_nr, ts_num)
+                  << std::endl;
+        return;
+      }
 
       time_format txtime = fn_time_delta_cpp(d_fn_ref, d_time_ref,
         frame_nr, d_time_hint, ts_num, d_ts_ref);
