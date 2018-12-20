@@ -20,10 +20,11 @@
 This is a set of helper classes for the grgsm_trx application.
 '''
 
-from udp_link import udp_link
-from ctrl_if import ctrl_if
-from ctrl_if_bb import ctrl_if_bb
-from fake_pm import fake_pm
-from radio_if_grc import radio_if_grc
-from radio_if import radio_if
+from udp_link import UDPLink
+from ctrl_if import CTRLInterface
+from ctrl_if_bb import CTRLInterfaceBB
+from fake_pm import FakePM
+from radio_if_grc import RadioInterfaceGRC
+from radio_if import RadioInterface
+
 from dict_toggle_sign import dict_toggle_sign

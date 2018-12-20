@@ -24,7 +24,7 @@
 
 from random import randint
 
-class fake_pm:
+class FakePM:
 	# Freq. list for good power level
 	bts_list = []
 
