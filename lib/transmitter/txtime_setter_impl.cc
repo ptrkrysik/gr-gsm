@@ -126,7 +126,7 @@ namespace gr {
 
       if (d_fn_ref == UNKNOWN_FN) {
         std::cout << "Missing reference TDMA frame number, dropping "
-                  << format("burst (fn=%u, tn=%u)", frame_nr, ts_num)
+                  << "burst (fn=" << frame_nr << ", tn=" << ts_num << ")"
                   << std::endl;
         return;
       }
