@@ -283,6 +283,7 @@ class RadioInterface(gr.top_block):
 					eng_notation.num_to_str(self.freq_offset)))
 		self.phy_src.set_center_freq(fc, 0)
 		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
+		self.gsm_clck_ctrl.set_fc(fc)
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
