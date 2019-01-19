@@ -24,6 +24,7 @@ GR_PYTHON_INSTALL(
     ctrl_if.py
     ctrl_if_bb.py
     radio_if.py
+    radio_if_uhd.py
     radio_if_grc.py
     transceiver.py
     dict_toggle_sign.py

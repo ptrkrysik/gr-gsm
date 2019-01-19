@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # GR-GSM based transceiver
-# Follow graph implementation
+# Generic (device independent) flow-graph implementation
 #
 # (C) 2016-2019 by Vadim Yanitskiy <axilirator@gmail.com>
 # (C) 2017      by Piotr Krysik <ptrkrysik@gmail.com>
@@ -33,7 +33,6 @@ from math import pi
 from gnuradio import eng_notation
 from gnuradio import digital
 from gnuradio import blocks
-from gnuradio import uhd
 from gnuradio import gr
 
 from gnuradio import filter
@@ -57,11 +56,6 @@ class RadioInterface(gr.top_block):
 	GSM_SYM_RATE = (1.0 / GSM_SYM_PERIOD_uS) * 1e6
 	SAMPLE_RATE = GSM_SYM_RATE * osr
 
-	# FIXME: shall be measured (automatically?) for
-	# particular device and particular clock rate.
-	# The current value is measured for USRP B2X0 at 26e6.
-	delay_correction = (285.616 + 2 * GSM_SYM_PERIOD_uS) * 1e-6
-
 	# Dummy freq. value that is used during initialization
 	# basically, the DL freq. of ARFCN 0
 	DUMMY_FREQ = 935e6
@@ -83,6 +77,10 @@ class RadioInterface(gr.top_block):
 		self.ppm = phy_ppm
 		self.freq_offset = phy_freq_offset
 
+		self.phy_args = phy_args
+		self.rx_antenna = phy_rx_antenna
+		self.tx_antenna = phy_tx_antenna
+
 		gr.top_block.__init__(self, "GR-GSM TRX")
 
 		# TRX Burst Interface
@@ -91,15 +89,7 @@ class RadioInterface(gr.top_block):
 			str(trx_base_port))
 
 		# RX path definition
-		self.phy_src = uhd.usrp_source(phy_args,
-			uhd.stream_args(cpu_format="fc32",
-				channels=range(1)))
-
-		self.phy_src.set_clock_rate(26e6, uhd.ALL_MBOARDS)
-		self.phy_src.set_antenna(phy_rx_antenna, 0)
-		self.phy_src.set_samp_rate(phy_sample_rate)
-		self.phy_src.set_bandwidth(650e3, 0)
-		self.phy_src.set_gain(phy_rx_gain)
+		self.phy_init_source()
 
 		self.msg_to_tag_src = grgsm.msg_to_tag()
 
@@ -115,7 +105,7 @@ class RadioInterface(gr.top_block):
 
 		# Connections
 		self.connect(
-			(self.phy_src, 0),
+			(self._phy_src, 0),
 			(self.msg_to_tag_src, 0))
 
 		self.connect(
@@ -140,18 +130,11 @@ class RadioInterface(gr.top_block):
 
 
 		# TX Path Definition
-		self.phy_sink = uhd.usrp_sink(phy_args,
-			uhd.stream_args(cpu_format="fc32",
-				channels=range(1)), "packet_len")
-
-		self.phy_sink.set_clock_rate(26e6, uhd.ALL_MBOARDS)
-		self.phy_sink.set_antenna(phy_tx_antenna, 0)
-		self.phy_sink.set_samp_rate(phy_sample_rate)
-		self.phy_sink.set_gain(self.tx_gain)
+		self.phy_init_sink()
 
 		self.tx_time_setter = grgsm.txtime_setter(
 			0xffffffff, 0, 0, 0, 0, 0,
-			self.delay_correction + self.GSM_UL_DL_SHIFT_uS * 1e-6)
+			self.phy_proc_delay + self.GSM_UL_DL_SHIFT_uS * 1e-6)
 
 		self.tx_burst_proc = grgsm.preprocess_tx_burst()
 
@@ -200,7 +183,7 @@ class RadioInterface(gr.top_block):
 
 		self.connect(
 			(self.rotator_sink, 0),
-			(self.phy_sink, 0))
+			(self._phy_sink, 0))
 
 
 		# RX & TX synchronization
@@ -245,11 +228,11 @@ class RadioInterface(gr.top_block):
 			(self.dict_toggle_sign, 'dict_out'),
 			(self.msg_to_tag_sink, 'msg'))
 
+	def phy_init_source(self):
+		raise NotImplementedError
 
-		# Some UHD devices (such as UmTRX) do start the clock
-		# not from 0, so it's required to reset it manually.
-		# Resetting UHD source will also affect the sink.
-		self.phy_src.set_time_now(uhd.time_spec(0.0))
+	def phy_init_sink(self):
+		raise NotImplementedError
 
 	def shutdown(self):
 		print("[i] Shutdown Radio interface")
@@ -281,9 +264,10 @@ class RadioInterface(gr.top_block):
 			print("[#] Shifting RX freq. to %s (offset is %s)"
 				% (eng_notation.num_to_str(fc),
 					eng_notation.num_to_str(self.freq_offset)))
-		self.phy_src.set_center_freq(fc, 0)
+
 		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
 		self.gsm_clck_ctrl.set_fc(fc)
+		self.phy_set_rx_freq(fc)
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
@@ -292,16 +276,17 @@ class RadioInterface(gr.top_block):
 			print("[#] Shifting TX freq. to %s (offset is %s)"
 				% (eng_notation.num_to_str(fc),
 					eng_notation.num_to_str(self.freq_offset)))
-		self.phy_sink.set_center_freq(fc, 0)
+
 		self.rotator_sink.set_phase_inc(-self.calc_phase_inc(fc))
+		self.phy_set_tx_freq(fc)
 		self.tx_freq = fc
 
 	def set_rx_gain(self, gain):
-		self.phy_src.set_gain(gain, 0)
+		self.phy_set_rx_gain(gain)
 		self.rx_gain = gain
 
 	def set_tx_gain(self, gain):
-		self.phy_sink.set_gain(gain, 0)
+		self.phy_set_tx_gain(gain)
 		self.tx_gain = gain
 
 	def set_slot(self, slot, config):

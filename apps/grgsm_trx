@@ -29,6 +29,7 @@ from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from gnuradio import eng_notation
 
+from grgsm.trx import RadioInterfaceUHD
 from grgsm.trx import RadioInterface
 from grgsm.trx import Transceiver
 
@@ -58,7 +59,7 @@ class Application:
 		signal.signal(signal.SIGINT, self.sig_handler)
 
 		# Init Radio interface
-		self.radio = RadioInterface(self.phy_args, self.phy_sample_rate,
+		self.radio = RadioInterfaceUHD(self.phy_args, self.phy_sample_rate,
 			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
 			self.phy_rx_antenna, self.phy_tx_antenna,
 			self.phy_freq_offset, self.bind_addr,
