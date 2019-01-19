@@ -269,6 +269,12 @@ class RadioInterface(gr.top_block):
 
 		return True
 
+	def reset(self):
+		# TODO: do we need to reset both RX / TX freq.?
+		# self.rx_freq = None
+		# self.tx_freq = None
+		self.set_ta(0)
+
 	def calc_phase_inc(self, fc):
 		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
 
