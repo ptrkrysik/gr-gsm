@@ -60,14 +60,18 @@ class RadioInterface(gr.top_block):
 	# basically, the DL freq. of ARFCN 0
 	DUMMY_FREQ = 935e6
 
+	# Human-readable description
+	def __str__(self):
+		return "(generic)"
+
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
 			phy_rx_antenna, phy_tx_antenna,
 			phy_freq_offset, trx_bind_addr,
 			trx_remote_addr, trx_base_port):
 
-		print("[i] Init Radio interface (L:%s:%u <-> R:%s:%u)"
-			% (trx_bind_addr, trx_base_port + 2,
+		print("[i] Init %s Radio interface (L:%s:%u <-> R:%s:%u)"
+			% (self, trx_bind_addr, trx_base_port + 2,
 				trx_remote_addr, trx_base_port + 102))
 
 		# PHY specific variables
