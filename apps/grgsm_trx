@@ -59,6 +59,8 @@ class Application:
 
 		if argv.driver == "uhd":
 			from grgsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
+		elif argv.driver == "lms":
+			from grgsm.trx.radio_if_lms import RadioInterfaceLMS as Radio
 		else:
 			raise ValueError("Unknown RadioInterface driver '%s'" % argv.driver)
 
@@ -117,7 +119,7 @@ def parse_argv():
 	phy_group = parser.add_argument_group("PHY parameters")
 	phy_group.add_argument("--driver",
 		dest = "driver", type = str, default = "uhd",
-		choices = ["uhd"],
+		choices = ["uhd", "lms"],
 		help = "Set device driver (default %(default)s)")
 	phy_group.add_argument("-a", "--args",
 		dest = "args", type = str, default = "",
