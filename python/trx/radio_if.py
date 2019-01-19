@@ -4,7 +4,7 @@
 # GR-GSM based transceiver
 # Follow graph implementation
 #
-# (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>
+# (C) 2016-2019 by Vadim Yanitskiy <axilirator@gmail.com>
 # (C) 2017      by Piotr Krysik <ptrkrysik@gmail.com>
 #
 # All Rights Reserved
@@ -43,8 +43,8 @@ from dict_toggle_sign import dict_toggle_sign
 
 class RadioInterface(gr.top_block):
 	# PHY specific variables
-	rx_freq = 935e6
-	tx_freq = 890e6
+	rx_freq = None
+	tx_freq = None
 	osr = 4
 
 	# Application state flags
@@ -64,6 +64,10 @@ class RadioInterface(gr.top_block):
 	# particular device and particular clock rate.
 	# The current value is measured for USRP B2X0 at 26e6.
 	delay_correction = (285.616 + 2 * GSM_SYM_PERIOD_uS) * 1e-6
+
+	# Dummy freq. value that is used during initialization
+	# basically, the DL freq. of ARFCN 0
+	DUMMY_FREQ = 935e6
 
 	def __init__(self, phy_args, phy_sample_rate,
 			phy_rx_gain, phy_tx_gain, phy_ppm,
@@ -95,7 +99,6 @@ class RadioInterface(gr.top_block):
 				channels=range(1)))
 
 		self.phy_src.set_clock_rate(26e6, uhd.ALL_MBOARDS)
-		self.phy_src.set_center_freq(self.rx_freq, 0)
 		self.phy_src.set_antenna(phy_rx_antenna, 0)
 		self.phy_src.set_samp_rate(phy_sample_rate)
 		self.phy_src.set_bandwidth(650e3, 0)
@@ -103,8 +106,7 @@ class RadioInterface(gr.top_block):
 
 		self.msg_to_tag_src = grgsm.msg_to_tag()
 
-		self.rotator_src = grgsm.controlled_rotator_cc(
-			self.calc_phase_inc(self.rx_freq))
+		self.rotator_src = grgsm.controlled_rotator_cc(0.0)
 
 		self.lpf = filter.fir_filter_ccf(1, firdes.low_pass(
 			1, phy_sample_rate, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
@@ -148,7 +150,6 @@ class RadioInterface(gr.top_block):
 		self.phy_sink.set_clock_rate(26e6, uhd.ALL_MBOARDS)
 		self.phy_sink.set_antenna(phy_tx_antenna, 0)
 		self.phy_sink.set_samp_rate(phy_sample_rate)
-		self.phy_sink.set_center_freq(self.tx_freq, 0)
 		self.phy_sink.set_gain(self.tx_gain)
 
 		self.tx_time_setter = grgsm.txtime_setter(
@@ -169,8 +170,7 @@ class RadioInterface(gr.top_block):
 
 		self.msg_to_tag_sink = grgsm.msg_to_tag()
 
-		self.rotator_sink = grgsm.controlled_rotator_cc(
-			-self.calc_phase_inc(self.tx_freq))
+		self.rotator_sink = grgsm.controlled_rotator_cc(0.0)
 
 		# Connections
 		self.msg_connect(
@@ -225,8 +225,9 @@ class RadioInterface(gr.top_block):
 
 
 		# AFC (Automatic Frequency Correction)
+		# NOTE: dummy frequency is used during init
 		self.gsm_clck_ctrl = grgsm.clock_offset_control(
-			self.rx_freq, phy_sample_rate, osr = self.osr)
+			self.DUMMY_FREQ, phy_sample_rate, osr = self.osr)
 
 		self.dict_toggle_sign = dict_toggle_sign()
 
