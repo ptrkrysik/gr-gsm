@@ -23,7 +23,6 @@ GR_PYTHON_INSTALL(
     udp_link.py
     ctrl_if.py
     ctrl_if_bb.py
-    fake_pm.py
     radio_if.py
     radio_if_grc.py
     dict_toggle_sign.py

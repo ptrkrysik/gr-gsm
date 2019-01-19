@@ -31,7 +31,6 @@ from gnuradio import eng_notation
 
 from grgsm.trx import CTRLInterfaceBB
 from grgsm.trx import RadioInterface
-from grgsm.trx import FakePM
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
@@ -65,16 +64,11 @@ class Application:
 			self.phy_freq_offset, self.bind_addr,
 			self.remote_addr, self.base_port)
 
-		# Power measurement emulation
-		# Noise: -120 .. -105
-		# BTS: -75 .. -50
-		self.pm = FakePM(-120, -105, -75, -50)
-
 		# Init TRX CTRL interface
 		self.server = CTRLInterfaceBB(
 			self.remote_addr, self.base_port + 101,
 			self.bind_addr, self.base_port + 1,
-			self.radio, self.pm)
+			self.radio)
 
 		print("[i] Init complete")
 
