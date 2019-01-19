@@ -29,7 +29,6 @@ from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from gnuradio import eng_notation
 
-from grgsm.trx import RadioInterfaceUHD
 from grgsm.trx import RadioInterface
 from grgsm.trx import Transceiver
 
@@ -58,8 +57,13 @@ class Application:
 		# Set up signal handlers
 		signal.signal(signal.SIGINT, self.sig_handler)
 
+		if argv.driver == "uhd":
+			from grgsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
+		else:
+			raise ValueError("Unknown RadioInterface driver '%s'" % argv.driver)
+
 		# Init Radio interface
-		self.radio = RadioInterfaceUHD(self.phy_args, self.phy_sample_rate,
+		self.radio = Radio(self.phy_args, self.phy_sample_rate,
 			self.phy_rx_gain, self.phy_tx_gain, self.phy_ppm,
 			self.phy_rx_antenna, self.phy_tx_antenna,
 			self.phy_freq_offset, self.bind_addr,
@@ -111,6 +115,10 @@ def parse_argv():
 
 	# PHY specific
 	phy_group = parser.add_argument_group("PHY parameters")
+	phy_group.add_argument("--driver",
+		dest = "driver", type = str, default = "uhd",
+		choices = ["uhd"],
+		help = "Set device driver (default %(default)s)")
 	phy_group.add_argument("-a", "--args",
 		dest = "args", type = str, default = "",
 		help = "Set device arguments")
