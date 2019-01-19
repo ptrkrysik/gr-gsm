@@ -41,13 +41,21 @@ class multiframe_configuration
     ~multiframe_configuration() {}
 
     void set_type(multiframe_type type) {
-      if (type == multiframe_26) {
-        d_burst_types.resize(26);
-      } else {
+      switch (type) {
+      case multiframe_51:
         d_burst_types.resize(51);
+        d_type = multiframe_51;
+        break;
+      case multiframe_26:
+        d_burst_types.resize(26);
+        d_type = multiframe_26;
+        break;
+      case unknown:
+      default:
+        d_burst_types.resize(0);
+        d_type = unknown;
+        break;
       }
-
-      d_type = type;
     }
 
     void set_burst_type(int nr, burst_type type) {
