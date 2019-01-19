@@ -29,8 +29,8 @@ from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from gnuradio import eng_notation
 
-from grgsm.trx import CTRLInterfaceBB
 from grgsm.trx import RadioInterface
+from grgsm.trx import Transceiver
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
@@ -64,18 +64,17 @@ class Application:
 			self.phy_freq_offset, self.bind_addr,
 			self.remote_addr, self.base_port)
 
-		# Init TRX CTRL interface
-		self.server = CTRLInterfaceBB(
-			self.remote_addr, self.base_port + 101,
-			self.bind_addr, self.base_port + 1,
-			self.radio)
+		# Init Transceiver
+		self.trx = Transceiver(self.bind_addr,
+			self.remote_addr, self.base_port,
+			radio_if = self.radio)
 
 		print("[i] Init complete")
 
 	def run(self):
 		# Enter main loop
 		while True:
-			self.server.loop()
+			self.trx.ctrl_if.loop()
 
 	def shutdown(self):
 		print("[i] Shutting down...")
