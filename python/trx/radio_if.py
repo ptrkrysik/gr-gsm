@@ -276,19 +276,21 @@ class RadioInterface(gr.top_block):
 		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
 
 	def set_rx_freq(self, fc):
-		fc += self.freq_offset
-		print("[#] Shifting RX freq. to %s (offset is %s)"
-			% (eng_notation.num_to_str(fc),
-				eng_notation.num_to_str(self.freq_offset)))
+		if self.freq_offset != 0:
+			fc += self.freq_offset
+			print("[#] Shifting RX freq. to %s (offset is %s)"
+				% (eng_notation.num_to_str(fc),
+					eng_notation.num_to_str(self.freq_offset)))
 		self.phy_src.set_center_freq(fc, 0)
 		self.rotator_src.set_phase_inc(self.calc_phase_inc(fc))
 		self.rx_freq = fc
 
 	def set_tx_freq(self, fc):
-		fc += self.freq_offset
-		print("[#] Shifting TX freq. to %s (offset is %s)"
-			% (eng_notation.num_to_str(fc),
-				eng_notation.num_to_str(self.freq_offset)))
+		if self.freq_offset != 0:
+			fc += self.freq_offset
+			print("[#] Shifting TX freq. to %s (offset is %s)"
+				% (eng_notation.num_to_str(fc),
+					eng_notation.num_to_str(self.freq_offset)))
 		self.phy_sink.set_center_freq(fc, 0)
 		self.rotator_sink.set_phase_inc(-self.calc_phase_inc(fc))
 		self.tx_freq = fc
