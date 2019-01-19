@@ -25,5 +25,6 @@ from ctrl_if import CTRLInterface
 from ctrl_if_bb import CTRLInterfaceBB
 from radio_if_grc import RadioInterfaceGRC
 from radio_if import RadioInterface
+from transceiver import Transceiver
 
 from dict_toggle_sign import dict_toggle_sign

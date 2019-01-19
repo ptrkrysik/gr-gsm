@@ -25,6 +25,7 @@ GR_PYTHON_INSTALL(
     ctrl_if_bb.py
     radio_if.py
     radio_if_grc.py
+    transceiver.py
     dict_toggle_sign.py
     DESTINATION ${GR_PYTHON_DIR}/grgsm/trx
 )

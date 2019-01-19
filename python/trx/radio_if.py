@@ -47,9 +47,6 @@ class RadioInterface(gr.top_block):
 	tx_freq = None
 	osr = 4
 
-	# Application state flags
-	trx_started = False
-
 	# GSM timings (in microseconds [uS])
 	# One timeslot duration is 576.9 μs = 15/26 ms,
 	# or 156.25 symbol periods (a symbol period is 48/13 μs)
@@ -303,6 +300,20 @@ class RadioInterface(gr.top_block):
 	def set_tx_gain(self, gain):
 		self.phy_sink.set_gain(gain, 0)
 		self.tx_gain = gain
+
+	def set_slot(self, slot, config):
+		print("[i] Configure timeslot filter to: %s"
+			% ("drop all" if config == 0 else "tn=%d" % slot))
+
+		if config == 0:
+			# Value 0 is used for deactivation
+			self.ts_filter.set_policy(grgsm.FILTER_POLICY_DROP_ALL)
+		else:
+			# FIXME: ideally, we should (re)configure the Receiver
+			# block, but there is no API for that, and hard-coded
+			# timeslot configuration is used...
+			self.ts_filter.set_policy(grgsm.FILTER_POLICY_DEFAULT)
+			self.ts_filter.set_tn(slot)
 
 	def set_ta(self, ta):
 		print("[i] Setting TA value %d" % ta)
