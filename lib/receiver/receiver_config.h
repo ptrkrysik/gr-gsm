@@ -161,6 +161,11 @@ class channel_configuration
       d_timeslots_descriptions[timeslot_nr].set_burst_type(burst_nr, b_type);
     }
 
+    void reset_all(void) {
+      for (int i = 0; i < TS_PER_FRAME; i++)
+        set_multiframe_type(i, unknown);
+    }
+
     burst_type get_burst_type(burst_counter burst_nr);
 };
 
