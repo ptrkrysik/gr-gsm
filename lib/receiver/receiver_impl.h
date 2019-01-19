@@ -202,7 +202,9 @@ namespace gr {
         void send_burst(burst_counter burst_nr, const unsigned char * burst_binary, uint8_t burst_type, size_t input_nr, unsigned int burst_start=-1);
 
         /**
-         * Configures burst types in different channels
+         * Initializes default burst detection config for all timeslots:
+         * TS0   (MF51): FB + SB + NB / DB
+         * TS1-7 (MF51): NB / DB
          */
         void configure_receiver();
 
