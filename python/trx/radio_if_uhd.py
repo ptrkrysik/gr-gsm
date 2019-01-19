@@ -27,6 +27,10 @@ from gnuradio import uhd
 from radio_if import RadioInterface
 
 class RadioInterfaceUHD(RadioInterface):
+	# Human-readable description
+	def __str__(self):
+		return "UHD"
+
 	@property
 	def phy_proc_delay(self):
 		# FIXME: shall be measured (automatically?) for
