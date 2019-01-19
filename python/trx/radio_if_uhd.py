@@ -27,6 +27,10 @@ from gnuradio import uhd
 from radio_if import RadioInterface
 
 class RadioInterfaceUHD(RadioInterface):
+	# Human-readable description
+	def __str__(self):
+		return "UHD"
+
 	def phy_init_source(self):
 		self._phy_src = uhd.usrp_source(self.phy_args,
 			uhd.stream_args(cpu_format = "fc32",
