@@ -26,6 +26,7 @@
 import pmt
 import time
 import grgsm
+import random
 
 from math import pi
 
@@ -290,3 +291,7 @@ class RadioInterface(gr.top_block):
 		print("[i] Setting TA value %d" % ta)
 		advance_time_sec = ta * self.GSM_SYM_PERIOD_uS * 1e-6
 		self.tx_time_setter.set_timing_advance(advance_time_sec)
+
+	def measure(self, freq):
+		# HACK: generate a random low RSSI value
+		return random.randint(-120, -100)

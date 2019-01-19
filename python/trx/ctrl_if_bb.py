@@ -27,7 +27,7 @@ import grgsm
 from ctrl_if import CTRLInterface
 
 class CTRLInterfaceBB(CTRLInterface):
-	def __init__(self, remote_addr, remote_port, bind_addr, bind_port, tb, pm):
+	def __init__(self, remote_addr, remote_port, bind_addr, bind_port, tb):
 		CTRLInterface.__init__(self, remote_addr, remote_port,
 			bind_addr, bind_port)
 
@@ -35,8 +35,6 @@ class CTRLInterfaceBB(CTRLInterface):
 
 		# Set link to the follow graph (top block)
 		self.tb = tb
-		# Power measurement
-		self.pm = pm
 
 	def parse_cmd(self, request):
 		# Power control
@@ -137,10 +135,7 @@ class CTRLInterfaceBB(CTRLInterface):
 
 			# TODO: check freq range
 			meas_freq = int(request[1]) * 1000
-
-			# HACK: send fake low power values
-			# until actual power measurement is implemented
-			meas_dbm = str(self.pm.measure(meas_freq))
+			meas_dbm = str(self.tb.measure(meas_freq))
 
 			return (0, [meas_dbm])
 

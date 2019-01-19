@@ -23,7 +23,6 @@ This is a set of helper classes for the grgsm_trx application.
 from udp_link import UDPLink
 from ctrl_if import CTRLInterface
 from ctrl_if_bb import CTRLInterfaceBB
-from fake_pm import FakePM
 from radio_if_grc import RadioInterfaceGRC
 from radio_if import RadioInterface
 
