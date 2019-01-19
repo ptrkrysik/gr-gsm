@@ -259,6 +259,16 @@ class RadioInterface(gr.top_block):
 		self.stop()
 		self.wait()
 
+	@property
+	def ready(self):
+		# RX / TX frequencies shall be set
+		if self.rx_freq is None:
+			return False
+		if self.tx_freq is None:
+			return False
+
+		return True
+
 	def calc_phase_inc(self, fc):
 		return self.ppm / 1.0e6 * 2 * pi * fc / self.sample_rate
 
