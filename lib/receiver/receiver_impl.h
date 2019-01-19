@@ -222,6 +222,19 @@ namespace gr {
         virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
         virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
         virtual void reset();
+
+        /* Reset multiframe configuration for all timeslots */
+        virtual void reset_mf_config(void);
+        /* Get multiframe type for a given timeslot */
+        virtual multiframe_type get_mf_type(int tn);
+        /* Set multiframe type for a given timeslot */
+        virtual void set_mf_type(int tn, multiframe_type type);
+        /* Get burst type for a given pair of timeslot and frame number */
+        virtual burst_type get_mf_burst_type(int tn, unsigned fn);
+        /* Set burst type for a given pair of timeslot and frame number */
+        virtual void set_mf_burst_type(int tn, unsigned fn, burst_type type);
+        /* Set burst type for every frame number within a given modulo */
+        virtual void set_mf_burst_type_mod(int tn, int mod, unsigned fn, burst_type type);
     };
   } // namespace gsm
 } // namespace gr

@@ -33,6 +33,7 @@
 
 %{
 #include "grgsm/constants.h"
+#include "grgsm/gsm_constants.h"
 #include "grgsm/receiver/receiver.h"
 #include "grgsm/receiver/clock_offset_control.h"
 #include "grgsm/receiver/cx_channel_hopper.h"
@@ -80,6 +81,7 @@
 %}
 
 %include "constants.i"
+%include "grgsm/gsm_constants.h"
 
 %include "grgsm/receiver/receiver.h"
 GR_SWIG_BLOCK_MAGIC2(gsm, receiver);

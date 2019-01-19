@@ -1132,5 +1132,59 @@ namespace gr
     {
       d_state = fcch_search;
     }
+
+    void
+    receiver_impl::reset_mf_config(void)
+    {
+      d_channel_conf.reset_all();
+    }
+
+    multiframe_type
+    receiver_impl::get_mf_type(int tn)
+    {
+      return d_channel_conf.get_multiframe_type(tn);
+    }
+
+    void
+    receiver_impl::set_mf_type(int tn, multiframe_type type)
+    {
+      d_channel_conf.set_multiframe_type(tn, type);
+    }
+
+    burst_type
+    receiver_impl::get_mf_burst_type(int tn, unsigned fn)
+    {
+      return d_channel_conf.get_single_burst_type(tn, fn);
+    }
+
+    void
+    receiver_impl::set_mf_burst_type(int tn, unsigned fn, burst_type type)
+    {
+      d_channel_conf.set_single_burst_type(tn, fn, type);
+    }
+
+    void
+    receiver_impl::set_mf_burst_type_mod(int tn, int mod, unsigned fn, burst_type type)
+    {
+      multiframe_type mf_type;
+      unsigned i, mf_len;
+
+      mf_type = d_channel_conf.get_multiframe_type(tn);
+      switch (mf_type) {
+      case multiframe_51:
+        mf_len = 51; break;
+      case multiframe_26:
+        mf_len = 26; break;
+      case unknown:
+      default:
+        mf_len = 0; break;
+      }
+
+      for (i = 0; i < mf_len; i++) {
+        if (i % mod == fn)
+          d_channel_conf.set_single_burst_type(tn, i, type);
+      }
+    }
+
   } /* namespace gsm */
 } /* namespace gr */

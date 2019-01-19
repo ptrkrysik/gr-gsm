@@ -29,6 +29,8 @@
 #include <gnuradio/sync_block.h>
 #include <vector>
 
+#include <grgsm/gsm_constants.h>
+
 namespace gr {
   namespace gsm {
 
@@ -55,6 +57,19 @@ namespace gr {
       virtual void set_cell_allocation(const std::vector<int> &cell_allocation) = 0;
       virtual void set_tseq_nums(const std::vector<int> & tseq_nums) = 0;
       virtual void reset() = 0;
+
+      /* Reset multiframe configuration for all timeslots */
+      virtual void reset_mf_config(void) = 0;
+      /* Get multiframe type for a given timeslot */
+      virtual multiframe_type get_mf_type(int tn) = 0;
+      /* Set multiframe type for a given timeslot */
+      virtual void set_mf_type(int tn, multiframe_type type) = 0;
+      /* Get burst type for a given pair of timeslot and frame number */
+      virtual burst_type get_mf_burst_type(int tn, unsigned fn) = 0;
+      /* Set burst type for a given pair of timeslot and frame number */
+      virtual void set_mf_burst_type(int tn, unsigned fn, burst_type type) = 0;
+      /* Set burst type for every frame number within a given modulo */
+      virtual void set_mf_burst_type_mod(int tn, int mod, unsigned fn, burst_type type) = 0;
     };
    
   } // namespace gsm

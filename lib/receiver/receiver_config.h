@@ -58,6 +58,12 @@ class multiframe_configuration
       }
     }
 
+    void reset(void) {
+      fill(d_burst_types.begin(), d_burst_types.end(), empty);
+      d_burst_types.resize(0);
+      d_type = unknown;
+    }
+
     void set_burst_type(int nr, burst_type type) {
       d_burst_types[nr] = type;
     }
@@ -146,6 +152,10 @@ class channel_configuration
       }
     }
 
+    multiframe_type get_multiframe_type(int timeslot_nr) {
+      return d_timeslots_descriptions[timeslot_nr].get_type();
+    }
+
     void set_multiframe_type(int timeslot_nr, multiframe_type type) {
       d_timeslots_descriptions[timeslot_nr].set_type(type);
     }
@@ -157,13 +167,17 @@ class channel_configuration
       }
     }
 
+    burst_type get_single_burst_type(int timeslot_nr, int burst_nr) {
+      return d_timeslots_descriptions[timeslot_nr].get_burst_type(burst_nr);
+    }
+
     void set_single_burst_type(int timeslot_nr, int burst_nr, burst_type b_type) {
       d_timeslots_descriptions[timeslot_nr].set_burst_type(burst_nr, b_type);
     }
 
     void reset_all(void) {
       for (int i = 0; i < TS_PER_FRAME; i++)
-        set_multiframe_type(i, unknown);
+        d_timeslots_descriptions[i].reset();
     }
 
     burst_type get_burst_type(burst_counter burst_nr);
