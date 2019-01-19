@@ -63,6 +63,9 @@ class CTRLInterfaceBB(CTRLInterface):
 				self.tb.stop()
 				self.tb.wait()
 
+			# POWEROFF is also used to reset transceiver
+			self.tb.reset()
+
 			return 0
 
 		# Gain control
