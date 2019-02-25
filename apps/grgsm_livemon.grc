@@ -933,7 +933,7 @@
     </param>
     <param>
       <key>osr</key>
-      <value>4</value>
+      <value>osr</value>
     </param>
     <param>
       <key>fc</key>
@@ -1043,7 +1043,7 @@
     </param>
     <param>
       <key>osr</key>
-      <value>4</value>
+      <value>osr</value>
     </param>
     <param>
       <key>tseq_nums</key>
