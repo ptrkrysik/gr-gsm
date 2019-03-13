@@ -344,7 +344,7 @@ if __name__ == '__main__':
     tch_options.add_option("--sub-channel", dest="tch_h_channel", default="0", type='intx',
                            help="TCH/H sub-channel. [default=0]")
     tch_options.add_option("--multi-rate", dest="multi_rate", default="", type='string',
-                           help="The MultiRrate configuration element from the Assignment Command message. "
+                           help="The MultiRate configuration element from the Assignment Command message. "
                            "Example: 28111a40. See 3GPP TS 44.018 - 10.5.2.21aa MultiRate configuration")
     tch_options.add_option("--voice-boundary", dest="enable_voice_boundary_detection", action="store_true", default=False,
                            help="Enable voice boundary detection for traffic channels. This can help reduce noice in the output.")
