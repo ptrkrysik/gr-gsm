@@ -31,7 +31,7 @@
 
 boost::shared_ptr<Gnuplot> current_figure;
 
-void imagesc(arma::mat & x){
+void imagesc(const arma::mat & x){
     Gnuplot gp;
 	gp << "set palette rgb 3,2,2;";
    gp << "plot ";
@@ -39,7 +39,7 @@ void imagesc(arma::mat & x){
 	gp << std::endl;
 }
 
-void plot(arma::cx_mat & x, std::string title){
+void plot(const arma::cx_mat & x, std::string title){
    arma::mat y = arma::abs(x);
    if(current_figure.get()==NULL){
       current_figure = boost::make_shared<Gnuplot>();
@@ -50,7 +50,7 @@ void plot(arma::cx_mat & x, std::string title){
    (*current_figure) << std::endl; 
 }
 
-void replot(arma::cx_mat & x, std::string title){
+void replot(const arma::cx_mat & x, std::string title){
    arma::mat y = arma::abs(x);
    if(current_figure.get()==NULL){
       current_figure = boost::make_shared<Gnuplot>();
@@ -61,19 +61,19 @@ void replot(arma::cx_mat & x, std::string title){
 }
 
 template<typename T>
-void plot(std::vector<T> & x){
+void plot(const std::vector<T> & x){
    arma::cx_mat y = arma::conv_to<arma::cx_mat>::from(x);
    plot(y,"");
 }
 
 template<typename T>
-void plot(std::vector<T> & x, std::string title){
+void plot(const std::vector<T> & x, std::string title){
    arma::cx_mat y = arma::conv_to<arma::cx_mat>::from(x);
    plot(y,title);
 }
 
 template<typename T>
-void replot(std::vector<T> & x, std::string title){
+void replot(const std::vector<T> & x, std::string title){
    arma::cx_mat y = arma::conv_to<arma::cx_mat>::from(x);
    replot(y,title);
 }
