@@ -178,7 +178,7 @@ namespace gr {
                             std::cout<<"5,15 kbit/s codec rate: is part of the subset"<<std::endl;
                             break;
                         case 2:
-                            std::cout<<"6,90 kbit/s codec rate: is part of the subset"<<std::endl;
+                            std::cout<<"5,90 kbit/s codec rate: is part of the subset"<<std::endl;
                             break;
                         case 3:
                             std::cout<<"6,70 kbit/s codec rate: is part of the subset"<<std::endl;
@@ -266,10 +266,12 @@ namespace gr {
 
             if (frameLength < 12)
             {
+                #if 0
                 if (!d_boundary_check || d_boundary_decode) {
                     std::cerr<<"Error! frame_nr:"<<frame_nr<<" mod26:"<<frame_nr%26
                         <<" fn_is_odd:"<<fn_is_odd<<" length:"<<frameLength<<std::endl;
                 }
+                #endif
                 return;
             }
             else if (frameLength == GSM_MACBLOCK_LEN) //FACCH/H
@@ -301,6 +303,7 @@ namespace gr {
                                     (frameBuffer[6] == 2) && //length
                                     ((frameBuffer[8] & 0x7f) == 0x08))
                             {
+                                std::cout << "(CC) Alerting with In-band information" << std::endl;
                                 //.000 1000 = Progress description: In-band information or appropriate pattern now available (8)
                                 d_boundary_decode = true;
                             }
@@ -311,6 +314,7 @@ namespace gr {
                             if ((frameBuffer[5] == 2) && //length
                                     (frameBuffer[7] & 0x7f) == 0x08)
                             {
+                                std::cout << "(CC) Progress with In-band information" << std::endl;
                                 //.000 1000 = Progress description: In-band information or appropriate pattern now available (8)
                                 d_boundary_decode = true;
                             }
@@ -318,16 +322,19 @@ namespace gr {
                         // Connect specified in GSM 04.08, 9.3.5
                         else if ((frameBuffer[4] & 0x3f) == 0x07)
                         {
+                            std::cout << "(CC) Connect" << std::endl;
                             d_boundary_decode = true;
                         }
                         // Connect Acknowledge specified in GSM 04.08, 9.3.6
                         else if ((frameBuffer[4] & 0x3f) == 0x0f)
                         {
+                            std::cout << "(CC) Connect Acknowledge" << std::endl;
                             d_boundary_decode = true;
                         }
                         // Release specified in GSM 04.08, 9.3.18
                         else if ((frameBuffer[4] & 0x3f) == 0x2d)
                         {
+                            std::cout << "(CC) Release" << std::endl;
                             d_boundary_decode = false;
                         }
                     }
