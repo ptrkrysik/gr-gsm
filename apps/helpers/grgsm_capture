@@ -54,7 +54,8 @@ class grgsm_capture(gr.top_block):
         ##################################################
 
         self.sdr_source = \
-                    osmosdr.source(args="numchan=1" + device_args )
+                    osmosdr.source(args="numchan=" + str(1) + " " + device_args)
+
         self.sdr_source.set_sample_rate(samp_rate)
         self.sdr_source.set_center_freq(freq, 0)
         self.sdr_source.set_freq_corr(freq_corr, 0)
