@@ -59,6 +59,7 @@ from gsm_gmsk_mod import gsm_gmsk_mod
 from fn_time import *
 from txtime_bursts_tagger import *
 import arfcn
+import device
 
 
 #

@@ -36,7 +36,7 @@ import os
 import osmosdr
 import pmt
 import time
-
+import sys
 
 # from wideband_receiver import *
 
@@ -208,7 +208,8 @@ class wideband_scanner(gr.top_block):
 
         # if no file name is given process data from rtl_sdr source
         print "Args=", args
-        self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " + args)
+        self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
+                str(grgsm.device.get_default_args(args)))
         #self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
         self.rtlsdr_source.set_sample_rate(sample_rate)
 
@@ -387,7 +388,10 @@ def argument_parser():
     parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=24.0,
                       help="Set gain [default=%default]")
     parser.add_option("", "--args", dest="args", type="string", default="",
-                      help="Set device arguments [default=%default]")
+                      help="Set device arguments [default=%default]."
+                      " Use --list-devices the view the available devices")
+    parser.add_option("-l", "--list-devices", action="store_true",
+                      help="List available SDR devices, use --args to specify hints")
     parser.add_option("--speed", dest="speed", type="intx", default=4,
                       help="Scan speed [default=%default]. Value range 0-5.")
     parser.add_option("-v", "--verbose", action="store_true",
@@ -403,6 +407,10 @@ def argument_parser():
 def main(options = None):
     if options is None:
         (options, args) = argument_parser().parse_args()
+
+    if options.list_devices:
+        grgsm.device.print_devices(options.args)
+        sys.exit(0)
 
     if options.band not in grgsm.arfcn.get_bands():
         parser.error("Invalid GSM band\n")

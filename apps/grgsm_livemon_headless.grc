@@ -2414,7 +2414,7 @@
     </param>
     <param>
       <key>args</key>
-      <value>args</value>
+      <value>str(grgsm.device.get_default_args(args))</value>
     </param>
     <param>
       <key>_enabled</key>

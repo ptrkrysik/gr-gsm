@@ -53,8 +53,8 @@ class grgsm_capture(gr.top_block):
         # Setting up RF source
         ##################################################
 
-        self.sdr_source = \
-                    osmosdr.source(args="numchan=" + str(1) + " " + device_args)
+        self.sdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
+                str(grgsm.device.get_default_args(device_args)))
 
         self.sdr_source.set_sample_rate(samp_rate)
         self.sdr_source.set_center_freq(freq, 0)
@@ -141,11 +141,18 @@ if __name__ == '__main__':
 
     osmogroup.add_option("", "--args", dest="device_args", type="string",
                       default="", help="Set device arguments "
-                      "[default=%default]")
+                      "[default=%default]. Use --list-devices the view the available devices")
+
+    osmogroup.add_option("-l", "--list-devices", action="store_true",
+                      help="List available SDR devices, use --args to specify hints")
 
     parser.add_option_group(osmogroup)
 
     (options, args) = parser.parse_args()
+
+    if options.list_devices:
+        grgsm.device.print_devices(options.device_args)
+        sys.exit(0)
 
     if not args:
         parser.error("Please provide an output file name to save the captured data\n")
