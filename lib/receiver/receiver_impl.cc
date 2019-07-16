@@ -58,18 +58,30 @@ namespace gr
     /* The public constructor */
     receiver::sptr
     receiver::make(
-      int osr, const std::vector<int> &cell_allocation,
-      const std::vector<int> &tseq_nums, bool process_uplink)
+      int osr,
+      const std::vector<int> &cell_allocation,
+      const std::vector<int> &tseq_nums,
+      double resamp_rate,
+      bool process_uplink
+    )
     {
-      return gnuradio::get_initial_sptr
-        (new receiver_impl(osr, cell_allocation,
-          tseq_nums, process_uplink));
+      return gnuradio::get_initial_sptr(
+        new receiver_impl(
+          osr,
+          cell_allocation,
+          tseq_nums,
+          resamp_rate,
+          process_uplink)
+        );
     }
 
     /* The private constructor */
     receiver_impl::receiver_impl(
-      int osr, const std::vector<int> &cell_allocation,
-      const std::vector<int> &tseq_nums, bool process_uplink
+      int osr,
+      const std::vector<int> &cell_allocation,
+      const std::vector<int> &tseq_nums,
+      double resamp_rate,
+      bool process_uplink
     ) : gr::sync_block("receiver",
           gr::io_signature::make(1, -1, sizeof(gr_complex)),
           gr::io_signature::make(0, 0, 0)),

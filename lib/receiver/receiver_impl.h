@@ -213,7 +213,13 @@ namespace gr {
             gr_vector_const_void_star &input_items, int noutput_items);
 
      public:
-        receiver_impl(int osr, const std::vector<int> &cell_allocation, const std::vector<int> &tseq_nums, bool process_uplink);
+        receiver_impl(
+          int osr,
+          const std::vector<int> &cell_allocation,
+          const std::vector<int> &tseq_nums,
+          double resamp_rate,
+          bool process_uplink
+        );
         ~receiver_impl();
       
         int work(int noutput_items, gr_vector_const_void_star &input_items, gr_vector_void_star &output_items);

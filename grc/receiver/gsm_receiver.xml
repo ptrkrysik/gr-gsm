@@ -3,7 +3,7 @@
   <name>GSM Receiver</name>
   <key>gsm_receiver</key>
   <import>import grgsm</import>
-  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, False)</make>
+  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, $resamp_rate, False)</make>
 
   <param>
     <name>Oversampling ratio</name>
@@ -29,6 +29,14 @@
   </param>
 
   <param>
+    <name>Resamp rate</name>
+    <key>resamp_rate</key>
+    <value>1.0</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
     <name>Num Streams</name>
     <key>num_streams</key>
     <value>1</value>
@@ -36,7 +44,7 @@
     <hide>part</hide>
   </param>
   <check>$num_streams &gt;= 0</check>
-  
+
   <sink>
     <name>in</name>
     <type>complex</type>

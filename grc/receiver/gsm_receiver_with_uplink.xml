@@ -3,7 +3,7 @@
   <name>GSM Receiver (with uplink)</name>
   <key>gsm_receiver_with_uplink</key>
   <import>import grgsm</import>
-  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, True)</make>
+  <make>grgsm.receiver($osr, $cell_allocation, $tseq_nums, $resamp_rate, True)</make>
 
   <param>
     <name>Oversampling ratio</name>
@@ -25,6 +25,14 @@
     <key>tseq_nums</key>
     <value>[]</value>
     <type>int_vector</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>Resamp rate</name>
+    <key>resamp_rate</key>
+    <value>1.0</value>
+    <type>float</type>
     <hide>part</hide>
   </param>
 
