@@ -87,7 +87,7 @@ namespace gr
           gr::io_signature::make(0, 0, 0)),
         d_samples_consumed(0),
         d_rx_time_received(false),
-        d_time_samp_ref(GSM_SYMBOL_RATE * osr),
+        d_time_samp_ref(osr*GSM_SYMBOL_RATE, resamp_rate),
         d_OSR(osr),
         d_process_uplink(process_uplink),
         d_chan_imp_length(CHAN_IMP_RESP_LENGTH),
@@ -152,34 +152,16 @@ namespace gr
       gr_vector_void_star &output_items)
     {
       gr_complex *input = (gr_complex *) input_items[0];
-      uint64_t start = nitems_read(0);
-      uint64_t stop = start + noutput_items;
+
+      /* Frequency correction loop */ //TODO: move this to FCCH burst processing
       d_freq_offset_tag_in_fcch = false;
-
-#if 0
-      /* FIXME: jak zrobić to rzutowanie poprawnie */
-      std::vector<const gr_complex *> iii =
-        (std::vector<const gr_complex *>) input_items;
-#endif
-
-      /* Time synchronization loop */
-      float current_time =
-        static_cast<float>(start / (GSM_SYMBOL_RATE * d_OSR));
-      if ((current_time - d_last_time) > 0.1) {
-        pmt::pmt_t msg = pmt::make_tuple(pmt::mp("current_time"),
-          pmt::from_double(current_time));
-        message_port_pub(pmt::mp("measurements"), msg);
-        d_last_time = current_time;
-      }
-
-      /* Frequency correction loop */
       std::vector<tag_t> freq_offset_tags;
       pmt::pmt_t key = pmt::string_to_symbol("setting_freq_offset");
-      get_tags_in_range(freq_offset_tags, 0, start, stop, key);
+      get_tags_in_window(freq_offset_tags, 0, 0, noutput_items, key);
 
       if (!freq_offset_tags.empty()) {
         tag_t freq_offset_tag = freq_offset_tags[0];
-        uint64_t tag_offset = freq_offset_tag.offset - start;
+        uint64_t tag_offset = freq_offset_tag.offset - nitems_read(0);
         d_freq_offset_setting = pmt::to_double(freq_offset_tag.value);
 
         burst_type b_type = d_channel_conf.get_burst_type(d_burst_nr);
@@ -189,10 +171,6 @@ namespace gr
           d_freq_offset_tag_in_fcch = tag_offset < last_sample_nr;
         }
       }
-      
-      /* Obtaining current time with use of rx_time tag provided i.e. by UHD devices */
-      /* And storing it in time_sample_ref for sample number to time conversion */
-      std::vector<tag_t> rx_time_tags;
 
       /* Main state machine */
       d_samples_consumed = 0;
@@ -208,17 +186,43 @@ namespace gr
         break;
       }
 
-      get_tags_in_window(rx_time_tags, 0, 0, d_samples_consumed, pmt::string_to_symbol("rx_time"));
-      if(!rx_time_tags.empty()){
-        d_rx_time_received = true;
-        tag_t rx_time_tag = *(rx_time_tags.begin());
+      /* Time synchronization */
+      /* Obtaining current time with use of rx_time tag provided i.e. by UHD devices */
+      /* and storing it in time_sample_ref for sample number to time conversion */
 
-        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
-        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
-        
-        time_spec_t current_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
-        uint64_t current_start_offset = rx_time_tag.offset;
-        d_time_samp_ref.update(current_rx_time, current_start_offset);
+      typedef std::vector<tag_t>::iterator tag_iter;
+      std::vector<tag_t> all_tags;
+      get_tags_in_window(all_tags, 0, 0, d_samples_consumed);
+
+      for(tag_iter itag = all_tags.begin(); itag != all_tags.end(); itag++){
+        if(pmt::eqv(itag->key, pmt::mp("set_resamp_ratio"))){
+          double resamp_rate = pmt::to_double(itag->value);
+          uint64_t N = get_offset_before_resampler(itag->offset);
+          d_time_samp_ref.update(itag->offset, N, resamp_rate);
+        }
+        else if(pmt::eqv(itag->key, pmt::mp("rx_time"))){
+          d_rx_time_received = true;
+          uint64_t N = get_offset_before_resampler(itag->offset);
+          time_spec_t rx_time = time_spec_t(
+            pmt::to_uint64(tuple_ref(itag->value,0)),
+            pmt::to_double(tuple_ref(itag->value,1))
+          );
+          d_time_samp_ref.update(itag->offset, N, rx_time);
+        }
+//        else if(pmt::eqv(itag->key, pmt::mp("rx_rate"))){ //to jest źle TODO extra: zamienić to na update samp_rate dal clock_offset_controllera, a on następnie ustawiałby resamp_rate w sterowanym resamplerze
+//          d_rx_time_received = true;
+//          d_time_samp_ref.set_samp_rate(pmt::to_double(itag->value));
+//        }
+      }
+
+      /* Send updates of time for clock offset controller every 0.1 second */
+      time_spec_t current_time = d_time_samp_ref.convert_M_to_ideal_t(nitems_read(0));
+
+      if ((current_time - d_last_time).get_real_secs() > 0.1) {
+        pmt::pmt_t msg = pmt::make_tuple(pmt::mp("current_time"),
+          pmt::from_double(current_time.get_real_secs())); //TODO: przerobić to na parę pmt i w bloku controllera przerabiać to na time_spec_t
+        message_port_pub(pmt::mp("measurements"), msg);
+        d_last_time = current_time;
       }
 
       return d_samples_consumed;
@@ -1059,12 +1063,15 @@ namespace gr
       pmt::pmt_t pdu_header = pmt::make_dict();
 
       /* Add timestamp of the first sample - if available */
-      if(d_rx_time_received) {
-        time_spec_t time_spec_of_first_sample = d_time_samp_ref.offset_to_time(nitems_read(0)+burst_start);
+      if(d_rx_time_received && burst_start != -1) {
+        time_spec_t time_spec_of_first_sample =
+          d_time_samp_ref.convert_M_to_t(nitems_read(0) + burst_start);
         uint64_t full = time_spec_of_first_sample.get_full_secs();
         double   frac = time_spec_of_first_sample.get_frac_secs();
-        pdu_header = 
-          pmt::dict_add(pdu_header, pmt::mp("fn_time"), 
+        int64_t N = d_time_samp_ref.convert_M_to_N(nitems_read(0) + burst_start);
+        time_spec_t ref_t = d_time_samp_ref.get_ref_time();
+        pdu_header =
+          pmt::dict_add(pdu_header, pmt::mp("fn_time"),
             pmt::cons(
               pmt::cons(pmt::from_uint64(be32toh(frame_number)), pmt::from_uint64(tn)),
               pmt::cons(pmt::from_uint64(full), pmt::from_double(frac))));

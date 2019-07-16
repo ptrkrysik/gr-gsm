@@ -25,32 +25,17 @@
 
 namespace gr {
   namespace gsm {
-    time_sample_ref::time_sample_ref(double samp_rate): d_samp_rate(samp_rate)
+    time_sample_ref::time_sample_ref(double samp_rate, double resamp_rate):
+      d_samp_rate(samp_rate),
+      d_resamp_rate(resamp_rate),
+      d_ref_time(0.0),
+      d_ref_offset(0),
+      d_original_ref_offset(0)
     {
-    }
-    
-    time_sample_ref::~time_sample_ref()
-    {
-    }
-    
-    void time_sample_ref::update(time_spec_t last_rx_time, uint64_t current_start_offset)
-    {
-        d_last_rx_time = last_rx_time;
-        d_current_start_offset = current_start_offset;
-    }
-    
-    time_spec_t time_sample_ref::offset_to_time(uint64_t offset)
-    {
-      uint64_t samples_from_last_rx_time = offset - d_current_start_offset;
-      time_spec_t time = time_spec_t::from_ticks(samples_from_last_rx_time, d_samp_rate) + d_last_rx_time;
-      return time;
     }
 
-    uint64_t time_sample_ref::time_to_offset(time_spec_t time)
+    time_sample_ref::~time_sample_ref()
     {
-      uint64_t samples_since_last_rx_time_tag = (time-d_last_rx_time).to_ticks(d_samp_rate);
-      uint64_t offset = samples_since_last_rx_time_tag + d_current_start_offset;
-      return offset;
     }
   } // namespace gsm
 } // namespace gr

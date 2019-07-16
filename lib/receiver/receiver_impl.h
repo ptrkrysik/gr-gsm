@@ -54,7 +54,7 @@ namespace gr {
         gr_complex d_sch_training_seq[N_SYNC_BITS]; ///<encoded training sequence of a SCH burst
         gr_complex d_norm_training_seq[TRAIN_SEQ_NUM][N_TRAIN_BITS]; ///<encoded training sequences of a normal and dummy burst
 
-        float d_last_time;
+        time_spec_t d_last_time;
 
         /** Counts samples consumed by the receiver
          *
@@ -209,6 +209,19 @@ namespace gr {
         /* State machine handlers */
         void fcch_search_handler(gr_complex *input, int noutput_items);
         void sch_search_handler(gr_complex *input, int noutput_items);
+
+        uint64_t get_offset_before_resampler(uint64_t offset){
+          std::vector<tag_t> original_ofsets;
+          get_tags_in_window(original_ofsets, 0, offset, offset+1, pmt::intern("original_offset"));
+          uint64_t offset_recovered = d_time_samp_ref.convert_M_to_N(offset);
+          uint64_t offset_before_resampler = 0;
+          if(!original_ofsets.empty()){
+            offset_before_resampler = pmt::to_uint64(original_ofsets[0].value);
+          } else {
+            offset_before_resampler = offset_recovered;
+          }
+          return offset_before_resampler;
+        };
         void synchronized_handler(gr_complex *input,
             gr_vector_const_void_star &input_items, int noutput_items);
 
