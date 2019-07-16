@@ -19,6 +19,7 @@
 
 add_sources(
     trx_burst_if_impl.cc
-    freq_hopping_impl.cc
+    freq_hopper_tag_impl.cc
+    freq_hopper_msg_impl.cc
 )
 

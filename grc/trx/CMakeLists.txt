@@ -19,6 +19,7 @@
 
 install(FILES
     gsm_trx_burst_if.xml
-    gsm_freq_hopping.xml
+    gsm_freq_hopper_tag.xml
+    gsm_freq_hopper_msg.xml
     DESTINATION share/gnuradio/grc/blocks
 )

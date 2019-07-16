@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <block>
-  <name>freq_hopping</name>
-  <key>gsm_freq_hopping</key>
+  <name>freq_hopper_tag</name>
+  <key>gsm_freq_hopper_tag</key>
   <import>import grgsm</import>
-  <make>grgsm.freq_hopping($hopping_cmd)</make>
+  <make>grgsm.freq_hopper_tag($hopping_cmd)</make>
 <!--  <callback>set_fn_time_reference($init_fn, $init_time_secs, $init_time_fracs)</callback>-->
   <param>
     <name>Initial hopping command</name>

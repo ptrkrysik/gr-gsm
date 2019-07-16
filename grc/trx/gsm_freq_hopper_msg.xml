@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<block>
+  <name>freq_hopper_msg</name>
+  <key>gsm_freq_hopper_msg</key>
+  <import>import grgsm</import>
+  <make>grgsm.freq_hopper_msg($samp_rate, $start_fc_rx, $start_fc_tx, $rx_hopping, $tx_hopping, $freq_change_period)</make>
+<!--  $hopping_cmd-->
+<!--  <callback>set_fn_time_reference($init_fn, $init_time_secs, $init_time_fracs)</callback>-->
+<!--  <param>-->
+<!--    <name>Initial hopping command</name>-->
+<!--    <key>hopping_cmd</key>-->
+<!--    <value>pmt.to_pmt({'cmd': 'start', 'hopping_params': {'hsn': 1, 'maio': 0, 'ma': [1,2,3,4]} })</value>-->
+<!--    <type>raw</type>-->
+<!--    <hide>part</hide>-->
+<!--  </param>-->
+
+  <param>
+    <name>Sample rate</name>
+    <key>samp_rate</key>
+    <value>samp_rate</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>start_fc_rx</name>
+    <key>start_fc_rx</key>
+    <value>fc</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>start_fc_tx</name>
+    <key>start_fc_tx</key>
+    <value>fc</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>rx_hopping</name>
+    <key>rx_hopping</key>
+    <value>True</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>tx_hopping</name>
+    <key>tx_hopping</key>
+    <value>True</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <param>
+    <name>freq_change_period</name>
+    <key>freq_change_period</key>
+    <value>0.0046</value>
+    <type>float</type>
+    <hide>part</hide>
+  </param>
+
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+<!--  <sink>-->
+<!--    <name>hopping_cmd</name>-->
+<!--    <type>message</type>-->
+<!--    <optional>1</optional>-->
+<!--  </sink>-->
+
+  <source>
+    <name>control</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+</block>

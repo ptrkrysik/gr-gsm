@@ -20,17 +20,17 @@
  * 
  */
 
-#ifndef INCLUDED_GSM_FREQ_HOPPING_IMPL_H
-#define INCLUDED_GSM_FREQ_HOPPING_IMPL_H
+#ifndef INCLUDED_GSM_FREQ_HOPPER_TAG_IMPL_H
+#define INCLUDED_GSM_FREQ_HOPPER_TAG_IMPL_H
 
-#include <grgsm/trx/freq_hopping.h>
+#include <grgsm/trx/freq_hopper_tag.h>
 #include <grgsm/misc_utils/time_spec.h>
 #include <grgsm/misc_utils/fn_time.h>
 
 namespace gr {
   namespace gsm {
 
-    class freq_hopping_impl : public freq_hopping
+    class freq_hopper_tag_impl : public freq_hopper_tag
     {
      private:
       bool d_hopping_enable; //if true block do the hopping, if not block just passes the bursts
@@ -38,13 +38,13 @@ namespace gr {
       uint64_t d_maio; //mobile allocation index offset
       double d_base_freq; //local oscillator frequency
       std::vector<uint64_t> d_ma; //mobile allocation
-     
+
       pmt::pmt_t d_hopping_cmd; //TODO: change this uint64_to a std::map
       void set_freq_metadata(pmt::pmt_t cmd);
       bool set_hopping_params(pmt::pmt_t hopping_params);
      public:
-      freq_hopping_impl(pmt::pmt_t hopping_cmd);
-      ~freq_hopping_impl();
+      freq_hopper_tag_impl(pmt::pmt_t hopping_cmd);
+      ~freq_hopper_tag_impl();
 
       void add_hopping_cmd(pmt::pmt_t hopping_cmd);
     };
@@ -52,4 +52,4 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_FREQ_HOPPING_IMPL_H */
+#endif /* INCLUDED_GSM_FREQ_HOPPER_TAG_IMPL_H */

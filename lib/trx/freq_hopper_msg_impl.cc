@@ -1,4 +1,3 @@
-
 /* -*- c++ -*- */
 /* @file
  * @author Piotr Krysik <ptrkrysik@gmail.com>
@@ -28,7 +27,7 @@
 #include <gnuradio/io_signature.h>
 #include <grgsm/gsmtap.h>
 
-#include "freq_hopping_impl.h"
+#include "freq_hopper_msg_impl.h"
 #include "../misc_utils/freq_hopping_utils.h"
 extern "C" {
 #include <osmocom/gsm/gsm_utils.h>
@@ -38,51 +37,145 @@ namespace gr {
   namespace gsm {
     using namespace pmt;
 
-    freq_hopping::sptr
-    freq_hopping::make(
-      pmt_t hopping_cmd)
+    freq_hopper_msg::sptr
+    freq_hopper_msg::make(
+      double samp_rate,
+      double start_fc_rx,
+      double start_fc_tx,
+      bool rx_hopping,
+      bool tx_hopping,
+      double freq_change_period)
     {
       return gnuradio::get_initial_sptr
-        (new freq_hopping_impl(hopping_cmd));
+        (new freq_hopper_msg_impl(samp_rate, start_fc_rx, start_fc_tx,
+          rx_hopping, tx_hopping, freq_change_period));
     }
 
     /*
      * The private constructor
      */
-    freq_hopping_impl::freq_hopping_impl(
-      pmt_t hopping_cmd
-    ) : gr::block("freq_hopping",
-          gr::io_signature::make(0, 0, 0),
+    freq_hopper_msg_impl::freq_hopper_msg_impl(
+      double samp_rate,
+      double start_fc_rx,
+      double start_fc_tx,
+      bool rx_hopping,
+      bool tx_hopping,
+      double freq_change_period) :
+        sync_block("freq_hopper_msg",
+          gr::io_signature::make(1, 1, sizeof(gr_complex)),
           gr::io_signature::make(0, 0, 0)),
-          d_hopping_cmd(PMT_NIL),
-          d_hopping_enable(false),
-          d_base_freq(890e6)
+        d_samp_rate(samp_rate),
+        d_fc_rx(start_fc_rx),
+        d_fc_tx(start_fc_tx),
+        d_rx_hopping(rx_hopping),
+        d_tx_hopping(tx_hopping),
+        d_freq_change_period(freq_change_period),
+        d_rx_time_received(false),
+        d_last_rx_time(0.0),
+        d_current_time(0.0),
+        d_current_start_offset(0.0),
+        d_i(0),
+        d_start_time(1.0),
+        d_next_change_time(time_spec_t(2.0)),
+        d_change_advance(0.15),
+        d_rx_time_key(string_to_symbol("rx_time"))
+//          d_hopping_cmd(PMT_NIL),
+//          d_hopping_enable(false),
+//          d_base_freq(890e6)
     {
         // Register I/O ports
-        message_port_register_in(mp("hopping_cmd"));
-        message_port_register_in(mp("bursts_in"));
-        message_port_register_out(mp("bursts_out"));
+//        message_port_register_in(mp("hopping_cmd"));
+        message_port_register_out(mp("control"));
+//      d_f.push_back(-0.3e6);
+//      d_f.push_back(-0.2e6);
+//      d_f.push_back(-0.1e6);
+//      d_f.push_back(0);
+//      d_f.push_back(0.1e6);
+//      d_f.push_back(0.2e6);
+//      d_f.push_back(0.3e6);
 
-        // Bind message handlers
-        set_msg_handler(mp("hopping_cmd"),
-          boost::bind(&freq_hopping_impl::add_hopping_cmd,
-            this, _1));
-        
-        set_msg_handler(mp("bursts_in"),
-          boost::bind(&freq_hopping_impl::set_freq_metadata,
-            this, _1));
-        
-        add_hopping_cmd(hopping_cmd);
+      d_ma.push_back(51);
+      d_ma.push_back(2);
+      d_ma.push_back(37);
+      d_ma.push_back(45);
+      d_hsn = 0;
+      d_maio = 0;
+      d_current_fn = 0;
+//        // Bind message handlers
+//        set_msg_handler(mp("hopping_cmd"),
+//          boost::bind(&freq_hopper_msg_impl::add_hopping_cmd,
+//            this, _1));
+
+//        add_hopping_cmd(hopping_cmd);
     }
 
     /*
      * Our virtual destructor.
      */
-    freq_hopping_impl::~freq_hopping_impl()
+    freq_hopper_msg_impl::~freq_hopper_msg_impl()
     {
     }
-    
-    void freq_hopping_impl::add_hopping_cmd(pmt_t cmd) //TODO: fn and discard not supported at the moment
+
+    int freq_hopper_msg_impl::work(
+      int noutput_items,
+      gr_vector_const_void_star &input_items,
+      gr_vector_void_star &output_items)
+    {
+      std::vector<tag_t> rx_time_tags;
+      get_tags_in_window(rx_time_tags, 0, 0, noutput_items, d_rx_time_key);
+      if(rx_time_tags.size() > 0){
+        tag_t rx_time_tag = rx_time_tags[0];
+        uint64_t rx_time_full_part = to_uint64(tuple_ref(rx_time_tag.value,0));
+        double rx_time_frac_part = to_double(tuple_ref(rx_time_tag.value,1));
+        d_last_rx_time = time_spec_t(rx_time_full_part, rx_time_frac_part);
+        d_current_start_offset = rx_time_tag.offset;
+        d_rx_time_received = true;
+      }
+      if(d_rx_time_received){
+        uint64_t buffer_end_offset = nitems_read(0) + noutput_items;
+        d_current_time = time_spec_t::from_ticks(buffer_end_offset - d_current_start_offset, d_samp_rate) + d_last_rx_time;
+      }
+
+//    Freq. control messages generation
+      if ((d_current_time.get_real_secs() > d_start_time) &&
+          ((d_next_change_time-d_current_time).get_real_secs() < d_change_advance)){
+        pmt_t freq_change_time_pmt = cons(
+          from_uint64(d_next_change_time.get_full_secs()),
+          from_double(d_next_change_time.get_frac_secs())
+        );
+        d_next_change_time = d_next_change_time + d_freq_change_period;
+        double dsp_freq = get_dsp_freq(d_current_fn);
+        if(d_tx_hopping){
+          pmt_t tx_tune_msg = dict_add(make_dict(), mp("lo_freq"), from_double(d_fc_tx));
+//          tx_tune_msg = dict_add(tx_tune_msg, mp("dsp_freq"), from_double(d_f[d_i % d_f.size()]));
+          tx_tune_msg = dict_add(tx_tune_msg, mp("dsp_freq"), from_double(dsp_freq));
+          tx_tune_msg = dict_add(tx_tune_msg, mp("time"), freq_change_time_pmt);
+          tx_tune_msg = dict_add(tx_tune_msg, mp("direction"), mp("TX"));
+          message_port_pub(mp("control"), tx_tune_msg);
+//          std::cout << "tx: " << tx_tune_msg << std::endl;
+        }
+        if(d_rx_hopping){
+          pmt_t rx_tune_msg = dict_add(make_dict(), mp("lo_freq"), from_double(d_fc_rx));
+//          rx_tune_msg = dict_add(rx_tune_msg, mp("dsp_freq"), from_double(-d_f[d_i % d_f.size()]));
+          rx_tune_msg = dict_add(rx_tune_msg, mp("dsp_freq"), from_double(-dsp_freq));
+          rx_tune_msg = dict_add(rx_tune_msg, mp("time"), freq_change_time_pmt);
+          rx_tune_msg = dict_add(rx_tune_msg, mp("direction"), mp("RX"));
+          message_port_pub(mp("control"), rx_tune_msg);
+//          std::cout << "rx: " << rx_tune_msg << std::endl;
+        }
+        d_i++;
+        d_current_fn++;
+      }
+      return noutput_items;
+    }
+
+    double freq_hopper_msg_impl::get_dsp_freq(uint64_t fn){ //TODO: jak otrzymac fn
+      int mai = calculate_ma_sfh(d_maio, d_hsn, d_ma.size(), fn);
+      uint16_t arfcn = d_ma[mai];
+      double dsp_freq = static_cast<double>(gsm_arfcn2freq10(arfcn, 0)) * 1.0e5 - d_fc_rx;
+    }
+/*
+    void freq_hopper_msg_impl::add_hopping_cmd(pmt_t cmd) //TODO: fn and discard not supported at the moment
     {
       if(dict_ref(cmd,intern("cmd"), PMT_NIL) == intern("start")) {
         if(dict_ref(cmd,intern("fn"), PMT_NIL)  != PMT_NIL){
@@ -100,8 +193,8 @@ namespace gr {
         }
       }
     }
-    
-    void freq_hopping_impl::set_freq_metadata(pmt_t burst)
+
+    void freq_hopper_msg_impl::set_freq_metadata(pmt_t burst)
     {
 
       if(d_hopping_enable) {
@@ -155,7 +248,7 @@ namespace gr {
       }
     }
     
-    bool freq_hopping_impl::set_hopping_params(pmt_t hopping_params){
+    bool freq_hopper_msg_impl::set_hopping_params(pmt_t hopping_params){
       bool retval = false;
       if(hopping_params != PMT_NIL){
         //set hopping parameters immediately
@@ -174,6 +267,7 @@ namespace gr {
         }
       }
       return retval;
-    }
+    }*/
+
   } /* namespace gsm */
 } /* namespace gr */

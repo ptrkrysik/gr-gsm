@@ -21,11 +21,11 @@
  */
 
 
-#ifndef INCLUDED_GSM_FREQ_HOPPING_H
-#define INCLUDED_GSM_FREQ_HOPPING_H
+#ifndef INCLUDED_GSM_FREQ_HOPPER_MSG_H
+#define INCLUDED_GSM_FREQ_HOPPER_MSG_H
 
 #include <grgsm/api.h>
-#include <gnuradio/block.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace gsm {
@@ -35,10 +35,18 @@ namespace gr {
      * \ingroup gsm
      *
      */
-    class GRGSM_API freq_hopping : virtual public gr::block
+    class GRGSM_API freq_hopper_msg : virtual public sync_block
     {
      public:
-      typedef boost::shared_ptr<freq_hopping> sptr;
+      typedef boost::shared_ptr<freq_hopper_msg> sptr;
+
+      static sptr make(
+        double samp_rate = 1e6,
+        double start_fc_rx = 1e9,
+        double start_fc_tx = 1e9,
+        bool rx_hopping=true,
+        bool tx_hopping=true,
+        double freq_change_period=0.0046);
 
       /*!
        * hopping_cmd is a pmt dictionary with following fields:
@@ -58,11 +66,9 @@ namespace gr {
        *      "n_arfcn": number_of_arfcns_in_ma}
        *  "fn": frame number when to start or stop hopping
        */
-      static sptr make(pmt::pmt_t hopping_cmd);
-      virtual void add_hopping_cmd(pmt::pmt_t hopping_cmd=pmt::PMT_NIL) = 0;
+//      virtual void add_hopping_cmd(pmt::pmt_t hopping_cmd=pmt::PMT_NIL) = 0;
     };
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GSM_FREQ_HOPPING_H */
-
+#endif /* INCLUDED_GSM_FREQ_HOPPER_MSG_H */
