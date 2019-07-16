@@ -30,7 +30,7 @@
 #define TAIL_BITS         3
 #define GUARD_BITS        8
 #define GUARD_FRACTIONAL  0.25 //fractional part of guard period
-#define GUARD_PERIOD      GUARD_BITS + GUARD_FRACTIONAL
+#define GUARD_PERIOD      (GUARD_BITS + GUARD_FRACTIONAL)
 #define DATA_BITS         57   //size of 1 data block in normal burst
 #define STEALING_BIT      1
 #define N_TRAIN_BITS      26
@@ -39,7 +39,7 @@
 #define FCCH_BITS         USEFUL_BITS
 #define BURST_SIZE        (USEFUL_BITS+2*TAIL_BITS)
 #define ACCESS_BURST_SIZE 88
-#define PROCESSED_CHUNK   BURST_SIZE+2*GUARD_PERIOD
+#define PROCESSED_CHUNK   (BURST_SIZE+2*GUARD_PERIOD)
 
 #define SCH_DATA_LEN      39
 #define TS_BITS           (TAIL_BITS+USEFUL_BITS+TAIL_BITS+GUARD_BITS)  //a full TS (156 bits)
