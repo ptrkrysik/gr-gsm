@@ -43,7 +43,7 @@
 
 #if 0
 /* Files included for debuging */
-#include "plotting/plotting.hpp"
+#include "grgsm/plotting.hpp"
 #include <pthread.h>
 #include <iomanip>
 #endif
