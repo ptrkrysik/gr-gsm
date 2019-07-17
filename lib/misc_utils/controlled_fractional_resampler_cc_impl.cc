@@ -44,7 +44,8 @@ namespace gr {
               io_signature::make(1, 1, sizeof(gr_complex)),
               io_signature::make(1, 1, sizeof(gr_complex))),
         d_mu(phase_shift), d_mu_inc(resamp_ratio),
-        d_resamp(new mmse_fir_interpolator_cc())
+        d_resamp(new mmse_fir_interpolator_cc()),
+        d_last_original_offset(0)
     {
       this->set_tag_propagation_policy(TPP_DONT);
       if(resamp_ratio <=  0)
@@ -88,8 +89,9 @@ namespace gr {
 
       pmt::pmt_t key = pmt::string_to_symbol("set_resamp_ratio");
       get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0)+ninput_items[0]);
+
       bool out_buffer_full = false;
-      for(std::vector<tag_t>::iterator i_tag = tags.begin(); i_tag < tags.end(); i_tag++)
+      for(std::vector<tag_t>::iterator i_tag = tags.begin(); i_tag != tags.end(); i_tag++)
       {
         uint64_t tag_offset_rel = i_tag->offset - nitems_read(0);
 
@@ -102,6 +104,7 @@ namespace gr {
             samples_to_produce = noutput_items - produced_out_sum;
             out_buffer_full = true;
           }
+
           processed_in = resample(in, processed_in_sum, out, produced_out_sum, samples_to_produce);
           processed_in_sum = processed_in_sum + processed_in;
           produced_out_sum = produced_out_sum + samples_to_produce;
@@ -112,15 +115,23 @@ namespace gr {
           } else {
             set_resamp_ratio(pmt::to_double(i_tag->value));
             tag_t original_offset_tag;
-            add_item_tag(0, produced_out_sum + nitems_written(0), pmt::mp("original_offset"), pmt::from_uint64(i_tag->offset));
-            add_item_tag(0, produced_out_sum + nitems_written(0), i_tag->key, i_tag->value);
+            uint64_t offset = produced_out_sum + nitems_written(0);
+            if(d_last_original_offset != offset){ //prevent from sending multiple "original_offset" tags for the same offset
+              add_item_tag(0, offset, pmt::mp("original_offset"), pmt::from_uint64(i_tag->offset));
+              d_last_original_offset = offset;
+            }
+            add_item_tag(0, offset, i_tag->key, i_tag->value);
           }
         } else {
           uint64_t out_samples_to_tag = round(static_cast<double>(tag_offset_rel-processed_in_sum)/d_mu_inc);
           if( (out_samples_to_tag + produced_out_sum) < noutput_items)
           {
-            add_item_tag(0, produced_out_sum + out_samples_to_tag + nitems_written(0), pmt::mp("original_offset"), pmt::from_uint64(i_tag->offset));
-            add_item_tag(0, produced_out_sum + out_samples_to_tag + nitems_written(0), i_tag->key, i_tag->value);
+            uint64_t offset = produced_out_sum + out_samples_to_tag + nitems_written(0);
+            if(d_last_original_offset != offset){
+              add_item_tag(0, offset, pmt::mp("original_offset"), pmt::from_uint64(i_tag->offset));
+              d_last_original_offset = offset;
+            }
+            add_item_tag(0, offset, i_tag->key, i_tag->value);
           }
         }
       }
@@ -130,6 +141,7 @@ namespace gr {
         processed_in = resample(in, processed_in_sum, out, produced_out_sum, (noutput_items-produced_out_sum));
         processed_in_sum = processed_in_sum + processed_in;
       }
+
       consume_each(processed_in_sum);
       return noutput_items;
     }
@@ -142,7 +154,7 @@ namespace gr {
       while(oo < (first_out_sample+samples_to_produce)) //produce samples_to_produce number of samples
       {
         out[oo++] = d_resamp->interpolate(&in[ii], d_mu);
-      
+
         double s = d_mu + d_mu_inc;
         double f = floor(s);
         int incr = (int)f;
