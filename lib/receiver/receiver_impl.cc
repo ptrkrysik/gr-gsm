@@ -48,7 +48,8 @@
 #include <iomanip>
 #endif
 
-#define SYNC_SEARCH_RANGE 30
+#define SYNC_SEARCH_RANGE 50
+#define SYNC_START        (BURST_SIZE/2-(SYNC_SEARCH_RANGE/2)-(N_SYNC_BITS/2) + 8)
 
 namespace gr
 {
@@ -285,7 +286,7 @@ namespace gr
       d_burst_nr++;
 
       /* Consume samples up to the next guard period */
-      unsigned int to_consume = burst_start + BURST_SIZE * d_OSR + 4 * d_OSR;
+      unsigned int to_consume = burst_start + BURST_SIZE * d_OSR + 4 * d_OSR + 2 * d_OSR + 1; //TODO: figure out where + 2 * d_OSR + 1 comes from
 //      consume_each(to_consume);
       d_samples_consumed += to_consume;
 
@@ -341,7 +342,7 @@ namespace gr
 
           /* Extract frequency offset */
           const unsigned first_sample =
-            ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
+            ceil((GUARD_PERIOD/2 + TAIL_BITS) * d_OSR) + 1;
           const unsigned last_sample =
             first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
           double freq_offset_tmp =
@@ -383,25 +384,23 @@ namespace gr
                 pmt::from_double(0.0),pmt::mp("sync_loss"));
               message_port_pub(pmt::mp("measurements"), msg);
             }
+          } else {
+            /* Compose a message with GSMTAP header and bits */
+            send_burst(d_burst_nr, output_binary,
+              GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
 
-            break;
+            /**
+             * Decoding was successful, now
+             * compute offset from burst_start,
+             * burst should start after a guard period.
+             */
+              offset = d_c0_burst_start - 2 * d_OSR; //TODO: figure out the -2 * d_OSR part
+              to_consume += offset;
+            d_failed_sch = 0;
           }
 
-          /* Compose a message with GSMTAP header and bits */
-          send_burst(d_burst_nr, output_binary,
-            GSMTAP_BURST_SCH, input_nr, d_c0_burst_start);
-
-          /**
-           * Decoding was successful, now
-           * compute offset from burst_start,
-           * burst should start after a guard period.
-           */
-          offset = d_c0_burst_start - floor((GUARD_PERIOD) * d_OSR);
-          to_consume += offset;
-          d_failed_sch = 0;
-
-          break;
         }
+        break;
 
         case normal_burst:
         {
@@ -785,8 +784,10 @@ namespace gr
       int burst_start;
       float energy = 0;
 
-      int len = (SYNC_POS + SYNC_SEARCH_RANGE) * d_OSR;
-      for (int ii = SYNC_POS * d_OSR; ii < len; ii++) {
+      int len = (SYNC_SEARCH_RANGE) * d_OSR;
+      int start = (SYNC_START) * d_OSR;
+      int stop = start + len;
+      for (int ii = start; ii < stop; ii++) {
         gr_complex correlation = correlate_sequence(&d_sch_training_seq[5],
           N_SYNC_BITS - 10, &input[ii]);
         correlation_buffer.push_back(correlation);
@@ -839,7 +840,7 @@ namespace gr
       }
 
       burst_start = strongest_window_nr + chan_imp_resp_center
-        - 48 * d_OSR - 2 * d_OSR + 2 + SYNC_POS * d_OSR;
+        - 48 * d_OSR - 2 * d_OSR + 2 + SYNC_START * d_OSR;
       return burst_start;
     }
 
