@@ -46,7 +46,7 @@ namespace gr {
      typedef std::pair<unsigned long long, double> time_format;
      
     GRGSM_API time_format fn_time_delta_cpp(uint32_t fn_ref, time_format time_ref, uint32_t fn_x,
-      time_format time_hint, uint32_t ts_num, uint32_t ts_ref);
+      time_format time_hint, uint32_t ts_num, uint32_t ts_ref, double clock_error=0.0);
 
   } // namespace gsm
 } // namespace gr

@@ -29,7 +29,7 @@
 #define GSM_SYM_RATE (13.0e6 / 48.0)
 
 #define GSM_TS_PERIOD (156.25 / GSM_SYM_RATE)
-#define GSM_FN_PERIOD (8 * GSM_TS_PERIOD)
+#define GSM_FRAME_PERIOD (8 * GSM_TS_PERIOD)
 
 namespace gr {
   namespace gsm {
@@ -62,7 +62,7 @@ namespace gr {
       time_spec_t time_diff_hint)
     {
       int frames_diff, fn_delta;
-      frames_diff = int(round(time_diff_hint.get_real_secs() / GSM_FN_PERIOD));
+      frames_diff = int(round(time_diff_hint.get_real_secs() / GSM_FRAME_PERIOD));
       fn_delta = fnmod_delta(fn, fn_ref + frames_diff) + frames_diff;
 
       return fn_delta;
@@ -80,11 +80,14 @@ namespace gr {
      * @return           difference between fn_ref and fn
      */
     time_format fn_time_delta_cpp(uint32_t fn_ref, time_format time_ref, uint32_t fn_x, 
-      time_format time_hint, uint32_t ts_num, uint32_t ts_ref)
+      time_format time_hint, uint32_t ts_num, uint32_t ts_ref, double clock_error)
     {
-      time_spec_t time_diff_hint = time_spec_t(time_hint.first, time_hint.second) - time_spec_t(time_ref.first, time_ref.second);
+      time_spec_t time_diff_hint = time_spec_t(time_hint.first, time_hint.second) 
+        - time_spec_t(time_ref.first, time_ref.second);
       int fn_delta = fn_time_diff_delta(fn_x, fn_ref, time_diff_hint);
-      time_spec_t time_x_precise = fn_delta * GSM_FN_PERIOD + time_spec_t(time_ref.first, time_ref.second) + (static_cast<int>(ts_num) - static_cast<int>(ts_ref)) * GSM_TS_PERIOD;
+      time_spec_t time_x_precise = (fn_delta * GSM_FRAME_PERIOD)*(1.0-clock_error)
+        + time_spec_t(time_ref.first, time_ref.second)
+        + (static_cast<int>(ts_num) - static_cast<int>(ts_ref)) * GSM_TS_PERIOD;
 
       return time_format(time_x_precise.get_full_secs(), time_x_precise.get_frac_secs());
     }
