@@ -183,7 +183,7 @@ namespace gr
         sch_search_handler(input, noutput_items);
         break;
       case synchronized:
-        synchronized_handler(input, input_items, noutput_items);
+        synchronized_handler(input_items, noutput_items);
         break;
       }
 
@@ -295,13 +295,14 @@ namespace gr
     }
 
     void
-    receiver_impl::synchronized_handler(gr_complex *input,
-      gr_vector_const_void_star &input_items, int noutput_items)
+    receiver_impl::synchronized_handler(gr_vector_const_void_star &input_items,
+      int noutput_items)
     {
       /**
        * In this state receiver is synchronized and it processes
        * bursts according to burst type for given burst number
        */
+      gr_complex *input = (gr_complex *) input_items[0];
       std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
       size_t inputs_to_process = d_cell_allocation.size();
       unsigned char output_binary[BURST_SIZE];

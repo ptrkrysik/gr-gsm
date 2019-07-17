@@ -209,6 +209,7 @@ namespace gr {
         /* State machine handlers */
         void fcch_search_handler(gr_complex *input, int noutput_items);
         void sch_search_handler(gr_complex *input, int noutput_items);
+        void synchronized_handler(gr_vector_const_void_star &input_items, int noutput_items);
 
         uint64_t get_offset_before_resampler(uint64_t offset){
           std::vector<tag_t> original_ofsets;
@@ -222,8 +223,6 @@ namespace gr {
           }
           return offset_before_resampler;
         };
-        void synchronized_handler(gr_complex *input,
-            gr_vector_const_void_star &input_items, int noutput_items);
 
      public:
         receiver_impl(
