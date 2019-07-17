@@ -59,7 +59,7 @@ namespace gr {
     time_spec_t time_spec_t::from_ticks(long long ticks, double tick_rate){
         const long long rate_i = (long long)(tick_rate);
         const double rate_f = tick_rate - rate_i;
-        const time_t secs_full = time_t(ticks/rate_i);
+        const time_t secs_full = (rate_i != 0 ? time_t(ticks/rate_i) : time_t(0));
         const long long ticks_error = ticks - (secs_full*rate_i);
         const double ticks_frac = ticks_error - secs_full*rate_f;
         return time_spec_t(secs_full, ticks_frac/tick_rate);
