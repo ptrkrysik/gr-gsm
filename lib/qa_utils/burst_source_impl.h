@@ -40,6 +40,7 @@ namespace gr {
         std::vector<int> d_timeslots;
         std::vector<std::string> d_burst_data;
         bool d_finished;
+        uint16_t d_arfcn;
         void run();
      public:
         burst_source_impl(const std::vector<int> &framenumbers,
@@ -49,6 +50,7 @@ namespace gr {
         virtual void set_framenumbers(const std::vector<int> &framenumbers);
         virtual void set_timeslots(const std::vector<int> &timeslots);
         virtual void set_burst_data(const std::vector<std::string> &burst_data);
+        virtual void set_arfcn(uint16_t arfcn);
         bool start();
         bool stop();
         bool finished();

@@ -54,6 +54,8 @@ namespace gr {
       virtual std::vector<int> get_timeslots() = 0;
       virtual std::vector<std::string> get_burst_data() = 0;
       virtual pmt::pmt_t get_bursts() = 0;      
+      virtual std::vector<uint8_t> get_sub_types() = 0;
+      virtual std::vector<uint8_t> get_sub_slots() = 0;
     };
   } // namespace gsm
 } // namespace gr

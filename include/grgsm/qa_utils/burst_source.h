@@ -54,6 +54,7 @@ namespace gr {
       virtual void set_framenumbers(const std::vector<int> &framenumbers) = 0;
       virtual void set_timeslots(const std::vector<int> &timeslots) = 0;
       virtual void set_burst_data(const std::vector<std::string> &burst_data) = 0;
+      virtual void set_arfcn(uint16_t arfcn) = 0;
     };
 
   } // namespace gsm

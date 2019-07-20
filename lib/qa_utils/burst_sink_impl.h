@@ -36,6 +36,8 @@ namespace gr {
       std::vector<int> d_timeslots;
       std::vector<std::string> d_burst_data;
       pmt::pmt_t d_bursts;
+      std::vector<uint8_t> d_sub_types;
+      std::vector<uint8_t> d_sub_slots;
      public:
       burst_sink_impl();
       ~burst_sink_impl();
@@ -44,6 +46,8 @@ namespace gr {
       virtual std::vector<int> get_timeslots();
       virtual std::vector<std::string> get_burst_data();
       virtual pmt::pmt_t get_bursts();
+      virtual std::vector<uint8_t> get_sub_types();
+      virtual std::vector<uint8_t> get_sub_slots();
     };
 
   } // namespace gsm

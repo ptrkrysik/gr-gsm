@@ -45,7 +45,7 @@ GR_PYTHON_INSTALL(
 include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gr-gsm)
-set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig:${CMAKE_BINARY_DIR}/python/misc_utils)
+set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig:${CMAKE_BINARY_DIR}/python/misc_utils:${CMAKE_BINARY_DIR}/python/receiver:${CMAKE_BINARY_DIR}/python/demapping:${CMAKE_BINARY_DIR}/python/transmitter)
 GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
 GR_ADD_TEST(qa_decryption ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_decryption.py)
 GR_ADD_TEST(qa_burst_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_printer.py)
@@ -61,6 +61,9 @@ GR_ADD_TEST(qa_tch_f_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa
 GR_ADD_TEST(qa_tch_h_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_decoder.py)
 GR_ADD_TEST(qa_tch_f_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_f_chans_demapper.py)
 GR_ADD_TEST(qa_tch_h_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_chans_demapper.py)
+GR_ADD_TEST(qa_gsm_bcch_ccch_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_bcch_ccch_demapper.py)
+GR_ADD_TEST(qa_gsm_bcch_ccch_sdcch4_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_bcch_ccch_sdcch4_demapper.py)
+GR_ADD_TEST(qa_gsm_sdcch8_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_sdcch8_demapper.py)
 #GR_ADD_TEST(qa_msg_to_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_tag.py)
 #GR_ADD_TEST(qa_controlled_fractional_resampler_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_controlled_fractional_resampler_cc.py)
 #GR_ADD_TEST(qa_uplink_downlink_splitter ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_uplink_downlink_splitter.py)

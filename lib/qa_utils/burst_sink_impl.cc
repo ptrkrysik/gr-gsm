@@ -90,6 +90,8 @@ namespace gr {
         d_framenumbers.push_back(frame_nr);
         d_timeslots.push_back(header->timeslot);
         d_burst_data.push_back(burst_str.str());
+        d_sub_types.push_back(header->sub_type);
+        d_sub_slots.push_back(header->sub_slot);
     }
 
     std::vector<int> burst_sink_impl::get_framenumbers()
@@ -109,6 +111,14 @@ namespace gr {
     pmt::pmt_t burst_sink_impl::get_bursts()
     {
         return d_bursts;
+    }
+    std::vector<uint8_t> burst_sink_impl::get_sub_types()
+    {
+        return d_sub_types;
+    }
+    std::vector<uint8_t> burst_sink_impl::get_sub_slots()
+    {
+        return d_sub_slots;
     }
   } /* namespace gsm */
 } /* namespace gr */
