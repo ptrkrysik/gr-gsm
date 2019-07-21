@@ -37,7 +37,6 @@ class qa_bcch_ccch_sdcch4_demapper (gr_unittest.TestCase):
     def tearDown (self):
         self.tb = None
 
-    @unittest.expectedFailure
     def test_downlink (self):
         """
            BCCH_CCCH_SDCCH4 demapper downlink test

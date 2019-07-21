@@ -37,7 +37,6 @@ class qa_gsm_sdcch8_demapper (gr_unittest.TestCase):
     def tearDown (self):
         self.tb = None
 
-    @unittest.expectedFailure
     def test_downlink (self):
         """
            SDCCH8 demapper downlink test

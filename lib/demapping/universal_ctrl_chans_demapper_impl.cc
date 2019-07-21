@@ -140,7 +140,7 @@ namespace gr {
             {
                 new_header->sub_type = ch_type;
             }
-            new_header->sub_slot = subslots[fn_mod51 + (51 * (frame_nr % 2))];
+            new_header->sub_slot = subslots[fn_mod102];
             
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
