@@ -123,7 +123,6 @@ class qa_gsm_bcch_ccch_demapper (gr_unittest.TestCase):
             0, 0, 0, 0, #BCCH
             ], list(dst.get_sub_slots()))
 
-    @unittest.expectedFailure
     def test_uplink (self):
         """
            BCCH_CCCH demapper uplink test
