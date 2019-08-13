@@ -53,7 +53,7 @@ endfunction()
 if(NOT RST2MAN_EXECUTABLE)
     message(WARNING "rst2man from python-docutils is required to build man pages")
 else()
-    build_man_page(MAN1_OUTPUT grgsm_livemon.rst grgsm_livemon.1)
+    #build_man_page(MAN1_OUTPUT grgsm_livemon.rst grgsm_livemon.1)
     install(FILES ${MAN1_OUTPUT} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1)
 endif()
 

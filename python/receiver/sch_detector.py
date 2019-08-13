@@ -57,10 +57,10 @@ class sch_receiver():
         correlation_bl = correlation_bl/len(self.sync_seq_msk)
         power_bl_mov_avg = uniform_filter1d(abs(correlation_bl)**2,self.L+1,mode='constant',axis=0)
 
-        print "correlation_bl.argmax()",argmax(abs(correlation_bl))
-        print "power_bl_mov_avg.argmax()",(power_bl_mov_avg).argmax()
-        print 'unravel_index(correlation_bl.argmax(), correlation_bl.shape)',unravel_index(argmax(abs(correlation_bl)), correlation_bl.shape)
-        print 'unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)',unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)
+        print("correlation_bl.argmax()",argmax(abs(correlation_bl)))
+        print("power_bl_mov_avg.argmax()",(power_bl_mov_avg).argmax())
+        print('unravel_index(correlation_bl.argmax(), correlation_bl.shape)',unravel_index(argmax(abs(correlation_bl)), correlation_bl.shape))
+        print('unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)',unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape))
         (r_corrmax, c_corrmax)=unravel_index(argmax(abs(correlation_bl)), correlation_bl.shape)
         (r_powmax, c_powmax)=unravel_index(power_bl_mov_avg.argmax(), power_bl_mov_avg.shape)
         
@@ -79,7 +79,7 @@ class sch_receiver():
 #                plot(range(ii,len(correlation_bl[:,0])*self.OSR,self.OSR),power_bl_mov_avg[:,ii]*5e6,'r.')
 #        show()
 #        figure()
-        print 'r_powmax: ',r_powmax
+        print('r_powmax: ',r_powmax)
 #        plot(abs(correlation_bl[range(r_powmax-(self.L+1)/2+1,r_powmax+(self.L+1)/2+1), c_powmax]),'g')
 #        hold(True)
 #        plot(abs(correlation_bl[range(r_corrmax-(self.L+1)/2+1,r_corrmax+(self.L+1)/2+1), c_corrmax]),'r')

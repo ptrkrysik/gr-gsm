@@ -83,10 +83,10 @@ if __name__ == "__main__":
         fn_delta, time2_precise = fn_time_delta(fn1, time1, fn2, time2_err, ts_x, ts_ref)
         time2_precise_cpp = fn_time_delta_cpp(fn1, (int(time1),time1-int(time1)), fn2, (int(time2_err),time2_err-int(time2_err)), ts_x, ts_ref)
         if fn_delta != fn2-fn1:
-            print "bad fn:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
+            print("bad fn:", fn2, error)#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
 #        time_diff_hint = time2 - time2_precise
         time_diff_hint = time2_precise_cpp[0]+time2_precise_cpp[1] - time2_precise
 
         if abs(time_diff_hint) > 0.0001:
-            print "time2_precise_cpp",time2_precise_cpp," time2_precise",time2_precise," time_ref",time1," time_hint",time2_err
-            print ""
+            print("time2_precise_cpp",time2_precise_cpp," time2_precise",time2_precise," time_ref",time1," time_hint",time2_err)
+            print("")
