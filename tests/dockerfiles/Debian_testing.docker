@@ -14,8 +14,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     liblog4cpp5-dev \
     python-gtk2 \
     python-scipy \
-    gnuradio-dev \
-    gr-osmosdr \
+    gnuradio-dev gnuradio libgmp-dev libboost-regex-dev \
     libosmocore-dev
 
 COPY ./ /src/
