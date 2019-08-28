@@ -18,12 +18,13 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_input.xml
-    gsm_receiver.xml
-    gsm_receiver_with_uplink.xml
-    gsm_fcch_burst_tagger.xml
-    gsm_sch_detector.xml
-    gsm_fcch_detector.xml
-    gsm_cx_channel_hopper.xml
-    gsm_clock_offset_control.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_input.block.yml
+    gsm_receiver.block.yml
+    gsm_receiver_with_uplink.block.yml
+    gsm_fcch_burst_tagger.block.yml
+    gsm_sch_detector.block.yml
+    gsm_fcch_detector.block.yml
+    gsm_cx_channel_hopper.block.yml
+    gsm_clock_offset_control.block.yml
+    DESTINATION share/gnuradio/grc/blocks
 )

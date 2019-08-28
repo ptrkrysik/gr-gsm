@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_decryption.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_decryption.block.yml
+    DESTINATION share/gnuradio/grc/blocks
 )

@@ -18,8 +18,9 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_burst_source.xml
-    gsm_burst_sink.xml
-    gsm_message_source.xml
-    gsm_message_sink.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_burst_source.block.xml
+    gsm_burst_sink.block.xml
+    gsm_message_source.block.xml
+    gsm_message_sink.block.xml
+    DESTINATION share/gnuradio/grc/blocks
 )

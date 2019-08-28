@@ -18,6 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_trx_burst_if.xml
+    gsm_trx_burst_if.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )

@@ -18,11 +18,11 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gsm_universal_ctrl_chans_demapper.xml
-    gsm_bcch_ccch_demapper.xml
-    gsm_bcch_ccch_sdcch4_demapper.xml
-    gsm_sdcch8_demapper.xml
-    gsm_tch_f_chans_demapper.xml
-    gsm_tch_h_chans_demapper.xml
+    gsm_universal_ctrl_chans_demapper.block.yml
+    gsm_bcch_ccch_demapper.block.yml
+    gsm_bcch_ccch_sdcch4_demapper.block.yml
+    gsm_sdcch8_demapper.block.yml
+    gsm_tch_f_chans_demapper.block.yml
+    gsm_tch_h_chans_demapper.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )
