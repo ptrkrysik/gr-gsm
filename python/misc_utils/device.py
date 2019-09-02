@@ -40,7 +40,7 @@ def exclude(devices, filters = ({'driver': 'audio'},)):
     return [dev for dev in devices if not match(dev, filters)]
 
 def get_all_args(hint="nofake"):
-    return map(lambda dev: dev.to_string(), exclude(get_devices(hint)))
+    return list(map(lambda dev: dev.to_string(), exclude(get_devices(hint))))
 
 def get_default_args(args):
     # The presence of GRC_BLOCKS_PATH environment variable indicates that

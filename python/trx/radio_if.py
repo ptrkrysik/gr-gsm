@@ -38,7 +38,7 @@ from gnuradio import gr
 from gnuradio import filter
 from gnuradio.filter import firdes
 
-from dict_toggle_sign import dict_toggle_sign
+from .dict_toggle_sign import dict_toggle_sign
 
 class RadioInterface(gr.top_block):
 	# PHY specific variables

@@ -33,7 +33,7 @@ from gnuradio.filter import firdes
 import grgsm
 
 
-class gsm_input(grgsm.hier_block):
+class gsm_input(gr.hier_block2):
 
     def __init__(self, fc=940e6, osr=4, ppm=0, samp_rate_in=1e6):
         gr.hier_block2.__init__(

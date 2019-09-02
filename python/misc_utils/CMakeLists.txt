@@ -21,7 +21,6 @@ GR_PYTHON_INSTALL(
     FILES
     arfcn.py
     clock_offset_corrector_tagged.py
-    hier_block.py 
     fn_time.py
     device.py
     DESTINATION ${GR_PYTHON_DIR}/grgsm

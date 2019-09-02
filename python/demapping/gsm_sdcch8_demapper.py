@@ -32,10 +32,10 @@ from gnuradio.filter import firdes
 import grgsm
 
 
-class gsm_sdcch8_demapper(grgsm.hier_block):
+class gsm_sdcch8_demapper(gr.hier_block2):
 
     def __init__(self, timeslot_nr=1):
-        grgsm.hier_block.__init__(
+        gr.hier_block2.__init__(
             self, "SDCCH/8 demapper",
             gr.io_signature(0, 0, 0),
             gr.io_signature(0, 0, 0),

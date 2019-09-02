@@ -14,7 +14,7 @@ from gnuradio.analog import cpm
 from gnuradio.filter import firdes
 import grgsm
 
-class gsm_gmsk_mod(grgsm.hier_block):
+class gsm_gmsk_mod(gr.hier_block2):
 
     def __init__(self, BT=4, pulse_duration=4, sps=4):
         gr.hier_block2.__init__(
