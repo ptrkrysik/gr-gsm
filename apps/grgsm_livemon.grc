@@ -105,7 +105,7 @@ blocks:
     hide: none
     label: Device Arguments
     short_id: ''
-    type: ''
+    type: str
     value: '""'
   states:
     bus_sink: false
@@ -178,7 +178,7 @@ blocks:
     hide: none
     label: IP or DNS name of collector point
     short_id: ''
-    type: ''
+    type: str
     value: 'localhost'
   states:
     bus_sink: false
@@ -195,7 +195,7 @@ blocks:
     hide: none
     label: UDP port number of collector
     short_id: ''
-    type: ''
+    type: str
     value: '4729'
   states:
     bus_sink: false
@@ -912,7 +912,7 @@ blocks:
     hide: none
     label: UDP server listening port
     short_id: ''
-    type: ''
+    type: str
     value: '4729'
   states:
     bus_sink: false
