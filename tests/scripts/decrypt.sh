@@ -3,7 +3,11 @@
 TEST_DIR=`dirname "$0"`
 
 # PYTHONPATH and LD_LIBRARY_PATH are needed on Fedora 26
-export PYTHONPATH=/usr/local/lib64/python2.7/site-packages/:/usr/local/lib64/python2.7/site-packages/grgsm/:$PYTHONPATH
+#
+# /usr/local/lib/python3/dist-packages/ is currently needed on Debian Testing and Kali Rolling
+# https://salsa.debian.org/bottoms/pkg-gnuradio/blob/unstable/debian/patches/debian-python-install#L8
+#
+export PYTHONPATH=/usr/local/lib/python3/dist-packages/:/usr/local/lib64/python2.7/site-packages/:/usr/local/lib64/python2.7/site-packages/grgsm/:$PYTHONPATH
 export LD_LIBRARY_PATH=/usr/local/lib64/:$LD_LIBRARY_PATH
 
 export AP_DECODE="grgsm_decode"
@@ -14,7 +18,8 @@ export RESULT_OBTAINED="grgsm_decode_test1_result"
 export RUNLINE="$AP_DECODE -c $SHORTENED_CAPFILE -s $((100000000/174)) -m SDCCH8 -t 1 -k 0x1E,0xF0,0x0B,0xAB,0x3B,0xAC,0x70,0x02 -v --ppm -10"
 echo "Testing with:"
 echo "  $RUNLINE"
-gnuradio-companion --version
+#gnuradio 3.8 does not have --version parameter
+#gnuradio-companion --version
 
 cd $TEST_DIR
 cat $CAPFILE | head -c -37000000 | head -c 35800000  > $SHORTENED_CAPFILE
