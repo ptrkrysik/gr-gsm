@@ -142,7 +142,7 @@ blocks:
     mtu: '10000'
     port: serverport
     tcp_no_delay: 'False'
-    type: TCP_SERVER
+    type: UDP_SERVER
   states:
     bus_sink: false
     bus_source: false
@@ -162,7 +162,7 @@ blocks:
     mtu: '1500'
     port: collectorport
     tcp_no_delay: 'False'
-    type: TCP_SERVER
+    type: UDP_CLIENT
   states:
     bus_sink: false
     bus_source: false
