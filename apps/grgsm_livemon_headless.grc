@@ -134,7 +134,7 @@ blocks:
     label: IP or DNS name of collector point
     short_id: ''
     type: str
-    value: 'localhost'
+    value: '"localhost"'
   states:
     bus_sink: false
     bus_source: false
