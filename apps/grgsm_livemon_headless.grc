@@ -315,7 +315,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    cell_allocation: '[arfcn.downlink2arfcn(fc)]'
+    cell_allocation: '[0]'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
