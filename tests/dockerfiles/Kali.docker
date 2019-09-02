@@ -16,8 +16,24 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gnuradio-dev gnuradio libgmp-dev libboost-regex-dev \
     libosmocore-dev
 
+# packages needed for gr-iqbal and gr-osmosdr
+RUN apt-get install -y git libuhd-dev
+
 COPY ./ /src/
-RUN ls /src
+
+RUN git clone --branch maint-3.8 --recurse-submodules https://github.com/velichkov/gr-iqbal && \
+    cd gr-iqbal && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make -j $(nproc) install
+
+RUN git clone --branch maint-3.8 https://github.com/velichkov/gr-osmosdr && \
+    cd gr-osmosdr && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make -j $(nproc) install
 
 RUN mkdir /src/build
 WORKDIR /src/build
