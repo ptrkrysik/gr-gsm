@@ -7,13 +7,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libtool \
     pkg-config \
     build-essential \
-    python-docutils \
     libcppunit-dev \
     swig \
     doxygen \
     liblog4cpp5-dev \
-    python-gtk2 \
-    python-scipy \
+    python3-docutils \
+    python3-scipy \
     gnuradio-dev gnuradio libgmp-dev libboost-regex-dev \
     libosmocore-dev
 
