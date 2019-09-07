@@ -23,6 +23,25 @@ This is the GNU Radio GSM module. Place your Python package
 description here (python/__init__.py).
 '''
 
+import os
+
+if "CMAKE_BINARY_DIR" in os.environ:
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+
+    # As the directory structure in the repository is different then the one after the package
+    # gets installed we need to add those subdirectories to the __path__ otherwise python3 is
+    # not able to load the modules using the relative import syntax and grcc compilation and
+    # some unit tests fail.
+    __path__ += [
+        # Load the local (not yet installed) grgsm_swig from the ../swig subdirectory.
+        os.path.join(os.environ.get("CMAKE_BINARY_DIR"), "swig"),
+
+        # Load the local (not yet installed) python modules from the local subdirectories
+        os.path.join(dirname, "misc_utils"),
+        os.path.join(dirname, "receiver"),
+        os.path.join(dirname, "demapping"),
+        os.path.join(dirname, "transmitter"),
+        os.path.join(dirname, "trx")]
 
 # import swig generated symbols into the gsm namespace
 from .grgsm_swig import *
