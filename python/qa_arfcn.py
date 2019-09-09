@@ -23,7 +23,7 @@
 
 from gnuradio import gr, gr_unittest, blocks
 import grgsm_swig as grgsm
-import arfcn
+from misc_utils import arfcn
 import os
 import sys
 
