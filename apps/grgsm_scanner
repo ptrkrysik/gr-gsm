@@ -298,9 +298,22 @@ class channel_info(object):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
-def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
+def sqlite_file(filename, debug = False):
+    import sqlite3 # Avoid pulling in sqlite3 when not saving
+    if debug: 
+        print("Saving to SQLite database in %s" % filename)
+    conn = sqlite3.connect(filename)
+    conn.execute("CREATE TABLE IF NOT EXISTS towers(time, arfcin, freq, cell_id, lac, mcc, mnc, ccch_conf, power, neighbour_list, cell_arfcn_list);")
+    return conn
+
+def do_scan(samp_rate, band, speed, ppm, gain, sqlite, args, prn = None, debug = False):
     signallist = []
     channels_num = int(samp_rate / 0.2e6)
+    conn = None
+
+    if sqlite is not None:
+        conn = sqlite_file(sqlite, debug)
+
     for arfcn_range in grgsm.arfcn.get_arfcn_ranges(band):
         first_arfcn = arfcn_range[0]
         last_arfcn = arfcn_range[1]
@@ -359,6 +372,15 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                                         neighbour_list, cell_arfcn_list)
                     found_list.append(info)
 
+                    if conn:
+                        now = time.time()
+                        conn.execute("INSERT INTO towers(time, arfcin, freq, cell_id, lac, mcc, mnc, ccch_conf, power, neighbour_list, cell_arfcn_list) "+
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+                                (now, grgsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
+                                        cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
+                                        str(neighbour_list), str(cell_arfcn_list)))
+                        conn.commit()           
+
             scanner = None
 
 
@@ -374,6 +396,10 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
             signallist.extend(found_list)
 
             current_freq += channels_num * 0.2e6
+
+    if sqlite is not None:
+        conn.close()
+
     return signallist
 
 def argument_parser():
@@ -398,6 +424,8 @@ def argument_parser():
                       help="If set, verbose information output is printed: ccch configuration, cell ARFCN's, neighbour ARFCN's")
     parser.add_option("-d", "--debug", action="store_true",
                       help="Print additional debug messages")
+    parser.add_option("-w", "--sqlite", dest="sqlite", default=None, type="string", help="Save observed tower values to specified SQLite file")
+    parser.add_option("-r", "--recurse", dest="recurse", action='store_true', help="Loop continously to monitor for change, most helpful with the --sqlite directive")
 
     """
         Dont forget: sudo sysctl kernel.shmmni=32000
@@ -413,13 +441,13 @@ def main(options = None):
         sys.exit(0)
 
     if options.band not in grgsm.arfcn.get_bands():
-        parser.error("Invalid GSM band\n")
+        argument_parser().error("Invalid GSM band\n")
 
     if options.speed < 0 or options.speed > 5:
-        parser.error("Invalid scan speed.\n")
+        argument_parser().error("Invalid scan speed.\n")
 
     if (options.samp_rate / 0.2e6) % 2 != 0:
-        parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
+        argument_parser().error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
 
     def printfunc(found_list):
         for info in sorted(found_list):
@@ -427,8 +455,11 @@ def main(options = None):
             if options.verbose:
                 print info.get_verbose_info()
     print ""
-    do_scan(options.samp_rate, options.band, options.speed,
-            options.ppm, options.gain, options.args, prn = printfunc, debug = options.debug)
+    while True:
+        do_scan(options.samp_rate, options.band, options.speed,
+            options.ppm, options.gain, options.sqlite, options.args, prn = printfunc, debug = options.debug)
+        if not options.recurse:
+            break
 
 if __name__ == '__main__':
     main()
