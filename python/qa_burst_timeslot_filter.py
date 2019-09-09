@@ -89,4 +89,4 @@ class qa_burst_timeslot_filter (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_timeslot_filter, "qa_burst_timeslot_filter.xml")
+    gr_unittest.run(qa_burst_timeslot_filter)

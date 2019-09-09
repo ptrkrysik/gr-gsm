@@ -294,4 +294,4 @@ class qa_burst_printer (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_printer, "qa_burst_printer.xml")
+    gr_unittest.run(qa_burst_printer)

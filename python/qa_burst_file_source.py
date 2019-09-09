@@ -101,4 +101,4 @@ class qa_burst_file_sink (gr_unittest.TestCase):
             list(dst.get_burst_data()))
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_file_sink, "qa_burst_file_sink.xml")
+    gr_unittest.run(qa_burst_file_sink)

@@ -40,4 +40,4 @@ class qa_msg_to_tag (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_msg_to_tag, "qa_msg_to_tag.xml")
+    gr_unittest.run(qa_msg_to_tag)

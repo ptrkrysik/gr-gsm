@@ -165,4 +165,4 @@ class qa_burst_fnr_filter (gr_unittest.TestCase):
         self.assertEqual(bursts_expected, bursts_result)
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_fnr_filter, "qa_burst_fnr_filter.xml")
+    gr_unittest.run(qa_burst_fnr_filter)
