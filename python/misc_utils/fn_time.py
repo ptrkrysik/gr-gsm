@@ -20,9 +20,6 @@
 # Boston, MA 02110-1301, USA.
 # 
 # 
-from math import floor, ceil
-from random import uniform
-from grgsm import fn_time_delta_cpp
 
 __hyper_frame = 26*51*2048
 __symb_rate = 13.0e6/48.0
@@ -72,10 +69,13 @@ def fn_time_delta(fn_ref, time_ref, fn_x, time_hint=None, ts_num=0, ts_ref=0):
 
 
 if __name__ == "__main__":
+    from random import uniform
+    from grgsm import fn_time_delta_cpp
+
     fn1 = 10000
     ts_ref = 4
     time1 = 10.5
-    for fn2 in xrange(__hyper_frame/2+fn1-10,__hyper_frame/2*10+fn1+100,10):
+    for fn2 in range(__hyper_frame//2+fn1-10,__hyper_frame//2*10+fn1+100,10):
         ts_x = int(uniform(0,8))
         time2 = time1 + (fn2-fn1)*__frame_period + (ts_x-ts_ref)*__ts_period
         error = uniform(-6200,6200)
