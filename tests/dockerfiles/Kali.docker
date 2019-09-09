@@ -26,18 +26,20 @@ RUN git clone --branch maint-3.8 --recurse-submodules https://github.com/velichk
     mkdir build && \
     cd build && \
     cmake .. && \
-    make -j $(nproc) install
+    make -j $(nproc) install && \
+    ldconfig
 
 RUN git clone --branch maint-3.8 https://github.com/velichkov/gr-osmosdr && \
     cd gr-osmosdr && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make -j $(nproc) install
+    make -j $(nproc) install && \
+    ldconfig
 
 RUN mkdir /src/build
 WORKDIR /src/build
-RUN cmake .. && \
+RUN PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH cmake .. && \
     # The parallel build sometimes fails when the .grc_gnuradio
     # and .gnuradio directories do not exist
     mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
