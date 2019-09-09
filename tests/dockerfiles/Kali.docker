@@ -17,7 +17,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libosmocore-dev
 
 # packages needed for gr-iqbal and gr-osmosdr
-RUN apt-get install -y git libuhd-dev
+RUN apt-get install -y git libuhd-dev liborc-0.4-dev
 
 COPY ./ /src/
 
