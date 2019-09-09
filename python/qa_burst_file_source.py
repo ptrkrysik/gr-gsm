@@ -51,6 +51,7 @@ class qa_burst_file_sink (gr_unittest.TestCase):
             0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01
             ]))
         handle.flush();
+        handle.close();
 
         src = grgsm.burst_file_source(temp.name);
         dst = grgsm.burst_sink();
@@ -88,6 +89,7 @@ class qa_burst_file_sink (gr_unittest.TestCase):
             0x00, 0x01, 0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x01
             ]))
         handle.flush();
+        handle.close();
 
         src = grgsm.burst_file_source(temp.name);
         dst = grgsm.burst_sink();
