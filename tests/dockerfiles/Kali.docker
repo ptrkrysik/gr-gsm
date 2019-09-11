@@ -13,32 +13,15 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     liblog4cpp5-dev \
     python3-docutils \
     python3-scipy \
-    gnuradio-dev gnuradio libgmp-dev libboost-regex-dev \
-    libosmocore-dev
-
-# packages needed for gr-iqbal and gr-osmosdr
-RUN apt-get install -y git libuhd-dev liborc-0.4-dev
+    gnuradio-dev gnuradio libgmp-dev libboost-regex-dev liborc-dev \
+    libosmocore-dev \
+    gr-osmosdr
 
 COPY ./ /src/
 
-RUN git clone --branch maint-3.8 --recurse-submodules https://github.com/velichkov/gr-iqbal && \
-    cd gr-iqbal && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make -j $(nproc) install && \
-    ldconfig
-
-RUN git clone --branch maint-3.8 https://github.com/velichkov/gr-osmosdr && \
-    cd gr-osmosdr && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make -j $(nproc) install && \
-    ldconfig
-
-RUN mkdir /src/build
+RUN mkdir -p /src/build
 WORKDIR /src/build
+
 RUN PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH cmake .. && \
     # The parallel build sometimes fails when the .grc_gnuradio
     # and .gnuradio directories do not exist
