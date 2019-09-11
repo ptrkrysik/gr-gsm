@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEST_DIR=`dirname "$0"`
+TEST_DIR=$(dirname "$0")
 
 # PYTHONPATH and LD_LIBRARY_PATH are needed on Fedora 26
 #
@@ -18,11 +18,10 @@ export RESULT_OBTAINED="grgsm_decode_test1_result"
 export RUNLINE="$AP_DECODE -c $SHORTENED_CAPFILE -s $((100000000/174)) -m SDCCH8 -t 1 -k 0x1E,0xF0,0x0B,0xAB,0x3B,0xAC,0x70,0x02 -v --ppm -10"
 echo "Testing with:"
 echo "  $RUNLINE"
-#gnuradio 3.8 does not have --version parameter
-#gnuradio-companion --version
+gnuradio-config-info --version
 
-cd $TEST_DIR
-cat $CAPFILE | head -c -37000000 | head -c 35800000  > $SHORTENED_CAPFILE
+cd "$TEST_DIR" || exit 1
+head -c -37000000 $CAPFILE | head -c 35800000  > $SHORTENED_CAPFILE
 
 $RUNLINE | grep -A 999999 "862210 1331352:  03 03 01 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b 2b" | tee $RESULT_OBTAINED
 diff -u $RESULT_EXPECTED $RESULT_OBTAINED
