@@ -19,6 +19,8 @@ export RUNLINE="$AP_DECODE -c $SHORTENED_CAPFILE -s $((100000000/174)) -m SDCCH8
 echo "Testing with:"
 echo "  $RUNLINE"
 gnuradio-config-info --version
+cat /proc/cpuinfo
+ulimit -a
 
 cd "$TEST_DIR" || exit 1
 head -c -37000000 $CAPFILE | head -c 35800000  > $SHORTENED_CAPFILE
