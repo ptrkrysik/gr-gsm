@@ -25,7 +25,13 @@ ulimit -a
 cd "$TEST_DIR" || exit 1
 head -c 6000000 $CAPFILE  > $SHORTENED_CAPFILE
 
+# VOLK_GENERIC=1 is a temporary workaround for the following VOLK's bug
+# https://github.com/gnuradio/volk/pull/278
+# https://github.com/gnuradio/gnuradio/issues/2748
+export VOLK_GENERIC=1
+
 $RUNLINE | grep -A 999999 "860933 1329237:  59 06 1a 8f 6d 18 10 80 00 00 00 00 00 00 00 00 00 00 00 78 b9 00 00" | tee $RESULT_OBTAINED
+
 diff $RESULT_EXPECTED $RESULT_OBTAINED
 TEST_RESULT=$?
 
