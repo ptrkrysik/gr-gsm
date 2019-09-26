@@ -369,7 +369,7 @@ if __name__ == '__main__':
         parser.error("Invalid A5 version\n")
 
     if options.cfile and (options.fc is None and options.arfcn is None):
-        print("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n", file=sys.stderr)
+        sys.stderr.write("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n")
 
     # handle frequency / arfcn input
     arfcn = None
