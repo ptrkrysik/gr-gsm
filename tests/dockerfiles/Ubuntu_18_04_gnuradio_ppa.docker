@@ -1,0 +1,51 @@
+FROM ubuntu:18.04
+MAINTAINER Vasil Velichkov
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        software-properties-common && \
+    add-apt-repository --yes ppa:gnuradio/gnuradio-releases && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        git \
+        cmake \
+        autoconf \
+        libtool \
+        pkg-config \
+        build-essential \
+        python-docutils \
+        libcppunit-dev \
+        swig \
+        doxygen \
+        liblog4cpp5-dev \
+        python-scipy \
+        gnuradio-dev gnuradio libgmp-dev libboost-regex-dev liborc-dev libuhd-dev \
+        libosmocore-dev
+
+RUN git clone --branch maint-3.8 --recurse-submodules https://github.com/velichkov/gr-iqbal && \
+    cd gr-iqbal && \
+    mkdir build && \
+    cd build && \
+    cmake -DENABLE_DOXYGEN=OFF .. && \
+    make -j $(nproc) install
+
+RUN git clone --branch maint-3.8 https://github.com/velichkov/gr-osmosdr && \
+    cd gr-osmosdr && \
+    mkdir build && \
+    cd build && \
+    cmake -DENABLE_DOXYGEN=OFF .. && \
+    make -j $(nproc) install
+
+COPY ./ /src/
+RUN mkdir /src/build
+WORKDIR /src/build
+
+#PYTHONPATH is needed as gr-osmosdr gets installed in /usr/local/lib/python3/...
+ENV PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH
+
+RUN cmake .. && \
+    # The parallel build sometimes fails when the .grc_gnuradio
+    # and .gnuradio directories do not exist
+    mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
+    make -j $(nproc) && \
+    make install && \
+    ldconfig && \
+    make CTEST_OUTPUT_ON_FAILURE=1 test

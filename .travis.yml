@@ -9,6 +9,7 @@ env:
 #  - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04_nolibosmo.docker IMGNAME=ubu16.04-grgsm-nolibosmo
   - DOCKERFILE=tests/dockerfiles/Kali.docker IMGNAME=kali-grgsm
 #  - DOCKERFILE=tests/dockerfiles/Fedora_26.Dockerfile IMGNAME=fedora26-grgsm
+  - DOCKERFILE=tests/dockerfiles/Ubuntu_18_04_gnuradio_ppa.docker IMGNAME=ubuntu_18_04_gnuradio_ppa
 
 
 services:
