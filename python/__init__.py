@@ -43,21 +43,25 @@ if "CMAKE_BINARY_DIR" in os.environ:
         os.path.join(dirname, "transmitter"),
         os.path.join(dirname, "trx")]
 
-# import swig generated symbols into the gsm namespace
-from .grgsm_swig import *
+try:
+    # import swig generated symbols into the gsm namespace
+    from .grgsm_swig import *
 
-# import any pure python here
+    # import any pure python here
 
-#from fcch_burst_tagger import fcch_burst_tagger
-#from sch_detector import sch_detector
-#from fcch_detector import fcch_detector
-from .clock_offset_corrector_tagged import clock_offset_corrector_tagged
-from .gsm_input import gsm_input
-from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
-from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
-from .gsm_sdcch8_demapper import gsm_sdcch8_demapper
-from .gsm_gmsk_mod import gsm_gmsk_mod
-from .fn_time import *
-from .txtime_bursts_tagger import *
-from .arfcn import *
-from .device import *
+    #from fcch_burst_tagger import fcch_burst_tagger
+    #from sch_detector import sch_detector
+    #from fcch_detector import fcch_detector
+    from .clock_offset_corrector_tagged import clock_offset_corrector_tagged
+    from .gsm_input import gsm_input
+    from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
+    from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
+    from .gsm_sdcch8_demapper import gsm_sdcch8_demapper
+    from .gsm_gmsk_mod import gsm_gmsk_mod
+    from .fn_time import *
+    from .txtime_bursts_tagger import *
+    from .arfcn import *
+    from .device import *
+except ImportError as e:
+    import traceback; traceback.print_exc()
+    raise
