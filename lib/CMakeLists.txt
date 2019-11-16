@@ -77,22 +77,32 @@ add_subdirectory(transmitter)
 add_subdirectory(trx)
 
 if(NOT LOCAL_OSMOCOM)
-    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOGSM_LIBRARY})
+    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARY} ${LIBOSMOCODEC_LIBRARY} ${LIBOSMOGSM_LIBRARY})
     if(LIBOSMOCODING_FOUND)
         list (APPEND grgsm_link_libraries
-           ${LIBOSMOCODING_LIBRARIES}
-	)
+           ${LIBOSMOCODING_LIBRARY}
+        )
         list (APPEND grgsm_include_directories
-           ${LIBOSMOCORE_INCLUDE_DIR}
+           PUBLIC $<BUILD_INTERFACE:${LIBOSMOCORE_INCLUDE_DIR}>
+        )
+    else()
+        list (APPEND grgsm_include_directories
+            PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/decoding>
         )
     endif()
-endif()
+else(NOT LOCAL_OSMOCOM)
+    list (APPEND grgsm_include_directories
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/decoding>
+    )
+endif(NOT LOCAL_OSMOCOM)
+
 
 add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm gnuradio::gnuradio-runtime gnuradio::gnuradio-filter volk osmocoding)
+target_link_libraries(grgsm gnuradio::gnuradio-runtime gnuradio::gnuradio-filter volk ${grgsm_link_libraries})
 target_include_directories(grgsm
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/receiver>
+    ${grgsm_include_directories}
     PUBLIC $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
     PUBLIC $<INSTALL_INTERFACE:include>
   )
