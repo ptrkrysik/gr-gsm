@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
 #define INCLUDED_GSM_MESSAGE_PRINTER_IMPL_H
 
-#include <gsm/misc_utils/message_printer.h>
+#include <grgsm/misc_utils/message_printer.h>
 
 namespace gr {
   namespace gsm {
@@ -32,8 +32,13 @@ namespace gr {
     {
      private:
       void message_print(pmt::pmt_t msg);
+      pmt::pmt_t d_prepend_string;
+      bool d_prepend_fnr;
+      bool d_prepend_frame_count;
+      bool d_print_gsmtap_header;
      public:
-      message_printer_impl();
+      message_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr=false,
+        bool prepend_frame_count=false, bool print_gsmtap_header=false);
       ~message_printer_impl();
     };
 

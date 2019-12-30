@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2009-2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -23,7 +23,9 @@
 #include "config.h"
 #endif
 
+#include <cmath>
 #include <receiver_config.h>
+
 
 burst_counter & burst_counter::operator++(int)
 {
@@ -44,6 +46,33 @@ burst_counter & burst_counter::operator++(int)
   d_offset_integer = floor(d_offset_fractional);
   d_offset_fractional = d_offset_fractional - d_offset_integer;
   return (*this);
+}
+
+burst_counter burst_counter::subtract_timeslots(unsigned int number_of_timeslots)
+{
+  int timeslot_nr = (int)d_timeslot_nr - (int)number_of_timeslots;
+  int t1,t2,t3;
+  if (timeslot_nr < 0) {
+    timeslot_nr = timeslot_nr + 8;
+
+    t2 = (d_t2+26 - 1) % 26;
+    t3 = (d_t3+51 - 1) % 51;
+
+    if ((d_t2 == 0) && (d_t3 == 0)) {
+      t1 = (d_t1 - 1) % (1 << 11);
+    } else
+    {
+      t1 = d_t1;
+    }
+  }
+  else
+  {
+    t1 = d_t1;
+    t2 = d_t2;
+    t3 = d_t3;
+  }
+  
+  return burst_counter(d_OSR, t1, t2, t3, timeslot_nr);
 }
 
 void burst_counter::set(uint32_t t1, uint32_t t2, uint32_t t3, uint32_t timeslot_nr)

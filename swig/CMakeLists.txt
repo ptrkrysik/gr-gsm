@@ -28,30 +28,38 @@ endif()
 include(GrSwig)
 include(GrPython)
 
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  # Mac OS X specific code
+  # Without this flag it does not find some of the libraries
+  SET(CMAKE_MODULE_LINKER_FLAGS "-undefined dynamic_lookup")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
 ########################################################################
 # Setup swig generation
 ########################################################################
 foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gnuradio/swig)
 endforeach(incdir)
+list(APPEND GR_SWIG_INCLUDE_DIRS ${FFTW3F_INCLUDE_DIRS})
 
-set(GR_SWIG_LIBRARIES gnuradio-gsm)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/gsm_swig_doc.i)
+set(GR_SWIG_LIBRARIES grgsm)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i)
 set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
-GR_SWIG_MAKE(gsm_swig gsm_swig.i)
+GR_SWIG_MAKE(grgsm_swig grgsm_swig.i)
 
 ########################################################################
 # Install the build swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS gsm_swig DESTINATION ${GR_PYTHON_DIR}/gsm)
+GR_SWIG_INSTALL(TARGETS grgsm_swig DESTINATION ${GR_PYTHON_DIR}/grgsm)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
     FILES
-    gsm_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/gsm_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/gsm/swig
+    grgsm_swig.i
+    constants.i
+    ${CMAKE_CURRENT_BINARY_DIR}/grgsm_swig_doc.i
+    DESTINATION ${GR_INCLUDE_DIR}/grgsm/swig
 )

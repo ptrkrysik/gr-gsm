@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
 #define INCLUDED_GSM_CONTROLLED_ROTATOR_CC_IMPL_H
 
-#include <gsm/misc_utils/controlled_rotator_cc.h>
+#include <grgsm/misc_utils/controlled_rotator_cc.h>
 #include <gnuradio/blocks/rotator.h>
 
 namespace gr {
@@ -33,15 +33,16 @@ namespace gr {
     {
      private:
       gr_complex d_phase_inc;
-      double d_samp_rate;
+//      double d_samp_rate;
       blocks::rotator d_r;
 
      public:
-      controlled_rotator_cc_impl(double phase_inc, double samp_rate);
+      controlled_rotator_cc_impl(double phase_inc);
       ~controlled_rotator_cc_impl();
 
       virtual void set_phase_inc(double phase_inc);
-      virtual void set_samp_rate(double samp_rate);
+//      virtual void set_samp_rate(double samp_rate);
+
       // Where all the action really happens
       int work(int noutput_items,
 	       gr_vector_const_void_star &input_items,

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# 
-# Copyright 2014 Piotr Krysik <ptrkrysik@gmail.com>
+# @file
+# @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+# @section LICENSE
 # 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +21,7 @@
 # 
 
 from numpy import *
-from pylab import *
+#from pylab import *
 from gnuradio import gr
 import pmt
 from scipy.ndimage.filters import uniform_filter1d
@@ -37,7 +38,7 @@ class sch_receiver():
         self.OSR = OSR
         sync_seq_msk_tmp = self.msk_mod(self.sync_seq, -1j)
         self.sync_seq_msk = sync_seq_msk_tmp[5:59]
-        self.sync_seq_msk_interp = zeros(self.OSR*len(self.sync_seq_msk), dtype=np.complex64)
+        self.sync_seq_msk_interp = zeros(self.OSR*len(self.sync_seq_msk), dtype=complex64)
         self.sync_seq_msk_interp[::OSR] = self.sync_seq_msk
         self.L = 5
 
@@ -49,7 +50,7 @@ class sch_receiver():
     
     def get_chan_imp_resp(self, sch_burst):
         sch_burst_bl = resize(array(sch_burst), (int(len(sch_burst)/self.OSR),self.OSR))
-        correlation_bl = zeros(shape(sch_burst_bl), dtype=np.complex64)
+        correlation_bl = zeros(shape(sch_burst_bl), dtype=complex64)
         for ii in xrange(0,self.OSR):
             correlation_bl[:,ii]=correlate(sch_burst_bl[:,ii],self.sync_seq_msk,'same')
         

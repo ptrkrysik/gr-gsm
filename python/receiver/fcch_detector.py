@@ -1,4 +1,25 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+# @file
+# @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+# @section LICENSE
+#
+# Gr-gsm is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# Gr-gsm is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with gr-gsm; see the file COPYING.  If not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street,
+# Boston, MA 02110-1301, USA.
+#
+
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: FCCH Bursts Detector
@@ -13,12 +34,12 @@
 from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import firdes
-import gsm
+import grgsm
 
-class fcch_detector(gr.hier_block2):
+class fcch_detector(grgsm.hier_block):
 
     def __init__(self, OSR=4):
-        gr.hier_block2.__init__(
+        grgsm.hier_block.__init__(
             self, "FCCH bursts detector",
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
             gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
@@ -38,7 +59,7 @@ class fcch_detector(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self.gsm_fcch_burst_tagger_0 = gsm.fcch_burst_tagger(OSR)
+        self.gsm_fcch_burst_tagger_0 = grgsm.fcch_burst_tagger(OSR)
         self.blocks_threshold_ff_0_0 = blocks.threshold_ff(0, 0, 0)
         self.blocks_threshold_ff_0 = blocks.threshold_ff(int((138)*samp_rate/f_symb), int((138)*samp_rate/f_symb), 0)
         self.blocks_multiply_conjugate_cc_0 = blocks.multiply_conjugate_cc(1)

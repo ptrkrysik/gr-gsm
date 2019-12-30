@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -25,8 +25,15 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <stdio.h>
 #include "message_printer_impl.h"
-#include "gsm/gsmtap.h"
+#include "grgsm/gsmtap.h"
+#include <grgsm/endian.h>
+
+
+extern "C" {
+    #include <osmocom/gsm/a5.h>
+}
 
 namespace gr {
   namespace gsm {
@@ -36,34 +43,72 @@ namespace gr {
         pmt::pmt_t message_plus_header_blob = pmt::cdr(msg);
         uint8_t * message_plus_header = (uint8_t *)pmt::blob_data(message_plus_header_blob);
         size_t message_plus_header_len=pmt::blob_length(message_plus_header_blob);
-        
         gsmtap_hdr * header = (gsmtap_hdr *)message_plus_header;
+        uint32_t frame_nr = be32toh(header->frame_number);
         
-        for(int ii=sizeof(gsmtap_hdr); ii<message_plus_header_len; ii++)
+        std::ostringstream out;
+        out << d_prepend_string;
+        if (d_prepend_fnr)
         {
-            printf(" %02x", message_plus_header[ii]);
+            out << frame_nr;
         }
-        std::cout << std::endl;
+
+        if (d_prepend_fnr && d_prepend_frame_count)
+        {
+            out << " ";
+        }
+
+        if (d_prepend_frame_count)
+        {
+            // calculate fn count using libosmogsm
+            out << osmo_a5_fn_count(frame_nr);
+        }
+
+        if (d_prepend_fnr || d_prepend_frame_count)
+        {
+            out << ": ";
+        }
+        
+        int start_index = sizeof(gsmtap_hdr);
+        
+        if (d_print_gsmtap_header)
+        {
+            start_index = 0;
+        }
+        
+        for(int ii=start_index; ii<message_plus_header_len; ii++)
+        {
+            out<<" "<<(std::hex)<<std::setw(2)<<std::setfill('0')<<(uint32_t)message_plus_header[ii];
+        }
+
+        out << std::endl;
+        std::cout << out.str() << std::flush;
     }
 
     message_printer::sptr
-    message_printer::make()
+    message_printer::make(pmt::pmt_t prepend_string, bool prepend_fnr,
+        bool prepend_frame_count, bool print_gsmtap_header)
     {
       return gnuradio::get_initial_sptr
-        (new message_printer_impl());
+        (new message_printer_impl(prepend_string, prepend_fnr,
+            prepend_frame_count, print_gsmtap_header));
     }
 
     /*
      * The private constructor
      */
-    message_printer_impl::message_printer_impl()
+    message_printer_impl::message_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr,
+        bool prepend_frame_count, bool print_gsmtap_header)
       : gr::block("message_printer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0))
     {
+        d_prepend_string = prepend_string;
+        d_prepend_fnr = prepend_fnr;
+        d_prepend_frame_count = prepend_frame_count;
+        d_print_gsmtap_header = print_gsmtap_header;
         message_port_register_in(pmt::mp("msgs"));
         set_msg_handler(pmt::mp("msgs"), boost::bind(&message_printer_impl::message_print, this, _1));
-
     }
 
     /*

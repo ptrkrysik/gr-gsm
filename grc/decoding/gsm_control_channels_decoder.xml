@@ -2,8 +2,8 @@
 <block>
   <name>Control channels decoder</name>
   <key>gsm_control_channels_decoder</key>
-  <import>import gsm</import>
-  <make>gsm.control_channels_decoder()</make>
+  <import>import grgsm</import>
+  <make>grgsm.control_channels_decoder()</make>
   <sink>
     <name>bursts</name>
     <type>message</type>

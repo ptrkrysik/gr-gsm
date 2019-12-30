@@ -17,42 +17,99 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
+include(GrPlatform) #define LIB_SUFFIX
+include(GrMiscUtils)
+
+########################################################################
+# Add sources macro
+########################################################################
+set(grgsm_sources "")
+
+macro (add_sources)
+    file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}/lib" "${CMAKE_CURRENT_SOURCE_DIR}")
+    foreach (_src ${ARGN})
+        if (_relPath)
+            list (APPEND grgsm_sources "${_relPath}/${_src}")
+        else()
+            list (APPEND grgsm_sources "${_src}")
+        endif()
+    endforeach()
+    if (_relPath)
+        # propagate grgsm_sources to parent directory
+        set (grgsm_sources ${grgsm_sources} PARENT_SCOPE)
+    endif()
+endmacro()
+
+########################################################################
+# Handle the generated constants
+########################################################################
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
+    "import time;print time.strftime('%a, %d %b %Y %H:%M:%S', time.gmtime())"
+    OUTPUT_VARIABLE BUILD_DATE OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "Loading build date ${BUILD_DATE} into constants...")
+message(STATUS "Loading version ${VERSION} into constants...")
+
+#double escape for windows backslash path separators
+string(REPLACE "\\" "\\\\" prefix "${prefix}")
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/constants.cc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/constants.cc
+    ESCAPE_QUOTES
+@ONLY)
+
+list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
+#########################################################################
+# Subdirecories
+#########################################################################
+add_subdirectory(decoding)
+add_subdirectory(decryption)
+add_subdirectory(demapping)
+add_subdirectory(flow_control)
+add_subdirectory(misc_utils)
+add_subdirectory(qa_utils)
+add_subdirectory(receiver)
+add_subdirectory(transmitter)
+add_subdirectory(trx)
+
 ########################################################################
 # Setup library
 ########################################################################
-include(GrPlatform) #define LIB_SUFFIX
-
-include_directories(${Boost_INCLUDE_DIR} receiver burst_printer)
+include_directories(${Boost_INCLUDE_DIR} receiver)
 link_directories(${Boost_LIBRARY_DIRS})
-list(APPEND gsm_sources
-    receiver/receiver_impl.cc
-    receiver/receiver_config.cc 
-    receiver/viterbi_detector.cc 
-    receiver/sch.c
-    misc_utils/bursts_printer_impl.cc
-    misc_utils/extract_system_info_impl.cc
-    demapping/universal_ctrl_chans_demapper_impl.cc
-    demapping/get_bcch_or_ccch_bursts_impl.cc
-    decoding/control_channels_decoder_impl.cc
-    decoding/cch.c
-    decoding/fire_crc.c
-    misc_utils/controlled_rotator_cc_impl.cc
-    misc_utils/controlled_const_source_f_impl.cc
-    misc_utils/message_printer_impl.cc
+
+set(grgsm_link_libraries "")
+list (APPEND grgsm_link_libraries ${Boost_LIBRARIES})
+list (APPEND grgsm_link_libraries ${GNURADIO_ALL_LIBRARIES})
+list (APPEND grgsm_link_libraries ${VOLK_LIBRARIES})
+if(WIN32)
+    list (APPEND grgsm_link_libraries wsock32)
+    list (APPEND grgsm_link_libraries ws2_32)
+endif()
+
+if(NOT LOCAL_OSMOCOM)
+    list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARIES} ${LIBOSMOCODEC_LIBRARIES} ${LIBOSMOGSM_LIBRARY})
+    if(LIBOSMOCODING_FOUND)
+        list (APPEND grgsm_link_libraries ${LIBOSMOCODING_LIBRARIES})
+    endif()
+endif()
+
+add_library(grgsm SHARED ${grgsm_sources})
+target_link_libraries(grgsm ${grgsm_link_libraries}
+# libraries required by plotting.h - have troubles to be installed by pybombs
+#    boost_iostreams
+#    boost_system
+#    boost_filesystem
 )
 
-add_library(gnuradio-gsm SHARED ${gsm_sources})
-target_link_libraries(gnuradio-gsm ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES}  
-    boost_iostreams
-    boost_system
-    boost_filesystem
-)
-set_target_properties(gnuradio-gsm PROPERTIES DEFINE_SYMBOL "gnuradio_gsm_EXPORTS")
+set_target_properties(grgsm PROPERTIES DEFINE_SYMBOL "grgsm_EXPORTS")
+GR_LIBRARY_FOO(grgsm)
 
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-gsm
+install(TARGETS grgsm
     LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
     ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
     RUNTIME DESTINATION bin              # .dll file
@@ -65,20 +122,20 @@ install(TARGETS gnuradio-gsm
 
 #include_directories(${CPPUNIT_INCLUDE_DIRS})
 
-#list(APPEND test_gsm_sources
+#list(APPEND test_grgsm_sources
 #    ${CMAKE_CURRENT_SOURCE_DIR}/test_gsm.cc
 #    ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm.cc
 #    ${CMAKE_CURRENT_SOURCE_DIR}/qa_receiver.cc
 #)
 
-#add_executable(test-gsm ${test_gsm_sources})
+#add_executable(test-gsm ${test_grgsm_sources})
 
 #target_link_libraries(
 #  test-gsm
 #  ${GNURADIO_RUNTIME_LIBRARIES}
 #  ${Boost_LIBRARIES}
 #  ${CPPUNIT_LIBRARIES}
-#  gnuradio-gsm
+#  grgsm
 #)
 
 #GR_ADD_TEST(test_gsm test-gsm)

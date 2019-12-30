@@ -16,21 +16,15 @@
 # along with GNU Radio; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
+
+add_subdirectory(decoding)
+add_subdirectory(decryption)
+add_subdirectory(demapping)
+add_subdirectory(receiver)
+add_subdirectory(flow_control)
+add_subdirectory(misc_utils)
+add_subdirectory(transmitter)
+add_subdirectory(trx)
 install(FILES
-    gsm_block_tree.xml
-    receiver/gsm_input.xml
-    receiver/gsm_receiver.xml
-    misc_utils/gsm_bursts_printer.xml
-    receiver/gsm_fcch_burst_tagger.xml
-    receiver/gsm_sch_detector.xml
-    receiver/gsm_fcch_detector.xml
-    demapping/gsm_get_bcch_or_ccch_bursts.xml
-    demapping/gsm_universal_ctrl_chans_demapper.xml 
-    decoding/gsm_control_channels_decoder.xml
-    misc_utils/gsm_extract_system_info.xml
-    misc_utils/gsm_controlled_rotator_cc.xml
-    misc_utils/gsm_controlled_const_source_f.xml
-    receiver/gsm_clock_offset_control.xml
-    misc_utils/gsm_message_printer.xml
-    misc_utils/gsm_clock_offset_corrector.xml DESTINATION share/gnuradio/grc/blocks
+    gsm_block_tree.xml DESTINATION share/gnuradio/grc/blocks
 )

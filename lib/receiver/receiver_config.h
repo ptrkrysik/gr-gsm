@@ -1,7 +1,7 @@
 /* -*- c++ -*- */
 /*
  * @file
- * @author Piotr Krysik <ptrkrysik@gmail.com>
+ * @author (C) 2009-2017 by Piotr Krysik <ptrkrysik@gmail.com>
  * @section LICENSE
  *
  * Gr-gsm is free software; you can redistribute it and/or modify
@@ -24,9 +24,8 @@
 
 #include <vector>
 #include <algorithm>
-#include <math.h>
 #include <stdint.h>
-#include <gsm_constants.h>
+#include <grgsm/gsm_constants.h>
 
 class multiframe_configuration
 {
@@ -89,12 +88,14 @@ class burst_counter
         d_t3(t3),
         d_timeslot_nr(timeslot_nr),
         d_offset_fractional(0.0),
-        d_offset_integer(0.0) {
+        d_offset_integer(0.0) 
+    {
       d_offset_integer = 0;
       d_offset_fractional = 0;
     }
 
     burst_counter & operator++(int);
+    burst_counter subtract_timeslots(unsigned int number_of_timeslots);
     void set(uint32_t t1, uint32_t t2, uint32_t t3, uint32_t timeslot_nr);
 
     uint32_t get_t1() {

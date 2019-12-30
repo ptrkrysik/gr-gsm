@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-# 
-# Copyright 2014 Piotr Krysik <ptrkrysik@gmail.com>
+# @file
+# @author (C) 2014 by Piotr Krysik <ptrkrysik@gmail.com>
+# @section LICENSE
 # 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,10 +21,10 @@
 # 
 
 from numpy import *
-from pylab import *
+#from pylab import *
 from gnuradio import gr
 import pmt
-from gsm.chirpz import ZoomFFT
+from chirpz import ZoomFFT
 
 class fcch_burst_tagger(gr.sync_block):
     """

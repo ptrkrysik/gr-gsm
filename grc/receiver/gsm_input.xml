@@ -1,9 +1,9 @@
 <block>
-  <name>GSM input adaptor</name>
+  <name>GSM Input Adaptor</name>
   <key>gsm_input</key>
   <category></category>
-  <import>import gsm</import>
-  <make>gsm.gsm_input(
+  <import>import grgsm</import>
+  <make>grgsm.gsm_input(
     ppm=$ppm,
     osr=$osr,
     fc=$fc,
@@ -47,7 +47,7 @@
     <vlen>1</vlen>
   </sink>
   <sink>
-    <name>ppm_in</name>
+    <name>ctrl_in</name>
     <type>message</type>
     <optional>True</optional>
   </sink>

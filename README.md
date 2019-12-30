@@ -1,114 +1,60 @@
-The gr-gsm project
+The gr-gsm project 
 ==================
-The project is based on the gsm-receiver which was written by me for the Airprobe project.
+The *gr-gsm* project is based on the *gsm-receiver* written by Piotr Krysik (also the main author of *gr-gsm*) for the *Airprobe* project.
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
-Installation
+Installation and usage
+======================
+Please see project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index) for information on [installation](https://osmocom.org/projects/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
+
+Mailing list
 ============
-The project is based on GNU Radio signal processing framework and takes advantage of its great features like stream tagging and message passing.
-Presence of GNU Radio is therefore a basic requirement for compilation and installation of gr-gsm. Installation of GNU Radio is described at the bottom of the page.
+Current gr-gsm project's mailing list address is following:
 
-The description of the installation is focussed on Ubuntu distribution and its flavours.
-First make sure that you have all required packages (checked on Ubuntu 14.04 and 14.10):
-```
-sudo apt-get install git cmake libboost-all-dev libcppunit-dev swig \
-                     doxygen liblog4cpp5-dev python-scipy
-```
-Then download gr-gsm sources using git:
-```
-git clone https://github.com/ptrkrysik/gr-gsm.git
-```
+gr-gsm@googlegroups.com
 
-To compile and install gr-gsm run:
-```
-cd gr-gsm
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-```
+Mailing list is a place for general discussions, questions about the usage and installation. In case of problem with installation please try to provide full information that will help reproducing it. Minimum information should contain:
+- operating system with version,
+- kind of installation (how gr-gsm and its dependencies were installed: with pybombs, from distibution's repository, compiled manually)
+- version of gnuradio (it can be obtained with: gnuradio-companion --version)
+- error messages (in case of pybombs installation they can be obtained after switching it to verbous mode with -v option).
 
-Usage
-=====
-There are many possible applications of gr-gsm. At this moment there is one application that is ready out of the box. It is improved replacement of the old Airprobe - the program that lets you receive and decode GSM control messages from timeslot 0 on the broadcasting channel of a BTS. After installation of gr-gsm there are three python executables that will be installed:
--airprobe_rtlsdr.py,
--airprobe_file.py.
+To join the group with any e-mail address, use this link:
 
-Airprobe with RTL-SDR input
----------------
-This program uses cheap RTL-SDR receivers as the source of the signal. It can be started by running from a terminal:
-```
-airprogre_rtlsdr.py
-```
-The window of the program contains amplitude spectrum of the signal drawn in realtime. The central frequency of the signal can be changed by moving fc slider. The GSM signal has bandwidth of around 200kHz. By looking for constant hills on the spectrum of such width you can find a GSM broadcasting channel. By setting the fc slider to a carrier frequency of a broadcasting channel the program should immediately print content of subsequent messages on the standard output. If it doesn't happen set ppm slider into different positions. The slider is responsible for setting devices clock offset correction. If the clock offset is too large the clock offset correction algorithm that is implemented in the program won't work. There is intentionally added upper of allowable clock offset - it was done in order to avoid adaptation of the algorithm to neighbour channels that would inevitably lead to instability. You can use the value set later by passing it as argument of the program:
-```
-airprogre_rtlsdr.py -p <correction>
-```
+<https://groups.google.com/forum/#!forum/gr-gsm/join>
 
-Airprobe with file input
--------------
-This program processes files containing complex data - interleaved float IQ samples.
-Example of the usage:
-```
-airprobe_file.py --samp-rate=1M --fc=940M -i input_file 
-```
-where:
-```
---samp-rate - sampling frequency of the data stored in the file,
---fc - central frequency of the recorded data - it is needed for frequency offset correction,
--i - the file containing the complex data.
-```
+Development
+===========
+New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, correction of bug y).
 
-Analyzing GSM messages in the Wireshark
--------------------------------------------
-The airprobe (file,usrp,rtlsdr) application sends GSM messages in GSMTAP format that was created by Harald Welte to the UDP port number 4729. Wireshark interprets packets coming on this port as GSM data with GSMTAP header and it is able to dissect messages.
-To start Wireshark straight to analysis of the GSMTAP packets obtained from gr-gsm's airprobe use following command:
-```
-sudo wireshark -k -Y '!icmp && gsmtap' -i lo
-````
-If you want to avoid the risks caused by running Wireshark with root priviledges follow this short howto:
-https://ask.wireshark.org/questions/7976/wireshark-setup-linux-for-nonroot-user
+If you wish to develop something for gr-gsm but don't know exactly what, then look for issues with label "Enhancement". Select one that you feel you are able to complete. After that claim it by commenting in the comment section of the issue. If there is any additional information about gr-gsm needed by you to make completing the task easier - just ask.
 
-Installation of GNU Radio
-=========================
+Videos
+======
+Short presentation of *Airprobe*'like application of *gr-gsm*:
 
-Building GNU Radio from source
-------------------------------
-For advanced users and developers it is advised to compile GNU Radio and required third party GNU Radio projects from source.
+<https://www.youtube.com/watch?v=Eofnb7zr8QE>
 
-In order to compile GNU Radio with optional projects needed in order to receive data from USRP devices (uhd) and RTL-SDR devices (gr-osmosdr) run following commands:
+Credits
+=======
+*Piotr Krysik* \<ptrkrysik (at) gmail.com\> - main author and project maintainer
 
-```
-sudo apt-get install git
-git clone git://github.com/pybombs/pybombs
-cd pybombs
-./pybombs install gnuradio uhd gr-osmosdr
-```
+*Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels,  decryption block supporting all ciphers used in GSM, blocks for storing and reading GSM bursts, project planning and user support
 
-At the first run pybombs will ask for configuration options. As a target directory select /usr/local/. The rest of the options can be left as default.
-Pybombs will then take care of downloading all of required libraries for installation of gnuradio and it will build and install it in /usr/local/.
+*Vadim Yanitskiy* \<axilirator (at) gmail.com\> - control and data interface for the transceiver, grgsm_trx application
+
+*Vasil Velichkov* \<vvvelichkov (at) gmail.com\> - automatic compilation of grc applications, fixes and user support
+
+*Pieter Robyns* \<pieter.robyns (at) uhasselt.be\> - block reversing channel hopping
 
 
-Installation of GNU Radio from packages (Ubuntu 14.10)
-------------------------------------------------------
-The easier way to install gnuradio is installation from distribution's repository. Currently gr-gsm works with GNU Radio versions 3.7.3 and newer. On Ubuntu 14.10 it is possible to compile and use gr-gsm together with GNU Radio available from distribution's standard repository.
-To do this install all required packages by entering following command in a terminal:
+Thanks
+======
+This work is built upon the efforts made by many people to gather knowledge of GSM. 
 
-```
-sudo apt-get install gnuradio-dev gr-osmosdr libgnuradio-uhd3.7.2.1
-```
+First very significant effort of public research into GSM and its security vulnerabilities was The Hacker's Choice GSM SCANNER PROJECT. One of the results of this project was creation of a software GSM receiver by *Tvoid* - *gsm-tvoid* - which was  was the most important predecessor of *gr-gsm* and of *gsm-receiver* from the *Airprobe* project.
 
-Gr-gsm blocks that will be later installed will be located in /usr/local directory. To tell Gnu Radio Companion to look for blocks in there create config.conf in ~/.gnuradio directory:
-```
-mkdir ~/.gnuradio
-touch ~/.gnuradio/config.conf
-```
+*Gr-gsm* wouldn't be also possible without help and inspiration by Harald Welte, Dieter Spaar and Sylvain Munaut.
 
-then edit ~/.gnuradio/config.conf and put following text inside:
-```
-[grc]
-local_blocks_path=/usr/local/share/gnuradio/grc/blocks:/usr/share/gnuradio/grc/blocks
-```
-
+Special thanks to Pawel Koszut who generously lent his USRP1 to the author of *gr-gsm* (Piotr Krysik) in 2007-2010.
