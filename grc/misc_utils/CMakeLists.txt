@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+install(
+    FILES
     gsm_extract_system_info.block.yml
     gsm_extract_immediate_assignment.block.yml
     gsm_collect_system_info.block.yml

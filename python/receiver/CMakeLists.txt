@@ -23,5 +23,6 @@ GR_PYTHON_INSTALL(
     fcch_burst_tagger.py
     sch_detector.py
     fcch_detector.py
-    chirpz.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    chirpz.py
+    DESTINATION ${GR_PYTHON_DIR}/grgsm
 )

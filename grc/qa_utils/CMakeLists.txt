@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+install(
+    FILES
     gsm_burst_source.block.xml
     gsm_burst_sink.block.xml
     gsm_message_source.block.xml

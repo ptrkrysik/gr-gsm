@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+install(
+    FILES
     gsm_input.block.yml
     gsm_receiver.block.yml
     gsm_receiver_with_uplink.block.yml

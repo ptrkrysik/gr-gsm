@@ -20,7 +20,8 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+    FILES
     universal_ctrl_chans_demapper.h 
     tch_f_chans_demapper.h
     tch_h_chans_demapper.h

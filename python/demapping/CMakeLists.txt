@@ -21,5 +21,6 @@ GR_PYTHON_INSTALL(
     FILES
     gsm_bcch_ccch_demapper.py
     gsm_bcch_ccch_sdcch4_demapper.py
-    gsm_sdcch8_demapper.py DESTINATION ${GR_PYTHON_DIR}/grgsm
+    gsm_sdcch8_demapper.py
+    DESTINATION ${GR_PYTHON_DIR}/grgsm
 )

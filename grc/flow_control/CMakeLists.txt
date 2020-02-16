@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+install(
+    FILES
     gsm_burst_timeslot_splitter.block.yml
     gsm_burst_fnr_filter.block.yml
     gsm_burst_timeslot_filter.block.yml

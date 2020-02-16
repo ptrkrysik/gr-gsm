@@ -20,6 +20,8 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
-    decryption.h DESTINATION include/grgsm/decoding
+install(
+    FILES
+    decryption.h
+    DESTINATION include/grgsm/decoding
 )

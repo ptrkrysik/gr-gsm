@@ -175,6 +175,8 @@ add_subdirectory(grc)
 # Install cmake search helper for this library
 ########################################################################
 
-install(FILES cmake/Modules/gr-gsmConfig.cmake
+install(
+    FILES
+    cmake/Modules/gr-gsmConfig.cmake
     DESTINATION ${CMAKE_MODULES_DIR}/grgsm
 )

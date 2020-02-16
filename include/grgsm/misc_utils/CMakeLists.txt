@@ -20,7 +20,8 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+    FILES
     bursts_printer.h
     burst_file_source.h
     burst_file_sink.h
@@ -38,5 +39,6 @@ install(FILES
     burst_to_fn_time.h
     controlled_fractional_resampler_cc.h 
     time_spec.h
-    fn_time.h DESTINATION include/grgsm/misc_utils
+    fn_time.h
+    DESTINATION include/grgsm/misc_utils
 )

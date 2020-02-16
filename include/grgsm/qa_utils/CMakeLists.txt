@@ -20,9 +20,11 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+    FILES
     burst_sink.h
     burst_source.h
     message_source.h
-    message_sink.h DESTINATION include/grgsm/qa_utils
+    message_sink.h
+    DESTINATION include/grgsm/qa_utils
 )

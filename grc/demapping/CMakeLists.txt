@@ -17,7 +17,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
+install(
+    FILES
     gsm_universal_ctrl_chans_demapper.block.yml
     gsm_bcch_ccch_demapper.block.yml
     gsm_bcch_ccch_sdcch4_demapper.block.yml

@@ -35,7 +35,9 @@ if(UNIX AND HAVE_XDG_UTILS)
         ${CMAKE_CURRENT_BINARY_DIR}/grgsm_setup_freedesktop
     @ONLY)
     install(
-        PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/grgsm_setup_freedesktop
-        DESTINATION ${GR_PKG_LIBEXEC_DIR} COMPONENT "gr-gsm"
+        PROGRAMS
+        ${CMAKE_CURRENT_BINARY_DIR}/grgsm_setup_freedesktop
+        DESTINATION ${GR_PKG_LIBEXEC_DIR}
+        COMPONENT "gr-gsm"
     )
 endif(UNIX AND HAVE_XDG_UTILS)
