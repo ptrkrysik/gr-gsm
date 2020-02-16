@@ -176,5 +176,5 @@ add_subdirectory(grc)
 ########################################################################
 
 install(FILES cmake/Modules/gr-gsmConfig.cmake
-    DESTINATION ${CMAKE_MODULES_DIR}/gsm
+    DESTINATION ${CMAKE_MODULES_DIR}/grgsm
 )

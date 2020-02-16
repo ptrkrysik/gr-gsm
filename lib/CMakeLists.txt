@@ -136,18 +136,18 @@ include(GrTest)
 # If your unit tests require special include paths, add them here
 #include_directories()
 # List all files that contain Boost.UTF unit tests here
-list(APPEND test_gsm_sources
+list(APPEND test_grgsm_sources
 )
 # Anything we need to link to for the unit tests go here
 list(APPEND GR_TEST_TARGET_DEPS grgsm)
 
-if(NOT test_gsm_sources)
+if(NOT test_grgsm_sources)
     MESSAGE(STATUS "No C++ unit tests... skipping")
     return()
-endif(NOT test_gsm_sources)
+endif(NOT test_grgsm_sources)
 
-foreach(qa_file ${test_gsm_sources})
-    GR_ADD_CPP_TEST("gsm_${qa_file}"
+foreach(qa_file ${test_grgsm_sources})
+    GR_ADD_CPP_TEST("grgsm_${qa_file}"
         ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
     )
 endforeach(qa_file)
