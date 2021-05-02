@@ -17,15 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-if(LOCAL_OSMOCOM)
-    add_subdirectory(osmocom/core)
-    add_subdirectory(osmocom/codec)
-    add_subdirectory(osmocom/gsm)
-    add_subdirectory(osmocom/coding)
-elseif(NOT LIBOSMOCODING_FOUND)
-    add_subdirectory(osmocom/coding)
-endif()
-
 add_subdirectory(openbts)
 
 add_sources(
@@ -34,4 +25,3 @@ add_sources(
     tch_h_decoder_impl.cc
     sch.c
 )
-

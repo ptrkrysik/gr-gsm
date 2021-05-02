@@ -129,14 +129,10 @@ find_package(Doxygen)
 ########################################################################
 # Find osmocom build dependencies
 ########################################################################
-option(LOCAL_OSMOCOM "Build with local osmocom libraries" OFF)
 find_package(Libosmocore)
 find_package(Libosmocodec)
 find_package(Libosmocoding)
 find_package(Libosmogsm)
-if(NOT LIBOSMOCORE_FOUND OR NOT LIBOSMOCODEC_FOUND OR NOT LIBOSMOGSM_FOUND)
-    set(LOCAL_OSMOCOM ON)
-endif()
 
 ########################################################################
 # Setup doxygen option
