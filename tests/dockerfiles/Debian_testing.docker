@@ -13,16 +13,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     liblog4cpp5-dev \
     python3-docutils \
     python3-scipy \
-    gnuradio-dev gnuradio libgmp-dev libboost-regex-dev liborc-dev \
+    gnuradio-dev \
+    liborc-dev \
     libosmocore-dev \
     gr-osmosdr
 
 COPY ./ /src/
-
-RUN mkdir -p /src/build
+RUN mkdir /src/build
 WORKDIR /src/build
 
-RUN PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH cmake .. && \
+RUN cmake .. && \
     # The parallel build sometimes fails when the .grc_gnuradio
     # and .gnuradio directories do not exist
     mkdir $HOME/.grc_gnuradio/ $HOME/.gnuradio/ && \
