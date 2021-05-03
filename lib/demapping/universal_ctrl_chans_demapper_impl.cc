@@ -75,7 +75,7 @@ namespace gr {
         std::copy(uplink_subslots.begin(), uplink_subslots.end(), d_uplink_subslots.begin());
         
         message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&universal_ctrl_chans_demapper_impl::filter_ctrl_chans, this, _1));
+        set_msg_handler(pmt::mp("bursts"), boost::bind(&universal_ctrl_chans_demapper_impl::filter_ctrl_chans, this, boost::placeholders::_1));
         message_port_register_out(pmt::mp("bursts"));
     }
 

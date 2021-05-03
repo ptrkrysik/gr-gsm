@@ -108,7 +108,7 @@ namespace gr {
         d_prepend_frame_count = prepend_frame_count;
         d_print_gsmtap_header = print_gsmtap_header;
         message_port_register_in(pmt::mp("msgs"));
-        set_msg_handler(pmt::mp("msgs"), boost::bind(&message_printer_impl::message_print, this, _1));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&message_printer_impl::message_print, this, boost::placeholders::_1));
     }
 
     /*

@@ -57,7 +57,7 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(gr_complex)))              
     {
       message_port_register_in(pmt::mp("msg"));
-      set_msg_handler(pmt::mp("msg"), boost::bind(&msg_to_tag_impl::queue_msg, this, _1));
+      set_msg_handler(pmt::mp("msg"), boost::bind(&msg_to_tag_impl::queue_msg, this, boost::placeholders::_1));
     }
 
     /*

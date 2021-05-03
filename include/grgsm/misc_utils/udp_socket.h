@@ -28,7 +28,6 @@
 #include <boost/function.hpp>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <pmt/pmt.h>
 
 namespace gr {

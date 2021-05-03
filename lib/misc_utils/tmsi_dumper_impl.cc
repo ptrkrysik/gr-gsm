@@ -217,7 +217,7 @@ tmsi_dumper_impl::tmsi_dumper_impl()
 {
     dump_file.open("tmsicount.txt", std::ios_base::app);
     message_port_register_in(pmt::mp("msgs"));
-    set_msg_handler(pmt::mp("msgs"), boost::bind(&tmsi_dumper_impl::dump_tmsi, this, _1));
+    set_msg_handler(pmt::mp("msgs"), boost::bind(&tmsi_dumper_impl::dump_tmsi, this, boost::placeholders::_1));
 }
 
 /*

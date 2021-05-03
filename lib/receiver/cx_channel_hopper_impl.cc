@@ -71,7 +71,7 @@ namespace gr {
         }
 
         message_port_register_in(pmt::mp("CX"));
-        set_msg_handler(pmt::mp("CX"), boost::bind(&cx_channel_hopper_impl::assemble_bursts, this, _1));
+        set_msg_handler(pmt::mp("CX"), boost::bind(&cx_channel_hopper_impl::assemble_bursts, this, boost::placeholders::_1));
         message_port_register_out(pmt::mp("bursts"));
     }
 

@@ -50,7 +50,7 @@ namespace gr {
         message_port_register_in(pmt::mp("in"));
         message_port_register_out(pmt::mp("uplink"));
         message_port_register_out(pmt::mp("downlink"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&uplink_downlink_splitter_impl::process_msg, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&uplink_downlink_splitter_impl::process_msg, this, boost::placeholders::_1));
     }
 
     void uplink_downlink_splitter_impl::process_msg(pmt::pmt_t msg)

@@ -76,10 +76,10 @@ namespace gr {
         // Bind message handlers
         set_msg_handler(pmt::mp("fn_time"),
           boost::bind(&txtime_setter_impl::process_fn_time_reference,
-            this, _1));
+            this, boost::placeholders::_1));
         set_msg_handler(pmt::mp("bursts_in"),
           boost::bind(&txtime_setter_impl::process_txtime_of_burst,
-            this, _1));
+            this, boost::placeholders::_1));
     }
 
     /*

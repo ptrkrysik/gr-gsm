@@ -304,9 +304,9 @@ namespace gr {
               after_reset(false)
     {
         message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&extract_system_info_impl::process_bursts, this, _1));
+        set_msg_handler(pmt::mp("bursts"), boost::bind(&extract_system_info_impl::process_bursts, this, boost::placeholders::_1));
         message_port_register_in(pmt::mp("msgs"));
-        set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_system_info_impl::process_sysinfo, this, _1));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_system_info_impl::process_sysinfo, this, boost::placeholders::_1));
     }
     
     /*

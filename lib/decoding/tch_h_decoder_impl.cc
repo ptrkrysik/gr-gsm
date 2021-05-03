@@ -81,7 +81,7 @@ namespace gr {
         {
             //setup input/output ports
             message_port_register_in(pmt::mp("bursts"));
-            set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_h_decoder_impl::decode, this, _1));
+            set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_h_decoder_impl::decode, this, boost::placeholders::_1));
             message_port_register_out(pmt::mp("msgs"));
             message_port_register_out(pmt::mp("voice"));
 

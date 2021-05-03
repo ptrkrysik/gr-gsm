@@ -62,7 +62,7 @@ namespace gr {
         message_port_register_in(pmt::intern("bursts_in"));
         message_port_register_out(pmt::intern("bursts_out"));
 
-        set_msg_handler(pmt::intern("bursts_in"),  boost::bind(&gen_test_ab_impl::generate_ab,   this, _1));
+        set_msg_handler(pmt::intern("bursts_in"),  boost::bind(&gen_test_ab_impl::generate_ab,   this, boost::placeholders::_1));
     }
 
     /*

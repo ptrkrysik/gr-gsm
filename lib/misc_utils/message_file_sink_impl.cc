@@ -48,7 +48,7 @@ namespace gr {
               d_output_file(filename.c_str(), std::ofstream::binary)
     {
         message_port_register_in(pmt::mp("in"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&message_file_sink_impl::process_message, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&message_file_sink_impl::process_message, this, boost::placeholders::_1));
     }
 
     /*

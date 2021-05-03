@@ -66,7 +66,7 @@ namespace gr {
         message_port_register_in(pmt::mp("in"));        
         message_port_register_out(pmt::mp("out"));
         
-        set_msg_handler(pmt::mp("in"), boost::bind(&dummy_burst_filter_impl::process_burst, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&dummy_burst_filter_impl::process_burst, this, boost::placeholders::_1));
     }
 
     /*

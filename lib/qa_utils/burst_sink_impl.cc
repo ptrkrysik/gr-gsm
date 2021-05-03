@@ -51,7 +51,7 @@ namespace gr {
         d_bursts(pmt::PMT_NIL)
     {
         message_port_register_in(pmt::mp("in"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_impl::process_burst, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&burst_sink_impl::process_burst, this, boost::placeholders::_1));
     }
 
     /*

@@ -48,7 +48,7 @@ namespace gr {
               gr::io_signature::make(0, 0, 0))
     {
         message_port_register_in(pmt::mp("in"));
-        set_msg_handler(pmt::mp("in"), boost::bind(&message_sink_impl::process_message, this, _1));
+        set_msg_handler(pmt::mp("in"), boost::bind(&message_sink_impl::process_message, this, boost::placeholders::_1));
     }
 
     /*
