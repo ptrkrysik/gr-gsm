@@ -4,6 +4,7 @@ dist: bionic
 language: ruby
 
 env:
+  - DOCKERFILE=tests/dockerfiles/Ubuntu_20_04.docker IMGNAME=ubuntu_20_04
   - DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debian_testing
 
 services:
@@ -13,6 +14,6 @@ before_install:
   - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
-#  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
+  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
   - docker run -it --rm $IMGNAME /src/tests/scripts/decode.sh
   - docker run -it --rm $IMGNAME /src/tests/scripts/decrypt.sh
