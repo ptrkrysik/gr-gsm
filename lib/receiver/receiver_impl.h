@@ -77,6 +77,7 @@ namespace gr {
         //@{
         int d_ncc; ///< network color code
         int d_bcc; ///< base station color code
+        int d_bsic; ///< base station identity code
         //@}
 
         /**@name Internal state of the gsm receiver */
@@ -220,6 +221,7 @@ namespace gr {
         virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
         virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
         virtual void reset();
+        virtual int get_bsic();
     };
   } // namespace gsm
 } // namespace gr

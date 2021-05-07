@@ -88,7 +88,8 @@ namespace gr
         d_signal_dbm(-120),
         d_tseq_nums(tseq_nums),
         d_cell_allocation(cell_allocation),
-        d_last_time(0.0)
+        d_last_time(0.0),
+        d_bsic(0)
     {
       /**
        * Don't send samples to the receiver
@@ -370,6 +371,8 @@ namespace gr
 
             break;
           }
+
+          d_bsic = (ncc << 3) | bcc;
 
           /* Compose a message with GSMTAP header and bits */
           send_burst(d_burst_nr, output_binary,
@@ -1131,6 +1134,12 @@ namespace gr
     receiver_impl::reset(void)
     {
       d_state = fcch_search;
+    }
+
+    int
+    receiver_impl::get_bsic(void)
+    {
+      return d_bsic;
     }
   } /* namespace gsm */
 } /* namespace gr */

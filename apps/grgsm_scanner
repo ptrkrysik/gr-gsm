@@ -249,7 +249,7 @@ class wideband_scanner(gr.top_block):
 
 
 class channel_info(object):
-    def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns):
+    def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns, bsic):
         self.arfcn = arfcn
         self.freq = freq
         self.cid = cid
@@ -260,6 +260,8 @@ class channel_info(object):
         self.power = power
         self.neighbours = neighbours
         self.cell_arfcns = cell_arfcns
+        self.ncc = (bsic >> 3) & 7
+        self.bcc = bsic & 7
 
     def __lt__(self, other):
         return self.arfcn < other.arfcn
@@ -299,8 +301,8 @@ class channel_info(object):
             self.neighbours, self.cell_arfcns)
 
     def __str__(self):
-        return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
-            self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
+        return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i, NCC: %d, BCC: %d" % (
+            self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power, self.ncc, self.bcc)
 
 def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
     signallist = []
@@ -357,10 +359,11 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                 for i in range(0, len(chans)):
                     cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                     neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
+                    bsic = scanner.wideband_receiver.receivers_with_decoders[chans[i]].gsm_receiver_0.get_bsic()
 
                     info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
-                                        neighbour_list, cell_arfcn_list)
+                                        neighbour_list, cell_arfcn_list, bsic)
                     found_list.append(info)
 
             scanner = None
