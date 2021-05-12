@@ -249,7 +249,7 @@ class wideband_scanner(gr.top_block):
 
 
 class channel_info(object):
-    def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns, bsic):
+    def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns, ncc, bcc):
         self.arfcn = arfcn
         self.freq = freq
         self.cid = cid
@@ -260,8 +260,8 @@ class channel_info(object):
         self.power = power
         self.neighbours = neighbours
         self.cell_arfcns = cell_arfcns
-        self.ncc = (bsic >> 3) & 7
-        self.bcc = bsic & 7
+        self.ncc = ncc
+        self.bcc = bcc
 
     def __lt__(self, other):
         return self.arfcn < other.arfcn
@@ -359,11 +359,11 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                 for i in range(0, len(chans)):
                     cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                     neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
-                    bsic = scanner.wideband_receiver.receivers_with_decoders[chans[i]].gsm_receiver_0.get_bsic()
+                    receiver = scanner.wideband_receiver.receivers_with_decoders[chans[i]].gsm_receiver_0
 
                     info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
-                                        neighbour_list, cell_arfcn_list, bsic)
+                                        neighbour_list, cell_arfcn_list, receiver.get_ncc(), receiver.get_bcc())
                     found_list.append(info)
 
             scanner = None

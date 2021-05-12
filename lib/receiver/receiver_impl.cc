@@ -89,7 +89,8 @@ namespace gr
         d_tseq_nums(tseq_nums),
         d_cell_allocation(cell_allocation),
         d_last_time(0.0),
-        d_bsic(0)
+        d_ncc(0),
+        d_bcc(0)
     {
       /**
        * Don't send samples to the receiver
@@ -243,6 +244,7 @@ namespace gr
       unsigned char burst_buf[BURST_SIZE];
       int rc, t1, t2, t3;
       int burst_start;
+      int ncc, bcc;
 
       /* Wait until we get a SCH burst */
       if (!reach_sch_burst(noutput_items))
@@ -255,7 +257,7 @@ namespace gr
       detect_burst(input, &channel_imp_resp[0], burst_start, burst_buf);
 
       /* Attempt to decode BSIC and frame number */
-      rc = decode_sch(&burst_buf[3], &t1, &t2, &t3, &d_ncc, &d_bcc);
+      rc = decode_sch(&burst_buf[3], &t1, &t2, &t3, &ncc, &bcc);
       if (rc) {
         /**
          * There is error in the SCH burst,
@@ -264,6 +266,10 @@ namespace gr
         d_state = fcch_search;
         return;
       }
+
+      /* Save the NCC and BCC */
+      d_ncc = ncc;
+      d_bcc = bcc;
 
       /* Set counter of bursts value */
       d_burst_nr.set(t1, t2, t3, 0);
@@ -372,7 +378,9 @@ namespace gr
             break;
           }
 
-          d_bsic = (ncc << 3) | bcc;
+          /* Save the NCC and BCC */
+          d_ncc = ncc;
+          d_bcc = bcc;
 
           /* Compose a message with GSMTAP header and bits */
           send_burst(d_burst_nr, output_binary,
@@ -1137,9 +1145,15 @@ namespace gr
     }
 
     int
-    receiver_impl::get_bsic(void)
+    receiver_impl::get_ncc(void)
     {
-      return d_bsic;
+      return d_ncc;
+    }
+
+    int
+    receiver_impl::get_bcc(void)
+    {
+      return d_bcc;
     }
   } /* namespace gsm */
 } /* namespace gr */
