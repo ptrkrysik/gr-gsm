@@ -55,6 +55,8 @@ namespace gr {
       virtual void set_cell_allocation(const std::vector<int> &cell_allocation) = 0;
       virtual void set_tseq_nums(const std::vector<int> & tseq_nums) = 0;
       virtual void reset() = 0;
+      virtual int get_ncc() = 0;
+      virtual int get_bcc() = 0;
     };
    
   } // namespace gsm

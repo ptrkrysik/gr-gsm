@@ -220,6 +220,8 @@ namespace gr {
         virtual void set_cell_allocation(const std::vector<int> &cell_allocation);
         virtual void set_tseq_nums(const std::vector<int> & tseq_nums);
         virtual void reset();
+        virtual int get_ncc();
+        virtual int get_bcc();
     };
   } // namespace gsm
 } // namespace gr
