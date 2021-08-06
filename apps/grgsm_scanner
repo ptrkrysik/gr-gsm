@@ -428,6 +428,9 @@ def main(options = None):
     def printfunc(found_list):
         for info in sorted(found_list):
             print(info)
+            text_file = open("channels.txt", "a")
+            text_file.write(str(info) + "\n")
+            text_file.close()
             if options.verbose:
                 print(info.get_verbose_info())
     print("")
