@@ -1,14 +1,11 @@
 sudo: required
+dist: bionic
 
 language: ruby
 
 env:
-  - DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debtest-grgsm
-  - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04.docker IMGNAME=ubu16.04-grgsm
-  - DOCKERFILE=tests/dockerfiles/Ubuntu_16_04_nolibosmo.docker IMGNAME=ubu16.04-grgsm-nolibosmo
-  - DOCKERFILE=tests/dockerfiles/Kali.docker IMGNAME=kali-grgsm
-  - DOCKERFILE=tests/dockerfiles/Fedora_26.Dockerfile IMGNAME=fedora26-grgsm
-
+  - DOCKERFILE=tests/dockerfiles/Ubuntu_20_04.docker IMGNAME=ubuntu_20_04
+  - DOCKERFILE=tests/dockerfiles/Debian_testing.docker IMGNAME=debian_testing
 
 services:
   - docker
@@ -17,6 +14,6 @@ before_install:
   - cat $DOCKERFILE > Dockerfile ; docker build -t $IMGNAME .
 
 script:
-#  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
+  - docker run -it --rm $IMGNAME sh -c 'cd /src/build;make test'
   - docker run -it --rm $IMGNAME /src/tests/scripts/decode.sh
   - docker run -it --rm $IMGNAME /src/tests/scripts/decrypt.sh

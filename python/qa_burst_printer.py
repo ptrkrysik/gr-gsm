@@ -52,7 +52,7 @@ class qa_burst_printer (gr_unittest.TestCase):
         out = ""
         for l in expected_lines:
             out = out + l + "\n"
-        return out
+        return out.encode('utf-8')
 
     def test_001_complete_bursts_prefix (self):
         """
@@ -294,4 +294,4 @@ class qa_burst_printer (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_printer, "qa_burst_printer.xml")
+    gr_unittest.run(qa_burst_printer)

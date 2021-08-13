@@ -8,23 +8,25 @@ cd demapping
 for p in *.grc
 do
     echo $p
-    grcc $p -d `pwd`
+    grcc $p -o `pwd`
 done
 cd ..
 
 mv ~/.grc_gnuradio/gsm_* .
 
-for file in *.py.xml
+for file in *.py.block.yml
 do
-    cat $file | sed 's/.*\<import\>.*/  <import>import grgsm<\/import>/' \
-              | sed 's/<make>/<make>grgsm./' \
+    echo $file
+    cat $file | sed "s/    imports: .*\(#.*\)/    imports: \\'import grgsm\\' \1/" \
+              | sed 's/make: "/make: "grgsm./' \
               | sed "s/.*.py//" \
-              | sed 's/<grc_source>.*hier_blocks/<grc_source>gr-gsm\/hier_blocks/' \
+              | sed 's/grc_source:.*hier_blocks/grc_source: gr-gsm\/hier_blocks/' \
               > ${file}2
+
 
     mv ${file}2 $file
 
-    mv "$file" "`basename $file .py.xml`.xml"
+    mv "$file" "`basename $file .py.block.yml`.block.yml"
 done
 
 for py in *.py
@@ -34,4 +36,4 @@ do
 done
 
 mv *.py ../python/demapping
-mv *.xml ../grc/demapping
+mv *.yml ../grc/demapping

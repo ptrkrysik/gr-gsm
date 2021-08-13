@@ -20,9 +20,10 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
-    control_channels_decoder.h 
+install(
+    FILES
+    control_channels_decoder.h
     tch_f_decoder.h
     tch_h_decoder.h
-	DESTINATION include/grgsm/decoding
+    DESTINATION include/grgsm/decoding
 )

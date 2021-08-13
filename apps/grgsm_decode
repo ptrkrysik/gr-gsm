@@ -30,6 +30,7 @@ import collections
 import grgsm
 import pmt
 import socket
+import sys
 
 
 class grgsm_decoder(gr.top_block):
@@ -336,7 +337,7 @@ if __name__ == '__main__':
         parser, 'TCH Options', 'Options for setting Traffic channel decoding parameters.',
     )
     tch_options.add_option("-d", "--speech-codec", dest="speech_codec", default='FR',
-                           type='choice', choices=tch_codecs.keys(),
+                           type='choice', choices=list(tch_codecs.keys()),
                            help="TCH-F speech codec [default=%default]. "
                                 "Valid options are " + ", ".join(tch_codecs.keys()))
     tch_options.add_option("-o", "--output-tch", dest="speech_output_file", default="/tmp/speech.au.gsm",
@@ -368,7 +369,7 @@ if __name__ == '__main__':
         parser.error("Invalid A5 version\n")
 
     if options.cfile and (options.fc is None and options.arfcn is None):
-        print("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n")
+        sys.stderr.write("You haven't provided a frequency or an ARFCN - working without automatic frequency offset correction.\n")
 
     # handle frequency / arfcn input
     arfcn = None

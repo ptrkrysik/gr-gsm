@@ -22,7 +22,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from udp_link import UDPLink
+from .udp_link import UDPLink
 
 class CTRLInterface(UDPLink):
 	def handle_rx(self, data, remote):

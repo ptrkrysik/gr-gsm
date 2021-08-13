@@ -40,9 +40,9 @@ import sys
 
 # from wideband_receiver import *
 
-class receiver_with_decoder(grgsm.hier_block):
+class receiver_with_decoder(gr.hier_block2):
     def __init__(self, OSR=4, chan_num=0, fc=939.4e6, ppm=0, samp_rate=0.2e6):
-        grgsm.hier_block.__init__(
+        gr.hier_block2.__init__(
             self, "Receiver With Decoder",
             gr.io_signature(1, 1, gr.sizeof_gr_complex * 1),
             gr.io_signature(0, 0, 0),
@@ -132,9 +132,9 @@ class receiver_with_decoder(grgsm.hier_block):
         self.samp_rate_out = samp_rate_out
 
 
-class wideband_receiver(grgsm.hier_block):
+class wideband_receiver(gr.hier_block2):
     def __init__(self, OSR=4, fc=939.4e6, samp_rate=0.4e6):
-        grgsm.hier_block.__init__(
+        gr.hier_block2.__init__(
             self, "Wideband receiver",
             gr.io_signature(1, 1, gr.sizeof_gr_complex * 1),
             gr.io_signature(0, 0, 0),
@@ -168,14 +168,14 @@ class wideband_receiver(grgsm.hier_block):
         # Connections
         ##################################################
         self.connect((self, 0), (self.pfb_channelizer_ccf_0, 0))
-        for chan in xrange(0, self.channels_num):
+        for chan in range(0, self.channels_num):
             self.connect((self.pfb_channelizer_ccf_0, chan), (self.receivers_with_decoders[chan], 0))
             self.msg_connect(self.receivers_with_decoders[chan], 'bursts', self, 'bursts')
             self.msg_connect(self.receivers_with_decoders[chan], 'msgs', self, 'msgs')
 
     def create_receivers(self):
         self.receivers_with_decoders = {}
-        for chan in xrange(0, self.channels_num):
+        for chan in range(0, self.channels_num):
             self.receivers_with_decoders[chan] = receiver_with_decoder(fc=self.fc, OSR=self.OSR, chan_num=chan,
                                                                        samp_rate=self.OSR_PFB * 0.2e6)
 
@@ -207,7 +207,7 @@ class wideband_scanner(gr.top_block):
         self.ppm = ppm
 
         # if no file name is given process data from rtl_sdr source
-        print "Args=", args
+        print("Args=", args)
         self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
                 str(grgsm.device.get_default_args(args)))
         #self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
@@ -260,6 +260,10 @@ class channel_info(object):
         self.power = power
         self.neighbours = neighbours
         self.cell_arfcns = cell_arfcns
+
+    def __lt__(self, other):
+        return self.arfcn < other.arfcn
+
 
     def get_verbose_info(self):
         i = "  |---- Configuration: %s\n" % self.get_ccch_conf()
@@ -315,7 +319,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
             if not debug:
                 # silence rtl_sdr output:
                 # open 2 fds
-                null_fds = [os.open(os.devnull, os.O_RDWR) for x in xrange(2)]
+                null_fds = [os.open(os.devnull, os.O_RDWR) for x in range(2)]
                 # save the current file descriptors to a tuple
                 save = os.dup(1), os.dup(2)
                 # put /dev/null fds on 1 and 2
@@ -423,10 +427,10 @@ def main(options = None):
 
     def printfunc(found_list):
         for info in sorted(found_list):
-            print info
+            print(info)
             if options.verbose:
-                print info.get_verbose_info()
-    print ""
+                print(info.get_verbose_info())
+    print("")
     do_scan(options.samp_rate, options.band, options.speed,
             options.ppm, options.gain, options.args, prn = printfunc, debug = options.debug)
 

@@ -20,7 +20,8 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+    FILES
     trx_burst_if.h
     DESTINATION include/grgsm/trx
 )

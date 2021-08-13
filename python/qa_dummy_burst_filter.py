@@ -99,4 +99,4 @@ class qa_dummy_burst_filter (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_dummy_burst_filter, "qa_dummy_burst_filter.xml")
+    gr_unittest.run(qa_dummy_burst_filter)

@@ -155,7 +155,7 @@ namespace gr {
         d_ignore_dummy_bursts = ignore_dummy_bursts;
 
         message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, _1));
+        set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, boost::placeholders::_1));
     }
 
     /*

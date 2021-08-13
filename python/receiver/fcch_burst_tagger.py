@@ -81,9 +81,9 @@ class fcch_burst_tagger(gr.sync_block):
 #                measured_freq = mean(inst_freq[precise_idx:precise_idx+self.processed_block_size])
                 expected_freq = self.symbol_rate/4
                 
-                print "input_items:",len(in0)
-                print "coarse_idx",coarse_idx
-                print "coarse_idx+precise_idx",coarse_idx+precise_idx
+                print("input_items:",len(in0))
+                print("coarse_idx",coarse_idx)
+                print("coarse_idx+precise_idx",coarse_idx+precise_idx)
                 
                 zoomed_spectrum = abs(self.zoomfft(in0[coarse_idx+precise_idx:coarse_idx+precise_idx+self.processed_block_size]))
                 measured_freq = self.f_axis[argmax(zoomed_spectrum)]
@@ -97,9 +97,9 @@ class fcch_burst_tagger(gr.sync_block):
 #   Some additional plots and prints for debugging
 #                print "coarse_idx+precise_idx",coarse_idx+precise_idx
 #                print "offset-self.nitems_written(0):",offset-self.nitems_written(0)
-                print offset-self.prev_offset
+                print(offset-self.prev_offset)
                 self.prev_offset=offset
-                print "freq offset", freq_offset
+                print("freq offset", freq_offset)
 #                freq_offset = measured_freq - expected_freq
 #                plot(self.f_axis, zoomed_spectrum)
 #                show()

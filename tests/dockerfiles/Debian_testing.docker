@@ -7,22 +7,21 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libtool \
     pkg-config \
     build-essential \
-    python-docutils \
     libcppunit-dev \
     swig \
     doxygen \
     liblog4cpp5-dev \
-    python-gtk2 \
-    python-scipy \
+    python3-docutils \
+    python3-scipy \
     gnuradio-dev \
-    gr-osmosdr \
-    libosmocore-dev
+    liborc-dev \
+    libosmocore-dev \
+    gr-osmosdr
 
 COPY ./ /src/
-RUN ls /src
-
 RUN mkdir /src/build
 WORKDIR /src/build
+
 RUN cmake .. && \
     # The parallel build sometimes fails when the .grc_gnuradio
     # and .gnuradio directories do not exist

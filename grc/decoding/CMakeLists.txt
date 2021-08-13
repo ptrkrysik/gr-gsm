@@ -17,9 +17,10 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
-    gsm_control_channels_decoder.xml 
-    gsm_tch_f_decoder.xml
-    gsm_tch_h_decoder.xml
+install(
+    FILES
+    gsm_control_channels_decoder.block.yml
+    gsm_tch_f_decoder.block.yml
+    gsm_tch_h_decoder.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )

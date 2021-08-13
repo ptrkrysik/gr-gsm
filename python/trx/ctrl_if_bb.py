@@ -22,7 +22,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from ctrl_if import CTRLInterface
+from .ctrl_if import CTRLInterface
 
 class CTRLInterfaceBB(CTRLInterface):
 	def __init__(self, trx, *ctrl_if_args):

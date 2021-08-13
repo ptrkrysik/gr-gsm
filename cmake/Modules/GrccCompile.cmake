@@ -30,25 +30,21 @@ SET(PYTHONPATH
     )
 string(REPLACE ";" ":" PYTHONPATH "${PYTHONPATH}")
 
+find_program(GRCC grcc
+    PATHS ${CMAKE_INSTALL_PREFIX}/${GR_RUNTIME_DIR}
+    )
+
 macro(GRCC_COMPILE file_name)
-    if(${CMAKE_VERSION} VERSION_LESS "3.2.0") #use wrapper script to set the environment on systems without cmake 3.2
-        ADD_CUSTOM_COMMAND(
-            OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
-            COMMAND /bin/sh ${CMAKE_SOURCE_DIR}/cmake/Modules/GrccCompileWrapper.sh "${PYTHONPATH}" "${CMAKE_SOURCE_DIR}/grc" "${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc -d ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${file_name}.grc"
-            COMMAND "${CMAKE_COMMAND}" -E rename ${CMAKE_CURRENT_BINARY_DIR}/${file_name}.py ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
-            DEPENDS ${file_name}.grc
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
+        COMMAND "${CMAKE_COMMAND}"
+        -E env PYTHONPATH="${PYTHONPATH}" GRC_BLOCKS_PATH=${CMAKE_SOURCE_DIR}/grc
+        CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}
+        ${GRCC} -o ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/${file_name}.grc
+        COMMAND "${CMAKE_COMMAND}" -E rename ${CMAKE_CURRENT_BINARY_DIR}/${file_name}.py ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
+        DEPENDS ${file_name}.grc
         )
-    else() #for the rest use new/more portable way
-        ADD_CUSTOM_COMMAND(
-            OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
-            COMMAND "${CMAKE_COMMAND}"
-                -E env PYTHONPATH="${PYTHONPATH}" GRC_BLOCKS_PATH=${CMAKE_SOURCE_DIR}/grc
-                ${PC_GNURADIO_RUNTIME_PREFIX}/${GR_RUNTIME_DIR}/grcc -d ${CMAKE_CURRENT_BINARY_DIR}
-                ${CMAKE_CURRENT_SOURCE_DIR}/${file_name}.grc
-            COMMAND "${CMAKE_COMMAND}" -E rename ${CMAKE_CURRENT_BINARY_DIR}/${file_name}.py ${CMAKE_CURRENT_BINARY_DIR}/${file_name}
-            DEPENDS ${file_name}.grc
-        )
-    endif()
 endmacro(GRCC_COMPILE)
 
 ########################################################################

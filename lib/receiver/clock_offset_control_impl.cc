@@ -50,7 +50,7 @@ clock_offset_control_impl::clock_offset_control_impl(float fc, float samp_rate, 
 
 {
     message_port_register_in(pmt::mp("measurements"));
-    set_msg_handler(pmt::mp("measurements"), boost::bind(&clock_offset_control_impl::process_measurement, this, _1));    
+    set_msg_handler(pmt::mp("measurements"), boost::bind(&clock_offset_control_impl::process_measurement, this, boost::placeholders::_1));
     message_port_register_out(pmt::mp("ctrl"));
     
     set_fc(fc);

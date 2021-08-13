@@ -187,4 +187,4 @@ class qa_tch_h_decoder (gr_unittest.TestCase):
             []) #Must return an empty array
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_tch_h_decoder, "qa_tch_h_decoder.xml")
+    gr_unittest.run(qa_tch_h_decoder)

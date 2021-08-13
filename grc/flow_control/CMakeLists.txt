@@ -17,13 +17,15 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES
-    gsm_burst_timeslot_splitter.xml
-    gsm_burst_fnr_filter.xml
-    gsm_burst_timeslot_filter.xml
-    gsm_burst_type_filter.xml
-    gsm_dummy_burst_filter.xml
-    gsm_burst_sdcch_subslot_splitter.xml
-    gsm_burst_sdcch_subslot_filter.xml 
-    gsm_uplink_downlink_splitter.xml DESTINATION share/gnuradio/grc/blocks
+install(
+    FILES
+    gsm_burst_timeslot_splitter.block.yml
+    gsm_burst_fnr_filter.block.yml
+    gsm_burst_timeslot_filter.block.yml
+    gsm_burst_type_filter.block.yml
+    gsm_dummy_burst_filter.block.yml
+    gsm_burst_sdcch_subslot_splitter.block.yml
+    gsm_burst_sdcch_subslot_filter.block.yml
+    gsm_uplink_downlink_splitter.block.yml
+    DESTINATION share/gnuradio/grc/blocks
 )

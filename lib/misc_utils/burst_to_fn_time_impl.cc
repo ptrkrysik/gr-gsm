@@ -52,7 +52,7 @@ namespace gr {
 
         // Bind a port handler
         set_msg_handler(pmt::mp("bursts_in"),
-          boost::bind(&burst_to_fn_time_impl::handle_burst, this, _1));
+          boost::bind(&burst_to_fn_time_impl::handle_burst, this, boost::placeholders::_1));
     }
 
     /*

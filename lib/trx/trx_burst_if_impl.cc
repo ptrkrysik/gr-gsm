@@ -76,7 +76,7 @@ namespace gr {
 
         // Bind a port handler
         set_msg_handler(pmt::mp("bursts"),
-          boost::bind(&trx_burst_if_impl::handle_dl_burst, this, _1));
+          boost::bind(&trx_burst_if_impl::handle_dl_burst, this, boost::placeholders::_1));
 
         // Prepare port numbers
         std::string data_src_port = boost::lexical_cast<std::string> (base_port + 2);
@@ -88,7 +88,7 @@ namespace gr {
 
         // Bind DATA interface handler
         d_data_sock->udp_rx_handler = boost::bind(
-          &trx_burst_if_impl::handle_ul_burst, this, _1, _2);
+          &trx_burst_if_impl::handle_ul_burst, this, boost::placeholders::_1, boost::placeholders::_2);
     }
 
     /*

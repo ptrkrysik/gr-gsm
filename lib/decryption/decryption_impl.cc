@@ -61,7 +61,7 @@ namespace gr {
         validate_k_c();
 
         message_port_register_in(pmt::mp("bursts"));
-        set_msg_handler(pmt::mp("bursts"), boost::bind(&decryption_impl::decrypt, this, _1));
+        set_msg_handler(pmt::mp("bursts"), boost::bind(&decryption_impl::decrypt, this, boost::placeholders::_1));
         message_port_register_out(pmt::mp("bursts"));
     }
 

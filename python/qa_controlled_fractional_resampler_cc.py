@@ -40,4 +40,4 @@ class qa_controlled_fractional_resampler_cc (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_controlled_fractional_resampler_cc, "qa_controlled_fractional_resampler_cc.xml")
+    gr_unittest.run(qa_controlled_fractional_resampler_cc)

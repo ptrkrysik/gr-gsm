@@ -398,4 +398,4 @@ class qa_burst_sdcch_subslot_splitter (gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_burst_sdcch_subslot_splitter, "qa_burst_sdcch_subslot_splitter.xml")
+    gr_unittest.run(qa_burst_sdcch_subslot_splitter)

@@ -57,7 +57,7 @@ tch_h_chans_demapper_impl::tch_h_chans_demapper_impl(unsigned int timeslot_nr, u
     //std::cout << "d_tch_type is " << d_tch_type << ", tch_h_channel is " << tch_h_channel << std::endl;
 
     message_port_register_in(pmt::mp("bursts"));
-    set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_h_chans_demapper_impl::filter_tch_chans, this, _1));
+    set_msg_handler(pmt::mp("bursts"), boost::bind(&tch_h_chans_demapper_impl::filter_tch_chans, this, boost::placeholders::_1));
     message_port_register_out(pmt::mp("tch_bursts"));
     message_port_register_out(pmt::mp("acch_bursts"));
 }

@@ -20,8 +20,10 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+    FILES
     clock_offset_control.h
     cx_channel_hopper.h
-    receiver.h DESTINATION include/grgsm/receiver
+    receiver.h
+    DESTINATION include/grgsm/receiver
 )

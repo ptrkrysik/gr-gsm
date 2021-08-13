@@ -206,4 +206,4 @@ class qa_tch_h_chans_demapper (gr_unittest.TestCase):
         self.assertEqual(odd,  self.sacch_hr_test(ts=7, sub=1, frames=[90, 103, 116, 129, 142, 155, 168, 181], bursts=bursts))
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_tch_h_chans_demapper, "qa_tch_h_chans_demapper.xml")
+    gr_unittest.run(qa_tch_h_chans_demapper)

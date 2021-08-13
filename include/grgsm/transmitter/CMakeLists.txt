@@ -20,8 +20,9 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
-    txtime_setter.h 
+install(
+    FILES
+    txtime_setter.h
     preprocess_tx_burst.h
     gen_test_ab.h
     DESTINATION include/grgsm/transmitter

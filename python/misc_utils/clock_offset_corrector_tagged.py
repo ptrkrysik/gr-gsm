@@ -33,7 +33,7 @@ import grgsm
 import math
 
 
-class clock_offset_corrector_tagged(grgsm.hier_block):
+class clock_offset_corrector_tagged(gr.hier_block2):
 
     def __init__(self, fc=936.6e6, osr=4, ppm=0, samp_rate_in=1625000.0/6.0*4.0):
         gr.hier_block2.__init__(

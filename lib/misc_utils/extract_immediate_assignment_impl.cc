@@ -332,7 +332,7 @@ namespace gr {
         d_ignore_gprs = ignore_gprs;
         d_unique_references = unique_references;
         message_port_register_in(pmt::mp("msgs"));
-        set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_immediate_assignment_impl::process_message, this, _1));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&extract_immediate_assignment_impl::process_message, this, boost::placeholders::_1));
     }
 
     /*

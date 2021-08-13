@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr
-from fn_time import fn_time_delta
+from .fn_time import fn_time_delta
 import pmt
 import numpy
 

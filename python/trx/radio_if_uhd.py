@@ -24,7 +24,7 @@
 
 from gnuradio import uhd
 
-from radio_if import RadioInterface
+from .radio_if import RadioInterface
 
 class RadioInterfaceUHD(RadioInterface):
 	# Human-readable description

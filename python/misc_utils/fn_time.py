@@ -20,9 +20,6 @@
 # Boston, MA 02110-1301, USA.
 # 
 # 
-from math import floor, ceil
-from random import uniform
-from grgsm import fn_time_delta_cpp
 
 __hyper_frame = 26*51*2048
 __symb_rate = 13.0e6/48.0
@@ -72,10 +69,13 @@ def fn_time_delta(fn_ref, time_ref, fn_x, time_hint=None, ts_num=0, ts_ref=0):
 
 
 if __name__ == "__main__":
+    from random import uniform
+    from grgsm import fn_time_delta_cpp
+
     fn1 = 10000
     ts_ref = 4
     time1 = 10.5
-    for fn2 in xrange(__hyper_frame/2+fn1-10,__hyper_frame/2*10+fn1+100,10):
+    for fn2 in range(__hyper_frame//2+fn1-10,__hyper_frame//2*10+fn1+100,10):
         ts_x = int(uniform(0,8))
         time2 = time1 + (fn2-fn1)*__frame_period + (ts_x-ts_ref)*__ts_period
         error = uniform(-6200,6200)
@@ -83,10 +83,10 @@ if __name__ == "__main__":
         fn_delta, time2_precise = fn_time_delta(fn1, time1, fn2, time2_err, ts_x, ts_ref)
         time2_precise_cpp = fn_time_delta_cpp(fn1, (int(time1),time1-int(time1)), fn2, (int(time2_err),time2_err-int(time2_err)), ts_x, ts_ref)
         if fn_delta != fn2-fn1:
-            print "bad fn:", fn2, error#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
+            print("bad fn:", fn2, error)#, 'fn_delta:'+str(fn_delta), time2, error, frames_diff_h4, (time2-time1)/(__hyper_frame*__frame_period), time_diff_hint_h4_prev, time_diff_hint
 #        time_diff_hint = time2 - time2_precise
         time_diff_hint = time2_precise_cpp[0]+time2_precise_cpp[1] - time2_precise
 
         if abs(time_diff_hint) > 0.0001:
-            print "time2_precise_cpp",time2_precise_cpp," time2_precise",time2_precise," time_ref",time1," time_hint",time2_err
-            print ""
+            print("time2_precise_cpp",time2_precise_cpp," time2_precise",time2_precise," time_ref",time1," time_hint",time2_err)
+            print("")

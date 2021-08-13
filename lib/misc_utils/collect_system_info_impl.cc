@@ -172,7 +172,7 @@ namespace gr {
               gr::io_signature::make(0, 0, 0))
     {
         message_port_register_in(pmt::mp("msgs"));
-        set_msg_handler(pmt::mp("msgs"), boost::bind(&collect_system_info_impl::process_messages, this, _1));
+        set_msg_handler(pmt::mp("msgs"), boost::bind(&collect_system_info_impl::process_messages, this, boost::placeholders::_1));
     }
     
     /*
