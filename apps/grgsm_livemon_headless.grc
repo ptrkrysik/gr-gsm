@@ -474,7 +474,7 @@ blocks:
     ant7: ''
     ant8: ''
     ant9: ''
-    args: str(gnuradio.gsm.device.get_default_args(args))
+    args: str(gsm.device.get_default_args(args))
     bb_gain0: '20'
     bb_gain1: '20'
     bb_gain10: '20'

@@ -375,7 +375,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 60]
+    coordinate: [1016, 148.0]
     rotation: 0
     state: enabled
 - name: network_socket_pdu_0

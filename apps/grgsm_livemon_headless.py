@@ -55,7 +55,7 @@ class grgsm_livemon_headless(gr.top_block):
         # Blocks
         ##################################################
         self.rtlsdr_source_0 = osmosdr.source(
-            args="numchan=" + str(1) + " " + 'str(gnuradio.gsm.device.get_default_args(args))'
+            args="numchan=" + str(1) + " " + 'str(gsm.device.get_default_args(args))'
         )
         self.rtlsdr_source_0.set_sample_rate(samp_rate)
         self.rtlsdr_source_0.set_center_freq(fc-shiftoff, 0)
