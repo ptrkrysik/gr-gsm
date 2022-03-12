@@ -47,6 +47,7 @@ namespace gr {
         if(msg_elements[2]==0x3f)
         {
             immediate_assignment current;
+            current.arfcn_id = be16toh(header->arfcn);
             current.frame_nr = frame_nr;
 
             /*
@@ -116,6 +117,7 @@ namespace gr {
                         2 bit low part of MAIO
                         6bit HSN
             */
+            current.tseq = (msg_elements[5] >> 5) & 7;
             current.hopping = (msg_elements[5] >> 4) & 1;
             if (current.hopping)
             {
@@ -188,7 +190,7 @@ namespace gr {
             if (d_print_immediate_assignments && !is_duplicate)
             {
                 std::cout << "\n------------------------------------------------\n" << std::endl;
-                std::cout << "FrameNr: " << (unsigned)current.frame_nr << std::endl;
+                std::cout << "Frame Nr: " << (unsigned)current.frame_nr << std::endl;
                 std::cout << "Channel type: " << current.channel_type << std::endl;
                 std::cout << "Timeslot: " << (unsigned)current.timeslot << std::endl;
                 // Dont print subchannel if mode == 1 or if the assigned channel is TCH/F
@@ -196,6 +198,7 @@ namespace gr {
                 {
                     std::cout << "Subchannel: " << (unsigned)current.subchannel << std::endl;
                 }
+                std::cout << "Training Sequence: " << (unsigned)current.tseq << std::endl;
                 std::cout << "Hopping: " << (unsigned)current.hopping << std::endl;
                 if (current.hopping)
                 {
@@ -210,6 +213,15 @@ namespace gr {
                 std::cout << "Timing Advance: " << (unsigned)current.timing_advance << std::endl;
             }
         }
+    }
+    std::vector<int> extract_immediate_assignment_impl::get_arfcn_ids()
+    {
+        std::vector<int> arfcn_ids;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            arfcn_ids.push_back(i.second.arfcn_id);
+        }
+        return arfcn_ids;
     }
 
     std::vector<int> extract_immediate_assignment_impl::get_frame_numbers()
@@ -250,6 +262,16 @@ namespace gr {
             subchannels.push_back(i.second.subchannel);
         }
         return subchannels;
+    }
+
+    std::vector<int> extract_immediate_assignment_impl::get_tseqs()
+    {
+        std::vector<int> tseq;
+        BOOST_FOREACH(immediate_assignment_map::value_type &i, d_assignment_map)
+        {
+            tseq.push_back(i.second.tseq);
+        }
+        return tseq;
     }
 
     std::vector<int> extract_immediate_assignment_impl::get_hopping()

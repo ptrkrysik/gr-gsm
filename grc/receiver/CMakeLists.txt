@@ -20,6 +20,7 @@
 install(
     FILES
     gsm_input.block.yml
+    gsm_multiarfcns_receiver.block.yml
     gsm_receiver.block.yml
     gsm_receiver_with_uplink.block.yml
     gsm_fcch_burst_tagger.block.yml

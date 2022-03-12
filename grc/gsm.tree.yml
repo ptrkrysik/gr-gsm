@@ -2,6 +2,7 @@
 - Receiver:
   - gsm_receiver
   - gsm_receiver_with_uplink
+  - gsm_multiarfcns_receiver
   - gsm_cx_channel_hopper
   - gsm_fcch_burst_tagger
   - gsm_sch_detector

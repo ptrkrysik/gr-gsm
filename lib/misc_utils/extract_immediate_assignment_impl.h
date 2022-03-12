@@ -33,10 +33,12 @@ namespace gr {
     class immediate_assignment
     {
         public:
+            uint32_t arfcn_id;
             uint32_t frame_nr;
             std::string channel_type;
             uint8_t timeslot;
             uint8_t subchannel;
+            uint8_t tseq;
             uint8_t hopping;
             uint8_t maio;
             uint8_t hsn;
@@ -44,7 +46,7 @@ namespace gr {
             uint8_t timing_advance;
             std::string mobile_allocation;
 
-            immediate_assignment() : frame_nr(0), channel_type("unknown"), timeslot(0), subchannel(0),
+            immediate_assignment() : arfcn_id(0), frame_nr(0), channel_type("unknown"), timeslot(0), subchannel(0), tseq(0),
                 hopping(false), maio(0), hsn(0), arfcn(0), timing_advance(0), mobile_allocation("") {};
             ~immediate_assignment() {};
     };
@@ -60,10 +62,12 @@ namespace gr {
             bool d_ignore_gprs;
             bool d_unique_references;
         public:
+            virtual std::vector<int> get_arfcn_ids();
             virtual std::vector<int> get_frame_numbers();
             virtual std::vector<std::string> get_channel_types();
             virtual std::vector<int> get_timeslots();
             virtual std::vector<int> get_subchannels();
+            virtual std::vector<int> get_tseqs();
             virtual std::vector<int> get_hopping();
             virtual std::vector<int> get_maios();
             virtual std::vector<int> get_hsns();

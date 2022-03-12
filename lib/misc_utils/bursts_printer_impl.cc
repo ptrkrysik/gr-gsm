@@ -33,6 +33,8 @@
 #include "bursts_printer_impl.h"
 //#include <unistd.h>
 #include <iostream>
+#include <chrono>
+using namespace std::chrono;
 extern "C" {
     #include <osmocom/gsm/a5.h>
 }
@@ -68,7 +70,11 @@ namespace gr {
         }
 
         std::ostringstream out;
+        std::chrono::time_point< std::chrono::system_clock > now = std::chrono::system_clock::now();
+        auto time_span = duration_cast<microseconds>(now - start);
         out << d_prepend_string;
+        //out << "arfcn:" << (uint16_t)(be16toh(header->arfcn) & 0x3FFF) << ", " << "tn:" << (header->timeslot) << ", " << time_span.count() << " mcs, ";
+
         if (d_prepend_fnr)
         {
             out << frame_nr;
@@ -155,6 +161,7 @@ namespace gr {
         d_print_payload_only = print_payload_only;
         d_ignore_dummy_bursts = ignore_dummy_bursts;
 
+        start = std::chrono::system_clock::now();
         message_port_register_in(pmt::mp("bursts"));
         set_msg_handler(pmt::mp("bursts"), boost::bind(&bursts_printer_impl::bursts_print, this, boost::placeholders::_1));
     }

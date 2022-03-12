@@ -1,0 +1,78 @@
+id: gsm_multiarfcns_receiver
+label: Multi Arfcns GSM Receiver
+category: '[GSM]'
+flags: need_qt_gui
+
+parameters:
+-   id: arfcns
+    label: Arfcns list
+    dtype: raw
+    default: '[]'
+    hide: none
+-   id: center_freq
+    label: Center frequency
+    dtype: real
+    default: 935e6
+    hide: none
+-   id: osr
+    label: OSR
+    dtype: int
+    default: '4'
+    hide: none
+-   id: tseq
+    label: Training sequence
+    dtype: int
+    default: '1'
+    hide: none
+-   id: wide_samp_rate
+    label: Input wideband sample rate
+    dtype: real
+    default: 2e6
+    hide: none
+-   id: gui
+    label: Draw waterfall GUI
+    dtype: raw
+    default: True
+    hide: none
+-   id: gui_hint
+    label: GUI Hint
+    dtype: gui_hint
+    hide: part
+
+inputs:
+-   label: in
+    dtype: complex
+    vlen: 1
+
+outputs:
+-   domain: stream
+    dtype: complex
+    vlen: 1
+    multiplicity: ${ len(arfcns) }
+    optional: true
+-   label: out_c0
+    domain: message
+    dtype: message
+-   label: out_cx
+    domain: message
+    dtype: message
+
+templates:
+    imports: import grgsm
+    make: "grgsm.multiarfcns_receiver(\n    arfcns=${ arfcns },\n    center_freq=${ center_freq\
+        \ },\n    osr=${ osr },\n    tseq=${ tseq },\n    wide_samp_rate=${ wide_samp_rate\
+        \ },\n    gui=${ gui },\n)\n<% win = 'self.%s'%id %>\n${ gui_hint() % win }"
+    callbacks:
+    - set_center_freq(${ center_freq })
+    - set_osr(${ osr })
+    - set_tseq(${ tseq })
+    - set_wide_samp_rate(${ wide_samp_rate })
+
+asserts:
+- ${ len(arfcns) >= 2 }
+
+documentation: 'Deligrim
+
+    Multi Arfcns GSM Receiver'
+
+file_format: 1

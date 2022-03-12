@@ -32,6 +32,8 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <chrono>
+using namespace std::chrono;
 
 #include <boost/circular_buffer.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -1022,7 +1024,7 @@ namespace gr
       tap_header->type = GSMTAP_TYPE_UM_BURST;
       tap_header->sub_type = burst_type;
 
-      bool dl_burst = !(input_nr >= d_cell_allocation.size());
+      bool dl_burst = !(input_nr >= d_cell_allocation.size()); //dl - downlink
       if (dl_burst) {
         tn = static_cast<uint8_t>(d_burst_nr.get_timeslot_nr());
         frame_number = htobe32(d_burst_nr.get_frame_nr());
@@ -1043,6 +1045,10 @@ namespace gr
 
       tap_header->signal_dbm = static_cast<int8_t>(d_signal_dbm);
       tap_header->snr_db = 0; /* FIXME: Can we calculate this? */
+
+      auto now = std::chrono::system_clock::now().time_since_epoch();
+      auto time_span = duration_cast<microseconds>(now);
+      //std::cout << +d_burst_nr.get_frame_nr() << " arfcn:" << d_cell_allocation[input_nr] << ", " << "tn:" << +d_burst_nr.get_timeslot_nr() << ", " << time_span.count() << " mcs" << std::endl <<std::flush;
 
       pmt::pmt_t pdu_header = pmt::make_dict();
 

@@ -54,6 +54,7 @@ try:
     #from sch_detector import sch_detector
     #from fcch_detector import fcch_detector
     from .clock_offset_corrector_tagged import clock_offset_corrector_tagged
+    from .multiarfcns_receiver import multiarfcns_receiver
     from .gsm_input import gsm_input
     from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
     from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper

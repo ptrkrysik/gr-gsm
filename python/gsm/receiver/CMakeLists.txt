@@ -20,6 +20,7 @@
 GR_PYTHON_INSTALL(
     FILES
     gsm_input.py
+    multiarfcns_receiver.py
     fcch_burst_tagger.py
     sch_detector.py
     fcch_detector.py
