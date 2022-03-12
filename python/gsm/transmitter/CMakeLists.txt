@@ -21,5 +21,5 @@ GR_PYTHON_INSTALL(
     FILES
     txtime_bursts_tagger.py
     gsm_gmsk_mod.py
-    DESTINATION ${GR_PYTHON_DIR}/gsm
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/gsm
 )

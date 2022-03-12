@@ -28,7 +28,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.trx_burst_if(${bind_addr}, ${remote_addr}, ${base_port})
 
 documentation: |-

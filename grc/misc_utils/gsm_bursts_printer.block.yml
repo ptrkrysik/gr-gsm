@@ -35,7 +35,7 @@ inputs:
 
 templates:
     imports: |-
-        import gsm
+        from gnuradio import gsm
         import pmt
     make: |-
         gsm.bursts_printer(pmt.intern(${prepend_string}), ${prepend_fnr},

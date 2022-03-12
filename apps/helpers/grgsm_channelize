@@ -36,7 +36,7 @@ from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from argparse import ArgumentParser, ArgumentTypeError, RawDescriptionHelpFormatter
-import gsm.arfcn as arfcn
+import gnuradio.gsm.arfcn as arfcn
 from gnuradio.filter import pfb
 import math
 import os

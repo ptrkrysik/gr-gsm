@@ -14,7 +14,7 @@ inputs:
     id: in
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.message_file_sink(${filename})
 
 documentation: |-

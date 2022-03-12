@@ -35,7 +35,7 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: |-
         gsm.clock_offset_corrector_tagged(
             fc=${fc},

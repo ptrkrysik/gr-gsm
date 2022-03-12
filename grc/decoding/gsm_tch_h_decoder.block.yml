@@ -34,7 +34,7 @@ asserts:
 - ${ sub_channel > -1 and sub_channel < 2 }
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.tch_h_decoder(${sub_channel}, ${multi_rate}, ${boundary_check})
 
 documentation: |-

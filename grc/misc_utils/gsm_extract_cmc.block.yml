@@ -8,7 +8,7 @@ inputs:
     id: msgs
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.extract_cmc()
 
 documentation: |-

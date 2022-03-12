@@ -325,7 +325,7 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    imports: from gsm import arfcn
+    imports: import gnuradio.gsm.arfcn as arfcn
   states:
     bus_sink: false
     bus_source: false

@@ -29,7 +29,7 @@
 
 from gnuradio import gr
 from gnuradio.filter import firdes
-import gsm
+from gnuradio import gsm
 
 
 class gsm_sdcch8_demapper(gr.hier_block2):

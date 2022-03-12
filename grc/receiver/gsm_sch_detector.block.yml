@@ -18,7 +18,7 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.sch_detector(${OSR})
     callbacks:
     - set_OSR(${OSR})

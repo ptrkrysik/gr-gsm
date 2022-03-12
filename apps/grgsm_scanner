@@ -31,14 +31,14 @@ from math import pi
 from optparse import OptionParser
 
 import math
-import gsm
+from gnuradio import gsm
 import numpy
 import os
 import osmosdr
 import pmt
 import time
 import sys
-import gsm.arfcn as arfcn 
+import gnuradio.gsm.arfcn as arfcn
 import gc 
 
 class multichannel_receiver(gr.hier_block2):

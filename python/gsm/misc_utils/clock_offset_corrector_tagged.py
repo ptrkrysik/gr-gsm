@@ -29,7 +29,7 @@
 
 from gnuradio import gr
 from gnuradio.filter import firdes
-import gsm
+from gnuradio import gsm
 import math
 
 

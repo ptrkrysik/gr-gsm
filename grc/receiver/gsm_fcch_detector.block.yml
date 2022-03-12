@@ -20,7 +20,7 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.fcch_detector(${OSR})
     callbacks:
     - set_OSR(${OSR})

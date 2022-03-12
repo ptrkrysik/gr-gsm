@@ -9,7 +9,7 @@ inputs:
 
 templates:
     imports: |-
-        import gsm
+        from gnuradio import gsm
         import pmt
     make: gsm.tmsi_dumper()
 

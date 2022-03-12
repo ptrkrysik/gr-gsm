@@ -30,7 +30,7 @@ from gnuradio.filter import firdes
 from optparse import OptionParser, OptionGroup
 import osmosdr
 import time
-import gsm
+from gnuradio import gsm
 import signal
 import sys
 

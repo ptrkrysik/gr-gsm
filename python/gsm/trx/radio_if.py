@@ -25,7 +25,7 @@
 
 import pmt
 import time
-import gsm
+from gnuradio import gsm
 import random
 
 from math import pi

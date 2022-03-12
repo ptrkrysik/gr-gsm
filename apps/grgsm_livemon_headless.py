@@ -20,9 +20,9 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import network
-from gsm import arfcn
+import gnuradio.gsm.arfcn as arfcn
 from math import pi
-import gsm
+from gnuradio import gsm
 import pmt
 import osmosdr
 import time

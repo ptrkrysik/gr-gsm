@@ -34,7 +34,7 @@
 from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import firdes
-import gsm
+from gnuradio import gsm
 
 class fcch_detector(gr.hier_block2):
 

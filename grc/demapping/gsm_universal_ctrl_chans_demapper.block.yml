@@ -49,7 +49,7 @@ outputs:
     id: bursts
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.universal_ctrl_chans_demapper(${timeslot_nr}, ${downlink_starts_fn_mod51},
         ${downlink_channel_types}, ${downlink_subslots}, ${uplink_starts_fn_mod51},
         ${uplink_channel_types}, ${uplink_subslots})

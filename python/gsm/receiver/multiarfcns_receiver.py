@@ -17,8 +17,8 @@ from gnuradio.filter import firdes
 from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import pfb
-import gsm
-import gsm.arfcn as arfcn
+from gnuradio import gsm
+import gnuradio.gsm.arfcn as arfcn
 import math
 
 class multiarfcns_receiver(gr.hier_block2, Qt.QWidget):

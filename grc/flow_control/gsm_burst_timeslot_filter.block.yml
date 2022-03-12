@@ -20,7 +20,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.burst_timeslot_filter(${timeslot})
 
 documentation: |-

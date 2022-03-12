@@ -27,7 +27,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.clock_offset_control(${fc}, ${samp_rate}, ${osr})
     callbacks:
     - set_fc(${fc})

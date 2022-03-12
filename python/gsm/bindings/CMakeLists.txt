@@ -88,7 +88,7 @@ add_custom_target(
   copy_bindings_for_tests ALL
   COMMAND
     ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/*.so"
-    ${CMAKE_BINARY_DIR}/test_modules/gsm/
+    ${CMAKE_BINARY_DIR}/test_modules/gnuradio/gsm/
   DEPENDS gsm_python)
 
-install(TARGETS gsm_python DESTINATION ${GR_PYTHON_DIR}/gsm COMPONENT pythonapi)
+install(TARGETS gsm_python DESTINATION ${GR_PYTHON_DIR}/gnuradio/gsm COMPONENT pythonapi)

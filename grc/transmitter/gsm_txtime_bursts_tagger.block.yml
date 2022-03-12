@@ -44,7 +44,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.txtime_bursts_tagger(${init_fn}, ${init_time}, ${time_hint}, ${timing_advance},
         ${delay_correction})
     callbacks:

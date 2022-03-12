@@ -24,7 +24,7 @@
 import unittest
 import numpy as np
 from gnuradio import gr, gr_unittest, blocks
-import gsm
+from gnuradio import gsm
 import pmt
 import qa_gsm_demapper_data as test_data
 

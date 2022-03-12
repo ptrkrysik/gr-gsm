@@ -28,7 +28,7 @@ from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from optparse import OptionParser, OptionGroup
 import collections
-import gsm
+from gnuradio import gsm
 import pmt
 import socket
 import sys

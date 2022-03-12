@@ -23,5 +23,5 @@ GR_PYTHON_INSTALL(
     clock_offset_corrector_tagged.py
     fn_time.py
     device.py
-    DESTINATION ${GR_PYTHON_DIR}/gsm
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/gsm
 )

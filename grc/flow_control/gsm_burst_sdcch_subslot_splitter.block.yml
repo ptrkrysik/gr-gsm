@@ -22,7 +22,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: |-
         gsm.burst_sdcch_subslot_splitter(
         % if int(ports)==4:

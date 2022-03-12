@@ -15,7 +15,7 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.msg_to_tag()
 
 file_format: 1

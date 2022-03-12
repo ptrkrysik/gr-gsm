@@ -17,7 +17,7 @@ mv ~/.grc_gnuradio/gsm_* .
 for file in *.py.block.yml
 do
     echo $file
-    cat $file | sed "s/    imports: .*\(#.*\)/    imports: \\'import gsm\\' \1/" \
+    cat $file | sed "s/    imports: .*\(#.*\)/    imports: \\'from gnuradio import gsm\\' \1/" \
               | sed 's/make: "/make: "gsm./' \
               | sed "s/.*.py//" \
               | sed 's/grc_source:.*hier_blocks/grc_source: gr-gsm\/hier_blocks/' \

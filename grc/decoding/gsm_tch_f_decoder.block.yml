@@ -30,7 +30,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.tch_f_decoder(${mode}, ${boundary_check})
 
 documentation: "If \"Voice boundary detection\" is enabled, then only bursts are decoded\

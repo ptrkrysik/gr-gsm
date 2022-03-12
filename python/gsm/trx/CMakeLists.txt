@@ -28,5 +28,5 @@ GR_PYTHON_INSTALL(
     radio_if_lms.py
     transceiver.py
     dict_toggle_sign.py
-    DESTINATION ${GR_PYTHON_DIR}/gsm/trx
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/gsm/trx
 )

@@ -31,7 +31,7 @@ from gnuradio import filter
 from gnuradio import gr
 from gnuradio.filter import firdes
 from gnuradio.fft import window
-import gsm
+from gnuradio import gsm
 
 
 class gsm_input(gr.hier_block2):

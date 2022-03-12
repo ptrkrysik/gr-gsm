@@ -7,7 +7,7 @@ TEST_DIR=$(dirname "$0")
 # /usr/local/lib/python3/dist-packages/ is currently needed on Debian Testing and Kali Rolling
 # https://salsa.debian.org/bottoms/pkg-gnuradio/blob/unstable/debian/patches/debian-python-install#L8
 #
-export PYTHONPATH=/usr/local/lib/python3/dist-packages/:/usr/local/lib64/python2.7/site-packages/:/usr/local/lib64/python2.7/site-packages/gsm/:$PYTHONPATH
+export PYTHONPATH=/usr/local/lib/python3/dist-packages/:/usr/local/lib64/python2.7/site-packages/:/usr/local/lib64/python2.7/site-packages/gnuradio/gsm/:$PYTHONPATH
 export LD_LIBRARY_PATH=/usr/local/lib64/:$LD_LIBRARY_PATH
 
 export AP_DECODE="grgsm_decode"

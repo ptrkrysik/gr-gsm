@@ -14,7 +14,7 @@ outputs:
     id: out
 
 templates:
-    imports: import gsm
+    imports: from gnuradio import gsm
     make: gsm.burst_file_source(${filename})
 
 file_format: 1

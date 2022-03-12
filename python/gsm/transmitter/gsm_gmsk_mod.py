@@ -12,7 +12,7 @@ from gnuradio import digital
 from gnuradio import gr
 from gnuradio.analog import cpm
 from gnuradio.filter import firdes
-import gsm
+from gnuradio import gsm
 
 class gsm_gmsk_mod(gr.hier_block2):
 
