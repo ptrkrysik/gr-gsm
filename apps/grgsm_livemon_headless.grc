@@ -325,7 +325,7 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    imports: import gnuradio.gsm.arfcn as arfcn
+    imports: import gnuradio.gsm as gsm
   states:
     bus_sink: false
     bus_source: false
@@ -333,6 +333,19 @@ blocks:
     coordinate: [200, 60]
     rotation: 0
     state: enabled
+- name: import_2
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: from gnuradio.gsm import arfcn
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 108.0]
+    rotation: 0
+    state: true
 - name: network_socket_pdu_0
   id: network_socket_pdu
   parameters:
@@ -461,7 +474,7 @@ blocks:
     ant7: ''
     ant8: ''
     ant9: ''
-    args: str(gsm.device.get_default_args(args))
+    args: str(gnuradio.gsm.device.get_default_args(args))
     bb_gain0: '20'
     bb_gain1: '20'
     bb_gain10: '20'

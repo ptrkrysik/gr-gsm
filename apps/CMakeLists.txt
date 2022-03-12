@@ -41,8 +41,8 @@ endif()
 GR_PYTHON_INSTALL(
     PROGRAMS
     grgsm_decode
-        grgsm_scanner
-        grgsm_trx
+    grgsm_scanner
+    grgsm_trx
     ${gsm_flowgraphs}
     DESTINATION bin
 )

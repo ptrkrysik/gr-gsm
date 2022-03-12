@@ -23,7 +23,7 @@ import math
 
 class multiarfcns_receiver(gr.hier_block2, Qt.QWidget):
     def __init__(self, arfcns=[725,661], center_freq=935e6, osr=4, tseq=1, wide_samp_rate=2e6, gui=False):
-        gr.hier_block2.__init__(
+        gr.hier_block2.__init__(gr
             self, "Multi Arfcns GSM Receiver",
                 gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
                 gr.io_signaturev(len(arfcns), len(arfcns), list(map(lambda x: gr.sizeof_gr_complex*1, arfcns))),

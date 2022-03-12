@@ -34,13 +34,13 @@ import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import network
 from gnuradio import gsm
-import gnuradio.gsm.arfcn as arfcn
+import pmt
+from gnuradio import network
 from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
 from math import pi
-import pmt
+import gnuradio.gsm.arfcn as arfcn
 import osmosdr
 import time
 
@@ -50,7 +50,7 @@ from gnuradio import qtgui
 
 class grgsm_livemon(gr.top_block, Qt.QWidget):
 
-    def __init__(self, args="", collector="localhost", collectorport='4729', fc=925.8e6, gain=30, osr=4, ppm=0, samp_rate=2000000.052982, serverport='4729', shiftoff=400e3):
+    def __init__(self, args="", collector="localhost", collectorport='4729', fc=925.8e6, gain=30, osr=4, ppm=0, samp_rate=2000000.052982, serverport='4730', shiftoff=400e3):
         gr.top_block.__init__(self, "Gr-gsm Livemon", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Gr-gsm Livemon")
@@ -115,7 +115,7 @@ class grgsm_livemon(gr.top_block, Qt.QWidget):
         self._fc_slider_win = RangeWidget(self._fc_slider_range, self.set_fc_slider, "Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._fc_slider_win)
         self.rtlsdr_source_0 = osmosdr.source(
-            args="numchan=" + str(1) + " " + 'str(gsm.device.get_default_args(args))'
+            args="numchan=" + str(1) + " " + 'str(grgsm.device.get_default_args(args))'
         )
         self.rtlsdr_source_0.set_sample_rate(samp_rate)
         self.rtlsdr_source_0.set_center_freq(fc_slider-shiftoff, 0)
@@ -349,7 +349,7 @@ def argument_parser():
         "-s", "--samp-rate", dest="samp_rate", type=eng_float, default=eng_notation.num_to_str(float(2000000.052982)),
         help="Set samp_rate [default=%(default)r]")
     parser.add_argument(
-        "--serverport", dest="serverport", type=str, default='4729',
+        "--serverport", dest="serverport", type=str, default='4730',
         help="Set UDP server listening port [default=%(default)r]")
     parser.add_argument(
         "-o", "--shiftoff", dest="shiftoff", type=eng_float, default=eng_notation.num_to_str(float(400e3)),

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # @file
 # @author (C) 2015 by Piotr Krysik <ptrkrysik@gmail.com>
@@ -22,6 +22,7 @@
 #
 #
 from gnuradio import blocks
+from gnuradio import network
 from gnuradio import gr
 from gnuradio import eng_notation
 from gnuradio.eng_option import eng_option
@@ -39,18 +40,19 @@ import pmt
 import time
 import sys
 import gnuradio.gsm.arfcn as arfcn
-import gc 
+import gc
+
 
 class multichannel_receiver(gr.hier_block2):
     def __init__(self, arfcns=[], center_freq=935e6, osr=4, tseq=1, wide_samp_rate=2e6):
         gr.hier_block2.__init__(
             self, "Multi Arfcns GSM Receiver",
-                gr.io_signature(1, 1, gr.sizeof_gr_complex*1),
-                gr.io_signaturev(len(arfcns), len(arfcns), list(map(lambda x: gr.sizeof_gr_complex*1, arfcns))),
+            gr.io_signature(1, 1, gr.sizeof_gr_complex * 1),
+            gr.io_signaturev(len(arfcns), len(arfcns), list(map(lambda x: gr.sizeof_gr_complex * 1, arfcns))),
         )
         self.message_port_register_hier_out("out_c0")
         self.message_port_register_hier_out("out_cx")
-        
+
         ##################################################
         # Parameters
         ##################################################
@@ -73,16 +75,15 @@ class multichannel_receiver(gr.hier_block2):
         self.pfb_arb_resamplers_xxx = []
         self.gsm_inputs = []
         self.blocks_rotators_cc = []
-        
-        
-        for i in range(len(self.fcs)):   
+
+        for i in range(len(self.fcs)):
             resampler = pfb.arb_resampler_ccf(
-                samp_rate/wide_samp_rate,
+                samp_rate / wide_samp_rate,
                 taps=None,
                 flt_size=32)
             resampler.declare_sample_delay(0)
             self.pfb_arb_resamplers_xxx.append(resampler)
-            
+
             gsm_input = gsm.gsm_input(
                 ppm=0,
                 osr=osr,
@@ -90,20 +91,20 @@ class multichannel_receiver(gr.hier_block2):
                 samp_rate_in=samp_rate,
             )
             self.gsm_inputs.append(gsm_input)
-            
-            blocks_rotator_cc = blocks.rotator_cc(-2*pi*(fcs[i] - center_freq)/wide_samp_rate)
+
+            blocks_rotator_cc = blocks.rotator_cc(-2 * pi * (fcs[i] - center_freq) / wide_samp_rate)
             self.blocks_rotators_cc.append(blocks_rotator_cc)
 
             ##################################################
             # Connections
             ##################################################
-            self.msg_connect((self.gsm_clock_offset_control, 'ctrl'), (gsm_input, 'ctrl_in'))   
+            self.msg_connect((self.gsm_clock_offset_control, 'ctrl'), (gsm_input, 'ctrl_in'))
             self.connect((blocks_rotator_cc, 0), (resampler, 0))
             self.connect((gsm_input, 0), (self.gsm_receiver, i))
             self.connect((gsm_input, 0), (self, i))
             self.connect((self, 0), (blocks_rotator_cc, 0))
             self.connect((resampler, 0), (gsm_input, 0))
-        
+
         self.msg_connect((self.gsm_receiver, 'measurements'), (self.gsm_clock_offset_control, 'measurements'))
         self.msg_connect((self.gsm_receiver, 'C0'), (self, 'out_c0'))
         self.msg_connect((self.gsm_receiver, 'CX'), (self, 'out_cx'))
@@ -129,14 +130,14 @@ class sdcch8_decoder_hopping(gr.top_block):
         ##################################################
         self.arfcns = arfcns = list(arfcns_list)
         self.fcs = fcs = list(map(arfcn.arfcn2downlink, arfcns))
-        self.wide_samp_rate = wide_samp_rate = max(1e6,int(math.ceil((max(fcs)-min(fcs))*1.1/1e6))*1e6)
-        self.center_freq = center_freq = ((max(fcs)+min(fcs))/2)
+        self.wide_samp_rate = wide_samp_rate = max(1e6, int(math.ceil((max(fcs) - min(fcs)) * 1.1 / 1e6)) * 1e6)
+        self.center_freq = center_freq = ((max(fcs) + min(fcs)) / 2)
         snippets_main_after_init(self)
         ##################################################
         # Blocks
         ##################################################
         self.osmosdr_source_0 = osmosdr.source(args="numchan=" + str(1) + " " +
-                str(gsm.device.get_default_args(args)))
+                                                    str(gsm.device.get_default_args(args)))
 
         self.osmosdr_source_0.set_sample_rate(wide_samp_rate)
         self.osmosdr_source_0.set_center_freq(center_freq, 0)
@@ -153,7 +154,7 @@ class sdcch8_decoder_hopping(gr.top_block):
             timeslot_nr=ts,
         )
         self.gsm_multiarfcns_receiver_0 = multichannel_receiver(
-            arfcns=[arfcns[ccch_index]]+arfcns[0:ccch_index]+arfcns[(ccch_index+1):len(arfcns)],
+            arfcns=[arfcns[ccch_index]] + arfcns[0:ccch_index] + arfcns[(ccch_index + 1):len(arfcns)],
             center_freq=center_freq,
             osr=osr,
             tseq=tseq,
@@ -163,9 +164,9 @@ class sdcch8_decoder_hopping(gr.top_block):
         self.gsm_extract_cmc_0 = gsm.extract_cmc()
         self.gsm_cx_channel_hopper_0 = gsm.cx_channel_hopper(arfcns, maio, hsn)
         self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
-        self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, int(wide_samp_rate * reclen))
-        
-        self.blocks_socket_pdu_0 = blocks.socket_pdu('UDP_CLIENT', '127.0.0.1', '4729', 10000, False)
+        self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex * 1, int(wide_samp_rate * reclen))
+
+        self.blocks_socket_pdu_0 = network.socket_pdu('UDP_CLIENT', '127.0.0.1', '4729', 10000, False)
 
         ##################################################
         # Connections
@@ -178,7 +179,6 @@ class sdcch8_decoder_hopping(gr.top_block):
         self.msg_connect((self.gsm_sdcch8_demapper_0, 'bursts'), (self.gsm_control_channels_decoder_0, 'bursts'))
         self.connect((self.blocks_head_0, 0), (self.gsm_multiarfcns_receiver_0, 0))
         self.connect((self.osmosdr_source_0, 0), (self.blocks_head_0, 0))
-
 
     def get_arfcns_list(self):
         return self.arfcns_list
@@ -230,15 +230,15 @@ class sdcch8_decoder_hopping(gr.top_block):
 
     def set_arfcns(self, arfcns):
         self.arfcns = arfcns
-        self.set_fcs(list(map(arfcn.arfcn2downlink, self.arfcns)) )
+        self.set_fcs(list(map(arfcn.arfcn2downlink, self.arfcns)))
 
     def get_fcs(self):
         return self.fcs
 
     def set_fcs(self, fcs):
         self.fcs = fcs
-        self.set_center_freq(((max(self.fcs)+min(self.fcs))/2))
-        self.set_wide_samp_rate(max(1e6,int(math.ceil((max(self.fcs)-min(self.fcs))*1.1/1e6))*1e6))
+        self.set_center_freq(((max(self.fcs) + min(self.fcs)) / 2))
+        self.set_wide_samp_rate(max(1e6, int(math.ceil((max(self.fcs) - min(self.fcs)) * 1.1 / 1e6)) * 1e6))
 
     def get_wide_samp_rate(self):
         return self.wide_samp_rate
@@ -257,12 +257,13 @@ class sdcch8_decoder_hopping(gr.top_block):
         self.gsm_multiarfcns_receiver_0.set_center_freq(self.center_freq)
         self.osmosdr_source_0.set_center_freq(self.center_freq, 0)
 
+
 def snipfcn_check_bandwidth(self):
-    if(self.wide_samp_rate > 20e6): #for hackrf
-    	print("Very wide bandwidth for this arfcns: " + str(self.wide_samp_rate/1e6) + " MHz")
-    	self.stop()
+    if (self.wide_samp_rate > 20e6):  # for hackrf
+        print("Very wide bandwidth for this arfcns: " + str(self.wide_samp_rate / 1e6) + " MHz")
+        self.stop()
     else:
-    	print("Wide bandwidth: " + str(self.wide_samp_rate/1e6) + " MHz")
+        print("Wide bandwidth: " + str(self.wide_samp_rate / 1e6) + " MHz")
 
 
 def snippets_main_after_init(tb):
@@ -440,10 +441,10 @@ class wideband_scanner(gr.top_block):
         # if no file name is given process data from rtl_sdr source
         print("Args=", args)
         self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
-                str(gsm.device.get_default_args(args)))
-        #self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
+                                                 str(gsm.device.get_default_args(args)))
+        # self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
         self.rtlsdr_source.set_sample_rate(sample_rate)
-        
+
         # capture half of GSM channel lower than channel center (-0.1MHz)
         # this is needed when even number of channels is captured in order to process full captured bandwidth
 
@@ -480,8 +481,9 @@ class wideband_scanner(gr.top_block):
         self.carrier_frequency = carrier_frequency
         self.rtlsdr_source.set_center_freq(carrier_frequency - 0.1e6, 0)
 
+
 class assignment_info(object):
-    def __init__(self, arfcn, channel, timeslot, tseq, maio, hsn, a5_vers = []):
+    def __init__(self, arfcn, channel, timeslot, tseq, maio, hsn, a5_vers=[]):
         self.arfcn = arfcn
         self.assignment_channel = channel
         self.timeslot = timeslot
@@ -489,8 +491,12 @@ class assignment_info(object):
         self.maio = maio
         self.hsn = hsn
         self.a5_vers = a5_vers
+
     def __str__(self):
-        return str(self.assignment_channel) + ", Timeslot: " + str(self.timeslot) + ", Training Sequence: "+ str(self.tseq) + ", MAIO: "+ str(self.maio) + ", HSN: "+ str(self.hsn) + ", A5/1 Version: " + ", ".join(map(str, list(set(self.a5_vers))))
+        return str(self.assignment_channel) + ", Timeslot: " + str(self.timeslot) + ", Training Sequence: " + str(
+            self.tseq) + ", MAIO: " + str(self.maio) + ", HSN: " + str(self.hsn) + ", A5/1 Version: " + ", ".join(
+            map(str, list(set(self.a5_vers))))
+
 
 class channel_info(object):
     def __init__(self, arfcn, freq, cid, lac, mcc, mnc, ccch_conf, power, neighbours, cell_arfcns, assignments):
@@ -506,21 +512,19 @@ class channel_info(object):
         self.cell_arfcns = cell_arfcns
         self.assignments = assignments
 
-
     def __lt__(self, other):
         return self.arfcn < other.arfcn
 
-
     def get_verbose_info(self):
-        v =  "  |---- Configuration: %s\n" % self.get_ccch_conf()
+        v = "  |---- Configuration: %s\n" % self.get_ccch_conf()
         v += "  |---- Cell ARFCNs: " + ", ".join(map(str, self.cell_arfcns)) + "\n"
         if len(self.assignments) > 0:
             v += "  |---- DCCHs:\n"
         for i in range(0, len(self.assignments)):
-            v += "  |-------- " +"#"+  str(i+1) +" "+str(self.assignments[i]) + "\n"
+            v += "  |-------- " + "#" + str(i + 1) + " " + str(self.assignments[i]) + "\n"
 
         v += "  |---- Neighbour Cells: " + ", ".join(map(str, self.neighbours)) + "\n"
-        
+
         return v
 
     def get_ccch_conf(self):
@@ -554,14 +558,15 @@ class channel_info(object):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
-def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
+
+def do_scan(samp_rate, band, speed, ppm, gain, args, prn=None, debug=False):
     signallist = []
-    server = blocks.socket_pdu('UDP_SERVER', '127.0.0.1', '4729', 10000, False)
+    server = network.socket_pdu('UDP_SERVER', '127.0.0.1', '4729', 10000, False)
     channels_num = int(samp_rate / 0.2e6)
     for arfcn_range in gsm.arfcn.get_arfcn_ranges(band):
         first_arfcn = arfcn_range[0]
         last_arfcn = arfcn_range[1]
-        print("Try scan CCCH on " + str(first_arfcn) +"-"+str(last_arfcn) + " arfcn`s:")
+        print("Try scan CCCH on " + str(first_arfcn) + "-" + str(last_arfcn) + " arfcn`s:")
         last_center_arfcn = last_arfcn - int((channels_num / 2) - 1)
 
         start_freq = gsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1)
@@ -570,7 +575,8 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
         stop_freq = last_freq + 0.2e6 * channels_num
 
         while current_freq < stop_freq:
-            print("Scanning: {percent:.2f}% done..".format(percent = (current_freq-start_freq)/(stop_freq-start_freq)*100))
+            print("Scanning: {percent:.2f}% done..".format(
+                percent=(current_freq - start_freq) / (stop_freq - start_freq) * 100))
             if not debug:
                 # silence rtl_sdr output:
                 # open 2 fds
@@ -596,7 +602,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                 # close the temporary fds
                 os.close(null_fds[0])
                 os.close(null_fds[1])
-                
+
             freq_offsets = numpy.fft.ifftshift(
                 numpy.array(range(int(-numpy.floor(channels_num / 2)), int(numpy.floor((channels_num + 1) / 2)))) * 2e5)
             detected_c0_channels = scanner.gsm_extract_system_info.get_chans()
@@ -632,37 +638,38 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                     found_arfcn = gsm.arfcn.downlink2arfcn(found_freqs[i])
                     print("\nFound CCCH arfcn: " + str(found_arfcn))
                     found_arfcn_assignments = []
-                        
+
                     for a in range(0, len(assignment_arfcns)):
-                        
-                        #print("Assigments: " + str(assignment_arfcns[a]) + "<->" + str(chans[i]))
+
+                        # print("Assigments: " + str(assignment_arfcns[a]) + "<->" + str(chans[i]))
                         if assignment_arfcns[a] == chans[i]:
                             dubl = False
                             for f in found_arfcn_assignments:
                                 if f.assignment_channel == assignment_channels[a] and \
-                                    f.timeslot == assignment_timeslots[a] and \
-                                    f.tseq == assignment_tseqs[a] and \
-                                    f.maio == assignment_maios[a] and \
-                                    f.hsn == assignment_hsns[a]:
+                                        f.timeslot == assignment_timeslots[a] and \
+                                        f.tseq == assignment_tseqs[a] and \
+                                        f.maio == assignment_maios[a] and \
+                                        f.hsn == assignment_hsns[a]:
                                     dubl = True
                                     break
                             if not dubl:
                                 a5_versions = []
                                 if len(cell_arfcn_list) > 0:
                                     fcs = list(map(arfcn.arfcn2downlink, cell_arfcn_list))
-                                    wide_samp_rate = max(1e6,int(math.ceil((max(fcs)-min(fcs))*1.1/1e6))*1e6)
+                                    wide_samp_rate = max(1e6, int(math.ceil((max(fcs) - min(fcs)) * 1.1 / 1e6)) * 1e6)
                                     if wide_samp_rate > 20e6:
-                                        #print("Very wide bandwidth for this hopping SDCCH/8 arfcns: " + str(wide_samp_rate/1e6) + " MHz, skip SDCCH/8 scan...")
-                                        a5_versions = ["?, arfcn`s range too wide: " + str(wide_samp_rate/1e6) + " MHz"]
+                                        # print("Very wide bandwidth for this hopping SDCCH/8 arfcns: " + str(wide_samp_rate/1e6) + " MHz, skip SDCCH/8 scan...")
+                                        a5_versions = [
+                                            "?, arfcn`s range too wide: " + str(wide_samp_rate / 1e6) + " MHz"]
                                     else:
                                         try:
-                                            #print("Wide bandwidth: " + str(wide_samp_rate/1e6) + " MHz")
-                                            #print(", ".join(map(str, cell_arfcn_list)))
-                                            #print(found_arfcn)
+                                            # print("Wide bandwidth: " + str(wide_samp_rate/1e6) + " MHz")
+                                            # print(", ".join(map(str, cell_arfcn_list)))
+                                            # print(found_arfcn)
                                             ccch_index = tuple(cell_arfcn_list).index(found_arfcn)
                                             print("Start SDCCH/8 scanning on " + str(found_arfcn) + " arfcn...")
                                             for t in range(0, 6):
-                                                print(str(t+1) + "`th try..")
+                                                print(str(t + 1) + "`th try..")
                                                 if not debug:
                                                     # silence rtl_sdr output:
                                                     # open 2 fds
@@ -672,7 +679,12 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                                                     # put /dev/null fds on 1 and 2
                                                     os.dup2(null_fds[0], 1)
                                                     os.dup2(null_fds[1], 2)
-                                                sdcch8_scanner = sdcch8_decoder_hopping(cell_arfcn_list,ccch_index,assignment_hsns[a],assignment_maios[a],4,assignment_timeslots[a],assignment_tseqs[a], 30, ppm, args)
+                                                sdcch8_scanner = sdcch8_decoder_hopping(cell_arfcn_list, ccch_index,
+                                                                                        assignment_hsns[a],
+                                                                                        assignment_maios[a], 4,
+                                                                                        assignment_timeslots[a],
+                                                                                        assignment_tseqs[a], 30, ppm,
+                                                                                        args)
                                                 if not debug:
                                                     os.dup2(save[0], 1)
                                                     os.dup2(save[1], 2)
@@ -683,31 +695,35 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                                                 sdcch8_scanner.wait()
                                                 sdcch8_scanner.stop()
                                                 a5_versions = sdcch8_scanner.gsm_extract_cmc_0.get_a5_versions()
-                                                if len(a5_versions) == 0 :
+                                                if len(a5_versions) == 0:
                                                     a5_versions = ["?, not found CMC"]
                                                 else:
                                                     break
-                                                #print(", ".join(map(str, a5_versions)))
+                                                # print(", ".join(map(str, a5_versions)))
                                                 sdcch8_scanner = None
                                                 gc.collect()
                                         except ValueError:
-                                            #print("Found arfcn not present in arfcns hopping list, skip SDCCH/8 scan...")
-                                            a5_versions = ["?, this CCCH is not present in hopping list | possible signal imposition"]
+                                            # print("Found arfcn not present in arfcns hopping list, skip SDCCH/8 scan...")
+                                            a5_versions = [
+                                                "?, this CCCH is not present in hopping list | possible signal imposition"]
                                 else:
-                                    print("!! Immidiate assigment got, but SDCCH/8 Channel Description not capture, skip SDCCH/8 scan...")
+                                    print(
+                                        "!! Immidiate assigment got, but SDCCH/8 Channel Description not capture, skip SDCCH/8 scan...")
                                     a5_versions = ["?, SDCCH/8 channel description not capture"]
-                                found_arfcn_assignments.append(assignment_info(found_arfcn,assignment_channels[a],
-                                                                           assignment_timeslots[a],assignment_tseqs[a],
-                                                                           assignment_maios[a],assignment_hsns[a], a5_versions))
+                                found_arfcn_assignments.append(assignment_info(found_arfcn, assignment_channels[a],
+                                                                               assignment_timeslots[a],
+                                                                               assignment_tseqs[a],
+                                                                               assignment_maios[a], assignment_hsns[a],
+                                                                               a5_versions))
                     if len(found_arfcn_assignments) == 0:
-                        print("Dont capture immediate assignments, skip extract SDCCH/8 info and scan...")           
+                        print("Dont capture immediate assignments, skip extract SDCCH/8 info and scan...")
                     info = channel_info(found_arfcn, found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
-                                        neighbour_list, cell_arfcn_list,found_arfcn_assignments)
-                    
+                                        neighbour_list, cell_arfcn_list, found_arfcn_assignments)
+
                     print(info)
                     print(info.get_verbose_info())
-                    
+
                     found_list.append(info)
 
             scanner = None
@@ -719,6 +735,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
             current_freq += channels_num * 0.2e6
     server = None
     return signallist
+
 
 def argument_parser():
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
@@ -733,7 +750,7 @@ def argument_parser():
                       help="Set gain [default=%default]")
     parser.add_option("", "--args", dest="args", type="string", default="",
                       help="Set device arguments [default=%default]."
-                      " Use --list-devices the view the available devices")
+                           " Use --list-devices the view the available devices")
     parser.add_option("-l", "--list-devices", action="store_true",
                       help="List available SDR devices, use --args to specify hints")
     parser.add_option("--speed", dest="speed", type="intx", default=15,
@@ -748,7 +765,8 @@ def argument_parser():
     """
     return parser
 
-def main(options = None):
+
+def main(options=None):
     if options is None:
         (options, args) = argument_parser().parse_args()
 
@@ -766,13 +784,14 @@ def main(options = None):
         parser.error("Invalid sample rate. Sample rate must be an even numer * 0.2e6")
 
     # def printfunc(found_list):
-        # for info in sorted(found_list):
-        #     print(info)
-        #     if options.verbose:
-        #         print(info.get_verbose_info())
+    # for info in sorted(found_list):
+    #     print(info)
+    #     if options.verbose:
+    #         print(info.get_verbose_info())
     print("")
     do_scan(options.samp_rate, options.band, options.speed,
-            options.ppm, options.gain, options.args, prn = None, debug = options.debug)
+            options.ppm, options.gain, options.args, prn=None, debug=options.debug)
+
 
 if __name__ == '__main__':
     main()
