@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_BURST_FNR_FILTER_IMPL_H
 #define INCLUDED_GSM_BURST_FNR_FILTER_IMPL_H
 
-#include <grgsm/flow_control/burst_fnr_filter.h>
+#include <gsm/flow_control/burst_fnr_filter.h>
 
 #define GSM_SUPERFRAME    (26 * 51)
 #define GSM_HYPERFRAME    (2048 * GSM_SUPERFRAME)

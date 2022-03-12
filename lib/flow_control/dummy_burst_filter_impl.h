@@ -25,7 +25,7 @@
 
 #define DUMMY_BURST_LEN 148
 
-#include <grgsm/flow_control/dummy_burst_filter.h>
+#include <gsm/flow_control/dummy_burst_filter.h>
 
 namespace gr {
   namespace gsm {

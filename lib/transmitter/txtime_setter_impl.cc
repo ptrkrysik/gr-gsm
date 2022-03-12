@@ -26,8 +26,8 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/endian.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/endian.h>
+#include <gsm/gsmtap.h>
 
 #include "txtime_setter_impl.h"
 

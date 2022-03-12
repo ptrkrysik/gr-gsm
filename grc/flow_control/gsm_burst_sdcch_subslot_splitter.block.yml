@@ -22,13 +22,13 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
+    imports: import gsm
     make: |-
-        grgsm.burst_sdcch_subslot_splitter(
+        gsm.burst_sdcch_subslot_splitter(
         % if int(ports)==4:
-        grgsm.SPLITTER_SDCCH4
+        gsm.SPLITTER_SDCCH4
         % else:
-        grgsm.SPLITTER_SDCCH8
+        gsm.SPLITTER_SDCCH8
         % endif
           )
 

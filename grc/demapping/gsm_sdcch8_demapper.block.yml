@@ -20,9 +20,9 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
+    imports: import gsm
     make: |-
-        grgsm.gsm_sdcch8_demapper(
+        gsm.gsm_sdcch8_demapper(
             timeslot_nr=${timeslot_nr},
         )
     callbacks:

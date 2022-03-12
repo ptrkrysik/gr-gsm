@@ -25,7 +25,7 @@ asserts:
 - ${ a5_version < 5 }
 
 templates:
-    imports: import grgsm
-    make: grgsm.decryption(${k_c}, ${a5_version})
+    imports: import gsm
+    make: gsm.decryption(${k_c}, ${a5_version})
 
 file_format: 1

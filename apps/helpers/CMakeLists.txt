@@ -22,8 +22,8 @@ include(GrPython)
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    grgsm_capture
-    grgsm_channelize
+        grgsm_capture
+        grgsm_channelize
     DESTINATION bin
 )
 

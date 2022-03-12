@@ -54,8 +54,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.txtime_setter(${init_fn} if (${init_fn} is not None) else 0xffffffff,
+    imports: import gsm
+    make: gsm.txtime_setter(${init_fn} if (${init_fn} is not None) else 0xffffffff,
         ${init_time_secs}, ${init_time_fracs}, ${time_hint_secs}, ${time_hint_fracs},
         ${timing_advance}, ${delay_correction})
     callbacks:

@@ -7,7 +7,7 @@ parameters:
 -   id: mode
     label: Mode
     dtype: enum
-    options: [grgsm.SS_FILTER_SDCCH8, grgsm.SS_FILTER_SDCCH4]
+    options: [gsm.SS_FILTER_SDCCH8, gsm.SS_FILTER_SDCCH4]
     option_labels: [SDCCH/8, SDCCH/4]
 -   id: subslot
     label: Subslot
@@ -25,8 +25,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_sdcch_subslot_filter(${mode}, ${subslot})
+    imports: import gsm
+    make: gsm.burst_sdcch_subslot_filter(${mode}, ${subslot})
 
 documentation: |-
     This block forwards only bursts in the subslot given by the parameter

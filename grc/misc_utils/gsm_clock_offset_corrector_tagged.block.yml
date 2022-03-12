@@ -35,9 +35,9 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import grgsm
+    imports: import gsm
     make: |-
-        grgsm.clock_offset_corrector_tagged(
+        gsm.clock_offset_corrector_tagged(
             fc=${fc},
             samp_rate_in=${samp_rate_in},
             ppm=${ppm},

@@ -28,8 +28,8 @@
 #include <assert.h>
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/gsm_constants.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/gsm_constants.h>
+#include <gsm/gsmtap.h>
 
 #include "preprocess_tx_burst_impl.h"
 

@@ -21,8 +21,8 @@
  * 
  */
 
-#include <grgsm/misc_utils/fn_time.h>
-#include <grgsm/misc_utils/time_spec.h>
+#include <gsm/misc_utils/fn_time.h>
+#include <gsm/misc_utils/time_spec.h>
 #include <math.h>
 
 #define GSM_HYPER_FRAME (26 * 51 * 2048)

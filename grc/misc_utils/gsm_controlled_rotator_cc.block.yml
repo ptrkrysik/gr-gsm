@@ -18,8 +18,8 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import grgsm
-    make: grgsm.controlled_rotator_cc(${phase_inc})
+    imports: import gsm
+    make: gsm.controlled_rotator_cc(${phase_inc})
     callbacks:
     - set_phase_inc(${phase_inc})
 

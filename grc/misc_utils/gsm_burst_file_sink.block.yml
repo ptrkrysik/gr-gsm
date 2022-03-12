@@ -14,7 +14,7 @@ inputs:
     id: in
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_file_sink(${filename})
+    imports: import gsm
+    make: gsm.burst_file_sink(${filename})
 
 file_format: 1

@@ -24,7 +24,7 @@ outputs:
     id: bursts
 
 templates:
-    imports: import grgsm
-    make: grgsm.cx_channel_hopper(${ma}, ${maio}, ${hsn})
+    imports: import gsm
+    make: gsm.cx_channel_hopper(${ma}, ${maio}, ${hsn})
 
 file_format: 1

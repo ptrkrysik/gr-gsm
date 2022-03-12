@@ -17,7 +17,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.uplink_downlink_splitter()
+    imports: import gsm
+    make: gsm.uplink_downlink_splitter()
 
 file_format: 1

@@ -30,10 +30,10 @@ inputs:
 
 templates:
     imports: |-
-        import grgsm
+        import gsm
         import pmt
     make: |-
-        grgsm.message_printer(pmt.intern(${prepend_string}), ${prepend_fnr},
+        gsm.message_printer(pmt.intern(${prepend_string}), ${prepend_fnr},
             ${prepend_frame_count}, ${print_gsmtap_header})
 
 file_format: 1

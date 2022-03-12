@@ -15,7 +15,7 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import grgsm
-    make: grgsm.msg_to_tag()
+    imports: import gsm
+    make: gsm.msg_to_tag()
 
 file_format: 1

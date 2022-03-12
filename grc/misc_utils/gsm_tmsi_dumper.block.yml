@@ -9,8 +9,8 @@ inputs:
 
 templates:
     imports: |-
-        import grgsm
+        import gsm
         import pmt
-    make: grgsm.tmsi_dumper()
+    make: gsm.tmsi_dumper()
 
 file_format: 1

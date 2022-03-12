@@ -20,8 +20,8 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import grgsm
-    make: grgsm.controlled_fractional_resampler_cc(${phase_shift}, ${resamp_ratio})
+    imports: import gsm
+    make: gsm.controlled_fractional_resampler_cc(${phase_shift}, ${resamp_ratio})
     callbacks:
     - set_resamp_ratio(${resamp_ratio})
 

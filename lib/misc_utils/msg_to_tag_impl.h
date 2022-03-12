@@ -20,10 +20,10 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H
-#define INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H
+#ifndef INCLUDED_GSM_MSG_TO_TAG_IMPL_H
+#define INCLUDED_GSM_MSG_TO_TAG_IMPL_H
 
-#include <grgsm/misc_utils/msg_to_tag.h>
+#include <gsm/misc_utils/msg_to_tag.h>
 
 namespace gr {
   namespace gsm {
@@ -47,5 +47,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_MSG_TO_TAG_IMPL_H */
+#endif /* INCLUDED_GSM_MSG_TO_TAG_IMPL_H */
 

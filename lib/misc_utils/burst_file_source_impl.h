@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_BURST_FILE_SOURCE_IMPL_H
 #define INCLUDED_GSM_BURST_FILE_SOURCE_IMPL_H
 
-#include <grgsm/misc_utils/burst_file_source.h>
+#include <gsm/misc_utils/burst_file_source.h>
 #include <fstream>
 
 namespace gr {
@@ -32,7 +32,7 @@ namespace gr {
     class burst_file_source_impl : public burst_file_source
     {
      private:
-        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::shared_ptr<gr::thread::thread> d_thread;
         std::ifstream d_input_file;
         bool d_finished;
         void run();

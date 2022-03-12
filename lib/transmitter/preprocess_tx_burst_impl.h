@@ -23,9 +23,9 @@
 #ifndef INCLUDED_GSM_PREPROCESS_TX_BURST_IMPL_H
 #define INCLUDED_GSM_PREPROCESS_TX_BURST_IMPL_H
 
-#include <grgsm/transmitter/preprocess_tx_burst.h>
-#include <grgsm/misc_utils/time_spec.h>
-#include <grgsm/misc_utils/fn_time.h>
+#include <gsm/transmitter/preprocess_tx_burst.h>
+#include <gsm/misc_utils/time_spec.h>
+#include <gsm/misc_utils/fn_time.h>
 
 namespace gr {
   namespace gsm {

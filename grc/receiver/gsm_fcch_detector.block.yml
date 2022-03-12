@@ -20,8 +20,8 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import grgsm
-    make: grgsm.fcch_detector(${OSR})
+    imports: import gsm
+    make: gsm.fcch_detector(${OSR})
     callbacks:
     - set_OSR(${OSR})
 

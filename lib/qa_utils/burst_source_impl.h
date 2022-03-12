@@ -25,7 +25,7 @@
 
 #define BURST_SIZE  148
 
-#include <grgsm/qa_utils/burst_source.h>
+#include <gsm/qa_utils/burst_source.h>
 #include <fstream>
 
 
@@ -35,7 +35,7 @@ namespace gr {
     class burst_source_impl : public burst_source
     {
      private:
-        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::shared_ptr<gr::thread::thread> d_thread;
         std::vector<int> d_framenumbers;
         std::vector<int> d_timeslots;
         std::vector<std::string> d_burst_data;

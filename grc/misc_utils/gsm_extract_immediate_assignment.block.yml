@@ -25,8 +25,8 @@ inputs:
     id: msgs
 
 templates:
-    imports: import grgsm
-    make: grgsm.extract_immediate_assignment(${print_immediate_assignments}, ${ignore_gprs},
+    imports: import gsm
+    make: gsm.extract_immediate_assignment(${print_immediate_assignments}, ${ignore_gprs},
         ${unique_references})
 
 documentation: |-

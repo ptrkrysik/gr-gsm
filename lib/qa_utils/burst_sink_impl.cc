@@ -28,8 +28,8 @@
 #include "burst_sink_impl.h"
 #include <stdio.h>
 #include <sstream>
-#include <grgsm/endian.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/endian.h>
+#include <gsm/gsmtap.h>
 
 namespace gr {
   namespace gsm {

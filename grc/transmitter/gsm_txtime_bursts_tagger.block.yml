@@ -44,8 +44,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.txtime_bursts_tagger(${init_fn}, ${init_time}, ${time_hint}, ${timing_advance},
+    imports: import gsm
+    make: gsm.txtime_bursts_tagger(${init_fn}, ${init_time}, ${time_hint}, ${timing_advance},
         ${delay_correction})
     callbacks:
     - set_fn_time_reference(${init_fn}, ${init_time})

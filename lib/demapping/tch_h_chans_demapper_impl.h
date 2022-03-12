@@ -24,7 +24,7 @@
 #ifndef INCLUDED_GSM_TCH_H_CHANS_DEMAPPER_IMPL_H
 #define INCLUDED_GSM_TCH_H_CHANS_DEMAPPER_IMPL_H
 
-#include <grgsm/demapping/tch_h_chans_demapper.h>
+#include <gsm/demapping/tch_h_chans_demapper.h>
 
 namespace gr {
     namespace gsm {

@@ -35,10 +35,10 @@ inputs:
 
 templates:
     imports: |-
-        import grgsm
+        import gsm
         import pmt
     make: |-
-        grgsm.bursts_printer(pmt.intern(${prepend_string}), ${prepend_fnr},
+        gsm.bursts_printer(pmt.intern(${prepend_string}), ${prepend_fnr},
             ${prepend_frame_count}, ${print_payload_only}, ${ignore_dummy_bursts})
 
 documentation: |-

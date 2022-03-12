@@ -14,8 +14,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_timeslot_splitter()
+    imports: import gsm
+    make: gsm.burst_timeslot_splitter()
 
 documentation: "Burst timeslot splitter distributes bursts to eight different output\
     \ ports depending on the timeslots of the bursts. \nThis means timeslot 0 bursts\

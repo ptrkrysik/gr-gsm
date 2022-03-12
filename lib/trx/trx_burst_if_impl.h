@@ -20,13 +20,13 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H
-#define INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H
+#ifndef INCLUDED_GSM_TRX_BURST_IF_IMPL_H
+#define INCLUDED_GSM_TRX_BURST_IF_IMPL_H
 
 #include <stddef.h>
 
-#include <grgsm/gsmtap.h>
-#include <grgsm/trx/trx_burst_if.h>
+#include <gsm/gsmtap.h>
+#include <gsm/trx/trx_burst_if.h>
 
 namespace gr {
   namespace gsm {
@@ -51,5 +51,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_TRX_BURST_IF_IMPL_H */
+#endif /* INCLUDED_GSM_TRX_BURST_IF_IMPL_H */
 

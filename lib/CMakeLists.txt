@@ -26,20 +26,20 @@ include(GrPlatform) #define LIB_SUFFIX
 ########################################################################
 # Add sources macro
 ########################################################################
-set(grgsm_sources "")
+set(gsm_sources "")
 
 macro (add_sources)
     file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}/lib" "${CMAKE_CURRENT_SOURCE_DIR}")
     foreach (_src ${ARGN})
         if (_relPath)
-            list (APPEND grgsm_sources "${_relPath}/${_src}")
+            list (APPEND gsm_sources "${_relPath}/${_src}")
         else()
-            list (APPEND grgsm_sources "${_src}")
+            list (APPEND gsm_sources "${_src}")
         endif()
     endforeach()
     if (_relPath)
-        # propagate grgsm_sources to parent directory
-        set (grgsm_sources ${grgsm_sources} PARENT_SCOPE)
+        # propagate gsm_sources to parent directory
+        set (gsm_sources ${gsm_sources} PARENT_SCOPE)
     endif()
 endmacro()
 
@@ -62,7 +62,7 @@ configure_file(
     ESCAPE_QUOTES
 @ONLY)
 
-list(APPEND grgsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
+list(APPEND gsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
 #########################################################################
 # Subdirecories
 #########################################################################
@@ -76,21 +76,21 @@ add_subdirectory(receiver)
 add_subdirectory(transmitter)
 add_subdirectory(trx)
 
-list (APPEND grgsm_link_libraries ${LIBOSMOCORE_LIBRARY} ${LIBOSMOCODEC_LIBRARY} ${LIBOSMOGSM_LIBRARY} ${LIBOSMOCODING_LIBRARY})
+list (APPEND gsm_link_libraries ${LIBOSMOCORE_LIBRARY} ${LIBOSMOCODEC_LIBRARY} ${LIBOSMOGSM_LIBRARY} ${LIBOSMOCODING_LIBRARY})
 
-add_library(grgsm SHARED ${grgsm_sources})
-target_link_libraries(grgsm gnuradio::gnuradio-runtime gnuradio::gnuradio-filter volk ${grgsm_link_libraries})
-target_include_directories(grgsm
+add_library(gnuradio-gsm SHARED ${gsm_sources})
+target_link_libraries(gnuradio-gsm gnuradio::gnuradio-runtime gnuradio-network gnuradio-pdu gnuradio-filter volk ${gsm_link_libraries})
+target_include_directories(gnuradio-gsm
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/receiver>
     PUBLIC $<BUILD_INTERFACE:${LIBOSMOCORE_INCLUDE_DIR}>
     PUBLIC $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
     PUBLIC $<INSTALL_INTERFACE:include>
   )
-set_target_properties(grgsm PROPERTIES DEFINE_SYMBOL "grgsm_EXPORTS")
+set_target_properties(gnuradio-gsm PROPERTIES DEFINE_SYMBOL "gnuradio_gsm_EXPORTS")
 
 if(APPLE)
-    set_target_properties(grgsm PROPERTIES
+    set_target_properties(gnuradio-gsm PROPERTIES
         INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
     )
 endif(APPLE)
@@ -99,7 +99,7 @@ endif(APPLE)
 # Install built library files
 ########################################################################
 include(GrMiscUtils)
-GR_LIBRARY_FOO(grgsm)
+GR_LIBRARY_FOO(gnuradio-gsm)
 
 ########################################################################
 # Print summary
@@ -107,7 +107,7 @@ GR_LIBRARY_FOO(grgsm)
 message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
 
-set (grgsm_sources ${grgsm_sources} PARENT_SCOPE)
+set (gsm_sources ${gsm_sources} PARENT_SCOPE)
 
 ########################################################################
 # Build and register unit test
@@ -117,18 +117,18 @@ include(GrTest)
 # If your unit tests require special include paths, add them here
 #include_directories()
 # List all files that contain Boost.UTF unit tests here
-list(APPEND test_grgsm_sources
+list(APPEND test_gsm_sources
 )
 # Anything we need to link to for the unit tests go here
-list(APPEND GR_TEST_TARGET_DEPS grgsm)
+list(APPEND GR_TEST_TARGET_DEPS gnuradio-gsm)
 
-if(NOT test_grgsm_sources)
+if(NOT test_gsm_sources)
     MESSAGE(STATUS "No C++ unit tests... skipping")
     return()
-endif(NOT test_grgsm_sources)
+endif(NOT test_gsm_sources)
 
-foreach(qa_file ${test_grgsm_sources})
-    GR_ADD_CPP_TEST("grgsm_${qa_file}"
+foreach(qa_file ${test_gsm_sources})
+    GR_ADD_CPP_TEST("gsm_${qa_file}"
         ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
     )
 endforeach(qa_file)

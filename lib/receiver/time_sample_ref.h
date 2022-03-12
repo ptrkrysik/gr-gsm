@@ -24,7 +24,7 @@
 #define INCLUDED_TIME_SAMPLE_REF_IMPL_H
 
 #include <stdint.h>
-#include <grgsm/misc_utils/time_spec.h>
+#include <gsm/misc_utils/time_spec.h>
 
 namespace gr {
   namespace gsm {

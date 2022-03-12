@@ -28,6 +28,7 @@
 #include "message_sink_impl.h"
 #include <stdio.h>
 #include <sstream>
+#include <iomanip>
 
 namespace gr {
   namespace gsm {

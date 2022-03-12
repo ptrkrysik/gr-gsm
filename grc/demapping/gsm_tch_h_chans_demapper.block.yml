@@ -31,7 +31,7 @@ asserts:
 - ${ tch_h_channel > -1 and tch_h_channel < 2 }
 
 templates:
-    imports: import grgsm
-    make: grgsm.tch_h_chans_demapper(${timeslot_nr}, ${tch_h_channel})
+    imports: import gsm
+    make: gsm.tch_h_chans_demapper(${timeslot_nr}, ${tch_h_channel})
 
 file_format: 1

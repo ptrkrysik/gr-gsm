@@ -25,9 +25,9 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/endian.h>
-#include <grgsm/gsmtap.h>
-#include <grgsm/gsm_constants.h>
+#include <gsm/endian.h>
+#include <gsm/gsmtap.h>
+#include <gsm/gsm_constants.h>
 #include "gen_test_ab_impl.h"
 
 namespace gr {

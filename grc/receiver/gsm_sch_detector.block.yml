@@ -18,8 +18,8 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import grgsm
-    make: grgsm.sch_detector(${OSR})
+    imports: import gsm
+    make: gsm.sch_detector(${OSR})
     callbacks:
     - set_OSR(${OSR})
 

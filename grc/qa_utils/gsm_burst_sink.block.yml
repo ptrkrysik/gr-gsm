@@ -8,7 +8,7 @@ inputs:
     id: in
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_sink()
+    imports: import gsm
+    make: gsm.burst_sink()
 
 file_format: 1

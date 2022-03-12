@@ -20,10 +20,10 @@
  * 
  */
 
-#ifndef INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
-#define INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
+#ifndef INCLUDED_GSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
+#define INCLUDED_GSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H
 
-#include <grgsm/flow_control/uplink_downlink_splitter.h>
+#include <gsm/flow_control/uplink_downlink_splitter.h>
 
 namespace gr {
   namespace gsm {
@@ -39,5 +39,5 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H */
+#endif /* INCLUDED_GSM_UPLINK_DOWNLINK_SPLITTER_IMPL_H */
 

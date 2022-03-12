@@ -21,10 +21,10 @@
  *
  */
 
-#ifndef INCLUDED_GRGSM_BURST_TO_FN_TIME_IMPL_H
-#define INCLUDED_GRGSM_BURST_TO_FN_TIME_IMPL_H
+#ifndef INCLUDED_GSM_BURST_TO_FN_TIME_IMPL_H
+#define INCLUDED_GSM_BURST_TO_FN_TIME_IMPL_H
 
-#include <grgsm/misc_utils/burst_to_fn_time.h>
+#include <gsm/misc_utils/burst_to_fn_time.h>
 
 namespace gr {
   namespace gsm {
@@ -42,4 +42,4 @@ namespace gr {
   } // namespace gsm
 } // namespace gr
 
-#endif /* INCLUDED_GRGSM_BURST_TO_FN_TIME_IMPL_H */
+#endif /* INCLUDED_GSM_BURST_TO_FN_TIME_IMPL_H */

@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_EXTRACT_ASSIGNMENT_CMD_IMPL_H
 #define INCLUDED_GSM_EXTRACT_ASSIGNMENT_CMD_IMPL_H
 
-#include <grgsm/misc_utils/extract_assignment_cmd.h>
+#include <gsm/misc_utils/extract_assignment_cmd.h>
 #include <vector>
 
 namespace gr {

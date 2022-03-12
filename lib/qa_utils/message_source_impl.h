@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
 #define INCLUDED_GSM_MESSAGE_SOURCE_IMPL_H
 
-#include <grgsm/qa_utils/message_source.h>
+#include <gsm/qa_utils/message_source.h>
 
 namespace gr {
   namespace gsm {
@@ -31,7 +31,7 @@ namespace gr {
     class message_source_impl : public message_source
     {
      private:
-        boost::shared_ptr<gr::thread::thread> d_thread;
+        std::shared_ptr<gr::thread::thread> d_thread;
         std::vector<std::vector<uint8_t> > d_msgs;
         bool d_finished;
         void run();

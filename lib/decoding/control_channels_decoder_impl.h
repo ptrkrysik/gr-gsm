@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_CONTROL_CHANNELS_DECODER_IMPL_H
 #define INCLUDED_GSM_CONTROL_CHANNELS_DECODER_IMPL_H
 
-#include <grgsm/decoding/control_channels_decoder.h>
+#include <gsm/decoding/control_channels_decoder.h>
 extern "C" {
     #include "osmocom/coding/gsm0503_coding.h"
 }

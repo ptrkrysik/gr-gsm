@@ -8,8 +8,8 @@ inputs:
     id: msgs
 
 templates:
-    imports: import grgsm
-    make: grgsm.extract_cmc()
+    imports: import gsm
+    make: gsm.extract_cmc()
 
 documentation: |-
     Extracts the framenumber and the assigned encryption algorithm from Cipher Mode Commands.

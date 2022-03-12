@@ -39,9 +39,9 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import grgsm
+    imports: import gsm
     make: |-
-        grgsm.gsm_input(
+        gsm.gsm_input(
             ppm=${ppm},
             osr=${osr},
             fc=${fc},

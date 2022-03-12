@@ -25,8 +25,8 @@ outputs:
     id: msgs
 
 templates:
-    imports: import grgsm
-    make: grgsm.message_source(${messages})
+    imports: import gsm
+    make: gsm.message_source(${messages})
 
 documentation: |-
     This block is a basic message source for testing purposes.

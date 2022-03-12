@@ -14,8 +14,8 @@ inputs:
     id: in
 
 templates:
-    imports: import grgsm
-    make: grgsm.message_file_sink(${filename})
+    imports: import gsm
+    make: gsm.message_file_sink(${filename})
 
 documentation: |-
     This block stores incoming gsm messages to a file.

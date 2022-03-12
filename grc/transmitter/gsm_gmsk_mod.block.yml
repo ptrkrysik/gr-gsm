@@ -30,7 +30,7 @@ outputs:
     optional: true
 
 templates:
-    imports: from grgsm import gsm_gmsk_mod
+    imports: from gsm import gsm_gmsk_mod
     make: |-
         gsm_gmsk_mod(
             BT=${BT},

@@ -64,7 +64,7 @@ namespace gr {
     bool burst_file_source_impl::start()
     {
         d_finished = false;
-        d_thread = boost::shared_ptr<gr::thread::thread>
+        d_thread = std::shared_ptr<gr::thread::thread>
             (new gr::thread::thread(boost::bind(&burst_file_source_impl::run, this)));
         return block::start();
     }

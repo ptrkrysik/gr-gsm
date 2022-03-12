@@ -24,7 +24,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.tch_f_chans_demapper(${timeslot_nr})
+    imports: import gsm
+    make: gsm.tch_f_chans_demapper(${timeslot_nr})
 
 file_format: 1

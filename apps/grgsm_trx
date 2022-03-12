@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # GR-GSM based transceiver
@@ -29,8 +29,8 @@ from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from gnuradio import eng_notation
 
-from grgsm.trx import RadioInterface
-from grgsm.trx import Transceiver
+from gsm.trx import RadioInterface
+from gsm.trx import Transceiver
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
@@ -58,9 +58,9 @@ class Application:
 		signal.signal(signal.SIGINT, self.sig_handler)
 
 		if argv.driver == "uhd":
-			from grgsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
+			from gsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
 		elif argv.driver == "lms":
-			from grgsm.trx.radio_if_lms import RadioInterfaceLMS as Radio
+			from gsm.trx.radio_if_lms import RadioInterfaceLMS as Radio
 		else:
 			raise ValueError("Unknown RadioInterface driver '%s'" % argv.driver)
 

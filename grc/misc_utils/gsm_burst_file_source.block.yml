@@ -14,7 +14,7 @@ outputs:
     id: out
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_file_source(${filename})
+    imports: import gsm
+    make: gsm.burst_file_source(${filename})
 
 file_format: 1

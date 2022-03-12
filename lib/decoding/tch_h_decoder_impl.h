@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_TCH_H_DECODER_IMPL_H
 #define INCLUDED_GSM_TCH_H_DECODER_IMPL_H
 
-#include <grgsm/decoding/tch_h_decoder.h>
+#include <gsm/decoding/tch_h_decoder.h>
 #include "tch_f_decoder_impl.h"
 
 namespace gr {

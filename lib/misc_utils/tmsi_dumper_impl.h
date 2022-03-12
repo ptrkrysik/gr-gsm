@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_TMSI_DUMPER_IMPL_H
 #define INCLUDED_GSM_TMSI_DUMPER_IMPL_H
 
-#include <grgsm/misc_utils/tmsi_dumper.h>
+#include <gsm/misc_utils/tmsi_dumper.h>
 #include <fstream>
 #include <ctime>
 

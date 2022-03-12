@@ -35,7 +35,7 @@
 
 #include <boost/circular_buffer.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <grgsm/endian.h>
+#include <gsm/endian.h>
 
 #include "receiver_impl.h"
 #include "viterbi_detector.h"

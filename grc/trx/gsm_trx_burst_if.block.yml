@@ -28,8 +28,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.trx_burst_if(${bind_addr}, ${remote_addr}, ${base_port})
+    imports: import gsm
+    make: gsm.trx_burst_if(${bind_addr}, ${remote_addr}, ${base_port})
 
 documentation: |-
     OsmoTRX like UDP burst interface for external applications.

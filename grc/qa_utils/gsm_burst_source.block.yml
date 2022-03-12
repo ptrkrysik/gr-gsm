@@ -24,7 +24,7 @@ outputs:
     id: out
 
 templates:
-    imports: import grgsm
-    make: grgsm.burst_source(${framenumbers}, ${timeslots}, ${bursts})
+    imports: import gsm
+    make: gsm.burst_source(${framenumbers}, ${timeslots}, ${bursts})
 
 file_format: 1

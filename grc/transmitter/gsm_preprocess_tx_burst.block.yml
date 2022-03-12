@@ -14,7 +14,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.preprocess_tx_burst()
+    imports: import gsm
+    make: gsm.preprocess_tx_burst()
 
 file_format: 1

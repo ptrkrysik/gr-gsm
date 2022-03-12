@@ -23,9 +23,9 @@
 #ifndef INCLUDED_GSM_TXTIME_SETTER_IMPL_H
 #define INCLUDED_GSM_TXTIME_SETTER_IMPL_H
 
-#include <grgsm/transmitter/txtime_setter.h>
-#include <grgsm/misc_utils/time_spec.h>
-#include <grgsm/misc_utils/fn_time.h>
+#include <gsm/transmitter/txtime_setter.h>
+#include <gsm/misc_utils/time_spec.h>
+#include <gsm/misc_utils/fn_time.h>
 
 namespace gr {
   namespace gsm {

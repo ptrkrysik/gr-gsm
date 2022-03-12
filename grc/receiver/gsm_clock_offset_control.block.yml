@@ -27,8 +27,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.clock_offset_control(${fc}, ${samp_rate}, ${osr})
+    imports: import gsm
+    make: gsm.clock_offset_control(${fc}, ${samp_rate}, ${osr})
     callbacks:
     - set_fc(${fc})
 

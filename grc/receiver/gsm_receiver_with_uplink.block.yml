@@ -48,7 +48,7 @@ asserts:
 - ${ num_streams >= 0 }
 
 templates:
-    imports: import grgsm
-    make: grgsm.receiver(${osr}, ${cell_allocation}, ${tseq_nums}, True)
+    imports: import gsm
+    make: gsm.receiver(${osr}, ${cell_allocation}, ${tseq_nums}, True)
 
 file_format: 1

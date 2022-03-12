@@ -25,10 +25,10 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/gsmtap.h>
 //#include <unistd.h>
 #include <map>
-#include <grgsm/endian.h>
+#include <gsm/endian.h>
 #include <boost/foreach.hpp>
 
 #include "extract_immediate_assignment_impl.h"

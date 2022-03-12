@@ -20,7 +20,7 @@ outputs:
     dtype: complex
 
 templates:
-    imports: import grgsm
-    make: grgsm.fcch_burst_tagger(${OSR})
+    imports: import gsm
+    make: gsm.fcch_burst_tagger(${OSR})
 
 file_format: 1

@@ -42,7 +42,7 @@ Credits
 
 *Roman Khassraf* \<rkhassraf (at) gmail.com\> - blocks for demultiplexing and decoding of voice channels,  decryption block supporting all ciphers used in GSM, blocks for storing and reading GSM bursts, project planning and user support
 
-*Vadim Yanitskiy* \<axilirator (at) gmail.com\> - control and data interface for the transceiver, grgsm_trx application
+*Vadim Yanitskiy* \<axilirator (at) gmail.com\> - control and data interface for the transceiver, gsm_trx application
 
 *Vasil Velichkov* \<vvvelichkov (at) gmail.com\> - automatic compilation of grc applications, fixes and user support
 

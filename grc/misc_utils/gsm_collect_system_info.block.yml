@@ -8,8 +8,8 @@ inputs:
     id: msgs
 
 templates:
-    imports: import grgsm
-    make: grgsm.collect_system_info()
+    imports: import gsm
+    make: gsm.collect_system_info()
 
 documentation: |-
     This blocks collect System Information Messages, which can be retrieved using the following methods:

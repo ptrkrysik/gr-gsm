@@ -25,7 +25,7 @@
 
 #define DUMMY_BURST_LEN 148
 
-#include <grgsm/misc_utils/bursts_printer.h>
+#include <gsm/misc_utils/bursts_printer.h>
 #include <set>
 
 namespace gr {

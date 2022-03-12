@@ -7,8 +7,8 @@ parameters:
 -   id: mode
     label: TCH coding mode
     dtype: enum
-    options: [grgsm.TCH_FS, grgsm.TCH_EFR, grgsm.TCH_AFS12_2, grgsm.TCH_AFS10_2, grgsm.TCH_AFS7_95,
-        grgsm.TCH_AFS7_4, grgsm.TCH_AFS6_7, grgsm.TCH_AFS5_9, grgsm.TCH_AFS5_15, grgsm.TCH_AFS4_75]
+    options: [gsm.TCH_FS, gsm.TCH_EFR, gsm.TCH_AFS12_2, gsm.TCH_AFS10_2, gsm.TCH_AFS7_95,
+        gsm.TCH_AFS7_4, gsm.TCH_AFS6_7, gsm.TCH_AFS5_9, gsm.TCH_AFS5_15, gsm.TCH_AFS4_75]
     option_labels: [GSM-FR, GSM-EFR, GSM-AMR 12.2, GSM-AMR 10.2, GSM-AMR 7.95, GSM-AMR
             7.4, GSM-AMR 6.7, GSM-AMR 5.9, GSM-AMR 5.15, GSM-AMR 4.75]
 -   id: boundary_check
@@ -30,8 +30,8 @@ outputs:
     optional: true
 
 templates:
-    imports: import grgsm
-    make: grgsm.tch_f_decoder(${mode}, ${boundary_check})
+    imports: import gsm
+    make: gsm.tch_f_decoder(${mode}, ${boundary_check})
 
 documentation: "If \"Voice boundary detection\" is enabled, then only bursts are decoded\
     \ as voice where\n\n- the framenumber is greater then the framenumber of a received\
