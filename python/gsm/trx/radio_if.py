@@ -36,6 +36,7 @@ from gnuradio import blocks
 from gnuradio import gr
 
 from gnuradio import filter
+from gnuradio.fft import window
 from gnuradio.filter import firdes
 
 from .dict_toggle_sign import dict_toggle_sign
@@ -100,7 +101,7 @@ class RadioInterface(gr.top_block):
 		self.rotator_src = gsm.controlled_rotator_cc(0.0)
 
 		self.lpf = filter.fir_filter_ccf(1, firdes.low_pass(
-			1, phy_sample_rate, 125e3, 5e3, firdes.WIN_HAMMING, 6.76))
+			1, phy_sample_rate, 125e3, 5e3, window.WIN_HAMMING, 6.76))
 
 		self.gsm_receiver = gsm.receiver(self.osr, ([0]), ([]))
 
@@ -149,7 +150,7 @@ class RadioInterface(gr.top_block):
 			BT = 0.3, pulse_duration = 4, sps = self.osr)
 
 		self.burst_shaper = digital.burst_shaper_cc(
-			(firdes.window(firdes.WIN_HANN, 16, 0)),
+			(firdes.window(window.WIN_HANN, 16, 0)),
 			0, 20, False, "packet_len")
 
 		self.msg_to_tag_sink = gsm.msg_to_tag()

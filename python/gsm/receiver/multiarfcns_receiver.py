@@ -18,6 +18,7 @@ from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import pfb
 from gnuradio import gsm
+from gnuradio.fft import window
 import gnuradio.gsm.arfcn as arfcn
 import math
 
@@ -85,7 +86,7 @@ class multiarfcns_receiver(gr.hier_block2, Qt.QWidget):
             if gui:
                 qtgui_waterfall_sink_x = qtgui.waterfall_sink_c(
                     512, #size
-                    firdes.WIN_BLACKMAN_hARRIS, #wintype
+                    window.WIN_BLACKMAN_hARRIS, #wintype
                     fcs[i], #fc
                     samp_rate, #bw
                     "", #name
