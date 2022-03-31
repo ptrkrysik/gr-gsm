@@ -27,7 +27,6 @@
 
 #include <gsm/misc_utils/bursts_printer.h>
 #include <set>
-#include <chrono>
 
 namespace gr {
   namespace gsm {
@@ -42,7 +41,6 @@ namespace gr {
       bool d_print_payload_only;
       bool d_ignore_dummy_bursts;
       bool is_dummy_burst(int8_t *burst, size_t burst_len);
-      std::chrono::time_point<std::chrono::system_clock> start;
       static const int8_t d_dummy_burst[];
      public:
       bursts_printer_impl(pmt::pmt_t prepend_string, bool prepend_fnr=false,

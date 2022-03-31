@@ -31,9 +31,6 @@
  static const char *__doc_gr_gsm_extract_immediate_assignment_get_frame_numbers = R"doc()doc";
 
 
- static const char *__doc_gr_gsm_extract_immediate_assignment_get_arfcn_ids = R"doc()doc";
-
-
  static const char *__doc_gr_gsm_extract_immediate_assignment_get_channel_types = R"doc()doc";
 
 
@@ -41,9 +38,6 @@
 
 
  static const char *__doc_gr_gsm_extract_immediate_assignment_get_subchannels = R"doc()doc";
-
-
- static const char *__doc_gr_gsm_extract_immediate_assignment_get_tseqs = R"doc()doc";
 
 
  static const char *__doc_gr_gsm_extract_immediate_assignment_get_hopping = R"doc()doc";

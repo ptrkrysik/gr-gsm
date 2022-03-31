@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(misc_utils/extract_immediate_assignment.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(0282f6143ed107632f05ee522b91c86f)                     */
+/* BINDTOOL_HEADER_FILE_HASH(6d039be3f9b96ad6c087401633d54764)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -54,12 +54,6 @@ void bind_extract_immediate_assignment(py::module& m)
 
 
         
-        .def("get_arfcn_ids",&extract_immediate_assignment::get_arfcn_ids,       
-            D(extract_immediate_assignment,get_arfcn_ids)
-        )
-
-
-        
         .def("get_channel_types",&extract_immediate_assignment::get_channel_types,       
             D(extract_immediate_assignment,get_channel_types)
         )
@@ -74,12 +68,6 @@ void bind_extract_immediate_assignment(py::module& m)
         
         .def("get_subchannels",&extract_immediate_assignment::get_subchannels,       
             D(extract_immediate_assignment,get_subchannels)
-        )
-
-
-        
-        .def("get_tseqs",&extract_immediate_assignment::get_tseqs,       
-            D(extract_immediate_assignment,get_tseqs)
         )
 
 

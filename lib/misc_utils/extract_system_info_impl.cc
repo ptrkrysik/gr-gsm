@@ -186,14 +186,12 @@ namespace gr {
             } else {
                 d_c0_channels[info.id] = info;
             }
-            //std::cout << "Arfcns: [";
+            
             for(int arfcn=0; arfcn<sizeof(freq); arfcn++){
                 if(freq[arfcn].mask==0x01){
                     d_c0_channels[info.id].cell_arfcns.insert(arfcn);
-                    //std::cout << arfcn << " ";
                 }
             }
-            //std::cout << "]" << std::endl;
         }
     }
     
