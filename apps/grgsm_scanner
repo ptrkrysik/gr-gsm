@@ -31,7 +31,6 @@ from gnuradio.filter import pfb
 from math import pi
 from optparse import OptionParser
 from gnuradio import gsm
-import gsm
 import numpy
 import os
 import osmosdr
