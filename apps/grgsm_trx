@@ -29,8 +29,8 @@ from argparse import ArgumentParser
 from argparse import ArgumentTypeError
 from gnuradio import eng_notation
 
-from gsm.trx import RadioInterface
-from gsm.trx import Transceiver
+from gnuradio.gsm.trx import RadioInterface
+from gnuradio.gsm.trx import Transceiver
 
 COPYRIGHT = \
 	"Copyright (C) 2016-2018 by Vadim Yanitskiy <axilirator@gmail.com>\n" \
