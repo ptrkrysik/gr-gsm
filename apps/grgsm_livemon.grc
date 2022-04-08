@@ -158,7 +158,7 @@ blocks:
     label: UDP port number of collector
     short_id: ''
     type: str
-    value: '4729'
+    value: '4730'
   states:
     bus_sink: false
     bus_source: false
@@ -175,7 +175,7 @@ blocks:
     label: GSM channel's central frequency
     short_id: f
     type: eng_float
-    value: 925.8e6
+    value: '934200000'
   states:
     bus_sink: false
     bus_source: false
@@ -395,7 +395,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1528, 172.0]
+    coordinate: [1504, 388.0]
     rotation: 0
     state: true
 - name: network_socket_pdu_1
@@ -1004,4 +1004,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: v3.11.0.0git-46-g614681ba
+  grc_version: v3.11.0.0git-91-gb554eeab
