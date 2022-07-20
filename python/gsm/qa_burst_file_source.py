@@ -22,7 +22,7 @@
 #
 
 from gnuradio import gr, gr_unittest, blocks
-import gsm_python as gsm
+from gnuradio import gsm
 import tempfile
 
 class qa_burst_file_sink (gr_unittest.TestCase):

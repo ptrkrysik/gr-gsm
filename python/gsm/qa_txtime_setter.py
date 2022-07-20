@@ -23,7 +23,7 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import gsm_python as gsm
+from gnuradio import gsm
 
 class qa_txtime_setter (gr_unittest.TestCase):
 

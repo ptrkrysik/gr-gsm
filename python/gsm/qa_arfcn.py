@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr, gr_unittest, blocks
-import gsm_python as gsm
+from gnuradio import gsm
 from misc_utils import arfcn
 import os
 import sys

@@ -23,7 +23,7 @@
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
-import gsm_python as gsm
+from gnuradio import gsm
 
 class qa_msg_to_tag (gr_unittest.TestCase):
 

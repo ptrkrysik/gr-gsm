@@ -23,7 +23,7 @@
 
 import numpy as np
 from gnuradio import gr, gr_unittest, blocks
-import gsm_python as gsm
+from gnuradio import gsm
 import pmt
 
 class qa_tch_h_chans_demapper (gr_unittest.TestCase):
