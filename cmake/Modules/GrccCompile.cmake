@@ -19,13 +19,7 @@
 # Boston, MA 02110-1301, USA.
 
 SET(PYTHONPATH
-    ${CMAKE_SOURCE_DIR}/python
-    ${CMAKE_SOURCE_DIR}/python/misc_utils
-    ${CMAKE_SOURCE_DIR}/python/demapping
-    ${CMAKE_SOURCE_DIR}/python/receiver
-    ${CMAKE_SOURCE_DIR}/python/transmitter
-    ${CMAKE_SOURCE_DIR}/python/trx
-    ${CMAKE_BINARY_DIR}/swig
+    ${CMAKE_BINARY_DIR}/test_modules
     $ENV{PYTHONPATH}
     )
 string(REPLACE ";" ":" PYTHONPATH "${PYTHONPATH}")

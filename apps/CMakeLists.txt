@@ -26,7 +26,7 @@ GRCC_COMPILE(grgsm_livemon)
 GRCC_COMPILE(grgsm_livemon_headless)
 
 set(gsm_flowgraphs "")
-#OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
+OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
 OPTION(ENABLE_GSM_LIVEMON "Compile grgsm_livemon" ON)
 OPTION(ENABLE_GSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
 
@@ -50,4 +50,4 @@ GR_PYTHON_INSTALL(
 # The add_dependencies(...) is very important for the parallel build `make -j $(nproc)`
 # The `pygen_apps` target is generated in GR_PYTHON_INSTALL function which calls
 # GR_UNIQUE_TARGET that we redefine in GrccCompile.
-add_dependencies(pygen_apps gsm_python)
+add_dependencies(pygen_apps gsm_python copy_module_for_tests)
