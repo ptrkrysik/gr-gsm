@@ -1,5 +1,5 @@
-FROM debian:testing
-MAINTAINER Piotr Krysik
+FROM fedora:36
+MAINTAINER Vasil Velichkov
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cmake \
