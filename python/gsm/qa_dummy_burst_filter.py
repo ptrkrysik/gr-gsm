@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr, gr_unittest, blocks
-import gsm_python as gsm
+from gnuradio import gsm
 
 class qa_dummy_burst_filter (gr_unittest.TestCase):
 

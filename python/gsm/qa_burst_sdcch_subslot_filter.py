@@ -22,7 +22,7 @@
 # 
 
 from gnuradio import gr, gr_unittest, blocks
-import gsm_python as gsm
+from gnuradio import gsm
 
 class qa_burst_sdcch_subslot_filter (gr_unittest.TestCase):
     # 102 random bursts as test input
