@@ -47,7 +47,7 @@ endmacro()
 # Handle the generated constants
 ########################################################################
 execute_process(COMMAND ${PYTHON_EXECUTABLE} -c
-    "import time;print(time.strftime('%a, %d %b %Y %H:%M:%S', time.gmtime()))"
+    "import os,time,datetime; print(datetime.datetime.utcfromtimestamp(int(os.environ.get('SOURCE_DATE_EPOCH', time.time()))).strftime('%a, %d %b %Y %H:%M:%S'))"
     OUTPUT_VARIABLE BUILD_DATE OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 message(STATUS "Loading build date ${BUILD_DATE} into constants...")
