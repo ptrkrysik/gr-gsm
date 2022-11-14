@@ -23,6 +23,7 @@
 
 from gnuradio import pdu
 from gnuradio import blocks
+from gnuradio import network
 from gnuradio import eng_notation
 from gnuradio import gr
 from gnuradio.eng_option import eng_option
@@ -102,12 +103,12 @@ class gsm_decoder(gr.top_block):
         elif self.chan_mode == 'TCHF':
             self.tch_f_demapper = gsm.tch_f_chans_demapper(self.timeslot)
             self.tch_f_decoder = gsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
-            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(gr.types.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
         elif self.chan_mode == 'TCHH':
             self.tch_h_demapper = gsm.tch_h_chans_demapper(self.timeslot, tch_h_channel)
             self.tch_h_decoder = gsm.tch_h_decoder(tch_h_channel, multi_rate, enable_voice_boundary_detection)
-            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(gr.types.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
         if self.kc != [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]:
@@ -118,8 +119,8 @@ class gsm_decoder(gr.top_block):
 
         self.cch_decoder = gsm.control_channels_decoder()
 
-        self.socket_pdu_server = pdu.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000) #added in order to avoid generating ICMP messages
-        self.socket_pdu = pdu.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.socket_pdu_server = network.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000) #added in order to avoid generating ICMP messages
+        self.socket_pdu = network.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
 
         if self.verbose:
             self.message_printer = gsm.message_printer(pmt.intern(""), True, True, False)
