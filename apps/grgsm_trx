@@ -58,9 +58,9 @@ class Application:
 		signal.signal(signal.SIGINT, self.sig_handler)
 
 		if argv.driver == "uhd":
-			from gsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
+			from gnuradio.gsm.trx.radio_if_uhd import RadioInterfaceUHD as Radio
 		elif argv.driver == "lms":
-			from gsm.trx.radio_if_lms import RadioInterfaceLMS as Radio
+			from gnuradio.gsm.trx.radio_if_lms import RadioInterfaceLMS as Radio
 		else:
 			raise ValueError("Unknown RadioInterface driver '%s'" % argv.driver)
 

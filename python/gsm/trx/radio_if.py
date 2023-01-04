@@ -34,7 +34,7 @@ from gnuradio import eng_notation
 from gnuradio import digital
 from gnuradio import blocks
 from gnuradio import gr
-
+from gnuradio import pdu
 from gnuradio import filter
 from gnuradio.fft import window
 from gnuradio.filter import firdes
@@ -143,8 +143,8 @@ class RadioInterface(gr.top_block):
 
 		self.tx_burst_proc = gsm.preprocess_tx_burst()
 
-		self.pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(
-			blocks.byte_t, 'packet_len')
+		self.pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(
+			gr.types.byte_t, 'packet_len')
 
 		self.gmsk_mod = gsm.gsm_gmsk_mod(
 			BT = 0.3, pulse_duration = 4, sps = self.osr)
