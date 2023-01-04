@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_MESSAGE_FILE_SINK_IMPL_H
 #define INCLUDED_GSM_MESSAGE_FILE_SINK_IMPL_H
 
-#include <grgsm/misc_utils/message_file_sink.h>
+#include <gsm/misc_utils/message_file_sink.h>
 #include <fstream>
 
 namespace gr {

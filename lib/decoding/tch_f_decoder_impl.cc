@@ -26,7 +26,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/gsmtap.h>
 #include "stdio.h"
 #include "tch_f_decoder_impl.h"
 

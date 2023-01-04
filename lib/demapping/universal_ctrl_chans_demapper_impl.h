@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_IMPL_H
 #define INCLUDED_GSM_UNIVERSAL_CTRL_CHANS_DEMAPPER_IMPL_H
 
-#include <grgsm/demapping/universal_ctrl_chans_demapper.h>
+#include <gsm/demapping/universal_ctrl_chans_demapper.h>
 #include <vector>
 
 namespace gr {

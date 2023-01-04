@@ -25,13 +25,13 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/gsmtap.h>
 //#include <unistd.h>
 #include <map>
 #include <iterator>
 #include <algorithm>
 #include <iostream>
-#include <grgsm/endian.h>
+#include <gsm/endian.h>
 #include <boost/foreach.hpp>
 extern "C" {
     #include <osmocom/gsm/gsm48_ie.h>

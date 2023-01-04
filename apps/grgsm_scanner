@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @file
 # @author (C) 2015 by Piotr Krysik <ptrkrysik@gmail.com>
@@ -21,6 +21,7 @@
 # Boston, MA 02110-1301, USA.
 #
 #
+from gnuradio import network
 from gnuradio import blocks
 from gnuradio import gr
 from gnuradio import eng_notation
@@ -29,14 +30,14 @@ from gnuradio.filter import firdes
 from gnuradio.filter import pfb
 from math import pi
 from optparse import OptionParser
-
-import grgsm
+from gnuradio import gsm
 import numpy
 import os
 import osmosdr
 import pmt
 import time
 import sys
+import gc
 
 # from wideband_receiver import *
 
@@ -67,16 +68,16 @@ class receiver_with_decoder(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self.gsm_receiver_0 = grgsm.receiver(OSR, ([chan_num]), ([]))
-        self.gsm_input_0 = grgsm.gsm_input(
+        self.gsm_receiver_0 = gsm.receiver(OSR, ([chan_num]), ([]))
+        self.gsm_input_0 = gsm.gsm_input(
             ppm=ppm,
             osr=OSR,
             fc=fc,
             samp_rate_in=samp_rate,
         )
-        self.gsm_control_channels_decoder_0 = grgsm.control_channels_decoder()
-        self.gsm_clock_offset_control_0 = grgsm.clock_offset_control(fc, samp_rate, osr=4)
-        self.gsm_bcch_ccch_demapper_0 = grgsm.gsm_bcch_ccch_demapper(0)
+        self.gsm_control_channels_decoder_0 = gsm.control_channels_decoder()
+        self.gsm_clock_offset_control_0 = gsm.clock_offset_control(fc, samp_rate, osr=4)
+        self.gsm_bcch_ccch_demapper_0 = gsm.gsm_bcch_ccch_demapper(0)
 
         ##################################################
         # Connections
@@ -209,7 +210,7 @@ class wideband_scanner(gr.top_block):
         # if no file name is given process data from rtl_sdr source
         print("Args=", args)
         self.rtlsdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
-                str(grgsm.device.get_default_args(args)))
+                str(gsm.device.get_default_args(args)))
         #self.rtlsdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
         self.rtlsdr_source.set_sample_rate(sample_rate)
 
@@ -236,7 +237,7 @@ class wideband_scanner(gr.top_block):
         self.blocks_rotator_cc = blocks.rotator_cc(-2 * pi * 0.1e6 / sample_rate)
 
         self.wideband_receiver = wideband_receiver(OSR=4, fc=carrier_frequency, samp_rate=sample_rate)
-        self.gsm_extract_system_info = grgsm.extract_system_info()
+        self.gsm_extract_system_info = gsm.extract_system_info()
 
         self.connect((self.rtlsdr_source, 0), (self.head, 0))
         self.connect((self.head, 0), (self.blocks_rotator_cc, 0))
@@ -305,13 +306,13 @@ class channel_info(object):
 def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
     signallist = []
     channels_num = int(samp_rate / 0.2e6)
-    for arfcn_range in grgsm.arfcn.get_arfcn_ranges(band):
+    for arfcn_range in gsm.arfcn.get_arfcn_ranges(band):
         first_arfcn = arfcn_range[0]
         last_arfcn = arfcn_range[1]
         last_center_arfcn = last_arfcn - int((channels_num / 2) - 1)
 
-        current_freq = grgsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1)
-        last_freq = grgsm.arfcn.arfcn2downlink(last_center_arfcn)
+        current_freq = gsm.arfcn.arfcn2downlink(first_arfcn + int(channels_num / 2) - 1)
+        last_freq = gsm.arfcn.arfcn2downlink(last_center_arfcn)
         stop_freq = last_freq + 0.2e6 * channels_num
 
         while current_freq < stop_freq:
@@ -358,7 +359,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
                     cell_arfcn_list = scanner.gsm_extract_system_info.get_cell_arfcns(chans[i])
                     neighbour_list = scanner.gsm_extract_system_info.get_neighbours(chans[i])
 
-                    info = channel_info(grgsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
+                    info = channel_info(gsm.arfcn.downlink2arfcn(found_freqs[i]), found_freqs[i],
                                         cell_ids[i], lacs[i], mccs[i], mncs[i], ccch_confs[i], powers[i],
                                         neighbour_list, cell_arfcn_list)
                     found_list.append(info)
@@ -382,7 +383,7 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
 
 def argument_parser():
     parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-    bands_list = ", ".join(grgsm.arfcn.get_bands())
+    bands_list = ", ".join(gsm.arfcn.get_bands())
     parser.add_option("-b", "--band", dest="band", default="GSM900",
                       help="Specify the GSM band for the frequency.\nAvailable bands are: " + bands_list)
     parser.add_option("-s", "--samp-rate", dest="samp_rate", type="float", default=2e6,
@@ -413,10 +414,10 @@ def main(options = None):
         (options, args) = argument_parser().parse_args()
 
     if options.list_devices:
-        grgsm.device.print_devices(options.args)
+        gsm.device.print_devices(options.args)
         sys.exit(0)
 
-    if options.band not in grgsm.arfcn.get_bands():
+    if options.band not in gsm.arfcn.get_bands():
         parser.error("Invalid GSM band\n")
 
     if options.speed < 0 or options.speed > 5:

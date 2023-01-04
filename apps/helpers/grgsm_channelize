@@ -36,7 +36,7 @@ from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from argparse import ArgumentParser, ArgumentTypeError, RawDescriptionHelpFormatter
-import grgsm.arfcn as arfcn
+import gnuradio.gsm.arfcn as arfcn
 from gnuradio.filter import pfb
 import math
 import os
@@ -56,9 +56,9 @@ def eng_float(value):
     except:
         raise ArgumentTypeError("invalid engineering notation value: {0}".format(value))
 
-class grgsm_channelize(gr.top_block):
+class gsm_channelize(gr.top_block):
     def __init__(self, arfcns, resamp_rate, fc, samp_rate, input_file, dest_dir, data_type="complex"):
-        gr.top_block.__init__(self, "grgsm_channelize")
+        gr.top_block.__init__(self, "gsm_channelize")
 
         ##################################################
         # Parameters
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     print("Output sample rate: " + eng_notation.num_to_str(args.out_samp_rate))
     print("==> using resample rate of " + str(resamp_rate))
 
-    tb = grgsm_channelize(arfcns=args.arfcns,
+    tb = gsm_channelize(arfcns=args.arfcns,
          resamp_rate=resamp_rate,
          fc=args.fc,
          samp_rate=args.samp_rate,

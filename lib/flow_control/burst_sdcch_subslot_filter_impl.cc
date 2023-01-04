@@ -27,8 +27,8 @@
 #include <gnuradio/io_signature.h>
 #include "burst_sdcch_subslot_filter_impl.h"
 #include <stdio.h>
-#include <grgsm/endian.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/endian.h>
+#include <gsm/gsmtap.h>
 
 namespace gr {
   namespace gsm {

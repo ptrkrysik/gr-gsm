@@ -26,11 +26,10 @@
 
 #include <gnuradio/thread/thread.h>
 #include <gnuradio/io_signature.h>
-#include <gnuradio/blocks/pdu.h>
 #include <pmt/pmt.h>
 
 #include <boost/lexical_cast.hpp>
-#include "grgsm/misc_utils/udp_socket.h"
+#include "gsm/misc_utils/udp_socket.h"
 
 using boost::asio::ip::udp;
 

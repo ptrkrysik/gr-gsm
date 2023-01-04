@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @file
 # @author (C) 2015 by Roman Khassraf <rkhassraf@gmail.com>
@@ -21,19 +21,21 @@
 #
 #
 
+from gnuradio import pdu
 from gnuradio import blocks
+from gnuradio import network
 from gnuradio import eng_notation
 from gnuradio import gr
 from gnuradio.eng_option import eng_option
 from optparse import OptionParser, OptionGroup
 import collections
-import grgsm
+from gnuradio import gsm
 import pmt
 import socket
 import sys
 
 
-class grgsm_decoder(gr.top_block):
+class gsm_decoder(gr.top_block):
 
     def __init__(self, timeslot=0, subslot=None, chan_mode='BCCH',
                  burst_file=None,
@@ -73,58 +75,58 @@ class grgsm_decoder(gr.top_block):
         ##################################################
 
         if self.burst_file:
-            self.burst_file_source = grgsm.burst_file_source(burst_file)
+            self.burst_file_source = gsm.burst_file_source(burst_file)
         elif self.cfile:
             self.file_source = blocks.file_source(gr.sizeof_gr_complex*1, self.cfile, False)
-            self.receiver = grgsm.receiver(4, ([0]), ([]))
+            self.receiver = gsm.receiver(4, ([0]), ([]))
             if self.fc is not None:
-                self.input_adapter = grgsm.gsm_input(ppm=ppm, osr=4, fc=self.fc, samp_rate_in=samp_rate)
-                self.offset_control = grgsm.clock_offset_control(self.fc, self.samp_rate)
+                self.input_adapter = gsm.gsm_input(ppm=ppm, osr=4, fc=self.fc, samp_rate_in=samp_rate)
+                self.offset_control = gsm.clock_offset_control(self.fc, self.samp_rate)
             else:
-                self.input_adapter = grgsm.gsm_input(ppm=ppm, osr=4, samp_rate_in=samp_rate)
+                self.input_adapter = gsm.gsm_input(ppm=ppm, osr=4, samp_rate_in=samp_rate)
 
-        self.dummy_burst_filter = grgsm.dummy_burst_filter()
-        self.timeslot_filter = grgsm.burst_timeslot_filter(self.timeslot)
+        self.dummy_burst_filter = gsm.dummy_burst_filter()
+        self.timeslot_filter = gsm.burst_timeslot_filter(self.timeslot)
 
         self.subslot_filter = None
         if self.chan_mode == 'BCCH_SDCCH4' and self.subslot is not None:
-            self.subslot_filter = grgsm.burst_sdcch_subslot_filter(grgsm.SS_FILTER_SDCCH4, self.subslot)
+            self.subslot_filter = gsm.burst_sdcch_subslot_filter(gsm.SS_FILTER_SDCCH4, self.subslot)
         elif self.chan_mode == 'SDCCH8' and self.subslot is not None:
-            self.subslot_filter = grgsm.burst_sdcch_subslot_filter(grgsm.SS_FILTER_SDCCH8, self.subslot)
+            self.subslot_filter = gsm.burst_sdcch_subslot_filter(gsm.SS_FILTER_SDCCH8, self.subslot)
 
         if self.chan_mode == 'BCCH':
-            self.bcch_demapper = grgsm.gsm_bcch_ccch_demapper(self.timeslot)
+            self.bcch_demapper = gsm.gsm_bcch_ccch_demapper(self.timeslot)
         elif self.chan_mode == 'BCCH_SDCCH4':
-            self.bcch_sdcch4_demapper = grgsm.gsm_bcch_ccch_sdcch4_demapper(self.timeslot)
+            self.bcch_sdcch4_demapper = gsm.gsm_bcch_ccch_sdcch4_demapper(self.timeslot)
         elif self.chan_mode == 'SDCCH8':
-            self.sdcch8_demapper = grgsm.gsm_sdcch8_demapper(self.timeslot)
+            self.sdcch8_demapper = gsm.gsm_sdcch8_demapper(self.timeslot)
         elif self.chan_mode == 'TCHF':
-            self.tch_f_demapper = grgsm.tch_f_chans_demapper(self.timeslot)
-            self.tch_f_decoder = grgsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
-            self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_f_demapper = gsm.tch_f_chans_demapper(self.timeslot)
+            self.tch_f_decoder = gsm.tch_f_decoder(speech_codec, enable_voice_boundary_detection)
+            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(gr.types.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
         elif self.chan_mode == 'TCHH':
-            self.tch_h_demapper = grgsm.tch_h_chans_demapper(self.timeslot, tch_h_channel)
-            self.tch_h_decoder = grgsm.tch_h_decoder(tch_h_channel, multi_rate, enable_voice_boundary_detection)
-            self.tch_f_pdu_to_tagged_stream = blocks.pdu_to_tagged_stream(blocks.byte_t, "packet_len")
+            self.tch_h_demapper = gsm.tch_h_chans_demapper(self.timeslot, tch_h_channel)
+            self.tch_h_decoder = gsm.tch_h_decoder(tch_h_channel, multi_rate, enable_voice_boundary_detection)
+            self.tch_f_pdu_to_tagged_stream = pdu.pdu_to_tagged_stream(gr.types.byte_t, "packet_len")
             self.tch_f_file_sink = blocks.file_sink(gr.sizeof_char*1, speech_file, False)
 
         if self.kc != [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]:
-            self.decryption = grgsm.decryption(self.kc, self.a5)
-            self.cch_decoder_decrypted = grgsm.control_channels_decoder()
+            self.decryption = gsm.decryption(self.kc, self.a5)
+            self.cch_decoder_decrypted = gsm.control_channels_decoder()
             if self.chan_mode in ('TCHF', 'TCHH'):
-                self.decryption_tch_sacch = grgsm.decryption(self.kc, self.a5)
+                self.decryption_tch_sacch = gsm.decryption(self.kc, self.a5)
 
-        self.cch_decoder = grgsm.control_channels_decoder()
+        self.cch_decoder = gsm.control_channels_decoder()
 
-        self.socket_pdu_server = blocks.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000) #added in order to avoid generating ICMP messages
-        self.socket_pdu = blocks.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
+        self.socket_pdu_server = network.socket_pdu("UDP_SERVER", "127.0.0.1", "4729", 10000) #added in order to avoid generating ICMP messages
+        self.socket_pdu = network.socket_pdu("UDP_CLIENT", "127.0.0.1", "4729", 10000)
 
         if self.verbose:
-            self.message_printer = grgsm.message_printer(pmt.intern(""), True, True, False)
+            self.message_printer = gsm.message_printer(pmt.intern(""), True, True, False)
 
         if self.print_bursts:
-            self.bursts_printer = grgsm.bursts_printer(pmt.intern(""), True, True, True, True)
+            self.bursts_printer = gsm.bursts_printer(pmt.intern(""), True, True, True, True)
 
 
 
@@ -244,18 +246,18 @@ if __name__ == '__main__':
     # List of channel configurations
     channel_modes = ['BCCH', 'BCCH_SDCCH4', 'SDCCH8', 'TCHF', 'TCHH']
 
-    # mapping options to grgsm's enums
+    # mapping options to gsm's enums
     tch_codecs = collections.OrderedDict([
-        ('FR', grgsm.TCH_FS),
-        ('EFR', grgsm.TCH_EFR),
-        ('AMR12.2', grgsm.TCH_AFS12_2),
-        ('AMR10.2', grgsm.TCH_AFS10_2),
-        ('AMR7.95', grgsm.TCH_AFS7_95),
-        ('AMR7.4', grgsm.TCH_AFS7_4),
-        ('AMR6.7', grgsm.TCH_AFS6_7),
-        ('AMR5.9', grgsm.TCH_AFS5_9),
-        ('AMR5.15', grgsm.TCH_AFS5_15),
-        ('AMR4.75', grgsm.TCH_AFS4_75)
+        ('FR', gsm.TCH_FS),
+        ('EFR', gsm.TCH_EFR),
+        ('AMR12.2', gsm.TCH_AFS12_2),
+        ('AMR10.2', gsm.TCH_AFS10_2),
+        ('AMR7.95', gsm.TCH_AFS7_95),
+        ('AMR7.4', gsm.TCH_AFS7_4),
+        ('AMR6.7', gsm.TCH_AFS6_7),
+        ('AMR5.9', gsm.TCH_AFS5_9),
+        ('AMR5.15', gsm.TCH_AFS5_15),
+        ('AMR4.75', gsm.TCH_AFS4_75)
     ])
 
     kc = []
@@ -375,17 +377,17 @@ if __name__ == '__main__':
     arfcn = None
     fc = None
     if options.arfcn:
-        if not grgsm.arfcn.is_valid_arfcn(options.arfcn):
+        if not gsm.arfcn.is_valid_arfcn(options.arfcn):
             parser.error("ARFCN is not valid\n")
         else:
             arfcn = options.arfcn
-            fc = grgsm.arfcn.arfcn2downlink(arfcn)
+            fc = gsm.arfcn.arfcn2downlink(arfcn)
     elif options.fc:
         fc = options.fc
-        arfcn = grgsm.arfcn.downlink2arfcn(options.fc)
+        arfcn = gsm.arfcn.downlink2arfcn(options.fc)
 
     # instanciate decoder
-    tb = grgsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
+    tb = gsm_decoder(timeslot=options.timeslot, subslot=options.subslot, chan_mode=options.chan_mode,
                           burst_file=options.burst_file,
                           cfile=options.cfile, fc=fc, samp_rate=options.samp_rate,
                           a5=options.a5, a5_kc=kc,

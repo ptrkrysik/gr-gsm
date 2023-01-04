@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_COLLECT_SYSTEM_INFO_IMPL_H
 #define INCLUDED_GSM_COLLECT_SYSTEM_INFO_IMPL_H
 
-#include <grgsm/misc_utils/collect_system_info.h>
+#include <gsm/misc_utils/collect_system_info.h>
 #include <vector>
 
 namespace gr {

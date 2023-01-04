@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_EXTRACT_IMMEDIATE_ASSIGNMENT_IMPL_H
 #define INCLUDED_GSM_EXTRACT_IMMEDIATE_ASSIGNMENT_IMPL_H
 
-#include <grgsm/misc_utils/extract_immediate_assignment.h>
+#include <gsm/misc_utils/extract_immediate_assignment.h>
 #include <map>
 #include <vector>
 

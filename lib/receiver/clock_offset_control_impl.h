@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_CLOCK_OFFSET_CONTROL_IMPL_H
 #define INCLUDED_GSM_CLOCK_OFFSET_CONTROL_IMPL_H
 
-#include <grgsm/receiver/clock_offset_control.h>
+#include <gsm/receiver/clock_offset_control.h>
 #include <string>
 
 namespace gr {

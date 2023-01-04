@@ -30,11 +30,11 @@ from gnuradio.filter import firdes
 from optparse import OptionParser, OptionGroup
 import osmosdr
 import time
-import grgsm
+from gnuradio import gsm
 import signal
 import sys
 
-class grgsm_capture(gr.top_block):
+class gsm_capture(gr.top_block):
     def __init__(self,
                  freq,
                  gain=30,
@@ -54,7 +54,7 @@ class grgsm_capture(gr.top_block):
         ##################################################
 
         self.sdr_source = osmosdr.source(args="numchan=" + str(1) + " " +
-                str(grgsm.device.get_default_args(device_args)))
+                str(gsm.device.get_default_args(device_args)))
 
         self.sdr_source.set_sample_rate(samp_rate)
         self.sdr_source.set_center_freq(freq, 0)
@@ -151,7 +151,7 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     if options.list_devices:
-        grgsm.device.print_devices(options.device_args)
+        gsm.device.print_devices(options.device_args)
         sys.exit(0)
 
     if not args:
@@ -167,14 +167,14 @@ if __name__ == '__main__':
     arfcn = 0
     freq = 0
     if options.arfcn:
-        if not grgsm.arfcn.is_valid_arfcn(options.arfcn):
+        if not gsm.arfcn.is_valid_arfcn(options.arfcn):
             parser.error("ARFCN is not valid\n")
         else:
-            freq = grgsm.arfcn.arfcn2downlink(options.arfcn)
+            freq = gsm.arfcn.arfcn2downlink(options.arfcn)
     elif options.freq:
         freq = options.freq
 
-    tb = grgsm_capture(freq=freq,
+    tb = gsm_capture(freq=freq,
                        gain=options.gain,
                        freq_corr=options.freq_corr,
                        samp_rate=options.samp_rate,

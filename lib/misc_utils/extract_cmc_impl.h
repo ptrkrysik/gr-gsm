@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_EXTRACT_CMC_IMPL_H
 #define INCLUDED_GSM_EXTRACT_CMC_IMPL_H
 
-#include <grgsm/misc_utils/extract_cmc.h>
+#include <gsm/misc_utils/extract_cmc.h>
 #include <vector>
 
 namespace gr {

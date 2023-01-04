@@ -23,9 +23,9 @@
 #ifndef INCLUDED_GSM_RECEIVER_IMPL_H
 #define INCLUDED_GSM_RECEIVER_IMPL_H
 
-#include <grgsm/receiver/receiver.h>
-#include <grgsm/gsmtap.h>
-#include <grgsm/gsm_constants.h>
+#include <gsm/receiver/receiver.h>
+#include <gsm/gsmtap.h>
+#include <gsm/gsm_constants.h>
 #include <receiver_config.h>
 #include <vector>
 #include "time_sample_ref.h"

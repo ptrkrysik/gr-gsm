@@ -21,7 +21,7 @@
  */
 
 #include <string.h>
-#include <grgsm/gsm_constants.h>
+#include <gsm/gsm_constants.h>
 
 #include <stdbool.h>
 #include <osmocom/coding/gsm0503_coding.h>

@@ -1,6 +1,7 @@
 options:
   parameters:
     author: Piotr Krysik
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -41,7 +42,7 @@ blocks:
     gui_hint: ''
     label: Frequency
     min_len: '100'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: 800e6
     step: 2e5
@@ -62,7 +63,7 @@ blocks:
     gui_hint: ''
     label: Gain
     min_len: '100'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
     step: '0.5'
@@ -83,7 +84,7 @@ blocks:
     gui_hint: ''
     label: PPM Offset
     min_len: '100'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '-150'
     step: '0.1'
@@ -123,51 +124,12 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     phase_inc: -2*pi*shiftoff/samp_rate
+    tag_inc_update: 'False'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [256, 300]
-    rotation: 0
-    state: enabled
-- name: blocks_socket_pdu_0_0
-  id: blocks_socket_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    host: 127.0.0.1
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mtu: '10000'
-    port: serverport
-    tcp_no_delay: 'False'
-    type: UDP_SERVER
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1632, 295]
-    rotation: 0
-    state: enabled
-- name: blocks_socket_pdu_0_1
-  id: blocks_socket_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    host: collector
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mtu: '1500'
-    port: collectorport
-    tcp_no_delay: 'False'
-    type: UDP_CLIENT
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1504, 295]
     rotation: 0
     state: enabled
 - name: collector
@@ -196,7 +158,7 @@ blocks:
     label: UDP port number of collector
     short_id: ''
     type: str
-    value: '4729'
+    value: '4730'
   states:
     bus_sink: false
     bus_source: false
@@ -213,7 +175,7 @@ blocks:
     label: GSM channel's central frequency
     short_id: f
     type: eng_float
-    value: 941.8e6
+    value: '934200000'
   states:
     bus_sink: false
     bus_source: false
@@ -352,7 +314,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1776, 302]
+    coordinate: [1680, 460.0]
     rotation: 0
     state: enabled
 - name: gsm_receiver_0
@@ -408,14 +370,54 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    imports: from grgsm import arfcn
+    imports: import gnuradio.gsm.arfcn as arfcn
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 60]
+    coordinate: [1016, 148.0]
     rotation: 0
     state: enabled
+- name: network_socket_pdu_0
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: 127.0.0.1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: '1500'
+    port: serverport
+    tcp_no_delay: 'False'
+    type: UDP_SERVER
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1504, 388.0]
+    rotation: 0
+    state: true
+- name: network_socket_pdu_1
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: collector
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: '1500'
+    port: collectorport
+    tcp_no_delay: 'False'
+    type: UDP_CLIENT
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1664, 108.0]
+    rotation: 0
+    state: true
 - name: osr
   id: parameter
   parameters:
@@ -502,6 +504,7 @@ blocks:
     minoutbuf: '0'
     name: '""'
     nconnections: '1'
+    norm_window: 'False'
     showports: 'True'
     tr_chan: '0'
     tr_level: '0.0'
@@ -520,7 +523,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -567,7 +570,7 @@ blocks:
     ant7: ''
     ant8: ''
     ant9: ''
-    args: str(grgsm.device.get_default_args(args))
+    args: str(gsm.device.get_default_args(args))
     bb_gain0: '20'
     bb_gain1: '20'
     bb_gain10: '20'
@@ -913,7 +916,7 @@ blocks:
     label: UDP server listening port
     short_id: ''
     type: str
-    value: '4729'
+    value: '4730'
   states:
     bus_sink: false
     bus_source: false
@@ -938,22 +941,67 @@ blocks:
     coordinate: [784, 11]
     rotation: 0
     state: enabled
+- name: soapy_custom_source_0
+  id: soapy_custom_source
+  parameters:
+    affinity: ''
+    agc0: 'False'
+    agc1: 'False'
+    alias: ''
+    antenna0: TX/RX
+    antenna1: ''
+    bandwidth0: 250e3+abs(shiftoff)
+    bandwidth1: '0'
+    center_freq0: fc_slider-shiftoff
+    center_freq1: '0'
+    comment: ''
+    dc_offset0: '0'
+    dc_offset1: '0'
+    dc_removal0: 'True'
+    dc_removal1: 'True'
+    dev_args: str(gsm.device.get_default_args(args))
+    driver: uhd
+    freq_correction0: '0'
+    freq_correction1: '0'
+    gain0: gain_slider
+    gain1: '0'
+    iq_balance0: '0'
+    iq_balance1: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '1'
+    samp_rate: samp_rate
+    settings0: ''
+    settings1: ''
+    stream_args: ''
+    tune_args0: ''
+    tune_args1: ''
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 484.0]
+    rotation: 0
+    state: disabled
 
 connections:
 - [blocks_rotator_cc_0, '0', gsm_input_0, '0']
 - [blocks_rotator_cc_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_socket_pdu_0_0, pdus, gsm_message_printer_1, msgs]
 - [gsm_bcch_ccch_demapper_0, bursts, gsm_control_channels_decoder_0, bursts]
 - [gsm_clock_offset_control_0, ctrl, gsm_input_0, ctrl_in]
-- [gsm_control_channels_decoder_0, msgs, blocks_socket_pdu_0_1, pdus]
-- [gsm_control_channels_decoder_0_0, msgs, blocks_socket_pdu_0_1, pdus]
+- [gsm_control_channels_decoder_0, msgs, network_socket_pdu_1, pdus]
+- [gsm_control_channels_decoder_0_0, msgs, network_socket_pdu_1, pdus]
 - [gsm_decryption_0, bursts, gsm_control_channels_decoder_0_0, bursts]
 - [gsm_input_0, '0', gsm_receiver_0, '0']
 - [gsm_receiver_0, C0, gsm_bcch_ccch_demapper_0, bursts]
 - [gsm_receiver_0, C0, gsm_sdcch8_demapper_0, bursts]
 - [gsm_receiver_0, measurements, gsm_clock_offset_control_0, measurements]
 - [gsm_sdcch8_demapper_0, bursts, gsm_decryption_0, bursts]
+- [network_socket_pdu_0, pdus, gsm_message_printer_1, msgs]
 - [rtlsdr_source_0, '0', blocks_rotator_cc_0, '0']
+- [soapy_custom_source_0, '0', blocks_rotator_cc_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: v3.11.0.0git-91-gb554eeab

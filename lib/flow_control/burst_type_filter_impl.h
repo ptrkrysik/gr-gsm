@@ -25,7 +25,7 @@
 
 #define BURST_TYPE_LEN 148
 
-#include <grgsm/flow_control/burst_type_filter.h>
+#include <gsm/flow_control/burst_type_filter.h>
 
 namespace gr {
   namespace gsm {

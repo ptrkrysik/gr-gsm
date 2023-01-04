@@ -25,29 +25,29 @@ add_subdirectory(helpers)
 GRCC_COMPILE(grgsm_livemon)
 GRCC_COMPILE(grgsm_livemon_headless)
 
-set(grgsm_flowgraphs "")
+set(gsm_flowgraphs "")
 OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
-OPTION(ENABLE_GRGSM_LIVEMON "Compile grgsm_livemon" ON)
-OPTION(ENABLE_GRGSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
+OPTION(ENABLE_GSM_LIVEMON "Compile grgsm_livemon" ON)
+OPTION(ENABLE_GSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
 
-if(ENABLE_GRC AND ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
-    list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
+if(ENABLE_GRC AND ENABLE_GRCC AND ENABLE_GSM_LIVEMON)
+    list (APPEND gsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
 endif()
 
-if(ENABLE_GRC AND ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
-    list (APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless)
+if(ENABLE_GRC AND ENABLE_GRCC AND ENABLE_GSM_LIVEMON_HEADLESS)
+    list (APPEND gsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless)
 endif()
 
 GR_PYTHON_INSTALL(
     PROGRAMS
-    ${grgsm_flowgraphs}
-    grgsm_scanner
     grgsm_decode
+    grgsm_scanner
     grgsm_trx
+    ${gsm_flowgraphs}
     DESTINATION bin
 )
 
 # The add_dependencies(...) is very important for the parallel build `make -j $(nproc)`
 # The `pygen_apps` target is generated in GR_PYTHON_INSTALL function which calls
 # GR_UNIQUE_TARGET that we redefine in GrccCompile.
-add_dependencies(pygen_apps grgsm_swig)
+add_dependencies(pygen_apps gsm_python copy_module_for_tests)

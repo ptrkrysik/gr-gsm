@@ -26,8 +26,8 @@
 
 #include <gnuradio/io_signature.h>
 #include "tch_f_chans_demapper_impl.h"
-#include <grgsm/endian.h>
-#include <grgsm/gsmtap.h>
+#include <gsm/endian.h>
+#include <gsm/gsmtap.h>
 
 #define BURST_SIZE 148
 

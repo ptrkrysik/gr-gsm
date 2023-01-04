@@ -25,7 +25,7 @@
 #endif
 
 #include <stdlib.h>
-#include <grgsm/constants.h>
+#include <gsm/constants.h>
 
 namespace gr {
  namespace gsm{

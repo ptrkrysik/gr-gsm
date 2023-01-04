@@ -1,6 +1,7 @@
 options:
   parameters:
     author: Piotr Krysik
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -78,51 +79,12 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     phase_inc: -2*pi*shiftoff/samp_rate
+    tag_inc_update: 'False'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [416, 300]
-    rotation: 0
-    state: enabled
-- name: blocks_socket_pdu_0_0
-  id: blocks_socket_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    host: 127.0.0.1
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mtu: '10000'
-    port: serverport
-    tcp_no_delay: 'False'
-    type: UDP_SERVER
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1736, 295]
-    rotation: 0
-    state: enabled
-- name: blocks_socket_pdu_0_1
-  id: blocks_socket_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    host: collector
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mtu: '1500'
-    port: collectorport
-    tcp_no_delay: 'False'
-    type: UDP_CLIENT
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1608, 295]
     rotation: 0
     state: enabled
 - name: collector
@@ -168,7 +130,7 @@ blocks:
     label: GSM channel's central frequency
     short_id: f
     type: eng_float
-    value: 957e6
+    value: 925.8e6
   states:
     bus_sink: false
     bus_source: false
@@ -363,7 +325,7 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    imports: from grgsm import arfcn
+    imports: import gnuradio.gsm as gsm
   states:
     bus_sink: false
     bus_source: false
@@ -371,6 +333,59 @@ blocks:
     coordinate: [200, 60]
     rotation: 0
     state: enabled
+- name: import_2
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: from gnuradio.gsm import arfcn
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 108.0]
+    rotation: 0
+    state: true
+- name: network_socket_pdu_0
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: collector
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: '1500'
+    port: collectorport
+    tcp_no_delay: 'False'
+    type: UDP_CLIENT
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1632, 180.0]
+    rotation: 0
+    state: true
+- name: network_socket_pdu_1
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: 127.0.0.1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: '1500'
+    port: serverport
+    tcp_no_delay: 'False'
+    type: UDP_SERVER
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1664, 332.0]
+    rotation: 0
+    state: true
 - name: osr
   id: parameter
   parameters:
@@ -459,7 +474,7 @@ blocks:
     ant7: ''
     ant8: ''
     ant9: ''
-    args: str(grgsm.device.get_default_args(args))
+    args: str(gsm.device.get_default_args(args))
     bb_gain0: '20'
     bb_gain1: '20'
     bb_gain10: '20'
@@ -834,18 +849,19 @@ blocks:
 connections:
 - [blocks_head_0, '0', blocks_rotator_cc_0, '0']
 - [blocks_rotator_cc_0, '0', gsm_input_0, '0']
-- [blocks_socket_pdu_0_0, pdus, gsm_message_printer_1, msgs]
 - [gsm_bcch_ccch_sdcch4_demapper_0, bursts, gsm_control_channels_decoder_0, bursts]
 - [gsm_clock_offset_control_0, ctrl, gsm_input_0, ctrl_in]
-- [gsm_control_channels_decoder_0, msgs, blocks_socket_pdu_0_1, pdus]
-- [gsm_control_channels_decoder_0_0, msgs, blocks_socket_pdu_0_1, pdus]
+- [gsm_control_channels_decoder_0, msgs, network_socket_pdu_0, pdus]
+- [gsm_control_channels_decoder_0_0, msgs, network_socket_pdu_0, pdus]
 - [gsm_decryption_0, bursts, gsm_control_channels_decoder_0_0, bursts]
 - [gsm_input_0, '0', gsm_receiver_0, '0']
 - [gsm_receiver_0, C0, gsm_bcch_ccch_sdcch4_demapper_0, bursts]
 - [gsm_receiver_0, C0, gsm_sdcch8_demapper_0, bursts]
 - [gsm_receiver_0, measurements, gsm_clock_offset_control_0, measurements]
 - [gsm_sdcch8_demapper_0, bursts, gsm_decryption_0, bursts]
+- [network_socket_pdu_1, pdus, gsm_message_printer_1, msgs]
 - [rtlsdr_source_0, '0', blocks_head_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: v3.11.0.0git-46-g614681ba

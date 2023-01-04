@@ -27,8 +27,8 @@
 #include <gnuradio/io_signature.h>
 #include "message_source_impl.h"
 #include <stdio.h>
-#include <grgsm/gsmtap.h>
-#include <grgsm/endian.h>
+#include <gsm/gsmtap.h>
+#include <gsm/endian.h>
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
 #include <iostream>
@@ -97,7 +97,7 @@ namespace gr {
     bool message_source_impl::start()
     {
         d_finished = false;
-        d_thread = boost::shared_ptr<gr::thread::thread>
+        d_thread = std::shared_ptr<gr::thread::thread>
             (new gr::thread::thread(boost::bind(&message_source_impl::run, this)));
         return block::start();
     }

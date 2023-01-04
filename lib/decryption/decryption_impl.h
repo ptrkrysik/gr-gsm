@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_DECRYPTION_IMPL_H
 #define INCLUDED_GSM_DECRYPTION_IMPL_H
 
-#include <grgsm/decryption/decryption.h>
+#include <gsm/decryption/decryption.h>
 #include <vector>
 
 namespace gr {

@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_BURST_SDCCH_SUBSLOT_SPLITTER_IMPL_H
 #define INCLUDED_GSM_BURST_SDCCH_SUBSLOT_SPLITTER_IMPL_H
 
-#include <grgsm/flow_control/burst_sdcch_subslot_splitter.h>
+#include <gsm/flow_control/burst_sdcch_subslot_splitter.h>
 
 namespace gr {
   namespace gsm {

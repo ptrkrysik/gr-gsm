@@ -29,7 +29,7 @@
 #include "openbts/GSM610Tables.h"
 #include "openbts/GSM660Tables.h"
 #include "openbts/ViterbiR204.h"
-#include <grgsm/decoding/tch_f_decoder.h>
+#include <gsm/decoding/tch_f_decoder.h>
 
 
 #define DATA_BLOCK_SIZE		184

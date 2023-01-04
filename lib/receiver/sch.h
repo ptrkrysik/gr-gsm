@@ -23,14 +23,14 @@
 #ifndef __SCH_H__
 #define __SCH_H__ 1
 
-#include <grgsm/api.h>
+#include <gsm/api.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  GRGSM_API int decode_sch(const unsigned char *buf, int * t1_o, int * t2_o, int * t3_o, int * ncc, int * bcc);
+  GSM_API int decode_sch(const unsigned char *buf, int * t1_o, int * t2_o, int * t3_o, int * ncc, int * bcc);
 
 #ifdef __cplusplus
 }

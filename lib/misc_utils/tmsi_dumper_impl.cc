@@ -26,7 +26,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "tmsi_dumper_impl.h"
-#include "grgsm/gsmtap.h"
+#include "gsm/gsmtap.h"
 #include <iostream>
 #include <boost/format.hpp>
 

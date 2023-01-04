@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GSM_EXTRACT_SYSTEM_INFO_IMPL_H
 #define INCLUDED_GSM_EXTRACT_SYSTEM_INFO_IMPL_H
 
-#include <grgsm/misc_utils/extract_system_info.h>
+#include <gsm/misc_utils/extract_system_info.h>
 #include <set>
 #include <map>
 #include <vector>
