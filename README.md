@@ -4,9 +4,39 @@ The *gr-gsm* project is based on the *gsm-receiver* written by Piotr Krysik (als
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
+This repository has been forked from the original creator of gr-gsm to stay informed of the compatibility of the script.
+
+Please refer to Installation and Usage Section
+
 Installation and usage
 ======================
-Please see project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index) for information on [installation](https://osmocom.org/projects/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
+
+
+
+To Download and install GR-GSM on your devices. Please download and boot into DragonOS. \
+⚠️ PLEASE NOTE THAT VIRTUAL MACHINES ARE NOT SUPPORTED TO RUN GR-GSM
+
+
+Step 1 :
+
+Download Dragon OS:
+https://cemaxecuter.com/
+
+Step 2 :
+
+Flash the OS into your USB in order to boot on it.
+You can do it via Balena Etcher
+https://etcher.balena.io/
+
+Step 3 :
+
+After Flashing your USB, Boot into DragonOS, You can use it as live or persistant. I recommand you to install it on your laptop as main or dual boot.
+
+Step 4 :
+
+You finished installed DragonOS, Enjoy. ( Please make sure to apt-get update just in-case )
+
+
 
 Mailing list
 ============
@@ -26,6 +56,11 @@ To join the group with any e-mail address, use this link:
 
 Development
 ===========
+This repository has been forked from the original creator, GR-GSM doesn't work on recents version of linux.
+
+\
+\
+\
 New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, correction of bug y).
 
 If you wish to develop something for gr-gsm but don't know exactly what, then look for issues with label "Enhancement". Select one that you feel you are able to complete. After that claim it by commenting in the comment section of the issue. If there is any additional information about gr-gsm needed by you to make completing the task easier - just ask.
