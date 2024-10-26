@@ -23,11 +23,23 @@
 
 import osmosdr
 import os
+from urllib.parse import parse_qsl
+from ast import literal_eval
 
 def get_devices(hint=""):
     return osmosdr.device_find(osmosdr.device_t(hint))
 
+def device_to_dict(dev):
+    dev_dict = {}
+    for k, v in parse_qsl(dev.to_string(), separator=","):
+        try:
+            dev_dict[k] = literal_eval(v)
+        except (ValueError, SyntaxError):
+            dev_dict[k] = literal_eval(f"'{v}'")
+    return dev_dict
+
 def match(dev, filters):
+    dev = device_to_dict(dev)
     for f in filters:
         for k, v in f.items():
             if (k not in dev or dev[k] != v):
