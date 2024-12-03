@@ -1,20 +1,30 @@
-title: The GSM OOT Module
-version: 1.0
-brief: Short description of gr-gsm
-tags: # Tags are arbitrary, but look at CGRAN what other authors are using
-  - sdr
+title: gr-gsm
+version: 2.0
+brief: GNU Radio blocks for receiving GSM
+tags:
+  - GSM
 author:
-  - Author Name <authors@email.address>
+  - Piotr Krysik <ptrkrysik@gmail.com>
 copyright_owner:
-  - Copyright Owner 1
+  - Piotr Krysik <ptrkrysik@gmail.com>
+  - Roman Khassraf <rkhassraf@gmail.com>
+  - Vadim Yanitskiy <axilirator@gmail.com>
+  - Pieter Robyns <pieter.robyns@uhasselt.be>
 license:
 gr_supported_version:
   - 3.X
-repo: # Put the URL of the repository here
-website: # If you have a separate project website, put it here
-#icon: # Put a URL to a square image here that will be used as an icon
+repo: https://github.com/ptrkrysik/gr-gsm.git
 description: |-
-  A longer, multi-line description of gr-gsm.
-  You may use some *basic* Markdown here.
-  If left empty, it will try to find a README file instead.
+  The gr-gsm project is based on the gsm-receiver written by Piotr Krysik
+  (also the main author of gr-gsm) for the Airprobe project.
+
+  The aim is to provide set of tools for receiving information transmitted by
+  GSM equipment/devices.
+
+  Please see project's wiki https://github.com/ptrkrysik/gr-gsm/wiki for
+  information on installation and usage of gr-gsm.
+
+  Short presentation of Airprobe'like application of gr-gsm:
+  https://www.youtube.com/watch?v=Eofnb7zr8QE
+
 file_format: 1

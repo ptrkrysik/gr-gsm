@@ -9,4 +9,11 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES api.h DESTINATION include/gnuradio/gsm)
+install(FILES
+    api.h
+    endian.h
+    gsm_constants.h
+    gsmtap.h DESTINATION include/gnuradio/gsm
+)
+
+add_subdirectory(receiver)

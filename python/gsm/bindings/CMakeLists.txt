@@ -24,7 +24,8 @@ include(GrPybind)
 # Python Bindings
 ########################################################################
 
-list(APPEND gsm_python_files python_bindings.cc)
+list(APPEND gsm_python_files
+    receiver_python.cc python_bindings.cc)
 
 gr_pybind_make_oot(gsm ../../.. gr::gsm "${gsm_python_files}")
 

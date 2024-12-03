@@ -11,22 +11,49 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-list(APPEND gsm_sources)
+########################################################################
+# Add sources macro
+########################################################################
+set(gsm_sources "")
 
-set(gsm_sources
-    "${gsm_sources}"
-    PARENT_SCOPE)
-if(NOT gsm_sources)
-    message(STATUS "No C++ sources... skipping lib/")
-    return()
-endif(NOT gsm_sources)
+macro (add_sources)
+    file (RELATIVE_PATH _relPath "${PROJECT_SOURCE_DIR}/lib" "${CMAKE_CURRENT_SOURCE_DIR}")
+    foreach (_src ${ARGN})
+        if (_relPath)
+            list (APPEND gsm_sources "${_relPath}/${_src}")
+        else()
+            list (APPEND gsm_sources "${_src}")
+        endif()
+    endforeach()
+    if (_relPath)
+        # propagate gsm_sources to parent directory
+        set (gsm_sources ${gsm_sources} PARENT_SCOPE)
+    endif()
+endmacro()
+
+#########################################################################
+# Subdirecories
+#########################################################################
+add_subdirectory(decoding)
+add_subdirectory(receiver)
+
+set(gsm_sources "${gsm_sources}" PARENT_SCOPE)
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
-target_link_libraries(gnuradio-gsm gnuradio::gnuradio-runtime)
+target_link_libraries(
+    gnuradio-gsm
+    gnuradio::gnuradio-runtime
+    ${LIBOSMOCORE_LIBRARY}
+    ${LIBOSMOCODEC_LIBRARY}
+    ${LIBOSMOGSM_LIBRARY}
+    ${LIBOSMOCODING_LIBRARY})
+
 target_include_directories(
     gnuradio-gsm
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    PUBLIC $<BUILD_INTERFACE:${LIBOSMOCORE_INCLUDE_DIR}>
     PUBLIC $<INSTALL_INTERFACE:include>)
+
 set_target_properties(gnuradio-gsm PROPERTIES DEFINE_SYMBOL "gnuradio_gsm_EXPORTS")
 
 if(APPLE)

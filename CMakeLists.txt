@@ -38,7 +38,7 @@ find_package(Gnuradio "3.10" REQUIRED)
 
 # Set the version information here
 # cmake-format: off
-set(VERSION_MAJOR 1)
+set(VERSION_MAJOR 2)
 set(VERSION_API   0)
 set(VERSION_ABI   0)
 set(VERSION_PATCH 0)
@@ -104,6 +104,14 @@ endif(APPLE)
 # Find gnuradio build dependencies
 ########################################################################
 find_package(Doxygen)
+
+########################################################################
+# Find osmocom build dependencies
+########################################################################
+find_package(Libosmocore)
+find_package(Libosmocodec)
+find_package(Libosmocoding)
+find_package(Libosmogsm)
 
 ########################################################################
 # Setup doxygen option

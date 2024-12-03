@@ -6,4 +6,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-install(FILES DESTINATION share/gnuradio/grc/blocks)
+install(FILES
+    gsm2.tree.yml DESTINATION share/gnuradio/grc/blocks)
+
+add_subdirectory(receiver)
