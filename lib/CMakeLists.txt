@@ -36,6 +36,7 @@ endmacro()
 #########################################################################
 add_subdirectory(decoding)
 add_subdirectory(demapping)
+add_subdirectory(misc_utils)
 add_subdirectory(receiver)
 
 set(gsm_sources "${gsm_sources}" PARENT_SCOPE)

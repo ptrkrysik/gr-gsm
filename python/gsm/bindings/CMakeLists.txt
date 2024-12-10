@@ -25,14 +25,16 @@ include(GrPybind)
 ########################################################################
 
 list(APPEND gsm_python_files
+    tch_f_chans_demapper_python.cc
+    tch_h_chans_demapper_python.cc
+    universal_ctrl_chans_demapper_python.cc
     control_channels_decoder_python.cc
+    tch_f_decoder_python.cc
+    tch_h_decoder_python.cc
+    bursts_printer_python.cc
+    message_printer_python.cc
     cx_channel_hopper_python.cc
     receiver_python.cc
-    tch_f_chans_demapper_python.cc
-    tch_f_decoder_python.cc
-    tch_h_chans_demapper_python.cc
-    tch_h_decoder_python.cc
-    universal_ctrl_chans_demapper_python.cc
     python_bindings.cc)
 
 gr_pybind_make_oot(gsm ../../.. gr::gsm "${gsm_python_files}")

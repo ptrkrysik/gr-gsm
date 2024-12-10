@@ -5,8 +5,7 @@
 
 install(
     FILES
-    bursts_printer.h
-    message_printer.h
-    time_spec.h
-    DESTINATION include/gnuradio/gsm/misc_utils
+    gsm_bursts_printer.block.yml
+    gsm_message_printer.block.yml
+    DESTINATION share/gnuradio/grc/blocks
 )

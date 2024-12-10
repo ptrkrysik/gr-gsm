@@ -4,6 +4,7 @@
 #
 
 add_sources(
+    cx_channel_hopper_impl.cc
     receiver_config.cc
     receiver_impl.cc
     viterbi_detector.cc
