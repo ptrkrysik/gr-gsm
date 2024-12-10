@@ -28,26 +28,26 @@
  *           it was designed with soft decisions in mind.
  *
  * SYNTAX:   void viterbi_detector(
- *                                  const gr_complex * input, 
- *                                  unsigned int samples_num, 
- *                                  gr_complex * rhh, 
- *                                  unsigned int start_state, 
- *                                  const unsigned int * stop_states, 
- *                                  unsigned int stops_num, 
+ *                                  const gr_complex * input,
+ *                                  unsigned int samples_num,
+ *                                  gr_complex * rhh,
+ *                                  unsigned int start_state,
+ *                                  const unsigned int * stop_states,
+ *                                  unsigned int stops_num,
  *                                  float * output)
  *
  * INPUT:    input:       Complex received signal afted matched filtering.
  *           samples_num: Number of samples in the input table.
- *           rhh:         The autocorrelation of the estimated channel 
+ *           rhh:         The autocorrelation of the estimated channel
  *                        impulse response.
- *           start_state: Number of the start point. In GSM each burst 
- *                        starts with sequence of three bits (0,0,0) which 
+ *           start_state: Number of the start point. In GSM each burst
+ *                        starts with sequence of three bits (0,0,0) which
  *                        indicates start point of the algorithm.
  *           stop_states: Table with numbers of possible stop states.
  *           stops_num:   Number of possible stop states
- *                     
  *
- * OUTPUT:   output:      Differentially decoded hard output of the algorithm: 
+ *
+ * OUTPUT:   output:      Differentially decoded hard output of the algorithm:
  *                        -1 for logical "0" and 1 for logical "1"
  *
  * SUB_FUNC: none
@@ -58,6 +58,12 @@
 #ifndef INCLUDED_VITERBI_DETECTOR_H
 #define INCLUDED_VITERBI_DETECTOR_H
 
-void viterbi_detector(const gr_complex * input, unsigned int samples_num, gr_complex * rhh, unsigned int start_state, const unsigned int * stop_states, unsigned int stops_num, float * output);
+void viterbi_detector(const gr_complex* input,
+                      unsigned int samples_num,
+                      gr_complex* rhh,
+                      unsigned int start_state,
+                      const unsigned int* stop_states,
+                      unsigned int stops_num,
+                      float* output);
 
 #endif /* INCLUDED_VITERBI_DETECTOR_H */
