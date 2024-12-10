@@ -26,6 +26,7 @@ include(GrPybind)
 
 list(APPEND gsm_python_files
     control_channels_decoder_python.cc
+    cx_channel_hopper_python.cc
     receiver_python.cc
     tch_f_chans_demapper_python.cc
     tch_f_decoder_python.cc

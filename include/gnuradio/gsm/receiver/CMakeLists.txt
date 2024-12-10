@@ -5,6 +5,7 @@
 
 install(
     FILES
+    cx_channel_hopper.h
     receiver.h
     DESTINATION include/gnuradio/gsm/receiver
 )

@@ -6,6 +6,7 @@
 '[GSM v2]':
 - Receiver:
   - gsm_receiver2
+  - gsm_cx_channel_hopper
 - Logical channels demapping:
   - gsm_universal_ctrl_chans_demapper
   - gsm_bcch_ccch_demapper
