@@ -14,6 +14,7 @@ if(NOT PYTHONINTERP_FOUND)
     return()
 endif()
 
+add_subdirectory(demapping)
 add_subdirectory(bindings)
 
 ########################################################################

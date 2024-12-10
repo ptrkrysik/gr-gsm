@@ -22,6 +22,12 @@ namespace py = pybind11;
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
     void bind_receiver(py::module& m);
+    void bind_tch_f_decoder(py::module& m);
+    void bind_tch_h_decoder(py::module& m);
+    void bind_control_channels_decoder(py::module& m);
+    void bind_universal_ctrl_chans_demapper(py::module& m);
+    void bind_tch_f_chans_demapper(py::module& m);
+    void bind_tch_h_chans_demapper(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -50,6 +56,12 @@ PYBIND11_MODULE(gsm_python, m)
     // Please do not delete
     /**************************************/
     // BINDING_FUNCTION_CALLS(
+    bind_tch_f_decoder(m);
+    bind_tch_h_decoder(m);
+    bind_control_channels_decoder(m);
+    bind_universal_ctrl_chans_demapper(m);
+    bind_tch_f_chans_demapper(m);
+    bind_tch_h_chans_demapper(m);
     bind_receiver(m);
 
     // ) END BINDING_FUNCTION_CALLS

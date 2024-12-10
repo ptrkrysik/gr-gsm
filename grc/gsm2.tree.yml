@@ -1,3 +1,19 @@
+# Copyright 2024 Piotr Krysik <ptrkrysik@gmail.com>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
 '[GSM v2]':
 - Receiver:
   - gsm_receiver2
+- Logical channels demapping:
+  - gsm_universal_ctrl_chans_demapper
+  - gsm_bcch_ccch_demapper
+  - gsm_bcch_ccch_sdcch4_demapper
+  - gsm_sdcch8_demapper
+  - gsm_tch_f_chans_demapper
+  - gsm_tch_h_chans_demapper
+- Decoding:
+  - gsm_control_channels_decoder
+  - gsm_tch_f_decoder
+  - gsm_tch_h_decoder

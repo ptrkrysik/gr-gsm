@@ -16,4 +16,6 @@ install(FILES
     gsmtap.h DESTINATION include/gnuradio/gsm
 )
 
+add_subdirectory(decoding)
+add_subdirectory(demapping)
 add_subdirectory(receiver)
