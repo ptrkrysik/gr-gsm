@@ -23,7 +23,7 @@
 
 namespace py = pybind11;
 
-#include <gsm/receiver/receiver.h>
+#include <gnuradio/gsm/receiver/receiver.h>
 // pydoc.h is automatically generated in the build directory
 #include <receiver_pydoc.h>
 
@@ -32,11 +32,9 @@ void bind_receiver(py::module& m)
 
     using receiver = ::gr::gsm::receiver;
 
-    py::class_<receiver,
-               gr::sync_block,
-               gr::block,
-               gr::basic_block,
-               std::shared_ptr<receiver>>(m, "receiver", D(receiver))
+
+    py::class_<receiver, gr::sync_block, gr::block, gr::basic_block, std::shared_ptr<receiver>>(
+        m, "receiver", D(receiver))
 
         .def(py::init(&receiver::make),
              py::arg("osr"),
@@ -52,10 +50,7 @@ void bind_receiver(py::module& m)
              D(receiver, set_cell_allocation))
 
 
-        .def("set_tseq_nums",
-             &receiver::set_tseq_nums,
-             py::arg("tseq_nums"),
-             D(receiver, set_tseq_nums))
+        .def("set_tseq_nums", &receiver::set_tseq_nums, py::arg("tseq_nums"), D(receiver, set_tseq_nums))
 
 
         .def("reset", &receiver::reset, D(receiver, reset))
