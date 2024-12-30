@@ -234,22 +234,25 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
     int to_consume = 0;
     int offset = 0;
 
-    if (d_process_uplink)
+    if (d_process_uplink) {
         inputs_to_process *= 2;
+    }
 
     /* Process all connected inputs */
     for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
         const gr_complex* input = gr_input_items[input_nr];
         double signal_pwr = 0;
 
-        for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++)
+        for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++) {
             signal_pwr += abs(input[ii]) * abs(input[ii]);
+        }
 
         signal_pwr = signal_pwr / (TS_BITS);
         d_signal_dbm = round(10 * log10(signal_pwr / 50));
 
-        if (input_nr == 0)
+        if (input_nr == 0) {
             d_c0_signal_dbm = d_signal_dbm;
+        }
 
         /* Get burst type for given burst number */
         b_type = input_nr == 0 ? d_channel_conf.get_burst_type(d_burst_nr) : normal_or_noise;
@@ -508,11 +511,11 @@ bool receiver_impl::find_fcch_burst(const gr_complex* input, const int nitems, d
         }
 
         case found_something: {
-            if (phase_diff > 0)
+            if (phase_diff > 0) {
                 hit_count++;
-            else
+            } else {
                 miss_count++;
-
+            }
             if ((miss_count >= FCCH_MAX_MISSES * d_OSR) && (hit_count <= FCCH_HITS_NEEDED * d_OSR)) {
                 /* If miss_count exceeds limit before hit_count */
                 fcch_search_state = init;
@@ -677,9 +680,9 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex* input, gr_complex* ch
             energy += (*iter_ii);
         }
 
-        if (loop_end)
+        if (loop_end) {
             break;
-
+        }
         window_energy_buffer.push_back(energy);
         iter++;
     }
@@ -724,15 +727,16 @@ void receiver_impl::detect_burst(const gr_complex* input,
     int start_state = 3;
 
     autocorrelation(chan_imp_resp, &rhh_temp[0], d_chan_imp_length * d_OSR);
-    for (int ii = 0; ii < d_chan_imp_length; ii++)
+    for (int ii = 0; ii < d_chan_imp_length; ii++) {
         rhh[ii] = conj(rhh_temp[ii * d_OSR]);
-
+    }
     mafi(&input[burst_start], BURST_SIZE, chan_imp_resp, d_chan_imp_length * d_OSR, filtered_burst);
 
     viterbi_detector(filtered_burst, BURST_SIZE, rhh, start_state, stop_states, 2, output);
 
-    for (int i = 0; i < BURST_SIZE; i++)
+    for (int i = 0; i < BURST_SIZE; i++) {
         output_binary[i] = output[i] > 0;
+    }
 }
 
 void receiver_impl::gmsk_mapper(const unsigned char* input, int nitems, gr_complex* gmsk_output, gr_complex start_point)
@@ -762,8 +766,9 @@ gr_complex receiver_impl::correlate_sequence(const gr_complex* sequence, int len
 {
     gr_complex result(0.0, 0.0);
 
-    for (int ii = 0; ii < length; ii++)
+    for (int ii = 0; ii < length; ii++) {
         result += sequence[ii] * conj(input[ii * d_OSR]);
+    }
 
     return result / gr_complex(length, 0);
 }
@@ -833,9 +838,9 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex* input, gr_complex* c
             energy += (*iter_ii);
         }
 
-        if (loop_end)
+        if (loop_end) {
             break;
-
+        }
         window_energy_buffer.push_back(energy);
         iter++;
     }
@@ -845,9 +850,9 @@ int receiver_impl::get_norm_chan_imp_resp(const gr_complex* input, gr_complex* c
         max_element(window_energy_buffer.begin(), window_energy_buffer.end() - d_chan_imp_length * d_OSR) -
         window_energy_buffer.begin();
 
-    if (strongest_window_nr < 0)
+    if (strongest_window_nr < 0) {
         strongest_window_nr = 0;
-
+    }
     float max_correlation = 0;
     for (int ii = 0; ii < d_chan_imp_length * d_OSR; ii++) {
         gr_complex correlation = correlation_buffer[strongest_window_nr + ii];
