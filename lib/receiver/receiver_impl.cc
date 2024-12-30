@@ -5,23 +5,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <gnuradio/io_signature.h>
-#include <gnuradio/math.h>
-
-#include <string.h>
-#include <algorithm>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-#include <gnuradio/gsm/endian.h>
-#include <boost/circular_buffer.hpp>
-#include <boost/scoped_ptr.hpp>
-
 #include "receiver_impl.h"
 #include "sch.h"
 #include "viterbi_detector.h"
+#include <gnuradio/gsm/endian.h>
 #include <gnuradio/gsm/misc_utils/time_spec.h>
+#include <gnuradio/io_signature.h>
+#include <gnuradio/math.h>
+#include <string.h>
+#include <boost/circular_buffer.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <algorithm>
+#include <vector>
 
 #define SYNC_SEARCH_RANGE 30
 
