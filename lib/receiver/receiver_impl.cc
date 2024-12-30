@@ -369,7 +369,7 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
             float normal_corr_max = -1e6;
             //          float normal_corr_max_tmp;
             unsigned int burst_start;
-            int max_tn, tseq_num;
+            int tseq_num;
 
             if (d_tseq_nums.size() == 0) {
                 /**
