@@ -42,13 +42,20 @@ add_subdirectory(receiver)
 set(gsm_sources "${gsm_sources}" PARENT_SCOPE)
 
 add_library(gnuradio-gsm SHARED ${gsm_sources})
+
 target_link_libraries(
     gnuradio-gsm
+    PUBLIC
     gnuradio::gnuradio-runtime
     ${LIBOSMOCORE_LIBRARY}
     ${LIBOSMOCODEC_LIBRARY}
     ${LIBOSMOGSM_LIBRARY}
     ${LIBOSMOCODING_LIBRARY})
+
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(gnuradio-gsm PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 target_include_directories(
     gnuradio-gsm

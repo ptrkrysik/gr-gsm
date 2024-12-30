@@ -12,6 +12,7 @@
 #include <gnuradio/gsm/misc_utils/time_spec.h>
 #include <gnuradio/io_signature.h>
 #include <gnuradio/math.h>
+#include <omp.h>
 #include <string.h>
 #include <boost/circular_buffer.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -88,6 +89,11 @@ receiver_impl::receiver_impl(int osr,
      * i.e. tell it where to find which burst type
      */
     configure_receiver();
+
+    /** Configure openmp TODO: make number of threads a parameter */
+    int current_num_threads = 4;
+    omp_set_dynamic(0);
+    omp_set_num_threads(current_num_threads);
 }
 
 /* Our virtual destructor */
@@ -95,7 +101,6 @@ receiver_impl::~receiver_impl() {}
 
 int receiver_impl::work(int noutput_items, gr_vector_const_void_star& input_items, gr_vector_void_star& output_items)
 {
-    gr_complex* input = (gr_complex*)input_items[0];
     uint64_t start = nitems_read(0);
     uint64_t stop = start + noutput_items;
     d_freq_offset_tag_in_fcch = false;
@@ -239,6 +244,12 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
     }
 
     /* Process all connected inputs */
+
+    int current_num_threads = 8;
+    omp_set_dynamic(0);
+    omp_set_num_threads(current_num_threads);
+
+#pragma omp parallel for
     for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
         const gr_complex* input = gr_input_items[input_nr];
         double signal_pwr = 0;
