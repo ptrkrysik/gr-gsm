@@ -201,9 +201,9 @@ private:
     void configure_receiver();
 
     /* State machine handlers */
-    void fcch_search_handler(gr_complex* input, int noutput_items);
-    void sch_search_handler(gr_complex* input, int noutput_items);
-    void synchronized_handler(gr_complex* input, gr_vector_const_void_star& input_items, int noutput_items);
+    void fcch_search_handler(const gr_complex* input, int noutput_items);
+    void sch_search_handler(const gr_complex* input, int noutput_items);
+    void synchronized_handler(std::vector<const gr_complex*>& input_items, int noutput_items);
 
 public:
     receiver_impl(int osr,

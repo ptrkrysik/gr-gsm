@@ -135,13 +135,13 @@ int receiver_impl::work(int noutput_items, gr_vector_const_void_star& input_item
     d_samples_consumed = 0;
     switch (d_state) {
     case fcch_search:
-        fcch_search_handler(input, noutput_items);
+        fcch_search_handler(gr_input_items[0], noutput_items);
         break;
     case sch_search:
-        sch_search_handler(input, noutput_items);
+        sch_search_handler(gr_input_items[0], noutput_items);
         break;
     case synchronized:
-        synchronized_handler(input, input_items, noutput_items);
+        synchronized_handler(gr_input_items, noutput_items);
         break;
     }
 
@@ -161,7 +161,7 @@ int receiver_impl::work(int noutput_items, gr_vector_const_void_star& input_item
     return d_samples_consumed;
 }
 
-void receiver_impl::fcch_search_handler(gr_complex* input, int noutput_items)
+void receiver_impl::fcch_search_handler(const gr_complex* input, int noutput_items)
 {
     double freq_offset_tmp;
 
@@ -180,7 +180,7 @@ void receiver_impl::fcch_search_handler(gr_complex* input, int noutput_items)
     d_state = sch_search;
 }
 
-void receiver_impl::sch_search_handler(gr_complex* input, int noutput_items)
+void receiver_impl::sch_search_handler(const gr_complex* input, int noutput_items)
 {
     std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
     unsigned char burst_buf[BURST_SIZE];
@@ -221,7 +221,7 @@ void receiver_impl::sch_search_handler(gr_complex* input, int noutput_items)
     d_state = synchronized;
 }
 
-void receiver_impl::synchronized_handler(gr_complex* input, gr_vector_const_void_star& input_items, int noutput_items)
+void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_input_items, int noutput_items)
 {
     /**
      * In this state receiver is synchronized and it processes
@@ -239,7 +239,7 @@ void receiver_impl::synchronized_handler(gr_complex* input, gr_vector_const_void
 
     /* Process all connected inputs */
     for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
-        input = (gr_complex*)input_items[input_nr];
+        const gr_complex* input = gr_input_items[input_nr];
         double signal_pwr = 0;
 
         for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++)
@@ -416,7 +416,7 @@ void receiver_impl::synchronized_handler(gr_complex* input, gr_vector_const_void
             break;
         }
 
-        if (input_nr == input_items.size() - 1) {
+        if (input_nr == gr_input_items.size() - 1) {
             /* Go to the next burst */
             d_burst_nr++;
 
