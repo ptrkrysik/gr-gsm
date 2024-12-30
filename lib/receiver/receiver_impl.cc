@@ -100,11 +100,7 @@ int receiver_impl::work(int noutput_items, gr_vector_const_void_star& input_item
     uint64_t stop = start + noutput_items;
     d_freq_offset_tag_in_fcch = false;
 
-#if 0
-      /* FIXME: jak zrobić to rzutowanie poprawnie */
-      std::vector<const gr_complex *> iii =
-        (std::vector<const gr_complex *>) input_items;
-#endif
+    std::vector<const gr_complex*>& gr_input_items = reinterpret_cast<std::vector<const gr_complex*>&>(input_items);
 
     /* Time synchronization loop */
     float current_time = static_cast<float>(start / (GSM_SYMBOL_RATE * d_OSR));
