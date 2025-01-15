@@ -25,7 +25,7 @@
 #define INCLUDED_GSM_TCH_H_DECODER_H
 
 #include <gnuradio/block.h>
-#include <gsm/api.h>
+#include <gnuradio/gsm/api.h>
 
 namespace gr {
 namespace gsm {
