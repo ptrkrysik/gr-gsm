@@ -19,5 +19,7 @@
   - gsm_tch_f_decoder
   - gsm_tch_h_decoder
 - Utilities:
+  - gsm_burst_file_sink
+  - gsm_burst_file_source
   - gsm_bursts_printer
   - gsm_message_printer

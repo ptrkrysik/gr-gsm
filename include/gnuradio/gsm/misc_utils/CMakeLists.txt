@@ -5,6 +5,8 @@
 
 install(
     FILES
+    burst_file_source.h
+    burst_file_sink.h
     bursts_printer.h
     message_printer.h
     time_spec.h

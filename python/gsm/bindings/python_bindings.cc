@@ -27,6 +27,8 @@ namespace py = pybind11;
     void bind_universal_ctrl_chans_demapper(py::module& m);
     void bind_tch_f_chans_demapper(py::module& m);
     void bind_tch_h_chans_demapper(py::module& m);
+    void bind_burst_file_sink(py::module& m);
+    void bind_burst_file_source(py::module& m);
     void bind_bursts_printer(py::module& m);
     void bind_message_printer(py::module& m);
     void bind_cx_channel_hopper(py::module& m);
@@ -65,6 +67,8 @@ PYBIND11_MODULE(gsm_python, m)
     bind_universal_ctrl_chans_demapper(m);
     bind_tch_f_chans_demapper(m);
     bind_tch_h_chans_demapper(m);
+    bind_burst_file_sink(m);
+    bind_burst_file_source(m);
     bind_bursts_printer(m);
     bind_message_printer(m);
     bind_cx_channel_hopper(m);

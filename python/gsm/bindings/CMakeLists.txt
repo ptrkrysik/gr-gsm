@@ -25,6 +25,8 @@ include(GrPybind)
 ########################################################################
 
 list(APPEND gsm_python_files
+    burst_file_sink_python.cc
+    burst_file_source_python.cc
     tch_f_chans_demapper_python.cc
     tch_h_chans_demapper_python.cc
     universal_ctrl_chans_demapper_python.cc

@@ -5,6 +5,8 @@
 
 install(
     FILES
+    gsm_burst_file_sink.block.yml
+    gsm_burst_file_source.block.yml
     gsm_bursts_printer.block.yml
     gsm_message_printer.block.yml
     DESTINATION share/gnuradio/grc/blocks
