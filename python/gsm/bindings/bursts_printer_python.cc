@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Free Software Foundation, Inc.
+ * Copyright 2025 Free Software Foundation, Inc.
  *
  * This file is part of GNU Radio
  *
@@ -13,8 +13,8 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(misc_utils/bursts_printer.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(8a3bab9bb062758c9d09c2d1a38c04d2)                     */
+/* BINDTOOL_HEADER_FILE(misc_utils/bursts_printer.h)                               */
+/* BINDTOOL_HEADER_FILE_HASH(b9cebda018252523904a31e93d13772d)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>

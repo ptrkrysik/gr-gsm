@@ -13,7 +13,7 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(misc_utils/message_printer.h)                                        */
+/* BINDTOOL_HEADER_FILE(misc_utils/message_printer.h)                              */
 /* BINDTOOL_HEADER_FILE_HASH(c6ace9046fa7821a614f2c1094e87caf)                     */
 /***********************************************************************************/
 

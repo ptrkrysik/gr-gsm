@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Free Software Foundation, Inc.
+ * Copyright 2025 Free Software Foundation, Inc.
  *
  * This file is part of GNU Radio
  *
@@ -13,8 +13,8 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(decoding/control_channels_decoder.h)                        */
-/* BINDTOOL_HEADER_FILE_HASH(b4ecbb55267e27862c2b4f2766a6c3d3)                     */
+/* BINDTOOL_HEADER_FILE(decoding/control_channels_decoder.h)                       */
+/* BINDTOOL_HEADER_FILE_HASH(71090c03faddd3322da0d35901536e87)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
