@@ -8,9 +8,10 @@
 #include <gnuradio/gsm/gsm_constants.h>
 #include <string.h>
 
+#include <stdbool.h>
+
 #include <osmocom/coding/gsm0503_coding.h>
 #include <osmocom/core/utils.h>
-#include <stdbool.h>
 
 static int ubits2sbits(ubit_t* ubits, sbit_t* sbits, int count)
 {
