@@ -6,6 +6,6 @@
 install(
     FILES
     gsm_cx_channel_hopper.block.yml
-    gsm_receiver2.block.yml
+    gsm_receiver.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )

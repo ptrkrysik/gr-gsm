@@ -10,8 +10,8 @@
 #endif
 
 #include "control_channels_decoder_impl.h"
-#include <gnuradio/io_signature.h>
 #include <gnuradio/gsm/gsmtap.h>
+#include <gnuradio/io_signature.h>
 
 #define DATA_BYTES 23
 

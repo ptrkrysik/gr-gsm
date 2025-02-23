@@ -9,10 +9,10 @@
 #include "config.h"
 #endif
 
-#include <gnuradio/gsm/gsmtap.h>
 #include "message_printer_impl.h"
-#include <gnuradio/io_signature.h>
 #include <gnuradio/gsm/endian.h>
+#include <gnuradio/gsm/gsmtap.h>
+#include <gnuradio/io_signature.h>
 #include <stdio.h>
 #include <iomanip>
 

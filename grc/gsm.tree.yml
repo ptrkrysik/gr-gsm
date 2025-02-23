@@ -3,10 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-'[GSM v2]':
+'[GSM]':
 - Receiver:
-  - gsm_receiver2
+  - gsm_receiver
+  - gsm_receiver_with_uplink
   - gsm_cx_channel_hopper
+  - gsm_input
 - Logical channels demapping:
   - gsm_universal_ctrl_chans_demapper
   - gsm_bcch_ccch_demapper
@@ -14,12 +16,25 @@
   - gsm_sdcch8_demapper
   - gsm_tch_f_chans_demapper
   - gsm_tch_h_chans_demapper
+- Decryption:
+  - gsm_decryption
 - Decoding:
   - gsm_control_channels_decoder
   - gsm_tch_f_decoder
   - gsm_tch_h_decoder
 - Utilities:
+  - gsm_bursts_printer
   - gsm_burst_file_sink
   - gsm_burst_file_source
-  - gsm_bursts_printer
+  - gsm_collect_system_info
+  - gsm_message_file_sink
+  - gsm_message_file_source
+  - gsm_extract_assignment_cmd
+  - gsm_extract_immediate_assignment
+  - gsm_controlled_rotator_cc
+  - gsm_controlled_fractional_resampler_cc
   - gsm_message_printer
+  - gsm_clock_offset_corrector_tagged
+  - gsm_msg_to_tag
+  - gsm_tmsi_dumper
+

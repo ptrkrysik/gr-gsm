@@ -21,7 +21,9 @@ if "CMAKE_BINARY_DIR" in os.environ:
     # some unit tests fail.
     __path__ += [
         # Load the local (not yet installed) python modules from the local subdirectories
-        os.path.join(dirname, "demapping")]
+        os.path.join(dirname, "misc_utils"),
+        os.path.join(dirname, "demapping"),
+        os.path.join(dirname, "receiver")]
 
 # import pybind11 generated symbols into the gsm namespace
 try:
@@ -34,9 +36,13 @@ except ModuleNotFoundError:
 #
 try:
     # import any pure python here
+    from .clock_offset_corrector_tagged import clock_offset_corrector_tagged
+    from .gsm_input import gsm_input
     from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
     from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
     from .gsm_sdcch8_demapper import gsm_sdcch8_demapper
+    from .arfcn import *
+    from .device import *
 except ImportError as e:
     import traceback; traceback.print_exc()
     raise

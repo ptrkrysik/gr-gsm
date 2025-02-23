@@ -4,6 +4,7 @@
 #
 
 add_sources(
+    clock_offset_control_impl.cc
     cx_channel_hopper_impl.cc
     receiver_config.cc
     receiver_impl.cc

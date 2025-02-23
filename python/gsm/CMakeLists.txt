@@ -16,6 +16,8 @@ endif()
 
 add_subdirectory(demapping)
 add_subdirectory(bindings)
+add_subdirectory(misc_utils)
+add_subdirectory(receiver)
 
 ########################################################################
 # Install python sources
@@ -35,3 +37,18 @@ add_custom_target(
     copy_module_for_tests ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}
             ${PROJECT_BINARY_DIR}/test_modules/gnuradio/gsm/)
+
+set(GR_TEST_TARGET_DEPS gnuradio-gsm)
+set(GR_TEST_ENVIRONS "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}")
+GR_ADD_TEST(qa_arfcn ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_arfcn.py)
+GR_ADD_TEST(qa_burst_file_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_file_source.py)
+GR_ADD_TEST(qa_burst_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_printer.py)
+GR_ADD_TEST(qa_decryption ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_decryption.py)
+GR_ADD_TEST(qa_gsm_bcch_ccch_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_bcch_ccch_demapper.py)
+GR_ADD_TEST(qa_gsm_bcch_ccch_sdcch4_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_bcch_ccch_sdcch4_demapper.py)
+GR_ADD_TEST(qa_gsm_sdcch8_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gsm_sdcch8_demapper.py)
+GR_ADD_TEST(qa_message_printer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_message_printer.py)
+GR_ADD_TEST(qa_tch_f_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_f_decoder.py)
+GR_ADD_TEST(qa_tch_h_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_decoder.py)
+GR_ADD_TEST(qa_tch_f_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_f_chans_demapper.py)
+GR_ADD_TEST(qa_tch_h_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_chans_demapper.py)

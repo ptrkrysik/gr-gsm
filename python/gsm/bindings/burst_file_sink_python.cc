@@ -13,7 +13,7 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(misc_utils/burst_file_sink.h                               */
+/* BINDTOOL_HEADER_FILE(misc_utils/burst_file_sink.h)                              */
 /* BINDTOOL_HEADER_FILE_HASH(992f444f6f5e0d2392066504648107df)                     */
 /***********************************************************************************/
 

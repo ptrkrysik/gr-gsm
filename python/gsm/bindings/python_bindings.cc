@@ -21,18 +21,33 @@ namespace py = pybind11;
 // Please do not delete
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
-    void bind_tch_f_decoder(py::module& m);
-    void bind_tch_h_decoder(py::module& m);
-    void bind_control_channels_decoder(py::module& m);
-    void bind_universal_ctrl_chans_demapper(py::module& m);
-    void bind_tch_f_chans_demapper(py::module& m);
-    void bind_tch_h_chans_demapper(py::module& m);
-    void bind_burst_file_sink(py::module& m);
-    void bind_burst_file_source(py::module& m);
-    void bind_bursts_printer(py::module& m);
-    void bind_message_printer(py::module& m);
-    void bind_cx_channel_hopper(py::module& m);
-    void bind_receiver(py::module& m);
+void bind_burst_file_sink(py::module& m);
+void bind_burst_file_source(py::module& m);
+void bind_burst_sink(py::module& m);
+void bind_burst_source(py::module& m);
+void bind_bursts_printer(py::module& m);
+void bind_clock_offset_control(py::module& m);
+void bind_control_channels_decoder(py::module& m);
+void bind_controlled_fractional_resampler_cc(py::module& m);
+void bind_controlled_rotator_cc(py::module& m);
+void bind_cx_channel_hopper(py::module& m);
+void bind_decryption(py::module& m);
+void bind_extract_assignment_cmd(py::module& m);
+void bind_extract_immediate_assignment(py::module& m);
+void bind_extract_system_info(py::module& m);
+void bind_message_file_sink(py::module& m);
+void bind_message_file_source(py::module& m);
+void bind_message_printer(py::module& m);
+void bind_message_sink(py::module& m);
+void bind_message_source(py::module& m);
+void bind_msg_to_tag(py::module& m);
+void bind_receiver(py::module& m);
+void bind_tch_f_chans_demapper(py::module& m);
+void bind_tch_f_decoder(py::module& m);
+void bind_tch_h_chans_demapper(py::module& m);
+void bind_tch_h_decoder(py::module& m);
+void bind_tmsi_dumper(py::module& m);
+void bind_universal_ctrl_chans_demapper(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -61,17 +76,32 @@ PYBIND11_MODULE(gsm_python, m)
     // Please do not delete
     /**************************************/
     // BINDING_FUNCTION_CALLS(
-    bind_tch_f_decoder(m);
-    bind_tch_h_decoder(m);
-    bind_control_channels_decoder(m);
-    bind_universal_ctrl_chans_demapper(m);
-    bind_tch_f_chans_demapper(m);
-    bind_tch_h_chans_demapper(m);
     bind_burst_file_sink(m);
     bind_burst_file_source(m);
+    bind_burst_sink(m);
+    bind_burst_source(m);
     bind_bursts_printer(m);
-    bind_message_printer(m);
+    bind_clock_offset_control(m);
+    bind_control_channels_decoder(m);
+    bind_controlled_fractional_resampler_cc(m);
+    bind_controlled_rotator_cc(m);
     bind_cx_channel_hopper(m);
+    bind_decryption(m);
+    bind_extract_assignment_cmd(m);
+    bind_extract_immediate_assignment(m);
+    bind_extract_system_info(m);
+    bind_message_file_sink(m);
+    bind_message_file_source(m);
+    bind_message_printer(m);
+    bind_message_sink(m);
+    bind_message_source(m);
+    bind_msg_to_tag(m);
     bind_receiver(m);
+    bind_tch_f_chans_demapper(m);
+    bind_tch_f_decoder(m);
+    bind_tch_h_chans_demapper(m);
+    bind_tch_h_decoder(m);
+    bind_tmsi_dumper(m);
+    bind_universal_ctrl_chans_demapper(m);
     // ) END BINDING_FUNCTION_CALLS
 }

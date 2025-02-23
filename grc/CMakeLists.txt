@@ -7,9 +7,11 @@
 #
 
 install(FILES
-    gsm2.tree.yml DESTINATION share/gnuradio/grc/blocks)
+    gsm.tree.yml DESTINATION share/gnuradio/grc/blocks)
 
 add_subdirectory(decoding)
 add_subdirectory(demapping)
 add_subdirectory(misc_utils)
+add_subdirectory(qa_utils)
 add_subdirectory(receiver)
+

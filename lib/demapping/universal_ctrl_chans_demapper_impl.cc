@@ -10,9 +10,9 @@
 #endif
 
 #include "universal_ctrl_chans_demapper_impl.h"
-#include <gnuradio/io_signature.h>
 #include <gnuradio/gsm/endian.h>
 #include <gnuradio/gsm/gsmtap.h>
+#include <gnuradio/io_signature.h>
 #include <set>
 
 #define BURST_SIZE 148

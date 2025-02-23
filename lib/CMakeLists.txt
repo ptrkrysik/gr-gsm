@@ -34,9 +34,17 @@ endmacro()
 #########################################################################
 # Subdirecories
 #########################################################################
+if(FFTChannelizer_FOUND)
+    add_subdirectory(channelization)
+    message(STATUS "FFT based channelizer found")
+else()
+    message(STATUS "FFT based channelizer NOT found!")
+endif()
 add_subdirectory(decoding)
+add_subdirectory(decryption)
 add_subdirectory(demapping)
 add_subdirectory(misc_utils)
+add_subdirectory(qa_utils)
 add_subdirectory(receiver)
 
 set(gsm_sources "${gsm_sources}" PARENT_SCOPE)
@@ -47,10 +55,18 @@ target_link_libraries(
     gnuradio-gsm
     PUBLIC
     gnuradio::gnuradio-runtime
+    gnuradio::gnuradio-filter
     ${LIBOSMOCORE_LIBRARY}
     ${LIBOSMOCODEC_LIBRARY}
     ${LIBOSMOGSM_LIBRARY}
     ${LIBOSMOCODING_LIBRARY})
+
+if(FFTChannelizer_FOUND)
+    target_link_libraries(
+        gnuradio-gsm
+        PUBLIC
+        ${FFTChannelizer_LIBRARY})
+endif()
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
@@ -60,6 +76,7 @@ endif()
 target_include_directories(
     gnuradio-gsm
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../include>
     PUBLIC $<BUILD_INTERFACE:${LIBOSMOCORE_INCLUDE_DIR}>
     PUBLIC $<INSTALL_INTERFACE:include>)
 

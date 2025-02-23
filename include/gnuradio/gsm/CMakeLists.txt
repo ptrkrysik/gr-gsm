@@ -18,4 +18,6 @@ install(FILES
 
 add_subdirectory(decoding)
 add_subdirectory(demapping)
+add_subdirectory(qa_utils)
 add_subdirectory(receiver)
+
