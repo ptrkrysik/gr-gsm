@@ -27,7 +27,8 @@
 #define PROCESSED_CHUNK   BURST_SIZE+2*GUARD_PERIOD
 
 #define SCH_DATA_LEN      39
-#define TS_BITS           (TAIL_BITS+USEFUL_BITS+TAIL_BITS+GUARD_BITS)  //a full TS (156 bits)
+#define TS_BITS           (TAIL_BITS+USEFUL_BITS+TAIL_BITS+GUARD_BITS)   //a full TS (156 bits)
+#define TS_LEN            (TAIL_BITS+USEFUL_BITS+TAIL_BITS+GUARD_PERIOD) // TS period in fractional bits (156.25 bits)
 #define TS_PER_FRAME      8
 #define FRAME_BITS        (TS_PER_FRAME * TS_BITS + 2) // 156.25 * 8
 #define FCCH_POS          TAIL_BITS

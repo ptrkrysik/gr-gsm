@@ -245,204 +245,203 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
     omp_set_dynamic(0);
     omp_set_num_threads(current_num_threads);
 
+    int bursts_in_buffer = std::floor((double)noutput_items / ((double)(TS_LEN * d_OSR)));
+    for (int b_nr = 0; b_nr < bursts_in_buffer; ++b_nr) {
 #pragma omp parallel for
-    for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
-        std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
-        int offset = 0;
-        unsigned char output_binary[BURST_SIZE];
-        burst_type b_type;
-        const gr_complex* input = gr_input_items[input_nr];
-        double signal_pwr = 0;
+        for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
+            std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
+            int offset = 0;
+            unsigned char output_binary[BURST_SIZE];
+            burst_type b_type;
+            const gr_complex* input = gr_input_items[input_nr] + (size_t)std::round(b_nr * ((double)(TS_LEN * d_OSR)));
+            double signal_pwr = 0;
 
-        for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++) {
-            signal_pwr += abs(input[ii]) * abs(input[ii]);
-        }
+            for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++) {
+                signal_pwr += abs(input[ii]) * abs(input[ii]);
+            }
 
-        signal_pwr = signal_pwr / (TS_BITS);
-        d_signal_dbm = round(10 * log10(signal_pwr / 50));
+            signal_pwr = signal_pwr / (TS_BITS);
+            d_signal_dbm = round(10 * log10(signal_pwr / 50));
 
-        if (input_nr == 0) {
-            d_c0_signal_dbm = d_signal_dbm;
-        }
+            if (input_nr == 0) {
+                d_c0_signal_dbm = d_signal_dbm;
+            }
 
-        /* Get burst type for given burst number */
-        b_type = input_nr == 0 ? d_channel_conf.get_burst_type(d_burst_nr) : normal_or_noise;
+            /* Get burst type for given burst number */
+            b_type = input_nr == 0 ? d_channel_conf.get_burst_type(d_burst_nr) : normal_or_noise;
 
-        /* Process burst according to its type */
-        switch (b_type) {
-        case fcch_burst: {
-            if (d_freq_offset_tag_in_fcch)
-                break;
+            /* Process burst according to its type */
+            switch (b_type) {
+            case fcch_burst: {
+                if (d_freq_offset_tag_in_fcch)
+                    break;
 
-            /* Send all-zero sequence message */
-            send_burst(d_burst_nr, fc_fb, GSMTAP_BURST_FCCH, input_nr);
+                /* Send all-zero sequence message */
+                send_burst(d_burst_nr, fc_fb, GSMTAP_BURST_FCCH, input_nr);
 
-            /* Extract frequency offset */
-            const unsigned first_sample = ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
-            const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
-            double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);
+                /* Extract frequency offset */
+                const unsigned first_sample = ceil((GUARD_PERIOD + 2 * TAIL_BITS) * d_OSR) + 1;
+                const unsigned last_sample = first_sample + USEFUL_BITS * d_OSR - TAIL_BITS * d_OSR;
+                double freq_offset_tmp = compute_freq_offset(input, first_sample, last_sample);
 
-            /* Frequency correction loop */
-            pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),
-                                             pmt::from_double(freq_offset_tmp - d_freq_offset_setting),
-                                             pmt::mp("synchronized"));
-            message_port_pub(pmt::mp("measurements"), msg);
-
-            break;
-        }
-
-        case sch_burst: {
-            int ncc, bcc;
-            int t1, t2, t3;
-            int rc;
-            int burst_start = 0;
-
-            /* Get channel impulse response */
-            burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);
-
-            /* Perform MLSE detection */
-            detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
-
-            /* Attempt to decode SCH burst */
-            rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &ncc, &bcc);
-            if (rc) {
-                if (++d_failed_sch >= MAX_SCH_ERRORS) {
-                    /* We have to resynchronize, change state */
-                    d_state = fcch_search;
-
-                    /* Frequency correction loop */
-                    pmt::pmt_t msg =
-                        pmt::make_tuple(pmt::mp("freq_offset"), pmt::from_double(0.0), pmt::mp("sync_loss"));
-                    message_port_pub(pmt::mp("measurements"), msg);
-                }
+                /* Frequency correction loop */
+                pmt::pmt_t msg = pmt::make_tuple(pmt::mp("freq_offset"),
+                                                 pmt::from_double(freq_offset_tmp - d_freq_offset_setting),
+                                                 pmt::mp("synchronized"));
+                message_port_pub(pmt::mp("measurements"), msg);
 
                 break;
             }
 
-            /* Compose a message with GSMTAP header and bits */
-            send_burst(d_burst_nr, output_binary, GSMTAP_BURST_SCH, input_nr, burst_start);
+            case sch_burst: {
+                int ncc, bcc;
+                int t1, t2, t3;
+                int rc;
+                int burst_start = 0;
 
-            /**
-             * Decoding was successful, now
-             * compute offset from burst_start,
-             * burst should start after a guard period.
-             */
-            offset = burst_start - floor((GUARD_PERIOD)*d_OSR);
-            to_consume += offset;
-            d_failed_sch = 0;
-
-            break;
-        }
-
-        case normal_burst: {
-            float normal_corr_max;
-            int burst_start = 0;
-            /**
-             * Get channel impulse response for given
-             * training sequence number - d_bcc
-             */
-            burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
-
-            /* Perform MLSE detection */
-            detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
-
-            /* Compose a message with GSMTAP header and bits */
-            send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
-
-            break;
-        }
-
-        case dummy_or_normal: {
-            unsigned int normal_burst_start, dummy_burst_start;
-            float dummy_corr_max, normal_corr_max;
-            int burst_start = 0;
-
-            dummy_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &dummy_corr_max, TS_DUMMY);
-            normal_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
-
-            if (normal_corr_max > dummy_corr_max) {
-                burst_start = normal_burst_start;
+                /* Get channel impulse response */
+                burst_start = get_sch_chan_imp_resp(input, &channel_imp_resp[0]);
 
                 /* Perform MLSE detection */
-                detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
+                detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
 
-                /* Compose a message with GSMTAP header and bits */
-                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, normal_burst_start);
-            } else {
-                burst_start = dummy_burst_start;
+                /* Attempt to decode SCH burst */
+                rc = decode_sch(&output_binary[3], &t1, &t2, &t3, &ncc, &bcc);
+                if (rc) {
+                    if (++d_failed_sch >= MAX_SCH_ERRORS) {
+                        /* We have to resynchronize, change state */
+                        d_state = fcch_search;
 
-                /* Compose a message with GSMTAP header and bits */
-                send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr, dummy_burst_start);
-            }
-
-            break;
-        }
-
-        case normal_or_noise: {
-            std::vector<gr_complex> v(input, input + noutput_items);
-            float normal_corr_max = -1e6;
-            //          float normal_corr_max_tmp;
-            unsigned int burst_start;
-            int tseq_num;
-
-            if (d_tseq_nums.size() == 0) {
-                /**
-                 * There is no information about training sequence,
-                 * however the receiver can detect it with use of a
-                 * very simple algorithm based on finding
-                 */
-                get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, 0);
-
-                float ts_max = normal_corr_max;
-                int ts_max_num = 0;
-
-                for (int ss = 1; ss <= 7; ss++) {
-                    get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, ss);
-
-                    if (ts_max < normal_corr_max) {
-                        ts_max = normal_corr_max;
-                        ts_max_num = ss;
+                        /* Frequency correction loop */
+                        pmt::pmt_t msg =
+                            pmt::make_tuple(pmt::mp("freq_offset"), pmt::from_double(0.0), pmt::mp("sync_loss"));
+                        message_port_pub(pmt::mp("measurements"), msg);
                     }
+
+                    break;
                 }
 
-                d_tseq_nums.push_back(ts_max_num);
+                /* Compose a message with GSMTAP header and bits */
+                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_SCH, input_nr, burst_start);
+
+                /**
+                 * Decoding was successful, now
+                 * compute offset from burst_start,
+                 * burst should start after a guard period.
+                 */
+                offset = burst_start - floor((GUARD_PERIOD)*d_OSR);
+                to_consume += offset;
+                d_failed_sch = 0;
+
+                break;
             }
 
-            /* Choose proper training sequence number */
-            tseq_num = input_nr <= d_tseq_nums.size() ? d_tseq_nums[input_nr - 1] : d_tseq_nums.back();
+            case normal_burst: {
+                float normal_corr_max;
+                int burst_start = 0;
+                /**
+                 * Get channel impulse response for given
+                 * training sequence number - d_bcc
+                 */
+                burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
 
-            /* Get channel impulse response */
-            burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, tseq_num);
+                /* Perform MLSE detection */
+                detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
 
-            /* Perform MLSE detection */
-            detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
+                /* Compose a message with GSMTAP header and bits */
+                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
 
-            /* Compose a message with GSMTAP header and bits */
-            send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
+                break;
+            }
 
-            break;
+            case dummy_or_normal: {
+                unsigned int normal_burst_start, dummy_burst_start;
+                float dummy_corr_max, normal_corr_max;
+                int burst_start = 0;
+
+                dummy_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &dummy_corr_max, TS_DUMMY);
+                normal_burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, d_bcc);
+
+                if (normal_corr_max > dummy_corr_max) {
+                    burst_start = normal_burst_start;
+
+                    /* Perform MLSE detection */
+                    detect_burst(input, &channel_imp_resp[0], normal_burst_start, output_binary);
+
+                    /* Compose a message with GSMTAP header and bits */
+                    send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, normal_burst_start);
+                } else {
+                    burst_start = dummy_burst_start;
+
+                    /* Compose a message with GSMTAP header and bits */
+                    send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr, dummy_burst_start);
+                }
+
+                break;
+            }
+
+            case normal_or_noise: {
+                std::vector<gr_complex> v(input, input + noutput_items);
+                float normal_corr_max = -1e6;
+                //          float normal_corr_max_tmp;
+                unsigned int burst_start;
+                int tseq_num;
+
+                if (d_tseq_nums.size() == 0) {
+                    /**
+                     * There is no information about training sequence,
+                     * however the receiver can detect it with use of a
+                     * very simple algorithm based on finding
+                     */
+                    get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, 0);
+
+                    float ts_max = normal_corr_max;
+                    int ts_max_num = 0;
+
+                    for (int ss = 1; ss <= 7; ss++) {
+                        get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, ss);
+
+                        if (ts_max < normal_corr_max) {
+                            ts_max = normal_corr_max;
+                            ts_max_num = ss;
+                        }
+                    }
+
+                    d_tseq_nums.push_back(ts_max_num);
+                }
+
+                /* Choose proper training sequence number */
+                tseq_num = input_nr <= d_tseq_nums.size() ? d_tseq_nums[input_nr - 1] : d_tseq_nums.back();
+
+                /* Get channel impulse response */
+                burst_start = get_norm_chan_imp_resp(input, &channel_imp_resp[0], &normal_corr_max, tseq_num);
+
+                /* Perform MLSE detection */
+                detect_burst(input, &channel_imp_resp[0], burst_start, output_binary);
+
+                /* Compose a message with GSMTAP header and bits */
+                send_burst(d_burst_nr, output_binary, GSMTAP_BURST_NORMAL, input_nr, burst_start);
+
+                break;
+            }
+
+            case dummy:
+                send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr);
+                break;
+
+            case rach_burst:
+            case empty:
+                /* Do nothing */
+                break;
+            }
         }
+        /* Go to the next burst */
+        d_burst_nr++;
 
-        case dummy:
-            send_burst(d_burst_nr, dummy_burst, GSMTAP_BURST_DUMMY, input_nr);
-            break;
-
-        case rach_burst:
-        case empty:
-            /* Do nothing */
-            break;
-        }
+        /* Consume samples of the burst up to next guard period */
+        to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();
+        d_samples_consumed += to_consume;
     }
-    // if (input_nr == gr_input_items.size() - 1) {
-    /* Go to the next burst */
-    d_burst_nr++;
-
-    /* Consume samples of the burst up to next guard period */
-    to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset(); //!!
-    //          consume_each(to_consume);
-    d_samples_consumed += to_consume;
-    // }
-    // }
 }
 
 bool receiver_impl::find_fcch_burst(const gr_complex* input, const int nitems, double& computed_freq_offset)
