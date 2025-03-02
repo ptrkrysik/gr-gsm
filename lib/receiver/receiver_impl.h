@@ -24,7 +24,6 @@ private:
     unsigned int d_samples_consumed;
     bool d_rx_time_received;
     //        time_sample_ref d_time_samp_ref;
-    int d_c0_burst_start;
     float d_c0_signal_dbm;
 
     /**@name Configuration of the receiver */
