@@ -34,7 +34,9 @@ endif()
 # Make sure our local CMake Modules path comes first
 list(INSERT CMAKE_MODULE_PATH 0 ${PROJECT_SOURCE_DIR}/cmake/Modules)
 # Find gnuradio to get access to the cmake modules
-find_package(Gnuradio "3.10" REQUIRED)
+
+set(GR_REQUIRED_COMPONENTS RUNTIME BLOCKS FFT FILTER PMT)
+find_package(Gnuradio "3.10" REQUIRED COMPONENTS runtime blocks fft filter pmt)
 
 # Set the version information here
 # cmake-format: off
