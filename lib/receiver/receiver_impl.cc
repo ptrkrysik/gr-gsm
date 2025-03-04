@@ -245,15 +245,16 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
     omp_set_dynamic(0);
     omp_set_num_threads(current_num_threads);
 
-    int bursts_in_buffer = std::floor((double)noutput_items / ((double)(TS_LEN * d_OSR)));
-    for (int b_nr = 0; b_nr < bursts_in_buffer; ++b_nr) {
+    size_t burst_offset = 0;
+//    int bursts_in_buffer = std::floor((double)noutput_items / ((double)(TS_LEN * d_OSR)));
+//    for (int b_nr = 0; b_nr < bursts_in_buffer; ++b_nr) {
 #pragma omp parallel for
         for (size_t input_nr = 0; input_nr < inputs_to_process; input_nr++) {
             std::vector<gr_complex> channel_imp_resp(CHAN_IMP_RESP_LENGTH * d_OSR);
             int offset = 0;
             unsigned char output_binary[BURST_SIZE];
             burst_type b_type;
-            const gr_complex* input = gr_input_items[input_nr] + (size_t)std::round(b_nr * ((double)(TS_LEN * d_OSR)));
+            const gr_complex* input = gr_input_items[input_nr] + burst_offset;
             double signal_pwr = 0;
 
             for (int ii = GUARD_PERIOD; ii < TS_BITS; ii++) {
@@ -441,7 +442,9 @@ void receiver_impl::synchronized_handler(std::vector<const gr_complex*>& gr_inpu
         /* Consume samples of the burst up to next guard period */
         to_consume += TS_BITS * d_OSR + d_burst_nr.get_offset();
         d_samples_consumed += to_consume;
-    }
+        to_consume = 0;
+//        burst_offset += TS_BITS * d_OSR + d_burst_nr.get_offset();
+//    }
 }
 
 bool receiver_impl::find_fcch_burst(const gr_complex* input, const int nitems, double& computed_freq_offset)
