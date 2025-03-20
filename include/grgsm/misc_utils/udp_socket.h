@@ -36,7 +36,7 @@ namespace gr {
     class udp_socket
     {
     private:
-      boost::asio::io_service d_io_service;
+      boost::asio::io_context d_io_service;
       std::vector<char> d_rxbuf;
       gr::thread::thread d_thread;
       bool d_started;
