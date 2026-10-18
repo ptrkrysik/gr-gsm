@@ -26,6 +26,10 @@ To join the group with any e-mail address, use this link:
 
 Development
 ===========
+Build and file-based integration tests run with GitHub Actions on Ubuntu 24.04
+and Ubuntu 26.04. See [tests/README.md](tests/README.md) for details and local
+test instructions.
+
 New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, correction of bug y).
 
 If you wish to develop something for gr-gsm but don't know exactly what, then look for issues with label "Enhancement". Select one that you feel you are able to complete. After that claim it by commenting in the comment section of the issue. If there is any additional information about gr-gsm needed by you to make completing the task easier - just ask.

@@ -1,0 +1,85 @@
+name: Build and integration test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-decode:
+    name: Ubuntu ${{ matrix.ubuntu }}
+    runs-on: ubuntu-24.04
+    container: ubuntu:${{ matrix.ubuntu }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        ubuntu: ['24.04', '26.04']
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Install build and runtime dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates git build-essential cmake pkg-config \
+            gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
+            pybind11-dev python3-dev python3-pybind11 python3-packaging
+
+      - uses: actions/checkout@v4
+
+      - name: Report toolchain versions
+        run: |
+          gnuradio-config-info --version
+          python3 --version
+          cmake --version
+          c++ --version
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            -DENABLE_DOXYGEN=OFF
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Install and check Python bindings
+        run: |
+          cmake --install build
+          ldconfig
+          python3 -c 'from gnuradio import gsm; print(gsm.__file__); print(gsm.receiver)'
+
+      - name: Compile livemon flowgraph
+        env:
+          GRC_BLOCKS_PATH: /usr/local/share/gnuradio/grc/blocks
+        run: grcc -o build apps/grgsm_livemon.grc
+
+      - name: Decode reference IQ recording
+        run: |
+          timeout 120s python3 -u tests/integration/decode_capture.py \
+            --download --capture build/integration/capture.cfile \
+            2>&1 | tee build/integration.log
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-ubuntu-${{ matrix.ubuntu }}
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles/CMakeConfigureLog.yaml
+            build/integration.log
+          if-no-files-found: ignore
