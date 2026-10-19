@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+id: gsm_clock_offset_control
+label: Clock Offset Control
+parameters:
+- id: fc
+  label: Center Frequency
+  dtype: real
+  default: 940e6
+- id: samp_rate
+  label: Sample Rate
+  dtype: real
+  default: 1e6
+- id: osr
+  label: Oversampling Ratio
+  dtype: int
+  default: '4'
+inputs:
+- domain: message
+  id: measurements
+outputs:
+- domain: message
+  id: ctrl
+templates:
+  imports: from gnuradio import gsm
+  make: gsm.clock_offset_control(${fc}, ${samp_rate}, ${osr})
+  callbacks:
+  - set_fc(${fc})
+  - set_samp_rate(${samp_rate})
+  - set_osr(${osr})
+file_format: 1

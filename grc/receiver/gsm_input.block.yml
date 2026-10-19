@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+id: gsm_input
+label: GSM Input
+parameters:
+- id: fc
+  label: Center Frequency
+  dtype: real
+  default: 940e6
+- id: osr
+  label: Oversampling Ratio
+  dtype: int
+  default: '4'
+- id: ppm
+  label: Frequency Correction (ppm)
+  dtype: real
+  default: '0'
+- id: samp_rate_in
+  label: Input Sample Rate
+  dtype: real
+  default: 1e6
+inputs:
+- domain: stream
+  dtype: complex
+- domain: message
+  id: ctrl_in
+  optional: true
+outputs:
+- domain: stream
+  dtype: complex
+templates:
+  imports: from gnuradio import gsm
+  make: gsm.gsm_input(fc=${fc}, osr=${osr}, ppm=${ppm}, samp_rate_in=${samp_rate_in})
+  callbacks:
+  - set_fc(${fc})
+  - set_osr(${osr})
+  - set_ppm(${ppm})
+  - set_samp_rate_in(${samp_rate_in})
+file_format: 1

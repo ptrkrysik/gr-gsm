@@ -7,5 +7,7 @@ install(
     FILES
     gsm_cx_channel_hopper.block.yml
     gsm_receiver.block.yml
+    gsm_input.block.yml
+    gsm_clock_offset_control.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )
