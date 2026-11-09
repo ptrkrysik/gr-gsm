@@ -51,18 +51,21 @@ list(APPEND gsm_python_files
     extract_immediate_assignment_python.cc
     extract_system_info_python.cc
     fn_time_python.cc
+    gen_test_ab_python.cc
     message_file_sink_python.cc
     message_file_source_python.cc
     message_printer_python.cc
     message_sink_python.cc
     message_source_python.cc
     msg_to_tag_python.cc
+    preprocess_tx_burst_python.cc
     receiver_python.cc
     tch_f_chans_demapper_python.cc
     tch_f_decoder_python.cc
     tch_h_chans_demapper_python.cc
     tch_h_decoder_python.cc
     tmsi_dumper_python.cc
+    txtime_setter_python.cc
     universal_ctrl_chans_demapper_python.cc
     uplink_downlink_splitter_python.cc
     python_bindings.cc)

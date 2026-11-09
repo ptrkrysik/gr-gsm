@@ -47,6 +47,7 @@ add_subdirectory(flow_control)
 add_subdirectory(misc_utils)
 add_subdirectory(qa_utils)
 add_subdirectory(receiver)
+add_subdirectory(transmitter)
 
 set(gsm_sources "${gsm_sources}" PARENT_SCOPE)
 

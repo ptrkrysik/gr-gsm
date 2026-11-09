@@ -12,7 +12,6 @@
 install(FILES
     api.h
     endian.h
-    gsm_constants.h
     gsmtap.h DESTINATION include/gnuradio/gsm
 )
 
@@ -21,4 +20,5 @@ add_subdirectory(demapping)
 add_subdirectory(flow_control)
 add_subdirectory(qa_utils)
 add_subdirectory(receiver)
+add_subdirectory(transmitter)
 
