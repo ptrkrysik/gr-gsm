@@ -12,7 +12,7 @@ description here (python/__init__.py).
 '''
 import os
 
-if "CMAKE_BINARY_DIR" in os.environ:
+if "CMAKE_BINARY_DIR" in os.environ or "PROJECT_BINARY_DIR" in os.environ:
     dirname, filename = os.path.split(os.path.abspath(__file__))
 
     # As the directory structure in the repository is different then the one after the package
