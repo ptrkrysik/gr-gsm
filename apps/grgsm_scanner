@@ -181,7 +181,8 @@ class wideband_receiver(gr.hier_block2):
 
 
 class wideband_scanner(gr.top_block):
-    def __init__(self, rec_len=3, sample_rate=2e6, carrier_frequency=939e6, gain=24, ppm=0, args=""):
+    def __init__(self, rec_len=3, sample_rate=2e6, carrier_frequency=939e6, gain=24, ppm=0, args="",
+                 if_gain=32, bb_gain=30):
         gr.top_block.__init__(self, "Wideband Scanner")
 
         self.rec_len = rec_len
@@ -212,8 +213,8 @@ class wideband_scanner(gr.top_block):
         self.sdr_source.set_gain_mode(True, 0)
         self.sdr_source.set_bandwidth(sample_rate, 0)
         self.sdr_source.set_gain(gain, 0)
-        self.sdr_source.set_if_gain(32, 0)
-        self.sdr_source.set_bb_gain(30, 0)
+        self.sdr_source.set_if_gain(if_gain, 0)
+        self.sdr_source.set_bb_gain(bb_gain, 0)
         self.head = blocks.head(gr.sizeof_gr_complex * 1, int(rec_len * sample_rate))
 
         # shift again by -0.1MHz in order to align channel center in 0Hz
@@ -286,7 +287,7 @@ class channel_info(object):
         return "ARFCN: %4u, Freq: %6.1fM, CID: %5u, LAC: %5u, MCC: %3u, MNC: %3u, Pwr: %3i" % (
             self.arfcn, self.freq / 1e6, self.cid, self.lac, self.mcc, self.mnc, self.power)
 
-def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
+def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False, if_gain = 32, bb_gain = 30):
     signallist = []
     channels_num = int(samp_rate / 0.2e6)
     for arfcn_range in gsm.arfcn.get_arfcn_ranges(band):
@@ -314,7 +315,8 @@ def do_scan(samp_rate, band, speed, ppm, gain, args, prn = None, debug = False):
             scanner = wideband_scanner(rec_len=6 - speed,
                                        sample_rate=samp_rate,
                                        carrier_frequency=current_freq,
-                                       ppm=ppm, gain=gain, args=args)
+                                       ppm=ppm, gain=gain, args=args,
+                                       if_gain=if_gain, bb_gain=bb_gain)
 
             # start recording
             scanner.start()
@@ -375,6 +377,10 @@ def argument_parser():
                       help="Set frequency correction in ppm [default=%default]")
     parser.add_option("-g", "--gain", dest="gain", type="eng_float", default=24.0,
                       help="Set gain [default=%default]")
+    parser.add_option("", "--if-gain", dest="if_gain", type="eng_float", default=32.0,
+                      help="Set IF gain, used by devices that have it e.g. HackRF [default=%default]")
+    parser.add_option("", "--bb-gain", dest="bb_gain", type="eng_float", default=30.0,
+                      help="Set baseband gain, used by devices that have it e.g. HackRF [default=%default]")
     parser.add_option("", "--args", dest="args", type="string", default="",
                       help="Set device arguments [default=%default]."
                       " Use --list-devices the view the available devices")
@@ -415,7 +421,8 @@ def main(options = None):
                 print(info.get_verbose_info())
     print("")
     do_scan(options.samp_rate, options.band, options.speed,
-            options.ppm, options.gain, options.args, prn = printfunc, debug = options.debug)
+            options.ppm, options.gain, options.args, prn = printfunc, debug = options.debug,
+            if_gain = options.if_gain, bb_gain = options.bb_gain)
 
 if __name__ == '__main__':
     main()
