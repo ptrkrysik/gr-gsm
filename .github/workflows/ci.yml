@@ -74,7 +74,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/test_data
-          key: gr-gsm-test-data-e2e5b44bc2906d5f01944355ce5c83b39eec6fee
+          key: gr-gsm-test-data-v2-e2e5b44bc2906d5f01944355ce5c83b39eec6fee
 
       - name: Fetch the test data
         run: python3 -u tests/integration/test_data.py build/test_data
@@ -97,6 +97,12 @@ jobs:
             --data-dir build/test_data \
             2>&1 | tee build/reference_call.log
 
+      - name: Decode an SMS from the downlink and the uplink recordings
+        run: |
+          timeout 300s python3 -u tests/integration/sms_call.py \
+            --data-dir build/test_data \
+            2>&1 | tee build/sms_call.log
+
       - name: Upload failure diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -108,4 +114,5 @@ jobs:
             build/integration.log
             build/cli_tools.log
             build/reference_call.log
+            build/sms_call.log
           if-no-files-found: ignore

@@ -36,6 +36,19 @@ FILES = {
         "size": 235_616,
         "sha256": "35403366e52a82098c2b29f85016c079c91157de9ede25f7245cb5f621c9c676",
     },
+    # Downlink and uplink of an SDCCH/8 channel recorded with two RTL-SDR dongles
+    # while a phone sent an SMS (1 Msps, the downlink is centred on 947.8 MHz, the uplink
+    # 45 MHz below it).
+    "sms_downlink": {
+        "name": "sms_multirtl_downlink_tail.cfile",
+        "size": 32_000_000,
+        "sha256": "38ccf460a95b7bdcaaf5bdfdd4a679dbfc7836108ff6110769190842db7c180e",
+    },
+    "sms_uplink": {
+        "name": "sms_multirtl_uplink_tail.cfile",
+        "size": 32_000_000,
+        "sha256": "22885c78301cfe08a39c6af546d8e4953029efb1aad42f4caef4f30039eca2db",
+    },
 }
 
 # Prefixes of the IQ file that the historical Travis tests used.
@@ -47,6 +60,11 @@ PREFIX_SHA256 = {
 SAMP_RATE = 100_000_000 // 174
 ARFCN = 725
 KC = "0x1E,0xF0,0x0B,0xAB,0x3B,0xAC,0x70,0x02"
+
+SMS_SAMP_RATE = 1_000_000
+SMS_FC = 947.8e6
+SMS_UPLINK_SHIFT = 45e6
+SMS_KC = [0x46, 0x77, 0x2D, 0x54, 0xA3, 0xA3, 0xC3, 0x1C]
 
 
 def sha256(path):
@@ -120,6 +138,8 @@ def prepare(dest):
         "prefix_6m": prefix(files["cfile"], 6_000_000, dest / "prefix_6000000.cfile"),
         "prefix_35m": prefix(files["cfile"], 35_800_000, dest / "prefix_35800000.cfile"),
         "bursts": bursts(files["bursts"], dest / f"{CALL}.bursts"),
+        "sms_downlink": files["sms_downlink"],
+        "sms_uplink": files["sms_uplink"],
     }
 
 

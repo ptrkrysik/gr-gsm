@@ -28,8 +28,9 @@ can be cached (CI does it with `actions/cache`):
 python3 tests/integration/test_data.py build/test_data
 ```
 
-It fetches the IQ file (73 MB) and the burst file (235 KB), and prepares the two prefixes of the IQ
-file and the unpacked burst file that the tests use. Nothing but a network connection is
+It fetches the IQ file of the call (73 MB), its burst file (235 KB) and the two recordings of an SMS
+(32 MB each), and prepares the two prefixes of the IQ file and the unpacked burst file that the
+tests use. Nothing but a network connection is
 needed, no SDR and no display.
 
 ## Integration tests
@@ -40,6 +41,7 @@ After building and installing gr-gsm (including running `ldconfig`) and fetching
 python3 tests/integration/decode_capture.py --capture build/test_data/prefix_6000000.cfile
 python3 tests/integration/cli_tools.py --capture build/test_data/prefix_6000000.cfile
 python3 tests/integration/reference_call.py --data-dir build/test_data
+python3 tests/integration/sms_call.py --data-dir build/test_data
 ```
 
 * `decode_capture.py` runs a flowgraph built in Python, see below.
@@ -55,8 +57,19 @@ python3 tests/integration/reference_call.py --data-dir build/test_data
   * **TCH/F voice**: exactly 389 valid GSM-FR speech frames (about 7.8 s) are decoded from the whole
     recording.
 
-The scanner is not tested, it needs a device. The decoding is deterministic: the voice output is
-identical between runs and between the generic and the SIMD VOLK kernels.
+* `sms_call.py` decodes a **short message** from the downlink and the uplink recordings of an SDCCH/8
+  channel (`sms_multirtl_downlink_tail.cfile` and `sms_multirtl_uplink_tail.cfile`, recorded with two
+  RTL-SDR dongles while a phone sent an SMS). It uses the flowgraph of `examples/uplink_decoding_demo`:
+  two inputs, a receiver that processes the uplink, the SDCCH/8 demapper, A5/1 decryption with the
+  known key and the control channel decoder. The test reassembles the three LAPDm segments of the
+  SMS-SUBMIT (`sms_decode.py`) and checks the destination number (530316008), the text
+  (`Test sms 12345678910111213141516k`) and that the network acknowledged the message with an RP-ACK
+  of the same reference. It covers the uplink receiver and the decryption of the uplink, which
+  nothing else tests. The clock correction of the dongles has to be given (`-10 ppm`): without it
+  the last segment of the message is lost.
+
+The decoding is deterministic: the voice output is identical between runs and between the generic and
+the SIMD VOLK kernels.
 
 ## The flowgraph test
 
