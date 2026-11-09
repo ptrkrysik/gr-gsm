@@ -23,7 +23,8 @@ if "CMAKE_BINARY_DIR" in os.environ or "PROJECT_BINARY_DIR" in os.environ:
         # Load the local (not yet installed) python modules from the local subdirectories
         os.path.join(dirname, "misc_utils"),
         os.path.join(dirname, "demapping"),
-        os.path.join(dirname, "receiver")]
+        os.path.join(dirname, "receiver"),
+        os.path.join(dirname, "transmitter")]
 
 # import pybind11 generated symbols into the gsm namespace
 try:
@@ -41,7 +42,9 @@ try:
     from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
     from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
     from .gsm_sdcch8_demapper import gsm_sdcch8_demapper
+    from .gsm_gmsk_mod import gsm_gmsk_mod
     from .fn_time import fnmod_delta, fn_time_diff_delta, fn_time_delta
+    from .txtime_bursts_tagger import txtime_bursts_tagger
     from .arfcn import *
     from .device import *
 except ImportError as e:

@@ -9,6 +9,12 @@
   - gsm_receiver_with_uplink
   - gsm_cx_channel_hopper
   - gsm_input
+- Transmitter:
+  - gsm_txtime_bursts_tagger
+  - gsm_txtime_setter
+  - gsm_gmsk_mod
+  - gsm_preprocess_tx_burst
+  - gsm_gen_test_ab
 - Logical channels demapping:
   - gsm_universal_ctrl_chans_demapper
   - gsm_bcch_ccch_demapper

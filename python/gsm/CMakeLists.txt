@@ -18,6 +18,7 @@ add_subdirectory(demapping)
 add_subdirectory(bindings)
 add_subdirectory(misc_utils)
 add_subdirectory(receiver)
+add_subdirectory(transmitter)
 
 ########################################################################
 # Install python sources
