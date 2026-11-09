@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Block definition of the wideband_receiver hierarchical block
+# (wideband_receiver.py); use it by adding this directory to GRC_BLOCKS_PATH
+# and to PYTHONPATH.
+id: wideband_receiver
+label: Wideband Receiver
+category: '[Custom]'
+
+parameters:
+-   id: OSR
+    label: OSR
+    dtype: int
+    default: '4'
+-   id: fc
+    label: fc
+    dtype: real
+    default: '0'
+-   id: samp_rate
+    label: samp_rate
+    dtype: real
+    default: 400e3
+
+inputs:
+-   domain: stream
+    dtype: complex
+
+outputs:
+-   domain: message
+    id: bursts
+    optional: true
+-   domain: message
+    id: msgs
+    optional: true
+
+templates:
+    imports: from wideband_receiver import wideband_receiver  # hand-written hier block
+    make: |-
+        wideband_receiver(
+            OSR=${OSR},
+            fc=${fc},
+            samp_rate=${samp_rate},
+        )
+    callbacks:
+    - set_OSR(${OSR})
+    - set_fc(${fc})
+    - set_samp_rate(${samp_rate})
+
+documentation: |-
+    Splits the input signal into 200 kHz GSM channels with a polyphase
+    channelizer and runs a receiver with a BCCH/CCCH decoder
+    (receiver_with_decoder) on each of them. The input sample rate has to be an
+    even multiple of 200 kHz. Decoded messages are emitted at the "msgs" port.
+
+file_format: 1
