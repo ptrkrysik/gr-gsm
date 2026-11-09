@@ -26,9 +26,11 @@ burst_file_source::sptr burst_file_source::make(const std::string& filename)
  */
 burst_file_source_impl::burst_file_source_impl(const std::string& filename)
     : gr::block("burst_file_source", gr::io_signature::make(0, 0, 0), gr::io_signature::make(0, 0, 0)),
-      d_input_file(filename.c_str(), std::ifstream::binary),
       d_finished(false)
 {
+    if (!d_input_file.open(filename, std::ios::in | std::ios::binary)) {
+        throw std::runtime_error("burst_file_source: cannot open " + filename);
+    }
     message_port_register_out(pmt::mp("out"));
 }
 
@@ -62,9 +64,8 @@ bool burst_file_source_impl::finished() { return d_finished; }
 
 void burst_file_source_impl::run()
 {
-    std::filebuf* pbuf = d_input_file.rdbuf();
     while (!d_finished) {
-        pmt::pmt_t burst = pmt::deserialize(*pbuf);
+        pmt::pmt_t burst = pmt::deserialize(d_input_file);
         if (pmt::is_eof_object(burst)) {
             break;
         }
