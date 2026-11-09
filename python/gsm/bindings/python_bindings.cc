@@ -36,6 +36,7 @@ void bind_bursts_printer(py::module& m);
 void bind_clock_offset_control(py::module& m);
 void bind_collect_system_info(py::module& m);
 void bind_common(py::module& m);
+void bind_constants(py::module& m);
 void bind_control_channels_decoder(py::module& m);
 void bind_controlled_fractional_resampler_cc(py::module& m);
 void bind_controlled_rotator_cc(py::module& m);
@@ -93,6 +94,7 @@ PYBIND11_MODULE(gsm_python, m)
     /**************************************/
     // BINDING_FUNCTION_CALLS(
     bind_common(m);
+    bind_constants(m);
     bind_burst_file_sink(m);
     bind_burst_file_source(m);
     bind_burst_fnr_filter(m);

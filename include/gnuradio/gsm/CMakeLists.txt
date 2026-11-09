@@ -11,7 +11,9 @@
 ########################################################################
 install(FILES
     api.h
+    constants.h
     endian.h
+    gsm_constants.h
     gsmtap.h DESTINATION include/gnuradio/gsm
 )
 

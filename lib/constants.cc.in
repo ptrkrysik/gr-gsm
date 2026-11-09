@@ -1,0 +1,32 @@
+/* -*- c++ -*- */
+/*
+ * Copyright 2006,2009,2013 Free Software Foundation, Inc.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <gnuradio/gsm/constants.h>
+#include <stdlib.h>
+
+namespace gr {
+namespace gsm {
+
+const std::string build_date() { return "@BUILD_DATE@"; }
+
+const std::string version() { return "@VERSION@"; }
+
+// Return individual parts of the version
+const std::string major_version() { return "@MAJOR_VERSION@"; }
+
+const std::string api_version() { return "@API_COMPAT@"; }
+
+const std::string minor_version() { return "@MINOR_VERSION@"; }
+
+const std::string maint_version() { return "@MAINT_VERSION@"; }
+
+} // namespace gsm
+} // namespace gr

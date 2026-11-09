@@ -40,6 +40,7 @@ list(APPEND gsm_python_files
     clock_offset_control_python.cc
     collect_system_info_python.cc
     common_python.cc
+    constants_python.cc
     control_channels_decoder_python.cc
     controlled_fractional_resampler_cc_python.cc
     controlled_rotator_cc_python.cc
