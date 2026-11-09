@@ -191,9 +191,9 @@ class wideband_scanner(gr.top_block):
 
         # if no file name is given process data from rtl_sdr source
 
-        self.sdr_source = osmosdr.source()
+        # numchan=1 is not added to the arguments on purpose, it breaks bladeRF
+        self.sdr_source = osmosdr.source(args=args) if args else osmosdr.source()
 
-        #args=str(gsm.device.get_default_args(args))) # this doesn't work for bladeRF
         #self.sdr_source.set_min_output_buffer(int(sample_rate*rec_len)) #this line causes segfaults on HackRF
         self.sdr_source.set_sample_rate(sample_rate)
 
