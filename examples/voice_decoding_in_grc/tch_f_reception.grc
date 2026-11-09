@@ -1,0 +1,422 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: Custom
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: tch_f_reception
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: run
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: ''
+    window_size: 1480, 1224
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 11]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '8000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 516]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: out.gsm
+    type: byte
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 566]
+    rotation: 0
+    state: enabled
+- name: blocks_file_source_0
+  id: blocks_file_source
+  parameters:
+    affinity: ''
+    alias: ''
+    begin_tag: pmt.PMT_NIL
+    comment: ''
+    file: input_file_name
+    length: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    repeat: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 197]
+    rotation: 0
+    state: enabled
+- name: blocks_short_to_float_0
+  id: blocks_short_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '32767.0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 516]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_to_vector_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: '33'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 516]
+    rotation: 0
+    state: enabled
+- name: fc
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: fc
+    short_id: f
+    type: eng_float
+    value: 937e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 11]
+    rotation: 0
+    state: enabled
+- name: gsm_clock_offset_control_0
+  id: gsm_clock_offset_control
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fc: fc
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    osr: osr
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [248, 292]
+    rotation: 180
+    state: enabled
+- name: gsm_control_channels_decoder_0
+  id: gsm_control_channels_decoder
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 257]
+    rotation: 0
+    state: enabled
+- name: gsm_decryption_0_0_0
+  id: gsm_decryption
+  parameters:
+    a5_version: '1'
+    affinity: ''
+    alias: ''
+    comment: ''
+    k_c: '[0x1e, 0xf0, 0x0b, 0xab, 0x3b, 0xac, 0x70, 0x02]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 165]
+    rotation: 0
+    state: enabled
+- name: gsm_decryption_0_0_0_0
+  id: gsm_decryption
+  parameters:
+    a5_version: '1'
+    affinity: ''
+    alias: ''
+    comment: ''
+    k_c: '[0x1e, 0xf0, 0x0b, 0xab, 0x3b, 0xac, 0x70, 0x02]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 245]
+    rotation: 0
+    state: enabled
+- name: gsm_input_0
+  id: gsm_input
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fc: fc
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    osr: osr
+    ppm: '0'
+    samp_rate_in: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 209]
+    rotation: 0
+    state: enabled
+- name: gsm_message_printer_0
+  id: gsm_message_printer
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    prepend_fnr: 'False'
+    prepend_frame_count: 'False'
+    prepend_string: '""'
+    print_gsmtap_header: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 238]
+    rotation: 0
+    state: enabled
+- name: gsm_message_printer_0_1
+  id: gsm_message_printer
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    prepend_fnr: 'False'
+    prepend_frame_count: 'False'
+    prepend_string: '""'
+    print_gsmtap_header: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1296, 142]
+    rotation: 0
+    state: enabled
+- name: gsm_receiver_0
+  id: gsm_receiver
+  parameters:
+    affinity: ''
+    alias: ''
+    cell_allocation: '[0]'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    osr: osr
+    tseq_nums: '[]'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 193]
+    rotation: 0
+    state: enabled
+- name: gsm_tch_f_chans_demapper_0
+  id: gsm_tch_f_chans_demapper
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    timeslot_nr: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 176]
+    rotation: 0
+    state: enabled
+- name: gsm_tch_f_decoder_0
+  id: gsm_tch_f_decoder
+  parameters:
+    affinity: ''
+    alias: ''
+    boundary_check: 'True'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mode: gsm.TCH_FS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 161]
+    rotation: 0
+    state: enabled
+- name: input_file_name
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: input_file_name
+    short_id: i
+    type: str
+    value: '"vf_call6_a725_d174_g5_Kc1EF00BAB3BAC7002.cfile"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 11]
+    rotation: 0
+    state: enabled
+- name: osr
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: OSR
+    short_id: ''
+    type: intx
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 7]
+    rotation: 0
+    state: enabled
+- name: pdu_pdu_to_tagged_stream_0
+  id: pdu_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 516]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: samp_rate
+    short_id: s
+    type: eng_float
+    value: 100.0e6/174.0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [448, 11]
+    rotation: 0
+    state: enabled
+- name: vocoder_gsm_fr_decode_ps_0
+  id: vocoder_gsm_fr_decode_ps
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 521]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_file_source_0, '0', gsm_input_0, '0']
+- [blocks_short_to_float_0, '0', audio_sink_0, '0']
+- [blocks_stream_to_vector_0, '0', vocoder_gsm_fr_decode_ps_0, '0']
+- [gsm_clock_offset_control_0, ctrl, gsm_input_0, ctrl_in]
+- [gsm_control_channels_decoder_0, msgs, gsm_message_printer_0, msgs]
+- [gsm_decryption_0_0_0, bursts, gsm_tch_f_decoder_0, bursts]
+- [gsm_decryption_0_0_0_0, bursts, gsm_control_channels_decoder_0, bursts]
+- [gsm_input_0, '0', gsm_receiver_0, '0']
+- [gsm_receiver_0, C0, gsm_tch_f_chans_demapper_0, bursts]
+- [gsm_receiver_0, measurements, gsm_clock_offset_control_0, measurements]
+- [gsm_tch_f_chans_demapper_0, acch_bursts, gsm_decryption_0_0_0_0, bursts]
+- [gsm_tch_f_chans_demapper_0, tch_bursts, gsm_decryption_0_0_0, bursts]
+- [gsm_tch_f_decoder_0, msgs, gsm_message_printer_0_1, msgs]
+- [gsm_tch_f_decoder_0, voice, pdu_pdu_to_tagged_stream_0, pdus]
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_file_sink_0, '0']
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_stream_to_vector_0, '0']
+- [vocoder_gsm_fr_decode_ps_0, '0', blocks_short_to_float_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2
