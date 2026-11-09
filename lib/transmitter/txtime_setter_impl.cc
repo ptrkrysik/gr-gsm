@@ -94,8 +94,8 @@ void txtime_setter_impl::process_fn_time_reference(pmt::pmt_t msg)
 
         set_fn_time_reference(fn_ref, ts, time_secs, time_fracs);
     } else if (time_hint != pmt::PMT_NIL) {
-        set_time_hint(pmt::to_uint64(pmt::car(fn_time)),
-            pmt::to_double(pmt::cdr(fn_time)));
+        set_time_hint(pmt::to_uint64(pmt::car(time_hint)),
+            pmt::to_double(pmt::cdr(time_hint)));
     }
 }
 
