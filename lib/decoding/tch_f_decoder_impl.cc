@@ -309,11 +309,9 @@ void tch_f_decoder_impl::decode(pmt::pmt_t msg)
             }
         } else {
             // Handle inband bits, see 3.9.4.1
-            // OpenBTS source takes last 8 bits as inband bits for some reason. This may be either a
-            // divergence between their implementation and GSM specification, which works because
-            // both their encoder and decoder do it same way, or they handle the issue at some other place
-            // SoftVector cMinus8 = mC.segment(0, mC.size() - 8);
-            SoftVector cMinus8 = mC.segment(8, mC.size());
+            // The first 8 coded bits carry the inband data, the speech frame is coded in the
+            // remaining ones (libosmocore decodes from cB + 8 as well).
+            SoftVector cMinus8 = mC.segment(8, mC.size() - 8);
             cMinus8.copyUnPunctured(mTCHUC, mPuncture, mPunctureLth);
 
             // 3.9.4.4

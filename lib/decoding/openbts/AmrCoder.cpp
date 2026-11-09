@@ -436,8 +436,8 @@ void ViterbiTCH_AFS12_2::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS12_2::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -643,8 +643,8 @@ void ViterbiTCH_AFS10_2::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS10_2::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -850,8 +850,8 @@ void ViterbiTCH_AFS7_95::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS7_95::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -1057,8 +1057,8 @@ void ViterbiTCH_AFS7_4::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS7_4::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -1266,8 +1266,8 @@ void ViterbiTCH_AFS6_7::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS6_7::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -1475,8 +1475,8 @@ void ViterbiTCH_AFS5_9::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS5_9::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -1686,8 +1686,8 @@ void ViterbiTCH_AFS5_15::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS5_15::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
@@ -1897,8 +1897,8 @@ void ViterbiTCH_AFS4_75::decode(const SoftVector& in, BitVector& target)
         size_t oCount = 0;
         while (op < opt) {
             // Viterbi algorithm
-            assert(match - matchCostTable < (int)(sizeof(matchCostTable) / sizeof(matchCostTable[0]) - 1));
-            assert(mismatch - mismatchCostTable < (int)(sizeof(mismatchCostTable) / sizeof(mismatchCostTable[0]) - 1));
+            assert(match - matchCostTable < (ptrdiff_t)ctsz);
+            assert(mismatch - mismatchCostTable < (ptrdiff_t)ctsz);
             const ViterbiTCH_AFS4_75::vCand& minCost = decoder.step(*ip, match, mismatch);
             ip += step;
             match += step;
