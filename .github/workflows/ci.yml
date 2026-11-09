@@ -70,17 +70,32 @@ jobs:
           GRC_BLOCKS_PATH: /usr/local/share/gnuradio/grc/blocks
         run: grcc -o build apps/grgsm_livemon.grc
 
+      - name: Cache the test data
+        uses: actions/cache@v4
+        with:
+          path: build/test_data
+          key: gr-gsm-test-data-e2e5b44bc2906d5f01944355ce5c83b39eec6fee
+
+      - name: Fetch the test data
+        run: python3 -u tests/integration/test_data.py build/test_data
+
       - name: Decode reference IQ recording
         run: |
           timeout 120s python3 -u tests/integration/decode_capture.py \
-            --download --capture build/integration/capture.cfile \
+            --capture build/test_data/prefix_6000000.cfile \
             2>&1 | tee build/integration.log
 
       - name: Run the installed command line tools
         run: |
           timeout 240s python3 -u tests/integration/cli_tools.py \
-            --capture build/integration/capture.cfile \
+            --capture build/test_data/prefix_6000000.cfile \
             2>&1 | tee build/cli_tools.log
+
+      - name: Decode the reference call (bursts, A5/1 decryption, voice)
+        run: |
+          timeout 600s python3 -u tests/integration/reference_call.py \
+            --data-dir build/test_data \
+            2>&1 | tee build/reference_call.log
 
       - name: Upload failure diagnostics
         if: failure()
@@ -92,4 +107,5 @@ jobs:
             build/CMakeFiles/CMakeConfigureLog.yaml
             build/integration.log
             build/cli_tools.log
+            build/reference_call.log
           if-no-files-found: ignore
