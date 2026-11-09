@@ -52,3 +52,4 @@ GR_ADD_TEST(qa_tch_f_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa
 GR_ADD_TEST(qa_tch_h_decoder ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_decoder.py)
 GR_ADD_TEST(qa_tch_f_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_f_chans_demapper.py)
 GR_ADD_TEST(qa_tch_h_chans_demapper ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tch_h_chans_demapper.py)
+GR_ADD_TEST(qa_training_sequences ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_training_sequences.py)
