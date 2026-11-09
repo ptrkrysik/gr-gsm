@@ -41,8 +41,10 @@ try:
     from .gsm_bcch_ccch_demapper import gsm_bcch_ccch_demapper
     from .gsm_bcch_ccch_sdcch4_demapper import gsm_bcch_ccch_sdcch4_demapper
     from .gsm_sdcch8_demapper import gsm_sdcch8_demapper
+    from .fn_time import fnmod_delta, fn_time_diff_delta, fn_time_delta
     from .arfcn import *
     from .device import *
 except ImportError as e:
     import traceback; traceback.print_exc()
     raise
+

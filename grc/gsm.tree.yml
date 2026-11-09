@@ -38,6 +38,7 @@
   - gsm_collect_system_info
   - gsm_message_file_sink
   - gsm_message_file_source
+  - gsm_extract_cmc
   - gsm_extract_assignment_cmd
   - gsm_extract_immediate_assignment
   - gsm_controlled_rotator_cc
@@ -46,4 +47,5 @@
   - gsm_clock_offset_corrector_tagged
   - gsm_msg_to_tag
   - gsm_tmsi_dumper
+  - gsm_burst_to_fn_time
 
