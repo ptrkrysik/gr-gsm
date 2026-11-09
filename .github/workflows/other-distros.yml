@@ -1,0 +1,71 @@
+name: Build on other distributions
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: other-distros-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.image }}
+    runs-on: ubuntu-24.04
+    container: ${{ matrix.image }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['ubuntu:22.04', 'debian:12', 'debian:13']
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Install dependencies (the list from the README)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates git build-essential cmake pkg-config \
+            gnuradio gnuradio-dev gr-osmosdr libosmocore-dev libsndfile1-dev \
+            pybind11-dev python3-dev python3-pybind11 python3-packaging
+
+      - uses: actions/checkout@v4
+
+      - name: Report toolchain versions
+        run: |
+          gnuradio-config-info --version
+          cmake --version | head -1
+          c++ --version | head -1
+          python3 --version
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Unit tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Install and check
+        run: |
+          cmake --install build
+          ldconfig
+          python3 -c 'from gnuradio import gsm; print(gsm.receiver)'
+          grgsm_decode --help | head -3
+
+      - name: Uninstall
+        run: |
+          cmake --build build --target uninstall
+          if command -v grgsm_decode; then
+            echo "grgsm_decode is still installed after uninstall"
+            exit 1
+          fi

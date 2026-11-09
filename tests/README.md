@@ -9,6 +9,11 @@ also check the installed Python bindings, compile the livemon flowgraph with
 The workflow runs on pushes, pull requests, and manual dispatch. A failed job
 uploads available CMake and integration-test diagnostics.
 
+A second workflow (`.github/workflows/other-distros.yml`) builds gr-gsm with the
+packages of **Ubuntu 22.04, Debian 12 and Debian 13**, runs the unit tests, installs,
+checks the Python module and the installed `grgsm_decode`, and uninstalls. The
+dependency list it installs is the one given in the README.
+
 ## File-based integration test
 
 After building and installing gr-gsm (including running `ldconfig`), run:

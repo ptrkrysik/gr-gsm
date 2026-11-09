@@ -6,33 +6,42 @@ The aim is to provide set of tools for receiving information transmitted by GSM 
 
 Status
 ======
-This version of gr-gsm is ported to **GNU Radio 3.10** (pybind11, no SWIG). It is built and tested with GitHub Actions on the GNU Radio packages of Ubuntu 24.04 (3.10.9) and Ubuntu 26.04 (3.10.12). GNU Radio 3.11 is not supported yet. The older GNU Radio 3.7 and 3.8 are not supported by this branch; the last version for them is the `maint-3.8` branch of the original repository.
+This version of gr-gsm is ported to **GNU Radio 3.10** (pybind11, no SWIG). GNU Radio 3.9 and older and GNU Radio 3.11 are not supported. The previous SWIG based code for GNU Radio 3.7/3.8 is kept on the branch [`legacy/swig-gnuradio-3.8`](https://github.com/ptrkrysik/gr-gsm/tree/legacy/swig-gnuradio-3.8) and is no longer maintained.
 
-Installation instructions in the wiki and in many web pages describe the old, SWIG based versions and do not apply to this version, please use the instructions below.
+| System | GNU Radio | Tested with GitHub Actions |
+|---|---|---|
+| Ubuntu 24.04 | 3.10.9 | build, unit tests, decoding of a recording, installed programs |
+| Ubuntu 26.04 | 3.10.12 | the same |
+| Ubuntu 22.04 | 3.10.1 | build, unit tests, installation |
+| Debian 12 | 3.10.5 | build, unit tests, installation |
+| Debian 13 | 3.10.12 | build, unit tests, installation |
+
+Other distributions that provide GNU Radio 3.10 with its development files should work as well, but they are not tested.
 
 Installation
 ============
-On Ubuntu 24.04 or newer, and on Debian based distributions with GNU Radio 3.10 in general:
+On the systems from the table above:
 
 ```sh
 sudo apt-get install --no-install-recommends \
     git build-essential cmake pkg-config \
-    gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
+    gnuradio gnuradio-dev gr-osmosdr libosmocore-dev libsndfile1-dev \
     pybind11-dev python3-dev python3-pybind11 python3-packaging
 
 git clone https://github.com/ptrkrysik/gr-gsm.git
 cd gr-gsm
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
+ctest --test-dir build
 sudo cmake --install build
 sudo ldconfig
 ```
 
-Check the installation with `python3 -c "from gnuradio import gsm; print(gsm.receiver)"` and `grgsm_livemon --help`.
+Check the installation with `python3 -c "from gnuradio import gsm; print(gsm.receiver)"` and `grgsm_livemon --help`. To remove it again run `sudo cmake --build build --target uninstall` in the same build directory.
 
-If the Python module is not found, the installation prefix is not in the Python search path. Install to `/usr/local` (the default) or set `PYTHONPATH` to the `dist-packages` directory under your prefix and `LD_LIBRARY_PATH` to its `lib` directory.
+The `libosmocore-dev` package provides `libosmocore`, `libosmocodec`, `libosmocoding` and `libosmogsm`. The Python package `scipy` is optional, it is needed only by the experimental receiver blocks (`fcch_detector`, `sch_detector`). Example flowgraphs are installed to `share/gnuradio/examples/gsm`.
 
-The libraries `libosmocoding`, `libosmocodec`, `libosmogsm` and `libosmocore` come with the `libosmocore-dev` package. Other distributions need the equivalent packages. The unit tests are run with `ctest --test-dir build`.
+Other distributions, a custom installation prefix, leftovers of an older installation and common problems are described on the wiki page [Installation](https://github.com/ptrkrysik/gr-gsm/wiki/Installation). Old installation instructions that use PyBOMBS no longer work: PyBOMBS is not maintained any more.
 
 Programs
 ========
@@ -56,29 +65,23 @@ Not included in this version: `grgsm_trx` and the transceiver interface for Osmo
 
 Usage
 =====
-General background on usage can still be found in the project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index), but commands, options and installation steps from the wiki may differ from this version. Run a program with `--help` for the current options.
+See the [wiki](https://github.com/ptrkrysik/gr-gsm/wiki): [Usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage), [Decoding How To](https://github.com/ptrkrysik/gr-gsm/wiki/Usage:-Decoding-How-To) and [RTL-SDR setup and calibration](https://github.com/ptrkrysik/gr-gsm/wiki/RTL-SDR-setup-and-calibration). Run a program with `--help` for the current options.
 
-Mailing list
-============
-Current gr-gsm project's mailing list address is following:
+Questions and bug reports
+=========================
+Bugs and feature requests belong to the [GitHub issues](https://github.com/ptrkrysik/gr-gsm/issues). General questions about usage and installation can be asked on the mailing list [gr-gsm@googlegroups.com](https://groups.google.com/g/gr-gsm). The list is moderated: new members have to be approved and the first messages of a new member are reviewed, because of spam.
 
-gr-gsm@googlegroups.com
-
-Mailing list is a place for general discussions, questions about the usage and installation. In case of problem with installation please try to provide full information that will help reproducing it. Minimum information should contain:
+In case of a problem with installation please provide the information that helps to reproduce it:
 - operating system with version,
-- kind of installation (how gr-gsm and its dependencies were installed: with pybombs, from distibution's repository, compiled manually)
-- version of gnuradio (it can be obtained with: gnuradio-companion --version)
-- error messages (in case of pybombs installation they can be obtained after switching it to verbous mode with -v option).
-
-To join the group with any e-mail address, use this link:
-
-<https://groups.google.com/forum/#!forum/gr-gsm/join>
+- how gr-gsm and its dependencies were installed (from the distribution's repository, built from source),
+- the version of GNU Radio (`gnuradio-config-info --version`),
+- the complete error messages.
 
 Development
 ===========
-Build and file-based integration tests run with GitHub Actions on Ubuntu 24.04
-and Ubuntu 26.04. See [tests/README.md](tests/README.md) for details and local
-test instructions.
+Build, unit tests and file-based integration tests run with GitHub Actions on Ubuntu 24.04
+and Ubuntu 26.04. A build with unit tests also runs on Ubuntu 22.04 and Debian 12 and 13.
+See [tests/README.md](tests/README.md) for details and local test instructions.
 
 New features are accepted through github's pull requests. When creating pull request try to make it adress one topic (addition of a feature x, correction of bug y).
 
