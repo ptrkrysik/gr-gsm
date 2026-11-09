@@ -7,5 +7,35 @@
 #
 
 include(GrPython)
+include(GrccCompile)
 
-gr_python_install(PROGRAMS DESTINATION bin)
+add_subdirectory(helpers)
+add_subdirectory(apps_data)
+
+GRCC_COMPILE(grgsm_livemon)
+GRCC_COMPILE(grgsm_livemon_headless)
+
+set(grgsm_flowgraphs "")
+
+OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
+OPTION(ENABLE_GRGSM_LIVEMON "Compile grgsm_livemon" ON)
+OPTION(ENABLE_GRGSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
+
+if(ENABLE_PYTHON AND ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
+    list(APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
+endif()
+
+if(ENABLE_PYTHON AND ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON_HEADLESS)
+    list(APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon_headless)
+endif()
+
+GR_PYTHON_INSTALL(
+    PROGRAMS
+    ${grgsm_flowgraphs}
+    grgsm_scanner
+    grgsm_decode
+    DESTINATION bin
+)
+
+# the flowgraphs are compiled with the module from the build tree
+add_dependencies(pygen_apps gsm_python copy_module_for_tests)
