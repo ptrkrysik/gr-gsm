@@ -41,7 +41,6 @@ frame-count column is omitted. Messages before the historical acquisition
 anchor are ignored, as in the old test. From that anchor onward, the complete
 sequence must match, including its length and order.
 
-The test constructs the flowgraph directly because `grgsm_decode` still depends
-on flow-control blocks not yet ported to this branch. A download error, invalid
+The test constructs the flowgraph directly instead of running `grgsm_decode`. A download error, invalid
 recording, missing reference frame, changed payload, missing/extra message, or
 timeout fails the job. It does not require USB access or bind a UDP port.
