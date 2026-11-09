@@ -9,5 +9,8 @@ install(
     gsm_receiver.block.yml
     gsm_input.block.yml
     gsm_clock_offset_control.block.yml
+    gsm_fcch_burst_tagger.block.yml
+    gsm_fcch_detector.block.yml
+    gsm_sch_detector.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )

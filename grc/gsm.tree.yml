@@ -8,6 +8,9 @@
   - gsm_receiver
   - gsm_receiver_with_uplink
   - gsm_cx_channel_hopper
+  - gsm_fcch_burst_tagger
+  - gsm_sch_detector
+  - gsm_fcch_detector
   - gsm_input
 - Transmitter:
   - gsm_txtime_bursts_tagger

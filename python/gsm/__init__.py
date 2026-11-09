@@ -51,3 +51,11 @@ except ImportError as e:
     import traceback; traceback.print_exc()
     raise
 
+try:
+    # experimental components of a new receiver, they need scipy
+    from .fcch_burst_tagger import fcch_burst_tagger
+    from .fcch_detector import fcch_detector
+    from .sch_detector import sch_detector
+except ModuleNotFoundError as e:
+    if e.name is None or not e.name.startswith("scipy"):
+        raise

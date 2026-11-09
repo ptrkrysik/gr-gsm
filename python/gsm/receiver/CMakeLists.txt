@@ -8,6 +8,10 @@
 
 GR_PYTHON_INSTALL(
     FILES
+    chirpz.py
+    fcch_burst_tagger.py
+    fcch_detector.py
     gsm_input.py
+    sch_detector.py
     DESTINATION ${GR_PYTHON_DIR}/gnuradio/gsm
 )
