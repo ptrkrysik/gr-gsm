@@ -76,6 +76,12 @@ jobs:
             --download --capture build/integration/capture.cfile \
             2>&1 | tee build/integration.log
 
+      - name: Run the installed command line tools
+        run: |
+          timeout 240s python3 -u tests/integration/cli_tools.py \
+            --capture build/integration/capture.cfile \
+            2>&1 | tee build/cli_tools.log
+
       - name: Upload failure diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -85,4 +91,5 @@ jobs:
             build/CMakeCache.txt
             build/CMakeFiles/CMakeConfigureLog.yaml
             build/integration.log
+            build/cli_tools.log
           if-no-files-found: ignore
