@@ -56,6 +56,9 @@ jobs:
       - name: Build
         run: cmake --build build --parallel 2
 
+      - name: Run unit tests
+        run: ctest --test-dir build --output-on-failure
+
       - name: Install and check Python bindings
         run: |
           cmake --install build
