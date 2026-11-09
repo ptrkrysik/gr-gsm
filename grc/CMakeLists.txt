@@ -12,6 +12,7 @@ install(FILES
 add_subdirectory(decoding)
 add_subdirectory(decryption)
 add_subdirectory(demapping)
+add_subdirectory(flow_control)
 add_subdirectory(misc_utils)
 add_subdirectory(qa_utils)
 add_subdirectory(receiver)

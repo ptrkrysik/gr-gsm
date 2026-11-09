@@ -22,6 +22,15 @@
   - gsm_control_channels_decoder
   - gsm_tch_f_decoder
   - gsm_tch_h_decoder
+- Flow control:
+  - gsm_burst_timeslot_splitter
+  - gsm_burst_sdcch_subslot_splitter
+  - gsm_burst_timeslot_filter
+  - gsm_burst_sdcch_subslot_filter
+  - gsm_burst_fnr_filter
+  - gsm_burst_type_filter
+  - gsm_dummy_burst_filter
+  - gsm_uplink_downlink_splitter
 - Utilities:
   - gsm_bursts_printer
   - gsm_burst_file_sink
