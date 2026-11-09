@@ -4,9 +4,59 @@ The *gr-gsm* project is based on the *gsm-receiver* written by Piotr Krysik (als
 
 The aim is to provide set of tools for receiving information transmitted by GSM equipment/devices.
 
-Installation and usage
-======================
-Please see project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index) for information on [installation](https://osmocom.org/projects/gr-gsm/wiki/Installation) and [usage](https://github.com/ptrkrysik/gr-gsm/wiki/Usage) of gr-gsm.
+Status
+======
+This version of gr-gsm is ported to **GNU Radio 3.10** (pybind11, no SWIG). It is built and tested with GitHub Actions on the GNU Radio packages of Ubuntu 24.04 (3.10.9) and Ubuntu 26.04 (3.10.12). GNU Radio 3.11 is not supported yet. The older GNU Radio 3.7 and 3.8 are not supported by this branch; the last version for them is the `maint-3.8` branch of the original repository.
+
+Installation instructions in the wiki and in many web pages describe the old, SWIG based versions and do not apply to this version, please use the instructions below.
+
+Installation
+============
+On Ubuntu 24.04 or newer, and on Debian based distributions with GNU Radio 3.10 in general:
+
+```sh
+sudo apt-get install --no-install-recommends \
+    git build-essential cmake pkg-config \
+    gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
+    pybind11-dev python3-dev python3-pybind11 python3-packaging
+
+git clone https://github.com/ptrkrysik/gr-gsm.git
+cd gr-gsm
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+sudo cmake --install build
+sudo ldconfig
+```
+
+Check the installation with `python3 -c "from gnuradio import gsm; print(gsm.receiver)"` and `grgsm_livemon --help`.
+
+If the Python module is not found, the installation prefix is not in the Python search path. Install to `/usr/local` (the default) or set `PYTHONPATH` to the `dist-packages` directory under your prefix and `LD_LIBRARY_PATH` to its `lib` directory.
+
+The libraries `libosmocoding`, `libosmocodec`, `libosmogsm` and `libosmocore` come with the `libosmocore-dev` package. Other distributions need the equivalent packages. The unit tests are run with `ctest --test-dir build`.
+
+Programs
+========
+| Program | Purpose |
+|---|---|
+| `grgsm_livemon` | live monitor of a single GSM channel with GUI, sends the decoded bursts as GSMTAP over UDP, e.g. for Wireshark (`sudo wireshark -k -f udp -Y gsmtap -i lo`) |
+| `grgsm_livemon_headless` | the same without the GUI |
+| `grgsm_scanner` | scans a GSM band for base stations (`grgsm_scanner -b GSM900`, `--args` selects the device, `-l` lists devices) |
+| `grgsm_capture` | records a channel to a file with the sample rate used by the decoder |
+| `grgsm_channelize` | extracts channels from a wideband recording |
+| `grgsm_decode` | decodes channels from a recording or a burst file, can decrypt A5/1, A5/2 and A5/3 (`-e`, `-k`) |
+
+Example: decode the BCCH of a recording made with `grgsm_capture`:
+
+```sh
+grgsm_capture --arfcn 975 -g 40 -T 30 capture.cfile
+grgsm_decode -c capture.cfile -s 1e6 -m BCCH -t 0 -v
+```
+
+Not included in this version: `grgsm_trx` and the transceiver interface for OsmocomBB.
+
+Usage
+=====
+General background on usage can still be found in the project's [wiki](https://osmocom.org/projects/gr-gsm/wiki/index), but commands, options and installation steps from the wiki may differ from this version. Run a program with `--help` for the current options.
 
 Mailing list
 ============
