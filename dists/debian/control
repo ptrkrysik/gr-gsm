@@ -13,15 +13,7 @@ Build-Depends: debhelper-compat (= 13),
                python3-packaging,
                python3-pybind11,
                python3-docutils,
-               python3-click,
-               python3-numpy,
-               python3-yaml,
-               python3-mako,
                gr-osmosdr,
-               libvolk-dev,
-               libspdlog-dev,
-               libfmt-dev,
-               libboost-dev,
                libboost-thread-dev
 Standards-Version: 4.6.2
 Rules-Requires-Root: no

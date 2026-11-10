@@ -77,6 +77,7 @@ gr_pybind_make_oot(gsm ../../.. gr::gsm "${gsm_python_files}")
 add_custom_command(
     TARGET gsm_python
     POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/test_modules/gnuradio/gsm
     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gsm_python>
             ${PROJECT_BINARY_DIR}/test_modules/gnuradio/gsm/)
 
