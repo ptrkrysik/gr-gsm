@@ -307,7 +307,7 @@ void ViterbiTCH_AFS12_2::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -514,7 +514,7 @@ void ViterbiTCH_AFS10_2::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -721,7 +721,7 @@ void ViterbiTCH_AFS7_95::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -928,7 +928,7 @@ void ViterbiTCH_AFS7_4::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -1137,7 +1137,7 @@ void ViterbiTCH_AFS6_7::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -1346,7 +1346,7 @@ void ViterbiTCH_AFS5_9::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -1557,7 +1557,7 @@ void ViterbiTCH_AFS5_15::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }
@@ -1768,7 +1768,7 @@ void ViterbiTCH_AFS4_75::branchCandidates()
             uint32_t outputs = oStateShifted;
             for (unsigned out = 0; out < mIRate; out++) {
                 char feedback = applyPoly(sp->rState[out], mCoeffsFB[out] ^ 1, mOrder + 1);
-                char rState = (((sp->rState[out]) ^ feedback) << 1) | in;
+                char rState = (char)((((unsigned)((sp->rState[out]) ^ feedback)) << 1) | in);
                 mCandidates[cand + in].rState[out] = rState;
                 outputs |= (mGeneratorTable[rState & mCMask] & (1 << (mIRate - out - 1)));
             }

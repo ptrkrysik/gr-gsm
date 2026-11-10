@@ -10,6 +10,7 @@
 #endif
 
 #include "burst_source_impl.h"
+#include <algorithm>
 #include "stdio.h"
 #include <gnuradio/gsm/endian.h>
 #include <gnuradio/gsm/gsmtap.h>
@@ -79,7 +80,9 @@ bool burst_source_impl::finished() { return d_finished; }
 
 void burst_source_impl::run()
 {
-    for (int i = 0; i < d_burst_data.size(); i++) {
+    // The vectors are set separately, the bursts without a frame number or a timeslot are skipped.
+    const size_t count = std::min({ d_burst_data.size(), d_timeslots.size(), d_framenumbers.size() });
+    for (size_t i = 0; i < count; i++) {
         if (d_burst_data[i].length() == BURST_SIZE && d_timeslots[i] >= 0 && d_timeslots[i] <= 7 &&
             d_framenumbers[i] >= 0 && d_framenumbers[i] <= (26 * 51 * 2048 - 1)) {
             boost::scoped_ptr<gsmtap_hdr> tap_header(new gsmtap_hdr());
