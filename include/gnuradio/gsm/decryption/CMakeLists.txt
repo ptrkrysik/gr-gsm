@@ -23,5 +23,5 @@
 install(
     FILES
     decryption.h
-    DESTINATION include/gnuradio/gsm/decoding
+    DESTINATION include/gnuradio/gsm/decryption
 )

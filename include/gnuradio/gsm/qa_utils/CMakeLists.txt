@@ -12,5 +12,5 @@ install(
     burst_source.h
     message_source.h
     message_sink.h
-    DESTINATION include/gsm/qa_utils
+    DESTINATION include/gnuradio/gsm/qa_utils
 )

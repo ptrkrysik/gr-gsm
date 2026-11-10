@@ -34,7 +34,7 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends \
             ca-certificates git build-essential cmake pkg-config \
-            gnuradio gnuradio-dev gr-osmosdr libosmocore-dev libsndfile1-dev \
+            gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
             pybind11-dev python3-dev python3-pybind11 python3-packaging
 
       - uses: actions/checkout@v4
@@ -64,6 +64,7 @@ jobs:
           cmake --install build
           ldconfig
           python3 -c 'from gnuradio import gsm; print(gsm.__file__); print(gsm.receiver)'
+          python3 tests/check_installed_headers.py . /usr/local
 
       - name: Compile livemon flowgraph
         env:
