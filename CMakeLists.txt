@@ -38,6 +38,14 @@ list(INSERT CMAKE_MODULE_PATH 0 ${PROJECT_SOURCE_DIR}/cmake/Modules)
 set(GR_REQUIRED_COMPONENTS RUNTIME BLOCKS FFT FILTER PMT)
 find_package(Gnuradio "3.10" REQUIRED COMPONENTS runtime blocks fft filter pmt)
 
+# The CMake files of GNU Radio 3.10.1 (Ubuntu 22.04) list sndfile::sndfile as a public
+# dependency of the blocks library, but do not find it themselves. Without libsndfile's
+# development package the target does not exist and the configuration fails. Nothing of
+# libsndfile is used here, so an empty target is enough.
+if(NOT TARGET sndfile::sndfile)
+    add_library(sndfile::sndfile INTERFACE IMPORTED)
+endif()
+
 # Set the version information here
 # cmake-format: off
 set(VERSION_MAJOR 2)

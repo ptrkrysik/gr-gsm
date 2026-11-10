@@ -25,7 +25,7 @@ On the systems from the table above:
 ```sh
 sudo apt-get install --no-install-recommends \
     git build-essential cmake pkg-config \
-    gnuradio gnuradio-dev gr-osmosdr libosmocore-dev libsndfile1-dev \
+    gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
     pybind11-dev python3-dev python3-pybind11 python3-packaging
 
 git clone https://github.com/ptrkrysik/gr-gsm.git
