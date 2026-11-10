@@ -12,7 +12,27 @@ uploads available CMake and integration-test diagnostics.
 A second workflow (`.github/workflows/other-distros.yml`) builds gr-gsm with the
 packages of **Ubuntu 22.04, Debian 12 and Debian 13**, runs the unit tests, installs,
 checks the Python module and the installed `grgsm_decode`, and uninstalls. The
-dependency list it installs is the one given in the README.
+dependency list it installs is the one given in the README. Both workflows also run
+`tests/check_installed_headers.py`, which checks that every public header of the source tree
+is installed.
+
+A third workflow (`.github/workflows/sanitizers.yml`) builds gr-gsm in the Debug mode (the
+assertions are on) with AddressSanitizer and UndefinedBehaviorSanitizer and runs the unit tests
+and the integration tests on the recordings with them. It finds out of bounds accesses and
+undefined behaviour that the optimised build hides. To do the same locally:
+
+```sh
+cmake -S . -B build-asan -DCMAKE_BUILD_TYPE=Debug -DENABLE_GRCC=OFF \
+  -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=undefined" \
+  -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=undefined" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+cmake --build build-asan --parallel
+LD_PRELOAD="$(gcc -print-file-name=libasan.so) $(gcc -print-file-name=libubsan.so)" \
+  ASAN_OPTIONS=detect_leaks=0 ctest --test-dir build-asan --output-on-failure
+```
+
+The workflow `.github/workflows/gnuradio-main.yml` is informational: once a week it builds the
+library against the development branch of GNU Radio (the future 3.11) and never fails the check.
 
 ## Test data
 

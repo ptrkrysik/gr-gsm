@@ -1,0 +1,65 @@
+name: GNU Radio main (informational)
+
+# GNU Radio 3.11 is not released yet. This job builds the library of gr-gsm against the
+# development branch of GNU Radio, to see when it stops compiling. A failure does not mean
+# that anything is wrong with a supported setup, so the job never fails the workflow. It runs
+# once a week and on demand, it takes about half an hour.
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      gnuradio_ref:
+        description: 'Branch or tag of GNU Radio to build against'
+        default: 'main'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: gr-gsm against GNU Radio ${{ github.event.inputs.gnuradio_ref || 'main' }}
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    continue-on-error: true
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GR_REF: ${{ github.event.inputs.gnuradio_ref || 'main' }}
+
+    steps:
+      - name: Install the dependencies of GNU Radio and gr-gsm
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates git build-essential cmake ninja-build pkg-config \
+            libboost-all-dev libgmp-dev libfftw3-dev libvolk-dev libspdlog-dev libfmt-dev \
+            libgsl-dev libsndfile1-dev libzmq3-dev libcppunit-dev \
+            python3-dev python3-numpy python3-mako python3-yaml python3-click python3-packaging \
+            python3-pybind11 pybind11-dev libosmocore-dev swig
+
+      - uses: actions/checkout@v4
+
+      - name: Build and install GNU Radio ${{ env.GR_REF }}
+        run: |
+          git clone --depth 1 --branch "$GR_REF" https://github.com/gnuradio/gnuradio.git /tmp/gnuradio
+          cd /tmp/gnuradio
+          git log -1 --format='GNU Radio %h %cd %s'
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/gnuradio \
+            -DENABLE_DEFAULT=OFF -DENABLE_GNURADIO_RUNTIME=ON -DENABLE_PYTHON=ON \
+            -DENABLE_GR_BLOCKS=ON -DENABLE_GR_FFT=ON -DENABLE_GR_FILTER=ON \
+            -DENABLE_TESTING=OFF -DENABLE_DOXYGEN=OFF
+          cmake --build build
+          cmake --install build
+
+      - name: Configure gr-gsm
+        run: |
+          cmake -S . -B build-gsm -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=/opt/gnuradio -DENABLE_GRCC=OFF
+
+      - name: Build the library of gr-gsm
+        run: cmake --build build-gsm --target gnuradio-gsm

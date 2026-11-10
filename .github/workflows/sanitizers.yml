@@ -1,0 +1,81 @@
+name: Debug build with sanitizers
+
+# Debug keeps the assertions, AddressSanitizer finds reads and writes outside of buffers and
+# UndefinedBehaviorSanitizer finds undefined behaviour. The decoders were derived from old
+# C code, and the optimised build hides this kind of errors. The unit tests and the
+# integration tests on the recordings run with the sanitizers.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanitizers-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sanitizers:
+    name: Ubuntu 24.04, Debug, ASan and UBSan
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      SANITIZE: -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=undefined
+      ASAN_OPTIONS: detect_leaks=0:halt_on_error=1
+      UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            ca-certificates git build-essential cmake pkg-config \
+            gnuradio gnuradio-dev gr-osmosdr libosmocore-dev \
+            pybind11-dev python3-dev python3-pybind11 python3-packaging
+
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_GRCC=OFF \
+            -DCMAKE_C_FLAGS="$SANITIZE" -DCMAKE_CXX_FLAGS="$SANITIZE" \
+            -DCMAKE_SHARED_LINKER_FLAGS="-fsanitize=address,undefined" \
+            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Unit tests
+        run: |
+          LD_PRELOAD="$(gcc -print-file-name=libasan.so) $(gcc -print-file-name=libubsan.so)" \
+            ctest --test-dir build --output-on-failure
+
+      - name: Install
+        run: |
+          cmake --install build
+          ldconfig
+
+      - name: Cache the test data
+        uses: actions/cache@v4
+        with:
+          path: build/test_data
+          key: gr-gsm-test-data-v2-e2e5b44bc2906d5f01944355ce5c83b39eec6fee
+
+      - name: Fetch the test data
+        run: python3 -u tests/integration/test_data.py build/test_data
+
+      - name: Integration tests on the recordings
+        run: |
+          export LD_PRELOAD="$(gcc -print-file-name=libasan.so) $(gcc -print-file-name=libubsan.so)"
+          timeout 900s python3 -u tests/integration/decode_capture.py --capture build/test_data/prefix_6000000.cfile
+          timeout 900s python3 -u tests/integration/reference_call.py --data-dir build/test_data
+          timeout 900s python3 -u tests/integration/sms_call.py --data-dir build/test_data
