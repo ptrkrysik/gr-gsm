@@ -15,10 +15,16 @@ namespace gr {
 namespace gsm {
 
 /*
- * pmt::deserialize() in some GNU Radio releases (e.g. 3.10.9) calls
- * pubseekoff(n, std::ios_base::cur) after it has already consumed n bytes. That is
- * harmless for a std::stringbuf, but a std::filebuf really skips the bytes and the
- * file gets misparsed. A buffer that refuses to seek avoids the problem.
+ * pmt::deserialize() calls pubseekoff(n, std::ios_base::cur) after it has already
+ * consumed n bytes. That is harmless for a std::stringbuf, but a std::filebuf really
+ * skips the bytes and the file gets misparsed, the reader ends with "pmt::deserialize:
+ * malformed input stream" (gr-gsm issue #477, GNU Radio issue #7672).
+ *
+ * GNU Radio fixed it in 3.10.12.0 (pull request #7682), every earlier release is
+ * affected, e.g. the 3.10.9 of Ubuntu 24.04 and the 3.10.5 of Debian 12.
+ * A buffer that refuses to seek avoids the problem on the affected releases and changes
+ * nothing on the fixed ones, which do not seek at all. It can be removed when GNU Radio
+ * older than 3.10.12.0 is no longer supported.
  */
 class sequential_filebuf : public std::filebuf
 {
