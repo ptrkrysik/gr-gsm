@@ -1,0 +1,59 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: gr-gsm
+Upstream-Contact: Piotr Krysik <ptrkrysik@gmail.com>
+Source: https://github.com/ptrkrysik/gr-gsm
+
+Files: *
+Copyright: 2007-2026 Piotr Krysik <ptrkrysik@gmail.com>
+           2014-2017 Roman Khassraf <rkhassraf@gmail.com>
+           2017-2018 Vadim Yanitskiy <axilirator@gmail.com>
+           2015 Pieter Robyns <pieter.robyns@uhasselt.be>
+           2018-2019 Vasil Velichkov <vvvelichkov@gmail.com>
+           2008-2025 Free Software Foundation, Inc.
+License: GPL-3+
+
+Files: lib/decoding/openbts/*
+Copyright: 2008-2014 Free Software Foundation, Inc.
+           2010 Sylvain Munaut <tnt@246tNt.com>
+           2013-2014 Range Networks, Inc.
+License: AGPL-3+
+
+Files: include/gnuradio/gsm/endian.h
+Copyright: Mathias Panzenböck
+License: public-domain
+ I, Mathias Panzenböck, place this file hereby into the public domain. Use it
+ at your own risk for whatever you like. In case there are jurisdictions that
+ don't support putting things in the public domain you can also consider it to
+ be "dual licensed" under the BSD, MIT and Apache licenses, if you want to.
+
+Files: python/gsm/receiver/chirpz.py
+Copyright: Paul Kienzle, Nadav Horesh
+License: public-domain
+ This program is public domain.
+
+Files: debian/*
+Copyright: 2026 Piotr Krysik <ptrkrysik@gmail.com>
+License: GPL-3+
+
+License: GPL-3+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; version 3 dated June, 2007, or (at
+ your option) any later version.
+ .
+ On Debian systems, the complete text of version 3 of the GNU General
+ Public License can be found in '/usr/share/common-licenses/GPL-3'.
+
+License: AGPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published
+ by the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ .
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.

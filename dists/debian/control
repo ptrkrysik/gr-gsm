@@ -1,0 +1,69 @@
+Source: gr-gsm
+Section: hamradio
+Priority: optional
+Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake,
+               dh-python,
+               pkg-config,
+               gnuradio-dev (>= 3.10),
+               libosmocore-dev,
+               pybind11-dev,
+               python3-dev,
+               python3-packaging,
+               python3-pybind11,
+               python3-docutils,
+               python3-click,
+               python3-numpy,
+               python3-yaml,
+               python3-mako,
+               gr-osmosdr,
+               libvolk-dev,
+               libspdlog-dev,
+               libfmt-dev,
+               libboost-dev,
+               libboost-thread-dev
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://github.com/ptrkrysik/gr-gsm
+Vcs-Git: https://github.com/ptrkrysik/gr-gsm.git
+Vcs-Browser: https://github.com/ptrkrysik/gr-gsm
+
+Package: gr-gsm
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+         ${python3:Depends},
+         libgnuradio-gsm1.0.0 (= ${binary:Version}),
+         gnuradio (>= 3.10),
+         gr-osmosdr,
+         python3-numpy
+Recommends: python3-scipy
+Description: GNU Radio blocks and tools for receiving GSM transmissions
+ gr-gsm decodes the GSM air interface from an SDR or from a recording of
+ samples: it finds the base stations, demodulates the bursts, decodes the
+ control channels, the speech channels and, when the key is known, the
+ A5/1 encrypted ones. Decoded frames can be sent as GSMTAP to Wireshark.
+ .
+ The package contains the GNU Radio Companion blocks, the Python module
+ gnuradio.gsm and the tools grgsm_scanner, grgsm_livemon, grgsm_decode,
+ grgsm_capture and grgsm_channelize. The transceiver interface for
+ OsmocomBB is not included.
+
+Package: libgnuradio-gsm1.0.0
+Architecture: any
+Section: libs
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: GNU Radio blocks for receiving GSM transmissions (library)
+ The shared library of the gr-gsm blocks: the receiver, the demappers, the
+ channel decoders and the decryption of A5/1.
+
+Package: gr-gsm-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends},
+         libgnuradio-gsm1.0.0 (= ${binary:Version}),
+         gnuradio-dev (>= 3.10)
+Description: GNU Radio blocks for receiving GSM transmissions (development files)
+ The C++ headers and the CMake package of gr-gsm, for building blocks and
+ applications on top of it.

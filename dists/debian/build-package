@@ -1,0 +1,13 @@
+#!/bin/bash
+# Build the binary packages from this source tree: dists/debian/build-package
+# The .deb files are written to the parent directory of the source tree.
+set -e
+top=$(cd "$(dirname "$0")/../.." && pwd)
+cd "$top"
+if [ -e debian ] && [ ! -L debian ]; then
+    echo "debian/ exists and is not a symbolic link, not touching it" >&2
+    exit 1
+fi
+ln -sfn dists/debian debian
+trap 'rm -f "$top/debian"' EXIT
+dpkg-buildpackage -us -uc -b "$@"

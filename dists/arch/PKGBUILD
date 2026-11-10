@@ -1,0 +1,35 @@
+# Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
+
+pkgname=gr-gsm
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="GNU Radio blocks and tools for receiving GSM transmissions"
+arch=('x86_64' 'aarch64')
+url="https://github.com/ptrkrysik/gr-gsm"
+license=('GPL-3.0-or-later' 'AGPL-3.0-or-later')
+# libosmocore is not in the official repositories, it is in the AUR
+depends=('gnuradio' 'gnuradio-osmosdr' 'libosmocore' 'python' 'python-numpy' 'boost-libs' 'volk')
+makedepends=('cmake' 'boost' 'pybind11' 'python-docutils' 'python-packaging' 'spdlog')
+optdepends=('python-scipy: experimental receiver blocks (fcch_detector, sch_detector)'
+            'wireshark-qt: viewing the GSMTAP output')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('4c3b3915d544ef0a9602e4d33b800bf89c6b1cba54b5c3aef13198f9ccf3f912')
+
+build() {
+  cmake -B build -S "$pkgname-$pkgver" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIB_SUFFIX="" \
+    -DENABLE_DOXYGEN=OFF \
+    -Wno-dev
+  cmake --build build
+}
+
+check() {
+  ctest --test-dir build --output-on-failure
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+  find "$pkgdir" \( -name '*.pyc' -o -name '*.pyo' \) -delete
+}

@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+%:
+	dh $@ --with python3
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DENABLE_DOXYGEN=OFF -DENABLE_GRCC=ON \
+		-DGR_PYTHON_DIR=lib/python3/dist-packages \
+		-DCMAKE_MODULES_DIR=lib/$(DEB_HOST_MULTIARCH)/cmake
+
+override_dh_auto_install:
+	dh_auto_install
+	find debian/tmp -name '*.pyc' -delete -o -name '*.pyo' -delete
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	dh_auto_test
+endif
+
+override_dh_fixperms:
+	dh_fixperms
+	find debian -path '*/share/gnuradio/examples/*' -name '*.py' -exec chmod a-x {} +

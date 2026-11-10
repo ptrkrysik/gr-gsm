@@ -1,0 +1,7 @@
+gr-gsm (1.0.0-1) unstable; urgency=medium
+
+  * Release 1.0.0, the port to GNU Radio 3.10 (pybind11, CMake only).
+  * New packaging: the library, the tools and the development files are
+    separate packages, Python 3.
+
+ -- Piotr Krysik <ptrkrysik@gmail.com>  Tue, 10 Nov 2026 12:00:00 +0100

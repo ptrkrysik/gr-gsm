@@ -1,0 +1,2 @@
+# The bindings only use numpy through GNU Radio, the dependency on python3-numpy is already there.
+gr-gsm: missing-dependency-on-numpy-abi

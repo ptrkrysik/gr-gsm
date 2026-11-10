@@ -41,6 +41,8 @@ Check the installation with `python3 -c "from gnuradio import gsm; print(gsm.rec
 
 The `libosmocore-dev` package provides `libosmocore`, `libosmocodec`, `libosmocoding` and `libosmogsm`. The Python package `scipy` is optional, it is needed only by the experimental receiver blocks (`fcch_detector`, `sch_detector`). Example flowgraphs are installed to `share/gnuradio/examples/gsm`.
 
+Packages: the directory `dists/` contains the recipes of a Debian/Ubuntu package (`dists/debian/build-package` builds the `.deb` files of the library, the tools and the development files) and of an Arch Linux package (`dists/arch/PKGBUILD`, `libosmocore` comes from the AUR). CI builds both. There are no ready made packages in the distributions' repositories yet.
+
 Other distributions, a custom installation prefix, leftovers of an older installation and common problems are described on the wiki page [Installation](https://github.com/ptrkrysik/gr-gsm/wiki/Installation). Old installation instructions that use PyBOMBS no longer work: PyBOMBS is not maintained any more.
 
 Programs

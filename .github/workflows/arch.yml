@@ -1,0 +1,63 @@
+name: Arch Linux package
+
+# Builds the package from dists/arch/PKGBUILD with makepkg in an Arch Linux container, runs its
+# check() (the unit tests) and installs the result. libosmocore is built from the AUR first, it
+# is not in the official repositories. The source is the checkout, packed under the name that the
+# PKGBUILD expects, so that this works before a release is tagged.
+
+on:
+  push:
+    paths:
+      - 'dists/arch/**'
+      - '.github/workflows/arch.yml'
+      - 'CMakeLists.txt'
+  pull_request:
+    paths:
+      - 'dists/arch/**'
+      - '.github/workflows/arch.yml'
+      - 'CMakeLists.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  makepkg:
+    name: Arch Linux, makepkg
+    runs-on: ubuntu-24.04
+    container: archlinux:latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Install the tools
+        run: |
+          pacman -Syu --noconfirm --needed base-devel git sudo
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+
+      - uses: actions/checkout@v4
+
+      - name: Build libosmocore from the AUR
+        run: |
+          sudo -u builder bash -ec '
+            git clone --depth 1 https://aur.archlinux.org/libosmocore.git /home/builder/libosmocore
+            cd /home/builder/libosmocore
+            makepkg --syncdeps --noconfirm --nocheck
+          '
+          pacman -U --noconfirm /home/builder/libosmocore/libosmocore-[0-9]*.pkg.tar.zst
+
+      - name: Build the package
+        run: |
+          version=$(sed -n 's/^pkgver=//p' dists/arch/PKGBUILD)
+          mkdir /home/builder/pkg
+          git config --global --add safe.directory "$PWD"
+          git archive --prefix="gr-gsm-$version/" -o "/home/builder/pkg/gr-gsm-$version.tar.gz" HEAD
+          cp dists/arch/PKGBUILD /home/builder/pkg/
+          chown -R builder /home/builder/pkg
+          sudo -u builder bash -ec "cd /home/builder/pkg && makepkg --syncdeps --noconfirm --skipchecksums"
+
+      - name: Install the package and use it
+        run: |
+          pacman -U --noconfirm /home/builder/pkg/gr-gsm-[0-9]*.pkg.tar.zst
+          python -c 'from gnuradio import gsm; print(gsm.__file__); print(gsm.receiver)'
+          grgsm_decode --help > /dev/null

@@ -9,3 +9,13 @@ build*/
 debian/tmp/
 debian/files
 .directory
+dists/debian/.debhelper/
+dists/debian/tmp/
+dists/debian/files
+dists/debian/*.substvars
+dists/debian/*.debhelper.log
+dists/debian/debhelper-build-stamp
+dists/debian/gr-gsm/
+dists/debian/gr-gsm-dev/
+dists/debian/libgnuradio-gsm1.0.0/
+/debian

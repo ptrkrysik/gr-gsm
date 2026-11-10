@@ -1,0 +1,61 @@
+name: Debian package
+
+# Builds the packages from dists/debian (the unit tests run during the build), installs them in
+# a clean container and checks that the Python module and the tools work.
+
+on:
+  push:
+    paths:
+      - 'dists/debian/**'
+      - '.github/workflows/deb.yml'
+      - 'CMakeLists.txt'
+  pull_request:
+    paths:
+      - 'dists/debian/**'
+      - '.github/workflows/deb.yml'
+      - 'CMakeLists.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deb:
+    name: ${{ matrix.image }}
+    runs-on: ubuntu-24.04
+    container: ${{ matrix.image }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['ubuntu:24.04', 'debian:13', 'debian:12']
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Install the tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates git build-essential fakeroot devscripts equivs
+
+      - uses: actions/checkout@v4
+
+      - name: Install the build dependencies
+        run: |
+          ln -s dists/debian debian
+          mk-build-deps --install --remove \
+            --tool 'apt-get -y --no-install-recommends' debian/control
+          rm debian
+
+      - name: Build the packages
+        run: ./dists/debian/build-package
+
+      - name: Install the packages
+        run: |
+          apt-get install -y --no-install-recommends ../*.deb
+          python3 -c 'from gnuradio import gsm; print(gsm.__file__); print(gsm.receiver)'
+          grgsm_decode --help > /dev/null
+          dpkg -L gr-gsm-dev | grep -c '\.h$'
+
+      - name: Remove the packages
+        run: apt-get purge -y gr-gsm gr-gsm-dev libgnuradio-gsm1.0.0
