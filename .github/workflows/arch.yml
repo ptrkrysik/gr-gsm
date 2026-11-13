@@ -56,6 +56,14 @@ jobs:
           chown -R builder /home/builder/pkg
           sudo -u builder bash -ec "cd /home/builder/pkg && makepkg --syncdeps --noconfirm --skipchecksums"
 
+      - name: Diagnostics of a failed build
+        if: failure()
+        run: |
+          command -v grcc || echo "grcc is not in the PATH"
+          pacman -Ql gnuradio | grep -E '/bin/' || true
+          python --version
+          sudo -u builder cmake --build /home/builder/pkg/src/build --target pygen_apps --verbose 2>&1 | tail -20
+
       - name: Install the package and use it
         run: |
           pacman -U --noconfirm /home/builder/pkg/gr-gsm-[0-9]*.pkg.tar.zst

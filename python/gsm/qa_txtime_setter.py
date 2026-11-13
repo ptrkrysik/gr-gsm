@@ -54,6 +54,10 @@ class qa_txtime_setter (gr_unittest.TestCase):
 
     def post(self, dut, port, msg):
         dut.to_basic_block()._post(pmt.intern(port), msg)
+        # GNU Radio keeps a queue per message port and does not order the messages of
+        # different ports, so wait until the block has handled this one before the next
+        # is posted, otherwise the tests that mix the ports depend on the scheduling
+        time.sleep(0.3)
 
     def finish(self, expected_msgs):
         # bursts that are dropped never show up, so give the block some time
