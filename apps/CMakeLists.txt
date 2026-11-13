@@ -21,6 +21,12 @@ OPTION(ENABLE_GRCC "Compile the flowgraphs with grcc" ON)
 OPTION(ENABLE_GRGSM_LIVEMON "Compile grgsm_livemon" ON)
 OPTION(ENABLE_GRGSM_LIVEMON_HEADLESS "Compile grgsm_livemon_headless" ON)
 
+if(ENABLE_GRCC AND NOT GRCC)
+    message(FATAL_ERROR "grcc was not found, it generates grgsm_livemon from its flowgraph. "
+                        "Install GNU Radio Companion (on Arch Linux the package gnuradio-companion) "
+                        "or configure with -DENABLE_GRCC=OFF.")
+endif()
+
 if(ENABLE_PYTHON AND ENABLE_GRCC AND ENABLE_GRGSM_LIVEMON)
     list(APPEND grgsm_flowgraphs ${CMAKE_CURRENT_BINARY_DIR}/grgsm_livemon)
 endif()

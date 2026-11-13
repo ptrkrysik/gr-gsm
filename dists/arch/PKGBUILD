@@ -9,7 +9,8 @@ url="https://github.com/ptrkrysik/gr-gsm"
 license=('GPL-3.0-or-later' 'AGPL-3.0-or-later')
 # libosmocore is not in the official repositories, it is in the AUR
 depends=('gnuradio' 'gnuradio-osmosdr' 'libosmocore' 'python' 'python-numpy' 'boost-libs' 'volk')
-makedepends=('cmake' 'boost' 'pybind11' 'python-docutils' 'python-packaging' 'spdlog')
+# grcc, which generates grgsm_livemon from its flowgraph, is in gnuradio-companion
+makedepends=('cmake' 'boost' 'gnuradio-companion' 'pybind11' 'python-docutils' 'python-packaging' 'spdlog')
 optdepends=('python-scipy: experimental receiver blocks (fcch_detector, sch_detector)'
             'wireshark-qt: viewing the GSMTAP output')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
