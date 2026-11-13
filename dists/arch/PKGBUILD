@@ -14,7 +14,7 @@ makedepends=('cmake' 'boost' 'gnuradio-companion' 'pybind11' 'python-docutils' '
 optdepends=('python-scipy: experimental receiver blocks (fcch_detector, sch_detector)'
             'wireshark-qt: viewing the GSMTAP output')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('SKIP')  # replaced by the sum of the release tarball when it is tagged
+sha256sums=('6c7ed33f9095fb4497ee0625500e4dc936f46714e4fc7f2b5039ba4b5e01f18e')
 
 build() {
   cmake -B build -S "$pkgname-$pkgver" \
