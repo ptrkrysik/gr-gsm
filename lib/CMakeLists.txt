@@ -50,12 +50,6 @@ list(APPEND gsm_sources ${CMAKE_CURRENT_BINARY_DIR}/constants.cc)
 #########################################################################
 # Subdirecories
 #########################################################################
-if(FFTChannelizer_FOUND)
-    add_subdirectory(channelization)
-    message(STATUS "FFT based channelizer found")
-else()
-    message(STATUS "FFT based channelizer NOT found!")
-endif()
 add_subdirectory(decoding)
 add_subdirectory(decryption)
 add_subdirectory(demapping)
@@ -78,13 +72,6 @@ target_link_libraries(
     ${LIBOSMOCODEC_LIBRARY}
     ${LIBOSMOGSM_LIBRARY}
     ${LIBOSMOCODING_LIBRARY})
-
-if(FFTChannelizer_FOUND)
-    target_link_libraries(
-        gnuradio-gsm
-        PUBLIC
-        ${FFTChannelizer_LIBRARY})
-endif()
 
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
