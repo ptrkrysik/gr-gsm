@@ -47,6 +47,6 @@ else()
     install(
         FILES
         ${MAN1_OUTPUT}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1
+        DESTINATION share/man/man1
     )
 endif()
