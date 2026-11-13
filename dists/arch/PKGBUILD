@@ -1,7 +1,7 @@
 # Maintainer: Piotr Krysik <ptrkrysik@gmail.com>
 
 pkgname=gr-gsm
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="GNU Radio blocks and tools for receiving GSM transmissions"
 arch=('x86_64' 'aarch64')
@@ -14,7 +14,7 @@ makedepends=('cmake' 'boost' 'gnuradio-companion' 'pybind11' 'python-docutils' '
 optdepends=('python-scipy: experimental receiver blocks (fcch_detector, sch_detector)'
             'wireshark-qt: viewing the GSMTAP output')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('4c3b3915d544ef0a9602e4d33b800bf89c6b1cba54b5c3aef13198f9ccf3f912')
+sha256sums=('SKIP')  # replaced by the sum of the release tarball when it is tagged
 
 build() {
   cmake -B build -S "$pkgname-$pkgver" \

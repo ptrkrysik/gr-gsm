@@ -51,7 +51,7 @@ endif()
 set(VERSION_MAJOR 1)
 set(VERSION_API   0)
 set(VERSION_ABI   0)
-set(VERSION_PATCH 0)
+set(VERSION_PATCH 1)
 # cmake-format: on
 
 cmake_policy(SET CMP0011 NEW)
@@ -171,5 +171,5 @@ configure_package_config_file(
     INSTALL_DESTINATION ${GR_CMAKE_DIR})
 
 install(FILES MANIFEST.yml
-    RENAME MANIFEST-${VERSION_MAJOR}.${VERSION_API}.${VERSION_ABI}${VERSION_PATCH}.yml
+    RENAME MANIFEST-${VERSION_MAJOR}.${VERSION_API}.${VERSION_ABI}.${VERSION_PATCH}.yml
     DESTINATION share/gnuradio/manifests/gsm)

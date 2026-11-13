@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.1
+
+### Added
+- Packages: `dists/debian` builds `libgnuradio-gsm1.0.0`, `gr-gsm` and `gr-gsm-dev`
+  (Python 3, the unit tests run during the build), `dists/arch/PKGBUILD` builds the Arch Linux
+  package. CI builds both: Debian package on Ubuntu 24.04 and Debian 12 and 13, Arch Linux in
+  an Arch container with libosmocore from the AUR.
+
+### Fixed
+- A serial build with CMake 4 (as `makepkg` does it) failed with "Is a directory" when the
+  bindings were copied to a directory that did not exist yet.
+- `qa_txtime_setter` depended on the order in which GNU Radio handles messages of different
+  ports and failed under load.
+- When `grcc` is missing, CMake says so (it used to fail with "no such file or directory").
+  On Arch Linux `grcc` is in the package `gnuradio-companion`.
+
 ## 1.0.0
 
 The first release that is a stable, maintained port to GNU Radio 3.10. The version of the
