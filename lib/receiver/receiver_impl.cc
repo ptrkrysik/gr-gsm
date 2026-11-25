@@ -668,7 +668,6 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex* input, gr_complex* ch
     std::vector<float> window_energy_buffer;
     std::vector<float> power_buffer;
 
-    int chan_imp_resp_center = 0;
     int strongest_window_nr;
     int burst_start;
     float energy = 0;
@@ -710,14 +709,8 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex* input, gr_complex* ch
       d_channel_imp_resp.clear();
 #endif
 
-    float max_correlation = 0;
     for (int ii = 0; ii < (d_chan_imp_length)*d_OSR; ii++) {
         gr_complex correlation = correlation_buffer[strongest_window_nr + ii];
-        if (abs(correlation) > max_correlation) {
-            chan_imp_resp_center = ii;
-            max_correlation = abs(correlation);
-        }
-
 #if 0
         d_channel_imp_resp.push_back(correlation);
 #endif
@@ -725,7 +718,7 @@ int receiver_impl::get_sch_chan_imp_resp(const gr_complex* input, gr_complex* ch
         chan_imp_resp[ii] = correlation;
     }
 
-    burst_start = strongest_window_nr + chan_imp_resp_center - 48 * d_OSR - 2 * d_OSR + 2 + SYNC_POS * d_OSR;
+    burst_start = SYNC_POS * d_OSR + strongest_window_nr - (TAIL_BITS + SCH_DATA_LEN + TRAIN_BEGINNING) * d_OSR;
     return burst_start;
 }
 
